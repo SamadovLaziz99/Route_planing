@@ -2,13 +2,14 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import AuthGuard from "./utils/auth.guard";
 import { adminRoot } from "./constants/config";
-import { UserRole } from "./utils/auth.roles";
+// import { UserRole } from "./utils/auth.roles";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
+    redirect: `${adminRoot}`,
     component: () => import(/* webpackChunkName: "home" */ "./views/home"),
   },
   {

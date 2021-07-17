@@ -48,17 +48,18 @@
           >{{l.name}}</b-dropdown-item>
         </b-dropdown>
       </div>
-      <div class="position-relative d-none d-none d-lg-inline-block">
-        <a
-          class="btn btn-outline-primary btn-sm ml-2"
-          target="_top"
-          :href="buyUrl"
-        >{{$t('user.buy')}}</a>
-      </div>
+<!--      <div class="position-relative d-none d-none d-lg-inline-block">-->
+<!--        <a-->
+<!--          class="btn btn-outline-primary btn-sm ml-2"-->
+<!--          target="_top"-->
+<!--          :href="buyUrl"-->
+<!--        >{{$t('user.buy')}}</a>-->
+<!--      </div>-->
     </div>
     <router-link class="navbar-logo" :to="adminRoot">
-      <span class="logo d-none d-xs-block"></span>
-      <span class="logo-mobile d-block d-xs-none"></span>
+<!--      <span><img src="../../assets/logos/coozin_logo_main.svg" style="width: 44px; height: 44px" ></span>-->
+<!--      <span class="logo d-none d-xs-block"></span>-->
+<!--      <span class="logo-mobile d-block d-xs-none"></span>-->
     </router-link>
 
     <div class="navbar-right">

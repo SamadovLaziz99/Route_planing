@@ -3,12 +3,12 @@
     <b-colxx xxs="12" md="10" class="mx-auto my-auto">
         <b-card class="auth-card" no-body>
             <div class="position-relative image-side">
-                <p class="text-white h2">{{ $t('dashboards.magic-is-in-the-details') }}</p>
-                <p class="white mb-0">
-                    Please use your credentials to login.
-                    <br />If you are not a member, please
-                    <router-link to="/user/register" class="white">register</router-link>.
-                </p>
+<!--                <p class="text-white h2">{{ $t('dashboards.magic-is-in-the-details') }}</p>-->
+<!--                <p class="white mb-0">-->
+<!--                    Please use your credentials to login.-->
+<!--                    <br />If you are not a member, please-->
+<!--                    <router-link to="/user/register" class="white">register</router-link>.-->
+<!--                </p>-->
             </div>
             <div class="form-side">
                 <router-link to="/">
@@ -32,9 +32,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <router-link to="/user/forgot-password">{{ $t('user.forgot-password-question')}}</router-link>
                         <b-button type="submit" variant="primary" size="lg" :disabled="processing" :class="{'btn-multiple-state btn-shadow': true,
-                    'show-spinner': processing,
-                    'show-success': !processing && loginError===false,
-                    'show-fail': !processing && loginError }">
+                          'show-spinner': processing,
+                          'show-success': !processing && loginError===false,
+                          'show-fail': !processing && loginError }">
                             <span class="spinner d-inline-block">
                                 <span class="bounce1"></span>
                                 <span class="bounce2"></span>

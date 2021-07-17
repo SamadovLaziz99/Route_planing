@@ -38,7 +38,7 @@ export const currentUser = {
   role: UserRole.Admin
 }
 
-export const isAuthGuardActive = false
+export const isAuthGuardActive = true
 export const themeRadiusStorageKey = 'theme_radius'
 export const themeSelectedColorStorageKey = 'theme_selected_color'
 export const defaultColor = 'light.blueolympic'
