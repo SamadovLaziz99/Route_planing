@@ -107,7 +107,7 @@ import {
   menuHiddenBreakpoint,
   subHiddenBreakpoint,
 } from "../../constants/config";
-import menuItems from "../../constants/menu";
+import menuItems from "../../constants/menu_new";
 import { UserRole } from "../../utils/auth.roles";
 
 export default {
