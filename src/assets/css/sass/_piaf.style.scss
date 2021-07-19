@@ -1856,10 +1856,12 @@ button {
   }
 
   .navbar-logo {
-    width: 110px;
+    width: 130px;
     height: 35px;
     position: absolute;
     left: 0;
+    top: 25%;
+    //transform: translateY(-30px);
     right: 0;
     margin: 0 auto;
 
@@ -3353,6 +3355,7 @@ div[data-notify="container"] {
   z-index: 999999;
   width: 320px;
   padding: 0px 15px;
+  padding-bottom: 20px;
   max-height: calc(100% - 30px);
   overflow-x: hidden;
   overflow-y: auto;
@@ -3848,19 +3851,19 @@ select.form-control[multiple] {
 }
 
 .custom-checkbox .custom-control-label.indeterminate::after {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Cpath stroke='"+encodecolor(
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Cpath stroke='"+ encodecolor(
       $button-text-color
-    )+"' d='M0 2h4'/%3E%3C/svg%3E");
+    )+"' d='M0 2h4'/%3E%3C/svg%3E")
 }
 
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='"+encodecolor(
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='"+ encodecolor(
       $button-text-color
     )+"' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
 }
 
 .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='"+encodecolor(
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='"+ encodecolor(
       $button-text-color
     )+"'/%3E%3C/svg%3E");
 }
@@ -4680,6 +4683,7 @@ input:-webkit-autofill {
   color: $success-color;
   background-color: $foreground-color;
   border: 1px solid $success-color;
+  box-shadow: $success-color 0px 2px 4px, $success-color 0px 4px 5px, $success-color 0px 8px 10px;
   opacity: 1;
 
   .notification-message {

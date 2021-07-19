@@ -57,6 +57,7 @@
 <!--      </div>-->
     </div>
     <router-link class="navbar-logo" :to="adminRoot">
+      <logo/>
 <!--      <span><img src="../../assets/logos/coozin_logo_main.svg" style="width: 44px; height: 44px" ></span>-->
 <!--      <span class="logo d-none d-xs-block"></span>-->
 <!--      <span class="logo-mobile d-block d-xs-none"></span>-->
@@ -176,7 +177,7 @@
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
           </template>
-          <b-dropdown-item>Account</b-dropdown-item>
+          <b-dropdown-item @click="$store.dispatch('alert')">Account</b-dropdown-item>
           <b-dropdown-item>Features</b-dropdown-item>
           <b-dropdown-item>History</b-dropdown-item>
           <b-dropdown-item>Support</b-dropdown-item>
@@ -202,8 +203,10 @@ import {
   adminRoot
 } from "../../constants/config";
 import { getDirection, setDirection, getThemeColor, setThemeColor } from "../../utils";
+import logo from '../../components/logo'
 export default {
   components: {
+    logo,
     "menu-icon": MenuIcon,
     "mobile-menu-icon": MobileMenuIcon,
     switches: Switches

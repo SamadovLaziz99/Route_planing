@@ -7,6 +7,7 @@ import user from './modules/user'
 import chat from './modules/chat'
 import todo from './modules/todo'
 import survey from './modules/survey'
+import alert from "./modules/alert";
 import { setCurrentLanguage } from '../utils'
 
 Vue.use(Vuex)
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     user,
     chat,
     todo,
-    survey
+    survey,
+    alert
   }
 })
