@@ -1,57 +1,50 @@
 import axios from 'axios'
-// import store from '../store'
-// import router from '../router'
+import store from '../store'
+import { t } from '../locales/i18n'
 const token = localStorage.getItem('token')
 
-// function alert(title, color) {
-//   store.dispatch('setNotification', {
-//     open: true,
-//     text: title,
-//     color: color,
-//   })
-// }
+function unauthorized(msg) {
+  errorNotification(t('unauthorized'), msg)
+  store.dispatch('signOut')
+}
 
-// function Redirect(msg, hooks) {
-//   // alert(msg, '#E53935')
-//   setTimeout(() => {
-//     localStorage.removeItem('token')
-//     localStorage.removeItem('user')
-//     router.push('/login')
-//     // document.location.reload()
-//   }, 500)
-// }
+function errorNotification (title, msg) {
+  store.dispatch('error_alert', {
+    title: title,
+    message: msg
+  })
+}
 
-// function ErrorHandler(error) {
-//   if (error.message.startsWith('timeout')) {
-//     alert('Time Out. Please check your internet!', '#E53935')
-//   }
-//   if (error.response) {
-//     // debugger
-//     const _error = error.response
-//     switch (_error.status) {
-//       case 400:
-//         // alert('Bad request', '#E53935')
-//         break
-//       case 401:
-//         // Redirect('Unauthorized')
-//         break
-//       case 403:
-//         // alert('Forbidden', '#E53935')
-//         break
-//       case 404:
-//         // alert('Not Found', '#E53935')
-//         break
-//       case 422:
-//         // alert('You sent a bad request', '#E53935')
-//         break
-//       case 500:
-//         // alert('Internal Server Error', '#E53935')
-//         break
-//       default:
-//         break
-//     }
-//   }
-// }
+function ErrorHandler(error) {
+  if (error.message.startsWith('timeout')) {
+    errorNotification(t('timeout'))
+  }
+  if (error.response) {
+    const _error = error.response
+    switch (_error.status) {
+      case 400:
+        errorNotification(t('bad_request'), _error.message)
+        break
+      case 401:
+        unauthorized(_error.message)
+        break
+      case 403:
+        errorNotification(t('forbidden'), _error.message)
+        break
+      case 404:
+        errorNotification(t('not_found'), _error.message)
+        break
+      case 422:
+        errorNotification(t('unprocessable_entity'), _error.message)
+        break
+      case 500:
+        errorNotification(t('internal_server_error'), _error.message)
+        break
+      default:
+        break
+    }
+  }
+}
 
 const init = {
   request(method, url, params, data) {
@@ -81,7 +74,7 @@ const init = {
           resolve(res.data)
         })
         .catch((error) => {
-          // ErrorHandler(error)
+          ErrorHandler(error)
           reject(error)
         })
     })

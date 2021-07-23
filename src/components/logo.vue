@@ -1,5 +1,4 @@
 <template>
-  <router-link to="/">
     <div class="svg-animation-container">
       <svg
         width="128"
@@ -113,7 +112,6 @@
         </defs>
       </svg>
     </div>
-  </router-link>
 </template>
 
 <script>

@@ -11,9 +11,9 @@
 <!--                </p>-->
             </div>
             <div class="form-side">
-                <router-link to="/">
-                    <span class="logo-single" />
-                </router-link>
+              <div style="width: 100%; text-align: center">
+                <logo/>
+              </div>
                 <h6 class="mb-4">{{ $t('user.login-title')}}</h6>
 
                 <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import logo from '../../components/logo'
 import {
     mapGetters,
     mapActions
@@ -73,6 +74,9 @@ const {
 } = require("vuelidate/lib/validators");
 
 export default {
+    components: {
+      logo
+    },
     data() {
         return {
             form: {

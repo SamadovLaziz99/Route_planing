@@ -42,25 +42,22 @@
             <span class="name">{{$i18n.locale.toUpperCase()}}</span>
           </template>
           <b-dropdown-item
-            v-for="(l,index) in localeOptions"
+            v-for="(l, index) in localeOptions"
             :key="index"
-            @click="changeLocale(l.id, l.direction)"
-          >{{l.name}}</b-dropdown-item>
+            @click="changeLocale(l.id)"
+          >{{ l.name }}</b-dropdown-item>
         </b-dropdown>
       </div>
-<!--      <div class="position-relative d-none d-none d-lg-inline-block">-->
-<!--        <a-->
-<!--          class="btn btn-outline-primary btn-sm ml-2"-->
-<!--          target="_top"-->
-<!--          :href="buyUrl"-->
-<!--        >{{$t('user.buy')}}</a>-->
-<!--      </div>-->
     </div>
     <router-link class="navbar-logo" :to="adminRoot">
-      <logo/>
-<!--      <span><img src="../../assets/logos/coozin_logo_main.svg" style="width: 44px; height: 44px" ></span>-->
-<!--      <span class="logo d-none d-xs-block"></span>-->
-<!--      <span class="logo-mobile d-block d-xs-none"></span>-->
+      <span class="logo d-none d-xl-flex">
+        <logo/>
+      </span>
+      <span class="d-block d-xl-none">
+        <div style="width: 44px; height: 44px" >
+          <img style="width: 100%; height: 100%" src="../../assets/logos/mobile.svg" alt="">
+        </div>
+      </span>
     </router-link>
 
     <div class="navbar-right">
@@ -177,7 +174,7 @@
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
           </template>
-          <b-dropdown-item @click="$store.dispatch('alert')">Account</b-dropdown-item>
+          <b-dropdown-item>Account</b-dropdown-item>
           <b-dropdown-item>Features</b-dropdown-item>
           <b-dropdown-item>History</b-dropdown-item>
           <b-dropdown-item>Support</b-dropdown-item>
@@ -252,12 +249,11 @@ export default {
       }
     },
 
-    changeLocale(locale, direction) {
-      const currentDirection = getDirection().direction;
-      if (direction !== currentDirection) {
-        setDirection(direction);
-      }
-
+    changeLocale(locale) {
+      // const currentDirection = getDirection().direction;
+      // if (direction !== currentDirection) {
+      //   setDirection(direction);
+      // }
       this.setLang(locale);
     },
     logout() {

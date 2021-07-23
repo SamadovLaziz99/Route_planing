@@ -1,15 +1,11 @@
 import Vue from 'vue'
 import App from './App'
-
+import i18n from "./locales/i18n";
 // BootstrapVue add
 import BootstrapVue from 'bootstrap-vue'
 // Router & Store add
 import router from './router'
 import store from './store'
-// Multi Language Add
-import en from './locales/en.json'
-import es from './locales/es.json'
-import VueI18n from 'vue-i18n'
 import { firebaseConfig } from './constants/config'
 // Notification Component Add
 import Notifications from './components/Common/Notification'
@@ -26,17 +22,9 @@ import VueLineClamp from 'vue-line-clamp'
 import VueScrollTo from 'vue-scrollto'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { getCurrentLanguage } from './utils'
+// import { getCurrentLanguage } from './utils'
 
 Vue.use(BootstrapVue);
-Vue.use(VueI18n);
-const messages = { en: en, es: es };
-const locale = getCurrentLanguage();
-const i18n = new VueI18n({
-  locale: locale,
-  fallbackLocale: 'en',
-  messages
-});
 Vue.use(Notifications);
 Vue.use(require('vue-shortkey'));
 Vue.use(contentmenu);
