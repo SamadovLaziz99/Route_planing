@@ -26,23 +26,24 @@
               <b-badge variant="danger">77</b-badge>
             </div>
           </template>
-          <template v-if="isLoad">
-            <list-page-listing
-              :displayMode="displayMode"
-              :items="items"
-              :selectedItems="selectedItems"
-              :toggleItem="toggleItem"
-              :lastPage="lastPage"
-              :perPage="perPage"
-              :page="page"
-              :changePage="changePage"
-              :handleContextMenu="handleContextMenu"
-              :onContextMenuAction="onContextMenuAction"
-            ></list-page-listing>
-          </template>
-          <template v-else>
-            <div class="loading"></div>
-          </template>
+          <CustomTable/>
+<!--          <template v-if="isLoad">-->
+<!--            <list-page-listing-->
+<!--              :displayMode="displayMode"-->
+<!--              :items="items"-->
+<!--              :selectedItems="selectedItems"-->
+<!--              :toggleItem="toggleItem"-->
+<!--              :lastPage="lastPage"-->
+<!--              :perPage="perPage"-->
+<!--              :page="page"-->
+<!--              :changePage="changePage"-->
+<!--              :handleContextMenu="handleContextMenu"-->
+<!--              :onContextMenuAction="onContextMenuAction"-->
+<!--            ></list-page-listing>-->
+<!--          </template>-->
+<!--          <template v-else>-->
+<!--            <div class="loading"></div>-->
+<!--          </template>-->
         </b-tab>
         <b-tab style="padding: 0.6rem">
           <template #title>
@@ -202,6 +203,7 @@
 <script>
 import axios from "axios";
 import { apiUrl } from "../../../../constants/config";
+import CustomTable from '../../orders/Table';
 import BestSellers from "../../../../containers/dashboards/BestSellers";
 import ListPageHeading from "../../../../containers/pages/ListPageHeading";
 import ListPageListing from "../../../../containers/pages/ListPageListing";
@@ -210,7 +212,8 @@ export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
-    BestSellers
+    BestSellers,
+    CustomTable
   },
   data() {
     return {

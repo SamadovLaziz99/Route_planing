@@ -4,7 +4,7 @@
       ref="vuetable"
       :api-url="bestsellers.apiUrl"
       :fields="bestsellers.fields"
-      :per-page="6"
+      :per-page="10"
       pagination-path
       @vuetable:pagination-data="onPaginationData"
     ></vuetable>
@@ -57,7 +57,7 @@ export default {
             title: "Category",
             titleClass: "",
             dataClass: "text-muted"
-          }
+          },
         ]
       }
     };
