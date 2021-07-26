@@ -69,7 +69,7 @@
           class="vue-switcher-small"
           color="primary"
         />
-        <b-tooltip target="tool-mode-switch" placement="left" title="Dark Mode"></b-tooltip>
+        <b-tooltip target="tool-mode-switch" placement="left" :title="$t('dark_mode')"></b-tooltip>
       </div>
       <div class="header-icons d-inline-block align-middle">
         <div class="position-relative d-none d-sm-inline-block">

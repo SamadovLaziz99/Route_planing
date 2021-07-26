@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-colxx class="disable-text-selection">
+    <b-colxx class="disable-text-selection" style="padding: 0">
       <list-page-heading
         :title="$t('menu.data-list')"
         :selectAll="selectAll"
@@ -18,23 +18,183 @@
         :total="total"
         :perPage="perPage"
       ></list-page-heading>
-      <template v-if="isLoad">
-        <list-page-listing
-          :displayMode="displayMode"
-          :items="items"
-          :selectedItems="selectedItems"
-          :toggleItem="toggleItem"
-          :lastPage="lastPage"
-          :perPage="perPage"
-          :page="page"
-          :changePage="changePage"
-          :handleContextMenu="handleContextMenu"
-          :onContextMenuAction="onContextMenuAction"
-        ></list-page-listing>
-      </template>
-      <template v-else>
-        <div class="loading"></div>
-      </template>
+      <b-tabs card>
+        <b-tab active style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">All Orders</div>
+              <b-badge variant="danger">77</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+        <b-tab style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">Pending</div>
+              <b-badge variant="danger">15</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+        <b-tab style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">Accepted</div>
+              <b-badge variant="danger">10</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+        <b-tab style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">In progress</div>
+              <b-badge variant="danger">9</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+        <b-tab style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">Shipping</div>
+              <b-badge variant="danger">20</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+        <b-tab style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">Finished</div>
+              <b-badge variant="danger">15</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+        <b-tab style="padding: 0.6rem">
+          <template #title>
+            <div style="display: flex">
+              <div style="margin-right: 10px">Cancelled</div>
+              <b-badge variant="danger">8</b-badge>
+            </div>
+          </template>
+          <template v-if="isLoad">
+            <list-page-listing
+              :displayMode="displayMode"
+              :items="items"
+              :selectedItems="selectedItems"
+              :toggleItem="toggleItem"
+              :lastPage="lastPage"
+              :perPage="perPage"
+              :page="page"
+              :changePage="changePage"
+              :handleContextMenu="handleContextMenu"
+              :onContextMenuAction="onContextMenuAction"
+            ></list-page-listing>
+          </template>
+          <template v-else>
+            <div class="loading"></div>
+          </template>
+        </b-tab>
+      </b-tabs>
     </b-colxx>
   </b-row>
 </template>
@@ -42,13 +202,15 @@
 <script>
 import axios from "axios";
 import { apiUrl } from "../../../../constants/config";
+import BestSellers from "../../../../containers/dashboards/BestSellers";
 import ListPageHeading from "../../../../containers/pages/ListPageHeading";
 import ListPageListing from "../../../../containers/pages/ListPageListing";
 
 export default {
   components: {
     "list-page-heading": ListPageHeading,
-    "list-page-listing": ListPageListing
+    "list-page-listing": ListPageListing,
+    BestSellers
   },
   data() {
     return {

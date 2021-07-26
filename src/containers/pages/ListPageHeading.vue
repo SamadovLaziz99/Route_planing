@@ -104,7 +104,7 @@
           </div>
         </b-collapse>
       </div>
-      <div class="separator mb-5" />
+      <div class="mb-5" />
     </b-colxx>
   </b-row>
 </template>

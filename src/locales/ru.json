@@ -11,6 +11,7 @@
     "unauthorized": "Unauthorized",
     "timeout": "Time Out. Please check your internet!"
   },
+  "dark_mode": "Темный режим",
   "unauthorized": {
     "title": "Unauthorized Access Attempt",
     "detail": "You are not authorized to view the page you are trying to access."
@@ -31,6 +32,7 @@
     "username": "Username"
   },
   "menu": {
+    "list": "Список",
     "home": "Home",
     "app": "Home",
     "dashboards": "Dashboards",

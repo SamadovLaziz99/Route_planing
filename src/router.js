@@ -47,7 +47,7 @@ const routes = [
           },
           {
             path: "history",
-            component: () => import("./views/app/pages/product/ThumbList"),
+            component: () => import("./views/app/orders/List"),
             children: []
           },
           {

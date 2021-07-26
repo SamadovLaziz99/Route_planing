@@ -14,6 +14,9 @@ export default {
   components: {
     // "color-switcher": ColorSwitcher
   },
+  mounted() {
+    console.log(process.env.VUE_APP_NAME)
+  },
   beforeMount() {
     const direction = getDirection();
     if (direction.isRtl) {
