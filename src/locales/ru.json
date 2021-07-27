@@ -31,6 +31,15 @@
     "buy": "BUY",
     "username": "Username"
   },
+  "order": {
+    "all": "Все заказы",
+    "pending": "В ожидании",
+    "accepted": "Принято",
+    "in_progress": "В ходе выполнения",
+    "shipping": "Перевозки",
+    "finished": "Законченный",
+    "cancelled": "Отменено"
+  },
   "menu": {
     "list": "Список",
     "home": "Home",

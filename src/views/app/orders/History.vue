@@ -2,12 +2,12 @@
   <b-row>
     <b-colxx class="disable-text-selection" style="padding: 0">
       <list-page-heading
-        :title="$t('menu.orders_list')"
+        :title="$t('menu.orders_history')"
         :selectAll="selectAll"
         :isSelectedAll="isSelectedAll"
         :isAnyItemSelected="isAnyItemSelected"
         :keymap="keymap"
-        :rangepicker="true"
+        :rangepicker="false"
         :changeOrderBy="changeOrderBy"
         :changePageSize="changePageSize"
         :sort="sort"
@@ -18,46 +18,6 @@
         :perPage="pagination.limit"
       ></list-page-heading>
       <b-tabs card v-model="activeTab" @input="changeTabs">
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.all') }}</div>
-              <b-badge variant="danger">77</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.pending') }}</div>
-              <b-badge variant="danger">15</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.accepted') }}</div>
-              <b-badge variant="danger">10</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.in_progress') }}</div>
-              <b-badge variant="danger">9</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.shipping') }}</div>
-              <b-badge variant="danger">20</b-badge>
-            </div>
-          </template>
-        </b-tab>
         <b-tab style="padding: 0.6rem">
           <template #title>
             <div style="display: flex">
@@ -115,7 +75,6 @@ export default {
   components: {
     "list-page-heading": ListPageHeading,
     Pagination
-    // TableSimple
   },
   data() {
     return {
@@ -220,38 +179,18 @@ export default {
     },
     findRoutesWithKey (key) {
       switch (key) {
-        case 0: this.changeRoutetypeWithKey('all')
+        case 0: this.changeRoutetypeWithKey('finished')
           break;
-        case 1: this.changeRoutetypeWithKey('pending')
-          break;
-        case 2: this.changeRoutetypeWithKey('accepted')
-          break;
-        case 3: this.changeRoutetypeWithKey('in_progress')
-          break;
-        case 4: this.changeRoutetypeWithKey('shipping')
-          break;
-        case 5: this.changeRoutetypeWithKey('finished')
-          break;
-        case 6: this.changeRoutetypeWithKey('cancelled')
+        case 1: this.changeRoutetypeWithKey('cancelled')
           break;
         default: break;
       }
     },
     findTabsWithType (type) {
       switch (type) {
-        case 'all': this.changeActiveTab(0)
+        case 'finished': this.changeActiveTab(0)
           break;
-        case 'pending': this.changeActiveTab(1)
-          break;
-        case 'accepted': this.changeActiveTab(2)
-          break;
-        case 'in_progress': this.changeActiveTab(3)
-          break;
-        case 'shipping': this.changeActiveTab(4)
-          break;
-        case 'finished': this.changeActiveTab(5)
-          break;
-        case 'cancelled': this.changeActiveTab(6)
+        case 'cancelled': this.changeActiveTab(1)
           break;
         default: break;
       }
@@ -266,6 +205,7 @@ export default {
 
     },
     changeOrderBy(sort) {
+      console.log(sort)
       this.sort = sort;
     },
     searchChange(val) {
@@ -343,7 +283,7 @@ export default {
         this.selectedItems.length > 0 &&
         this.selectedItems.length < this.items.length
       );
-    },
+    }
   },
   watch: {
     search() {
@@ -354,7 +294,7 @@ export default {
     const { type } = this.$route.query
     console.log(type)
     if (!type) {
-      this.$router.push({ name: this.$route.name, query: { type: 'all' } })
+      this.$router.push({ name: this.$route.name, query: { type: 'finished' } })
     } else {
       setTimeout(() => {
         this.findTabsWithType(type)

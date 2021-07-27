@@ -2,7 +2,7 @@
   <b-row>
     <b-colxx class="disable-text-selection" style="padding: 0">
       <list-page-heading
-        :title="$t('menu.orders_list')"
+        :title="$t('menu.transactions')"
         :selectAll="selectAll"
         :isSelectedAll="isSelectedAll"
         :isAnyItemSelected="isAnyItemSelected"
@@ -17,64 +17,6 @@
         :total="pagination.total"
         :perPage="pagination.limit"
       ></list-page-heading>
-      <b-tabs card v-model="activeTab" @input="changeTabs">
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.all') }}</div>
-              <b-badge variant="danger">77</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.pending') }}</div>
-              <b-badge variant="danger">15</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.accepted') }}</div>
-              <b-badge variant="danger">10</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.in_progress') }}</div>
-              <b-badge variant="danger">9</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.shipping') }}</div>
-              <b-badge variant="danger">20</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.finished') }}</div>
-              <b-badge variant="danger">15</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.cancelled') }}</div>
-              <b-badge variant="danger">8</b-badge>
-            </div>
-          </template>
-        </b-tab>
-      </b-tabs>
       <b-card :title="$t(`order.${$route.query.type}`)">
         <b-table
           hover
@@ -138,13 +80,18 @@ export default {
           // tdClass: 'selectColumn'
         },
         {
-          key: 'customer',
-          label: 'Customer',
-          tdClass: 'firstColumn'
+          key: 'order_id',
+          label: 'Order ID',
+          // tdClass: 'firstColumn'
         },
         {
-          key: 'vendor',
-          label: 'Vendor',
+          key: 'vendor_id',
+          label: 'Vendor ID',
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'customer_id',
+          label: 'Customer ID',
           tdClass: 'text-muted'
         },
         {
@@ -153,20 +100,20 @@ export default {
           tdClass: 'text-muted'
         },
         {
-          key: 'price',
-          label: 'Order Price',
+          key: 'created_at',
+          label: 'Created At',
           tdClass: 'text-muted'
         },
-        {
-          key: 'time',
-          label: 'Order Time',
-          tdClass: 'text-muted'
-        },
-        {
-          key: 'delivery',
-          label: 'Delivery time',
-          tdClass: 'text-muted'
-        },
+        // {
+        //   key: 'time',
+        //   label: 'Order Time',
+        //   tdClass: 'text-muted'
+        // },
+        // {
+        //   key: 'delivery',
+        //   label: 'Delivery time',
+        //   tdClass: 'text-muted'
+        // },
         {
           key: 'status',
           label: 'Status',
@@ -179,16 +126,16 @@ export default {
         }
       ],
       items: [
-        { customer: 'Dickerson', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 21, last_name: 'Macdonald' },
-        { customer: 'Larsen', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 26, last_name: 'Shaw' },
-        { customer: 'Geneva', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 15, last_name: 'Wilson',},
-        { customer: 'Thor', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 49, last_name: 'MacDonald',},
-        { customer: 'Dick', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 53, last_name: 'Dunlap' },
-        { customer: 'Dickerson', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 21, last_name: 'Macdonald' },
-        { customer: 'Larsen', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 26, last_name: 'Shaw' },
-        { customer: 'Geneva', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 15, last_name: 'Wilson',},
-        { customer: 'Thor', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 49, last_name: 'MacDonald',},
-        { customer: 'Dick', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 53, last_name: 'Dunlap' },
+        { customer_id: 'Dickerson', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 21, order_id: 'Macdonald' },
+        { customer_id: 'Larsen', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 26, order_id: 'Shaw' },
+        { customer_id: 'Geneva', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 15, order_id: 'Wilson',},
+        { customer_id: 'Thor', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 49, order_id: 'MacDonald',},
+        { customer_id: 'Dick', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 53, order_id: 'Dunlap' },
+        { customer_id: 'Dickerson', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 21, order_id: 'Macdonald' },
+        { customer_id: 'Larsen', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 26, order_id: 'Shaw' },
+        { customer_id: 'Geneva', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 15, order_id: 'Wilson',},
+        { customer_id: 'Thor', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 49, order_id: 'MacDonald',},
+        { customer_id: 'Dick', vendor_id: 'Cooker', payment_type: 'card', price: '1000$', created_at: '2 hours', delivery: '1 hour', status: 'pending...',  age: 53, order_id: 'Dunlap' },
       ],
       selectedItems: []
     };

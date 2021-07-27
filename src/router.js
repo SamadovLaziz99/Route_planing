@@ -42,17 +42,17 @@ const routes = [
         children: [
           {
             path: "list",
-            component: () => import("./views/app/pages/product/DataList"),
+            component: () => import("./views/app/orders/List"),
             children: []
           },
           {
             path: "history",
-            component: () => import("./views/app/orders/Table"),
+            component: () => import("./views/app/orders/History"),
             children: []
           },
           {
             path: "transactions",
-            component: () => import("./views/app/pages/product/Details"),
+            component: () => import("./views/app/orders/Transactions"),
             children: []
           },
         ]

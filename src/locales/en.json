@@ -31,6 +31,15 @@
     "buy": "BUY",
     "username": "Username"
   },
+  "order": {
+    "all": "All Orders",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "in_progress": "In progress",
+    "shipping": "Shipping",
+    "finished": "Finished",
+    "cancelled": "Cancelled"
+  },
   "menu": {
     "home": "Home",
     "list": "List",
@@ -39,6 +48,7 @@
     "orders": "Orders",
     "orders_list": "Orders List",
     "orders_history": "Orders History",
+    "history": "History",
     "transactions": "Transactions",
     "foods": "Foods",
     "foods_list": "Foods List",

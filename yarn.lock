@@ -1228,6 +1228,51 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
+"@livelybone/copy@^2.6.3":
+  version "2.6.5"
+  resolved "https://registry.yarnpkg.com/@livelybone/copy/-/copy-2.6.5.tgz#9bcffe5222e23734aa0a5d4a4caf58ddd7b72c35"
+  integrity sha512-FAF2k46ZYXcGccRBkA0z0qvyI4it/KV9kxu2+dNmSA4mIocWnSXoBumdArDD6akPJsLxRAcmGuGMTaqYbLXzYw==
+
+"@livelybone/date-generator@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@livelybone/date-generator/-/date-generator-4.2.1.tgz#c08da13437c1d6adf8ccf2a9e6f2e08244a4fde6"
+  integrity sha512-rcxOwM5S5c0dr6NWRMp7Wial7yT9yjBiFkJt28TuXvPu1OrzB34bLxp9TqRK84dXyiWdKgPlcQmcx/xiWv1dzw==
+
+"@livelybone/mouse-events@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@livelybone/mouse-events/-/mouse-events-1.0.0.tgz#0e16fcc2dc7fcf0c3e6dad9c6a81f4da5c15de7a"
+  integrity sha512-JuAy6wq2CJnvOnmFX26OSy5n1G7b2TxizD2FMTuphcQAGBRGxsb/o+ZAydG3xIekrrxYS9E6Fwpap/1c0KJQ0A==
+  dependencies:
+    "@livelybone/mouse-wheel" "^4.2.1"
+    is-mobile "^2.0.1"
+
+"@livelybone/mouse-wheel@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@livelybone/mouse-wheel/-/mouse-wheel-4.2.1.tgz#aa3cfd43ef060b3533db55a8902b429b446739af"
+  integrity sha512-4MSMarV5bYE2g7EksiWEM3gr+Z4zaCyIiU7uyyRZ4eqfCzLKo+LCStrUgAv4PC6ykmZpASYUzwM2PWSeqJuTqw==
+
+"@livelybone/scroll-get@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@livelybone/scroll-get/-/scroll-get-5.0.2.tgz#6d278b5adc59c77b268162a87d449e39597ab616"
+  integrity sha512-zswJ9y1Ygsu5Nnewu+i/Ee/vSsVpENCt67zDxuUo2CyGPtNVFF3eKcs1JMFmPJUrltb49SFgDOFoGXsPFIFjhw==
+
+"@livelybone/vue-datepicker@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@livelybone/vue-datepicker/-/vue-datepicker-4.0.3.tgz#f617d884842c3f3bef6873e1b2035f2327b220e3"
+  integrity sha512-lojd+1Gci+NarGRdtgt8vy2d5O7N+JcUZE/TRtI/296/VbieRLkNty8GEOi+y2LFZdMCZ89iwFAkysUgDFscFw==
+  dependencies:
+    "@livelybone/copy" "^2.6.3"
+    "@livelybone/date-generator" "^4.2.1"
+    "@livelybone/vue-popper" "^2.4.0"
+    vue-scrollbar-live "^5.7.1"
+
+"@livelybone/vue-popper@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@livelybone/vue-popper/-/vue-popper-2.4.0.tgz#24093266399f394165174f2ce24ae00326111551"
+  integrity sha512-JUADQjeHKV8ACBzcdJRXivAZ71/Iz7FJ8vQTkqS0eM+EDZtQoqsFW4AQoGJHlfw7L5TxUxY3BDLu9Dqb2cy03A==
+  dependencies:
+    popper.js "^1.14.4"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -5452,6 +5497,11 @@ is-glob@^4.0.0, is-glob@^4.0.1, is-glob@~4.0.1:
   dependencies:
     is-extglob "^2.1.1"
 
+is-mobile@^2.0.1:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/is-mobile/-/is-mobile-2.2.2.tgz#f6c9c5d50ee01254ce05e739bdd835f1ed4e9954"
+  integrity sha512-wW/SXnYJkTjs++tVK5b6kVITZpAZPtUrt9SF80vvxGiF/Oywal+COk1jlRkiVq15RFNEQKQY31TkV24/1T5cVg==
+
 is-negative-zero@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/is-negative-zero/-/is-negative-zero-2.0.1.tgz#3de746c18dda2319241a53675908d8f766f11c24"
@@ -7048,7 +7098,7 @@ pnp-webpack-plugin@^1.6.4:
   dependencies:
     ts-pnp "^1.1.6"
 
-popper.js@^1.16.1:
+popper.js@^1.14.4, popper.js@^1.16.1:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
   integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
@@ -9338,6 +9388,14 @@ vue-runtime-helpers@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vue-runtime-helpers/-/vue-runtime-helpers-1.1.2.tgz#446b7b820888ab0c5264d2c3a32468e72e4100f3"
   integrity sha512-pZfGp+PW/IXEOyETE09xQHR1CKkR9HfHZdnMD/FVLUNI+HxYTa82evx5WrF6Kz4s82qtqHvMZ8MZpbk2zT2E1Q==
+
+vue-scrollbar-live@^5.7.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/vue-scrollbar-live/-/vue-scrollbar-live-5.7.1.tgz#192a344f885a5762ef5acf639e72dad736c3a819"
+  integrity sha512-bN/Bx6Olq9IWi6fR4BdsvslKfBlX6oz7ocS8haev09PmP2bgSzCdv/J2SQdra8QgHB0FfXwKOjg7cqkSrWVWsA==
+  dependencies:
+    "@livelybone/mouse-events" "^1.0.0"
+    "@livelybone/scroll-get" "^5.0.2"
 
 vue-scrollto@^2.20.0:
   version "2.20.0"

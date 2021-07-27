@@ -104,7 +104,7 @@
           </div>
         </b-collapse>
       </div>
-      <div class="mb-5" />
+      <div class="separator mb-5" />
     </b-colxx>
   </b-row>
 </template>
@@ -115,7 +115,6 @@ import {
   ImageListIcon
 } from "../../components/Svg";
 import AddNewModal from "./AddNewModal";
-
 export default {
   components: {
     "data-list-icon": DataListIcon,
