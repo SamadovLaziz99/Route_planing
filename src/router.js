@@ -64,22 +64,28 @@ const routes = [
         children: [
           {
             path: "list",
-            component: () => import("./views/app/pages/product/DataList"),
+            component: () => import("./views/app/foods/List"),
+            children: []
+          },
+          {
+            path: "details",
+            name: 'food_detail',
+            component: () => import("./views/app/foods/Details"),
             children: []
           },
           {
             path: "category",
-            component: () => import("./views/app/pages/product/ThumbList"),
+            component: () => import("./views/app/foods/Category"),
             children: []
           },
           {
             path: "unit",
-            component: () => import("./views/app/pages/product/Details"),
+            component: () => import("./views/app/foods/Unit"),
             children: []
           },
           {
             path: "collection",
-            component: () => import("./views/Defaults"),
+            component: () => import("./views/app/foods/Collection"),
             children: []
           },
         ]

@@ -607,7 +607,7 @@ p {
 }
 
 .list-thumbnail {
-  border-radius: $border-radius;
+  border-radius: $border-radius-rounded !important;
   padding: 0;
   border: initial;
   height: auto;
@@ -2964,7 +2964,7 @@ body.default-transition main {
 .card {
   border: initial;
   background: $foreground-color;
-
+  border-radius: $border-radius-rounded !important;
   .card-header .card-icon {
     right: 5px;
     top: 5px;
@@ -6125,7 +6125,7 @@ i.large-icon {
   }
 
   .list-thumbnail {
-    border-radius: $border-radius-rounded;
+    border-radius: $border-radius-rounded !important;
   }
 
   .card-img-bottom,
@@ -6161,7 +6161,7 @@ i.large-icon {
   }
 
   .card {
-    border-radius: $border-radius-rounded;
+    border-radius: $border-radius-rounded !important;
   }
 
   .card.auth-card {

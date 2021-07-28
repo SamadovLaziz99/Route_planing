@@ -17,7 +17,7 @@
         :total="pagination.total"
         :perPage="pagination.limit"
       ></list-page-heading>
-      <b-card :title="$t(`order.${$route.query.type}`)">
+      <b-card :title="$t(`menu.transactions`)">
         <b-table
           hover
           :items="items"

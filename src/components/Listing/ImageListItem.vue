@@ -13,7 +13,9 @@
             </b-colxx>
             <b-colxx xxs="10" class="mb-3">
                 <h6 class="mb-4 card-subtitle">{{data.title}}</h6>
-                <p class="text-muted text-small mb-0 font-weight-light card-text">{{data.date}}</p>
+                <p v-if="data.unit" class="text-muted text-small mb-0 font-weight-light card-text">Unit: {{data.unit}}</p>
+                <p v-if="data.price" class="text-muted text-small mb-0 font-weight-light card-text">Price: {{data.price}}</p>
+                <p class="text-muted text-small mb-0 font-weight-light card-text"> Created At: {{data.date}}</p>
             </b-colxx>
         </b-row>
     </b-card-body>
