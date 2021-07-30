@@ -5,11 +5,14 @@
     </router-link>
     <div class="pl-2 d-flex flex-grow-1 min-width-zero">
         <div class="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-          <router-link :to="{ name: data.push, query: { food: data.title, id: data.id } }" class="w-40 w-sm-100">
-                <p class="list-item-heading mb-0 truncate">{{ data.title }}</p>
+          <router-link :to="data.router ? data.router : '#'" class="w-40 w-sm-100">
+                <p v-if="data.fullname" class="list-item-heading mb-0 truncate">{{ data.fullname }}</p>
+                <p v-else class="list-item-heading mb-0 truncate">{{ data.title }}</p>
             </router-link>
+            <p v-if="data.phone" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.phone }}</p>
             <p v-if="data.vendor" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.vendor }}</p>
-            <p class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.category }}</p>
+            <p v-if="data.car_model" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.car_model }}</p>
+            <p v-if="data.plate_number" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.plate_number }}</p>
             <p v-if="data.unit" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.unit }}</p>
             <p v-if="data.price" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.price }}</p>
             <p v-if="data.position" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.position }}</p>

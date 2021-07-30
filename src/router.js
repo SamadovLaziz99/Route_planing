@@ -97,7 +97,7 @@ const routes = [
         children: [
           {
             path: "list",
-            component: () => import("./views/app/pages/product/DataList"),
+            component: () => import("./views/app/users/List"),
             children: []
           }
         ]
@@ -109,17 +109,23 @@ const routes = [
         children: [
           {
             path: "vendors",
-            component: () => import("./views/app/pages/product/DataList"),
+            component: () => import("./views/app/employees/Vendors"),
+            children: []
+          },
+          {
+            path: "vendor-detail",
+            name: "vendor-detail",
+            component: () => import("./views/app/employees/VendorDetails"),
             children: []
           },
           {
             path: "couriers",
-            component: () => import("./views/app/pages/product/ThumbList"),
+            component: () => import("./views/app/employees/Couriers"),
             children: []
           },
           {
             path: "management_team",
-            component: () => import("./views/app/pages/product/Details"),
+            component: () => import("./views/app/employees/ManagementTeam"),
             children: []
           }
         ]

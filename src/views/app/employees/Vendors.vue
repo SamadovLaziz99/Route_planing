@@ -2,7 +2,7 @@
   <b-row>
     <b-colxx class="disable-text-selection">
       <list-page-heading
-        :title="$t('menu.foods_list')"
+        :title="$t('menu.foods_category')"
         :selectAll="selectAll"
         :isSelectedAll="isSelectedAll"
         :isAnyItemSelected="isAnyItemSelected"
@@ -43,9 +43,8 @@
 <script>
 import axios from "axios";
 import { apiUrl } from "../../../constants/config";
-import ListPageHeading from "./ListHeading";
-import ListPageListing from "./ListListing";
-
+import ListPageHeading from "./Heading";
+import ListPageListing from "./Listing";
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -67,6 +66,18 @@ export default {
           label: "Category"
         }
       ],
+      // vendors: [
+      //   { name: 'James', phone: '+998900006996', image: '1.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'Robert', phone: '+998900006996', image: '2.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'John', phone: '+998900006996', image: '3.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'Michael', phone: '+998900006996', image: '4.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'William', phone: '+998900006996', image: '5.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'David', phone: '+998900006996', image: '6.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'Richard', phone: '+998900006996', image: '7.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'Joseph', phone: '+998900006996', image: '8.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'Thomas', phone: '+998900006996', image: '9.jpg',  reg_date: '12-07-2021 08:42' },
+      //   { name: 'Charles', phone: '+998900006996', image: '10.jpg',  reg_date: '12-07-2021 08:42' },
+      // ],
       page: 1,
       perPage: 4,
       search: "",
@@ -91,21 +102,21 @@ export default {
           this.total = res.total;
           this.from = res.from;
           this.to = res.to;
-          this.items = res.data.map(x => {
+          console.log(res.data)
+          this.items = res.data.map((x, index) => {
             return {
               ...x,
-              unit: 'kg',
-              price: '1000 $',
-              vendor: 'Sophia',
+              fullname: 'Sara Korthey',
+              phone: '+9989908890036',
               router: {
-                name: 'food_detail',
+                name: 'vendor-detail',
                 query: {
-                  food: x.title,
+                  vendor: 'Sara Korthey',
                   id: x.id
                 },
               },
               action: ['view', 'edit', 'delete'],
-              img: x.img.replace("/img/", "/img/products/")
+              img: `../../../assets/img/profiles/${index + 3}.jpg`
             };
           });
           this.perPage = res.per_page;
