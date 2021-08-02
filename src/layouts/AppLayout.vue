@@ -2,7 +2,7 @@
   <div id="app-container" :class="getMenuType">
     <topnav />
     <sidebar />
-    <main class="responsiveMain">
+    <main :class="`${$route.name === 'maps' ? 'responsiveMain' : ''}`">
       <div class="container-fluid">
         <slot></slot>
       </div>

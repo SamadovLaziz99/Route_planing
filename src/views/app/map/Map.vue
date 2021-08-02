@@ -176,7 +176,7 @@ export default {
         this.maps = maps
         this.map = new maps.Map('map', {
           center: this.coordinates,
-          zoom: 15,
+          zoom: 12,
           controls: ['zoomControl', 'fullscreenControl']
         })
         this.drawPointers()
@@ -184,8 +184,11 @@ export default {
         .catch(error => console.log('Failed to load Yandex Maps', error))
     },
   },
+  mounted() {
+    this.map.container.fitToViewport();
+  },
   created () {
-    this.initMap()
+    ymaps.ready(this.initMap())
   }
 }
 </script>
@@ -193,14 +196,5 @@ export default {
 <style>
 .map {
   height: 680px;
-  position: relative;
-}
-.saveGeo {
-  /*border: 1px solid;*/
-  position: absolute;
-  display: flex;
-  bottom: 2%;
-  right: 1%;
-  z-index: 5;
 }
 </style>

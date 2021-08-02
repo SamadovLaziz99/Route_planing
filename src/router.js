@@ -125,6 +125,7 @@ const routes = [
           },
           {
             path: "maps",
+            name: 'maps',
             component: () => import("./views/app/map/Map"),
             children: []
           },
