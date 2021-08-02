@@ -105,6 +105,12 @@ const data = [
         // roles: [UserRole.Admin],
       },
       {
+        icon: "simple-icon-map",
+        label: "menu.maps",
+        to: `${adminRoot}/employees/maps`,
+        // roles: [UserRole.Admin],
+      },
+      {
         icon: "iconsminds-conference",
         label: "menu.management_team",
         to: `${adminRoot}/employees/management_team`,

@@ -43,7 +43,8 @@
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.6",
     "vuetable-2": "^1.7.5",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "ymaps": "^0.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.13",

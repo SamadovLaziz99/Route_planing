@@ -124,6 +124,11 @@ const routes = [
             children: []
           },
           {
+            path: "maps",
+            component: () => import("./views/app/map/Map"),
+            children: []
+          },
+          {
             path: "management_team",
             component: () => import("./views/app/employees/ManagementTeam"),
             children: []

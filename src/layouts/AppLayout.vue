@@ -2,7 +2,7 @@
   <div id="app-container" :class="getMenuType">
     <topnav />
     <sidebar />
-    <main>
+    <main class="responsiveMain">
       <div class="container-fluid">
         <slot></slot>
       </div>
@@ -38,3 +38,12 @@ export default {
   }
 };
 </script>
+<style>
+.responsiveMain {
+  /*margin-left: 110px !important;*/
+  margin-left: 121px !important;
+  margin-right: 0 !important;
+  margin-bottom: 0px!important;
+  margin-top: 100px;
+}
+</style>
