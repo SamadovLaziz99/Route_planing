@@ -1,33 +1,30 @@
 <template>
   <div>
-    <div v-if="reload" tabindex="1" @keyup="keyHandler($event)" id="map" ref="basicMap" class="map">
-<!--      <div class="saveGeo">-->
-<!--        <a-button @click="showMapData" type="default"><a-icon type="save" /> {{ $t('save_geo') }}</a-button>-->
-<!--        <a-button @click="reset" style="margin-left: 5px" type="default"><a-icon type="reload" /> {{ $t('reset') }}</a-button>-->
-<!--      </div>-->
-    </div>
-<!--    <div style="margin-top: 10px">-->
-<!--      <p style="font-size: 14px; transform: translateY(10px)">{{ $t('name') }}</p>-->
-<!--      <a-input v-model="name" />-->
-<!--    </div>-->
-<!--    <div style="display: flex; justify-content: flex-end; margin-top: 30px">-->
-<!--      <a-button @click="$router.go(-1)" type="default">{{ $t('cancel') }}</a-button>-->
-<!--      <a-button :loading="loading" @click="save" style="margin-left: 5px" type="primary">{{ $route.params.id ? $t('update') : $t('save') }}</a-button>-->
-<!--    </div>-->
+    <div tabindex="1" @keyup="keyHandler($event)" id="map" ref="basicMap" class="map"></div>
   </div>
 </template>
-<!--<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=679a08be-aa49-4a79-ad31-80c65dda374a" />-->
 <script>
 import homeIcon from '../../../assets/img/pointers/home.svg'
 import cookerIcon from '../../../assets/img/pointers/cooker.png'
+// import { loadYmap } from 'vue-yandex-maps'
+// import { yandexMap, ymapMarker } from 'vue-yandex-maps'
 import ymaps from 'ymaps'
+import way from './way'
+// const fs = require('fs')
 export default {
+  // components: { yandexMap, ymapMarker },
   data () {
     return {
       map: null,
       maps: null,
       reload: true,
       count: 0,
+      vector: 1,
+      geoObjects: {
+        cookers: [],
+        couriers: [],
+        route: null
+      },
       cookers: [
         [41.367250, 69.285450],
         [41.352607, 69.288931],
@@ -46,6 +43,7 @@ export default {
         [41.311251, 69.268272],
         [41.307083, 69.294877]
       ],
+      courierWay: way,
       home_coord: [41.324174, 69.290130],
       home_coords: [
         [41.324174, 69.290130],
@@ -54,54 +52,35 @@ export default {
         [41.325194, 69.287582],
         [41.325534, 69.282935]
       ],
-      coordinates: [41.324174, 69.290130],
+      coordinates: [ 41.312947, 69.280204 ],
       homeIcon: homeIcon,
       cookerIcon: cookerIcon
     }
   },
   watch: {
-    // coordinates () {
-    //   ymaps.ready(this.initMap());
-    // }
+    courierWay (val) {
+      console.log(val)
+    },
+    count (val) {
+      if (val > 136) this.vector = -1
+      if (val < 1) this.vector = 1
+    }
   },
   methods: {
-    reloader () {
-      setTimeout(() => {
-        console.log('salom')
-      }, 1)
-      setTimeout(() => {
-        console.log('alik')
-      }, 2)
+    onClick (e) {
+      console.log(e.get('coords'))
     },
     keyHandler (e) {
       console.log(e.code)
-      this.homePoint(this.home_coords[4])
-      console.log(this.map.geoObjects)
-      // this.reloader()
-      // this.map.geoObjects.each((collection) => {
-      //   console.log(collection.get('target'))
-        // console.log(collection.getGeoObjects())
-        // collection.each((marker) => {
-        //   const markerId = marker.properties.get('markerId');
-        //   console.log(markerId)
+      console.log(this.geoObjects)
+      if (e.code === 'KeyS') {
+        // fs.writeFile('ways.json', {
+        //   way: this.courierWay
         // })
-      // })
-      // if (e.code === 'KeyS') {
-      //     if (this.count >= 0 && this.count < 6) this.count --
-      //     this.homePoint(this.home_coords[this.count])
-      //     this.coordinates = this.home_coords[this.count]
-      // }
-      // if (e.code === 'KeyW') {
-      //   if (this.count >= 0 && this.count < 5) this.count ++
-      //   this.homePoint(this.home_coords[this.count])
-      //   this.coordinates = this.home_coords[this.count]
-      // }
-    },
-    pointDown (e) {
-      console.log('Down Pressed', e)
-    },
-    pointUp (e) {
-      console.log('Up Pressed', e)
+        // for (let i = 0; i < this.geoObjects.couriers.length; i++) {
+        //   this.map.geoObjects.remove(this.geoObjects.couriers[i])
+        // }
+      }
     },
     homePoint (coords) {
       const point = new this.maps.GeoObject({
@@ -116,12 +95,30 @@ export default {
       }, {
         preset: 'islands#redHomeCircleIcon',
         draggable: false,
-        // iconLayout: 'default#image',
-        // iconImageHref: this.homeIcon,
-        // iconImageSize: [50, 42],
-        // iconImageOffset: [-3, -42]
       })
       this.map.geoObjects.add(point)
+    },
+    pointSetter(oldPoint, newPoint) {
+      const index = this.geoObjects.couriers.indexOf(oldPoint)
+      this.geoObjects.couriers[index] = newPoint
+      this.map.geoObjects.remove(oldPoint)
+      this.map.geoObjects.add(newPoint)
+    },
+    courierRealTime (coords) {
+      this.map.panTo(coords, { checkZoomRange: true })
+      const point = new this.maps.GeoObject({
+        geometry: {
+          type: 'Point',
+          coordinates: coords
+        },
+        properties: {
+          hintContent: 'Real Courier'
+        }
+      }, {
+        preset: 'islands#greenAutoCircleIcon',
+        draggable: false,
+      })
+      this.pointSetter(this.geoObjects.couriers[2], point)
     },
     courierPoint (coords, name) {
       const point = new this.maps.GeoObject({
@@ -135,11 +132,8 @@ export default {
       }, {
         preset: 'islands#greenAutoCircleIcon',
         draggable: false,
-        // iconLayout: 'default#image',
-        // iconImageHref: this.homeIcon,
-        // iconImageSize: [50, 42],
-        // iconImageOffset: [-3, -42]
       })
+      this.geoObjects.couriers.push(point)
       this.map.geoObjects.add(point)
     },
     cookerPoint (coords, name) {
@@ -155,12 +149,58 @@ export default {
       }, {
         preset: 'islands#blueFoodCircleIcon',
         draggable: false,
-        // iconLayout: 'default#image',
-        // iconImageHref: this.cookerIcon,
-        // iconImageSize: [50, 42],
-        // iconImageOffset: [-3, -42]
       })
+      this.geoObjects.cookers.push(point)
       this.map.geoObjects.add(point)
+    },
+    routeCreator (state) {
+      const _oldRoute = this.geoObjects.route
+      if (_oldRoute) this.map.geoObjects.remove(_oldRoute)
+      this.maps.route([this.home_coord, this.coordinates], {
+        multiRoute: true,
+        mapStateAutoApply: state?.mapStateAutoApply,
+      }).done(function (route) {
+        console.log(route)
+        // console.log(route.getWayPoints().getLength())
+        console.log(route.model.getReferencePoints())
+        route.options.set("mapStateAutoApply", true);
+        this.geoObjects.route = route
+        this.map.geoObjects.add(route);
+      }, function (err) {
+        throw err;
+      }, this);
+    },
+    multiRoute () {
+      const multiRoute = new this.maps.multiRouter.MultiRoute({
+        referencePoints: [
+          this.home_coord,
+          [41.313705, 69.280240]
+        ],
+        params: {
+          routingMode: 'masstransit'
+        }
+      }, {
+        boundsAutoApply: true
+      });
+
+      // Creating a button.
+      // const changeLayoutButton = new this.maps.control.Button({
+      //   data: { content: "Show time for walking segments"},
+      //   options: { selectOnClick: true }
+      // });
+      //
+      // // Declaring handlers for the button.
+      // changeLayoutButton.events.add('select', function () {
+      //   multiRoute.options.set(
+      //     "routeWalkMarkerIconContentLayout",
+      //     ymaps.templateLayoutFactory.createClass('{{ properties.duration.text }}')
+      //   );
+      // });
+      //
+      // changeLayoutButton.events.add('deselect', function () {
+      //   multiRoute.options.unset("routeWalkMarkerIconContentLayout");
+      // });
+      this.map.geoObjects.add(multiRoute);
     },
     drawPointers () {
       this.homePoint()
@@ -170,31 +210,43 @@ export default {
       this.couriers.forEach((e, i) => {
         this.courierPoint(e, `Courier ${ i + 1 }`)
       })
+      this.routeCreator()
+      // this.multiRoute()
     },
     initMap () {
-      ymaps.load().then(maps => {
+      ymaps.load('https://api-maps.yandex.ru/2.1/?apikey=8fb635ed-f033-4166-8286-a5388bb7d9a9&lang=ru_RU').then(maps => {
         this.maps = maps
         this.map = new maps.Map('map', {
           center: this.coordinates,
-          zoom: 12,
+          zoom: 15,
           controls: ['zoomControl', 'fullscreenControl']
         })
+        this.map.events.add('click', (e) => {
+          const _coords = e.get('coords');
+          this.coordinates = _coords
+          this.map.panTo(_coords, { checkZoomRange: true })
+          this.routeCreator({
+            mapStateAutoApply: true
+          })
+        })
+        this.map.container.fitToViewport();
         this.drawPointers()
+        setInterval(() => {
+          this.courierRealTime(this.courierWay[this.count])
+          this.count += this.vector
+        }, 1000)
       })
         .catch(error => console.log('Failed to load Yandex Maps', error))
     },
   },
-  mounted() {
-    this.map.container.fitToViewport();
-  },
   created () {
-    ymaps.ready(this.initMap())
+    this.initMap()
   }
 }
 </script>
 
 <style>
 .map {
-  height: 680px;
+  height: 87vh;
 }
 </style>
