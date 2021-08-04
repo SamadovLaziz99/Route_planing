@@ -1,5 +1,4 @@
 <template>
-<!--  <div class="pr-3 pl-3">-->
       <vue-perfect-scrollbar
         class="rightbar_container yandexRightBar pr-3 pl-3"
         :settings="{ suppressScrollX: true, wheelPropagation: false }"
@@ -19,18 +18,18 @@
           </div>
           <b-collapse :id="`faq_${index}`" accordion="faq-accordion" role="tabpanel">
             <div class="pl-4 pt-4">
-              <TimeLine/>
+              <TimeLine @get="getRoute" :route="route"/>
             </div>
           </b-collapse>
         </b-card>
       </vue-perfect-scrollbar>
-<!--  </div>-->
 </template>
 <script>
 import tickets from "../../../data/tickets";
 import ListCard from "./ListCard";
 import TimeLine from "./TimeLine";
 export default {
+  props: ['route'],
   components: {
     ListCard,
     TimeLine
@@ -47,6 +46,9 @@ export default {
     }
   },
   methods: {
+    getRoute (e) {
+      this.$emit('getOneRoute', e)
+    },
     clicked (id) {
       this.active = id
     }

@@ -5,7 +5,7 @@
       <div class="rightToggle" @click="rightBar = !rightBar">
         <div class="simple-icon-layers icon"></div>
       </div>
-      <right-bar/>
+      <right-bar @getOneRoute="getOneRoute" :route="route"/>
     </div>
   </div>
 </template>
@@ -27,6 +27,10 @@ export default {
       maps: null,
       count: 0,
       vector: 1,
+      route: {
+        stop: true,
+        coords: []
+      },
       geoObjects: {
         cookers: [],
         couriers: [],
@@ -51,7 +55,6 @@ export default {
         [41.307083, 69.294877]
       ],
       courierWay: way,
-      // home_coord: [41.324174, 69.290130],
       home_coords: [
         [41.324174, 69.290130],
         [41.324759, 69.290031],
@@ -76,12 +79,23 @@ export default {
   methods: {
     clickedMap (e) {
       this.rightBar = false
+      this.route.stop = true
       const _coords = e.get('coords');
       this.coordinates = _coords
       this.map.panTo(_coords, { checkZoomRange: true })
-      this.routeCreator({
-        mapStateAutoApply: true
-      })
+      // this.routeCreator({
+      //   mapStateAutoApply: true
+      // })
+    },
+    getOneRoute (e) {
+      this.rightBar = false
+      this.route.coords = e
+      this.route.stop = false
+      // this.routeCreator({
+      //   coords: e,
+      //   mapStateAutoApply: true
+      // })
+      console.log('Route:', e)
     },
     keyHandler (e) {
       console.log(e.code)
@@ -132,6 +146,13 @@ export default {
         draggable: false,
       })
       this.pointSetter(this.geoObjects.couriers[2], point)
+      this.routeCreator({
+        coords: [
+          coords,
+          defaultMap.home,
+          this.route.coords[0]
+        ]
+      })
     },
     courierPoint (coords, name) {
       const point = new this.maps.GeoObject({
@@ -169,19 +190,21 @@ export default {
     routeCreator (state) {
       const _oldRoute = this.geoObjects.route
       if (_oldRoute) this.map.geoObjects.remove(_oldRoute)
-      this.maps.route([defaultMap.home, this.coordinates], {
-        multiRoute: true,
-        mapStateAutoApply: state?.mapStateAutoApply,
-      }).done(function (route) {
-        console.log(route)
-        // console.log(route.getWayPoints().getLength())
-        console.log(route.model.getReferencePoints())
-        route.options.set("mapStateAutoApply", true);
-        this.geoObjects.route = route
-        this.map.geoObjects.add(route);
-      }, function (err) {
-        throw err;
-      }, this);
+      if (!this.route.stop) {
+        this.maps.route(state.coords, {
+          multiRoute: true,
+          mapStateAutoApply: state?.mapStateAutoApply,
+        }).done(function (route) {
+          // console.log(route)
+          // console.log(route.getWayPoints().getLength())
+          // console.log(route.model.getReferencePoints())
+          route.options.set("mapStateAutoApply", true);
+          this.geoObjects.route = route
+          this.map.geoObjects.add(route);
+        }, function (err) {
+          throw err;
+        }, this);
+      }
     },
     multiRoute () {
       const multiRoute = new this.maps.multiRouter.MultiRoute({
@@ -205,7 +228,7 @@ export default {
       this.couriers.forEach((e, i) => {
         this.courierPoint(e, `Courier ${ i + 1 }`)
       })
-      this.routeCreator()
+      // this.routeCreator()
       // this.multiRoute()
     },
     initMap () {
