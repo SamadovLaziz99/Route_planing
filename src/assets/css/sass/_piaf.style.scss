@@ -566,6 +566,58 @@ p {
     }
   }
 }
+// ======= YANDEX MAP ===========
+.yandexMap {
+  height: calc(100vh - 100px);
+  margin-top: $navbar-height;
+  width: calc(100vw - 120px);
+  margin-left: 120px;
+  @include respond-below(xl) {
+    height: calc(100vh - 90px);
+    margin-top: $navbar-height-lg;
+    width: calc(100% - 110px);
+    margin-left: $main-menu-width-lg;
+  }
+
+  @include respond-below(lg) {
+    height: calc(100vh - 80px);
+    margin-top: $navbar-height-md;
+    width: calc(100% - 100px);
+    margin-left: $main-menu-width-md;
+  }
+
+  @include respond-below(sm) {
+    height: calc(100vh - 70px);
+    margin-top: $navbar-height-xs;
+    width: calc(100% - 90px);
+    margin-left: $main-menu-width-xs;
+  }
+}
+.yandexRightBar {
+  height: calc(100vh - 100px);
+  margin-top: $navbar-height;
+  @include respond-below(xl) {
+    height: calc(100vh - 90px);
+    margin-top: $navbar-height-lg;
+  }
+
+  @include respond-below(lg) {
+    height: calc(100vh - 80px);
+    margin-top: $navbar-height-md;
+  }
+
+  @include respond-below(sm) {
+    height: calc(100vh - 70px);
+    margin-top: $navbar-height-xs;
+  }
+}
+
+
+
+// ======= YANDEX MAP ===========
+
+
+
 
 .text-theme-2 {
   color: $theme-color-2 !important;
@@ -7661,8 +7713,7 @@ i.large-icon {
     }
   }
 }
-
-body {
+.app_main {
   min-height: calc(100% - 150px);
   position: relative;
   padding-bottom: 90px;
@@ -7678,6 +7729,33 @@ body {
   @include respond-below(sm) {
     min-height: calc(100% - 85px);
   }
+  @include respond-below(xs) {
+    padding-bottom: 60px;
+  }
+
+  &.no-footer {
+    padding-bottom: initial;
+    footer {
+      display: none;
+    }
+  }
+}
+body {
+  //min-height: calc(100% - 150px);
+  position: relative;
+  //padding-bottom: 90px;
+
+  //@include respond-below(xl) {
+  //  min-height: calc(100% - 130px);
+  //}
+  //
+  //@include respond-below(lg) {
+  //  min-height: calc(100% - 110px);
+  //}
+
+  //@include respond-below(sm) {
+  //  min-height: calc(100% - 85px);
+  //}
 
   @include respond-below(xs) {
     padding-bottom: 60px;

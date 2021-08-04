@@ -7,7 +7,7 @@
         <slot></slot>
       </div>
     </main>
-    <footer-component />
+    <footer-component v-if="$route.name !== 'maps'" />
   </div>
 </template>
 
@@ -40,10 +40,11 @@ export default {
 </script>
 <style>
 .responsiveMain {
+  margin: 0 !important;
   /*margin-left: 110px !important;*/
-  margin-left: 121px !important;
-  margin-right: 0 !important;
-  margin-bottom: 0px!important;
-  margin-top: 100px;
+  /*margin-left: 121px !important;*/
+  /*margin-right: 0 !important;*/
+  /*margin-bottom: 0px!important;*/
+  /*margin-top: 100px;*/
 }
 </style>

@@ -1,23 +1,30 @@
 <template>
-  <div>
-    <div tabindex="1" @keyup="keyHandler($event)" id="map" ref="basicMap" class="map"></div>
+  <div class="map_container">
+    <div tabindex="1" @keyup="keyHandler($event)" id="map" ref="basicMap" class="yandexMap"></div>
+    <div :class="`mapRightBar ${ rightBar ? 'mapRightBar_active' : '' }`">
+      <div class="rightToggle" @click="rightBar = !rightBar">
+        <div class="simple-icon-layers icon"></div>
+      </div>
+      <right-bar/>
+    </div>
   </div>
 </template>
 <script>
 import homeIcon from '../../../assets/img/pointers/home.svg'
 import cookerIcon from '../../../assets/img/pointers/cooker.png'
-// import { loadYmap } from 'vue-yandex-maps'
-// import { yandexMap, ymapMarker } from 'vue-yandex-maps'
 import ymaps from 'ymaps'
+import { defaultMap } from "../../../constants/config";
+import RightBar from "./RightBar";
 import way from './way'
-// const fs = require('fs')
 export default {
-  // components: { yandexMap, ymapMarker },
+  components: {
+    'right-bar': RightBar
+  },
   data () {
     return {
+      rightBar: false,
       map: null,
       maps: null,
-      reload: true,
       count: 0,
       vector: 1,
       geoObjects: {
@@ -44,7 +51,7 @@ export default {
         [41.307083, 69.294877]
       ],
       courierWay: way,
-      home_coord: [41.324174, 69.290130],
+      // home_coord: [41.324174, 69.290130],
       home_coords: [
         [41.324174, 69.290130],
         [41.324759, 69.290031],
@@ -67,8 +74,14 @@ export default {
     }
   },
   methods: {
-    onClick (e) {
-      console.log(e.get('coords'))
+    clickedMap (e) {
+      this.rightBar = false
+      const _coords = e.get('coords');
+      this.coordinates = _coords
+      this.map.panTo(_coords, { checkZoomRange: true })
+      this.routeCreator({
+        mapStateAutoApply: true
+      })
     },
     keyHandler (e) {
       console.log(e.code)
@@ -86,7 +99,7 @@ export default {
       const point = new this.maps.GeoObject({
         geometry: {
           type: 'Point',
-          coordinates: coords || this.home_coord
+          coordinates: coords || defaultMap.home
         },
         properties: {
           iconContent: 'Coozin',
@@ -105,7 +118,7 @@ export default {
       this.map.geoObjects.add(newPoint)
     },
     courierRealTime (coords) {
-      this.map.panTo(coords, { checkZoomRange: true })
+      // this.map.panTo(coords, { checkZoomRange: true })
       const point = new this.maps.GeoObject({
         geometry: {
           type: 'Point',
@@ -156,7 +169,7 @@ export default {
     routeCreator (state) {
       const _oldRoute = this.geoObjects.route
       if (_oldRoute) this.map.geoObjects.remove(_oldRoute)
-      this.maps.route([this.home_coord, this.coordinates], {
+      this.maps.route([defaultMap.home, this.coordinates], {
         multiRoute: true,
         mapStateAutoApply: state?.mapStateAutoApply,
       }).done(function (route) {
@@ -182,24 +195,6 @@ export default {
       }, {
         boundsAutoApply: true
       });
-
-      // Creating a button.
-      // const changeLayoutButton = new this.maps.control.Button({
-      //   data: { content: "Show time for walking segments"},
-      //   options: { selectOnClick: true }
-      // });
-      //
-      // // Declaring handlers for the button.
-      // changeLayoutButton.events.add('select', function () {
-      //   multiRoute.options.set(
-      //     "routeWalkMarkerIconContentLayout",
-      //     ymaps.templateLayoutFactory.createClass('{{ properties.duration.text }}')
-      //   );
-      // });
-      //
-      // changeLayoutButton.events.add('deselect', function () {
-      //   multiRoute.options.unset("routeWalkMarkerIconContentLayout");
-      // });
       this.map.geoObjects.add(multiRoute);
     },
     drawPointers () {
@@ -214,21 +209,14 @@ export default {
       // this.multiRoute()
     },
     initMap () {
-      ymaps.load('https://api-maps.yandex.ru/2.1/?apikey=8fb635ed-f033-4166-8286-a5388bb7d9a9&lang=ru_RU').then(maps => {
+      ymaps.load(defaultMap.api).then(maps => {
         this.maps = maps
         this.map = new maps.Map('map', {
-          center: this.coordinates,
+          center: defaultMap.home,
           zoom: 15,
           controls: ['zoomControl', 'fullscreenControl']
         })
-        this.map.events.add('click', (e) => {
-          const _coords = e.get('coords');
-          this.coordinates = _coords
-          this.map.panTo(_coords, { checkZoomRange: true })
-          this.routeCreator({
-            mapStateAutoApply: true
-          })
-        })
+        this.map.events.add('click', (e) => this.clickedMap(e))
         this.map.container.fitToViewport();
         this.drawPointers()
         setInterval(() => {
@@ -245,8 +233,59 @@ export default {
 }
 </script>
 
-<style>
-.map {
-  height: 87vh;
+<style lang="scss">
+.mapRightBar {
+  width: 400px;
+  height: 100%;
+  position: fixed;
+  //margin-right: -345px;
+  transform: translateX(345px);
+  z-index: 5;
+  display: flex;
+  right: 0;
+  top: 0;
+  //position: absolute;
+  transition: all, .5s;
+  .rightbar_container {
+    width: 345px;
+    position: relative;
+    z-index: 6;
+    padding: 15px 10px;
+    overflow-y: scroll;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    background: #ffffff;
+  }
+}
+.rightToggle {
+  width: 55px;
+  height: 80px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-0%);
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  cursor: pointer;
+  transition: all, .3s;
+  .icon {
+    color: #6B7280;
+    font-size: 30px;
+    transition: all, .2s;
+  }
+}
+.rightToggle:hover {
+  padding-right: 5px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  .icon {
+    transform: rotate(-360deg);
+  }
+}
+.mapRightBar_active {
+  transform: translateX(0px);
 }
 </style>

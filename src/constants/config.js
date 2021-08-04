@@ -1,6 +1,6 @@
 import { UserRole } from "../utils/auth.roles";
 
-export const defaultMenuType = 'menu-default' // 'menu-default', 'menu-sub-hidden', 'menu-hidden';
+export const defaultMenuType = 'menu-sub-hidden' // 'menu-default', 'menu-sub-hidden', 'menu-hidden';
 export const adminRoot = '/app';
 export const searchPath = `${adminRoot}/pages/miscellaneous/search`
 export const buyUrl = 'https://1.envato.market/nEyZa'
@@ -15,7 +15,12 @@ export const localeOptions = [
   { id: 'en', name: 'English' },
   { id: 'ru', name: 'Русский' }
 ]
-
+export const defaultMap = {
+  api: 'https://api-maps.yandex.ru/2.1/?apikey=8fb635ed-f033-4166-8286-a5388bb7d9a9&lang=ru_RU',
+  // apiKey: '8fb635ed-f033-4166-8286-a5388bb7d9a9',
+  center: [41.312947, 69.280204],
+  home: [41.324174, 69.290130]
+}
 export const firebaseConfig = {
   apiKey: "AIzaSyDe94G7L-3soXVSpVbsYlB5DfYH2L91aTU",
   authDomain: "piaf-vue-login.firebaseapp.com",
