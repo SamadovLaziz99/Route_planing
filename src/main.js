@@ -22,6 +22,8 @@ import VueLineClamp from 'vue-line-clamp'
 import VueScrollTo from 'vue-scrollto'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 // import { getCurrentLanguage } from './utils'
 
 Vue.use(BootstrapVue);
@@ -32,7 +34,7 @@ Vue.use(VueScrollTo);
 Vue.use(VueLineClamp, {
   importCss: true
 });
-
+Vue.component('v-select', vSelect)
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);
 Vue.component('b-colxx', Colxx);

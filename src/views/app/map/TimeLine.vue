@@ -1,24 +1,37 @@
 <template>
   <div class="history-tl-container">
-    <ul class="tl">
-      <li v-for="timeline in timelines" :key="timeline.distance" class="tl-item" ng-repeat="item in retailer_history">
-          <div :class="`title ${ (route && route.coords && route.coords === timeline.coords) ? 'title_active' : '' }`" @click="setRoute(timeline)">
-            <div class="item-title"><span class="iconsminds-map-marker-2 marker red"></span>Coozin Home</div>
-            <div class="item-title"><span class="iconsminds-map-marker-2 marker green"></span>{{ timeline.point }}</div>
-            <div class="item-title"><span class="iconsminds-clock marker blue"></span>{{ timeline.time }}</div>
-            <div class="item-title"><span class="iconsminds-scooter marker orange"></span>{{ timeline.distance }}</div>
+<!--    <div class="timeline">-->
+      <ul class="tl">
+        <li v-for="timeline in timelines" :key="timeline.distance" class="tl-item" ng-repeat="item in retailer_history">
+          <div :class="`title ${ (route && route.coords && route.coords === timeline.coords) ? 'title_active' : '' }`">
+            <div class="order_number">
+              #1001100011
+            </div>
+            <div @click="setRoute(timeline)">
+              <div class="item-title"><span class="iconsminds-map-marker-2 marker red"></span>Coozin Home</div>
+              <div class="item-title"><span class="iconsminds-map-marker-2 marker green"></span>{{ timeline.point }}</div>
+              <div class="item-title"><span class="iconsminds-clock marker blue"></span>{{ timeline.time }}</div>
+              <div class="item-title"><span class="iconsminds-scooter marker orange"></span>{{ timeline.distance }}</div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center pt-2">
+              <span>Courier: </span>
+              <v-select style="min-width: 180px;" :options="tickets" label="title" index="detail"/>
+            </div>
           </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+<!--    </div>-->
   </div>
 </template>
 
 <script>
+import tickets from "../../../data/tickets";
 export default {
   name: "TimeLine",
   props: ['route'],
   data () {
     return {
+      tickets,
       timelines: [
         {
           point: 'махалля Мирзо Улугбек, 7/2/24',
@@ -59,94 +72,13 @@ export default {
 </script>
 
 <style lang="scss">
-$line-color: #ed7117;
-.title {
-  padding: 10px;
-  //background: #ececec;
-  border-radius: 10px;
-  border-top-left-radius: 0;
-  transition: all, .8s;
-  cursor: pointer;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
-}
-.title:hover {
-  box-shadow: rgba(237, 113, 23, 0.25) 0px 30px 60px -12px inset, rgba(237, 113, 23, 0.8) 0px 18px 36px -18px inset;
-}
-.title_active {
-  box-shadow: rgba(237, 113, 23, 0.25) 0px 30px 60px -12px inset, rgba(237, 113, 23, 0.8) 0px 18px 36px -18px inset;
-}
-.marker {
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-.red {
-  color: red;
-}
-.green {
-  color: green;
-}
-.blue {
-  color: cornflowerblue;
-}
-.orange {
-  color: $line-color;
-}
-.history-tl-container{
-  //width:50%;
-  //margin: auto;
-  padding-right: 10px;
-  display: block;
-  position: relative;
-}
-.history-tl-container ul.tl{
-  margin: 20px 0;
-  width: 100%;
-  padding: 0;
-  display:inline-block;
-
-}
-.history-tl-container ul.tl li{
-  list-style: none;
-  margin:auto;
-  //margin-left:200px;
-  min-height: 50px;
-  /*background: rgba(255,255,0,0.1);*/
-  border-left:1px dashed $line-color;
-  padding: 0 0 20px 20px;
-  position:relative;
-}
-.history-tl-container ul.tl li:last-child{ border-left:0;}
-.history-tl-container ul.tl li::before{
+.order_number {
   position: absolute;
-  left: -10px;
-  top: 0px;
-  content: " ";
-  border: 8px solid rgba(255, 255, 255, 0.74);
-  border-radius: 500%;
-  background: $line-color;
-  height: 20px;
-  width: 20px;
-  transition: all 500ms ease-in-out;
-
-}
-.history-tl-container ul.tl li:hover::before{
-  border-color:  $line-color;
-  transition: all 400ms ease-in-out;
-}
-ul.tl li .item-title{
-  margin: 5px 0;
-}
-ul.tl li .item-detail{
-  color:rgba(0,0,0,0.5);
-  font-size:12px;
-}
-ul.tl li .timestamp{
-  color: #8D8D8D;
-  position: absolute;
-  //width: 100px;
-  left: -50%;
-  text-align: right;
-  font-size: 12px;
+  right: 0;
+  top: 0;
+  background: #e7e7e7;
+  border-radius: inherit;
+  border-bottom-right-radius: 0;
+  padding: 5px 10px;
 }
 </style>

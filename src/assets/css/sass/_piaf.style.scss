@@ -612,10 +612,161 @@ p {
   }
 }
 
-
+.mapRightBar {
+  width: 400px;
+  height: 100%;
+  position: fixed;
+  //margin-right: -345px;
+  transform: translateX(345px);
+  z-index: 5;
+  display: flex;
+  right: 0;
+  top: 0;
+  //position: absolute;
+  transition: all, .5s;
+  .rightbar_container {
+    width: 345px;
+    position: relative;
+    z-index: 6;
+    padding: 15px 10px;
+    overflow-y: scroll;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    background: $foreground-color;
+  }
+}
+.rightToggle {
+  width: 55px;
+  height: 80px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-0%);
+  right: 0;
+  background: $foreground-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  cursor: pointer;
+  transition: all, .3s;
+  .icon {
+    color: #6B7280;
+    font-size: 30px;
+    transition: all, .2s;
+  }
+}
+.rightToggle:hover {
+  padding-right: 5px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  .icon {
+    transform: rotate(-360deg);
+  }
+}
+.mapRightBar_active {
+  transform: translateX(0px);
+}
 
 // ======= YANDEX MAP ===========
 
+
+// ======= TIME LINE ============
+$line-color: $theme-color-1;
+.title {
+  padding: 10px;
+  //background: #ececec;
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  transition: all, .8s;
+  cursor: pointer;
+  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
+.title:hover {
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+.title_active {
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+.marker {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}
+.blue {
+  color: cornflowerblue;
+}
+.orange {
+  color: $line-color;
+}
+.history-tl-container{
+  //width:50%;
+  //margin: auto;
+  padding-right: 10px;
+  display: block;
+  position: relative;
+  .timeline {
+    ul.tl li .item-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin: 5px 0;
+    }
+    ul.tl li .item-detail{
+      color:rgba(0,0,0,0.5);
+      font-size:12px;
+    }
+    ul.tl li .timestamp{
+      color: #8D8D8D;
+      position: absolute;
+      //width: 100px;
+      left: -50%;
+      text-align: right;
+      font-size: 12px;
+    }
+  }
+}
+.history-tl-container ul.tl{
+  margin: 20px 0;
+  width: 100%;
+  padding: 0;
+  display:inline-block;
+
+}
+.history-tl-container ul.tl li{
+  list-style: none;
+  margin:auto;
+  //margin-left:200px;
+  min-height: 50px;
+  /*background: rgba(255,255,0,0.1);*/
+  border-left:1px dashed $line-color;
+  padding: 0 0 20px 20px;
+  position:relative;
+}
+.history-tl-container ul.tl li:last-child{ border-left:0;}
+.history-tl-container ul.tl li::before{
+  position: absolute;
+  left: -10px;
+  top: 0px;
+  content: " ";
+  border: 8px solid rgba(255, 255, 255, 0.74);
+  border-radius: 500%;
+  background: $line-color;
+  height: 20px;
+  width: 20px;
+  transition: all 500ms ease-in-out;
+
+}
+.history-tl-container ul.tl li:hover::before{
+  border-color:  $line-color;
+  transition: all 400ms ease-in-out;
+}
+
+// ======= TIME LINE ============
 
 
 

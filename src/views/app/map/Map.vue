@@ -68,9 +68,6 @@ export default {
     }
   },
   watch: {
-    courierWay (val) {
-      console.log(val)
-    },
     count (val) {
       if (val > 136) this.vector = -1
       if (val < 1) this.vector = 1
@@ -255,60 +252,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.mapRightBar {
-  width: 400px;
-  height: 100%;
-  position: fixed;
-  //margin-right: -345px;
-  transform: translateX(345px);
-  z-index: 5;
-  display: flex;
-  right: 0;
-  top: 0;
-  //position: absolute;
-  transition: all, .5s;
-  .rightbar_container {
-    width: 345px;
-    position: relative;
-    z-index: 6;
-    padding: 15px 10px;
-    overflow-y: scroll;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    background: #ffffff;
-  }
-}
-.rightToggle {
-  width: 55px;
-  height: 80px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-0%);
-  right: 0;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
-  cursor: pointer;
-  transition: all, .3s;
-  .icon {
-    color: #6B7280;
-    font-size: 30px;
-    transition: all, .2s;
-  }
-}
-.rightToggle:hover {
-  padding-right: 5px;
-  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-  .icon {
-    transform: rotate(-360deg);
-  }
-}
-.mapRightBar_active {
-  transform: translateX(0px);
-}
-</style>
