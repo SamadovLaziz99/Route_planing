@@ -104,12 +104,12 @@ const data = [
         to: `${adminRoot}/employees/couriers`,
         // roles: [UserRole.Admin],
       },
-      {
-        icon: "simple-icon-map",
-        label: "menu.maps",
-        to: `${adminRoot}/employees/maps`,
-        // roles: [UserRole.Admin],
-      },
+      // {
+      //   icon: "simple-icon-map",
+      //   label: "menu.maps",
+      //   to: `${adminRoot}/employees/maps`,
+      //   // roles: [UserRole.Admin],
+      // },
       {
         icon: "iconsminds-conference",
         label: "menu.management_team",
@@ -117,6 +117,14 @@ const data = [
         // roles: [UserRole.Admin],
       }
     ]
+  },
+  {
+    id: "maps",
+    icon: "simple-icon-map",
+    label: "menu.maps",
+    to: `${adminRoot}/maps`,
+    // roles: [UserRole.Admin, UserRole.Editor],
+    subs: []
   },
   {
     id: "settings",

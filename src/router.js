@@ -123,16 +123,30 @@ const routes = [
             component: () => import("./views/app/employees/Couriers"),
             children: []
           },
-          {
-            path: "maps",
-            name: 'maps',
-            component: () => import("./views/app/map/Map"),
-            children: []
-          },
+          // {
+          //   path: "maps",
+          //   name: 'maps',
+          //   component: () => import("./views/app/map/Map"),
+          //   children: []
+          // },
           {
             path: "management_team",
             component: () => import("./views/app/employees/ManagementTeam"),
             children: []
+          }
+        ]
+      },
+      {
+        path: "maps",
+        component: () => import("./views/app/map"),
+        redirect: `${ adminRoot }/maps/map`,
+        // meta: { roles: [UserRole.Admin, UserRole.Editor] },
+        children: [
+          {
+            path: "map",
+            name: "maps",
+            component: () => import("./views/app/map/Map"),
+            // meta: { roles: [UserRole.Admin] },
           }
         ]
       },

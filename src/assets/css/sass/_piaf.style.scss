@@ -684,6 +684,10 @@ $line-color: $theme-color-1;
 .title:hover {
   box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
+.title:hover .info-toggle{
+  opacity: 1;
+  //box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
 .title_active {
   box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
@@ -691,6 +695,16 @@ $line-color: $theme-color-1;
   font-size: 16px;
   font-weight: bold;
   margin-right: 5px;
+}
+
+.info-toggle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: all, .4s;
+  padding-right: 10px;
+  padding-bottom: 80px;
 }
 .red {
   color: red;
