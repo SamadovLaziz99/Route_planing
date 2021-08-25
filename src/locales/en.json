@@ -15,6 +15,7 @@
     "title": "Unauthorized Access Attempt",
     "detail": "You are not authorized to view the page you are trying to access."
   },
+  "dark_mode": "Dark Mode",
   "user": {
     "login-title": "Login",
     "register": "Register",

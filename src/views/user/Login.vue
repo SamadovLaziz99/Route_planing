@@ -17,11 +17,11 @@
                 <h6 class="mb-4">{{ $t('user.login-title')}}</h6>
 
                 <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
-                    <b-form-group :label="$t('user.email')" class="has-float-label mb-4">
-                        <b-form-input type="text" v-model="$v.form.email.$model" :state="!$v.form.email.$error" />
-                        <b-form-invalid-feedback v-if="!$v.form.email.required">Please enter your email address</b-form-invalid-feedback>
-                        <b-form-invalid-feedback v-else-if="!$v.form.email.email">Please enter a valid email address</b-form-invalid-feedback>
-                        <b-form-invalid-feedback v-else-if="!$v.form.email.minLength">Your email must be minimum 4 characters</b-form-invalid-feedback>
+                    <b-form-group :label="$t('user.username')" class="has-float-label mb-4">
+                        <b-form-input type="text" v-model="$v.form.username.$model" :state="!$v.form.username.$error" />
+                        <b-form-invalid-feedback v-if="!$v.form.username.required">Please enter your username</b-form-invalid-feedback>
+<!--                        <b-form-invalid-feedback v-else-if="!$v.form.email.email">Please enter a valid email address</b-form-invalid-feedback>-->
+                        <b-form-invalid-feedback v-else-if="!$v.form.username.minLength">Your username must be minimum 3 characters</b-form-invalid-feedback>
                     </b-form-group>
 
                     <b-form-group :label="$t('user.password')" class="has-float-label mb-4">
@@ -31,10 +31,10 @@
                     </b-form-group>
                     <div class="d-flex justify-content-between align-items-center">
                         <router-link to="/user/forgot-password">{{ $t('user.forgot-password-question')}}</router-link>
-                        <b-button type="submit" variant="primary" size="lg" :disabled="processing" :class="{'btn-multiple-state btn-shadow': true,
-                          'show-spinner': processing,
-                          'show-success': !processing && loginError===false,
-                          'show-fail': !processing && loginError }">
+                        <b-button type="submit" variant="primary" size="lg" :disabled="fetchToken" :class="{'btn-multiple-state btn-shadow': true,
+                          'show-spinner': fetchToken,
+                          'show-success': !fetchToken && authError === false,
+                          'show-fail': !fetchToken && authError }">
                             <span class="spinner d-inline-block">
                                 <span class="bounce1"></span>
                                 <span class="bounce2"></span>
@@ -80,8 +80,8 @@ export default {
     data() {
         return {
             form: {
-                email: "test@coloredstrategies.com",
-                password: "xxxxxx"
+                username: "",
+                password: ""
             },
         };
     },
@@ -93,28 +93,32 @@ export default {
                 maxLength: maxLength(16),
                 minLength: minLength(4)
             },
-            email: {
+            username: {
                 required,
-                email,
                 minLength: minLength(4)
             }
         }
     },
     computed: {
-        ...mapGetters(["currentUser", "processing", "loginError"])
+        ...mapGetters(["currentUser", "fetchToken", "authError"])
     },
     methods: {
-        ...mapActions(["login"]),
+        ...mapActions(["getToken"]),
         formSubmit() {
-            this.$v.$touch();
-            this.form.email = "piaf-vue@coloredstrategies.com";
-            this.form.password = "piaf123";
+            // this.$v.$touch();
+            // this.form.email = "piaf-vue@coloredstrategies.com";
+            // this.form.password = "piaf123";
             this.$v.form.$touch();
+          if (!this.$v.$invalid) {
+            this.getToken(this.form).then(res => {
+              this.$router.push(adminRoot);
+            })
+          }
            // if (!this.$v.form.$anyError) {
-                this.login({
-                    email: this.form.email,
-                    password: this.form.password
-                });
+           //      this.login({
+           //          email: this.form.email,
+           //          password: this.form.password
+           //      });
             //}
         }
     },

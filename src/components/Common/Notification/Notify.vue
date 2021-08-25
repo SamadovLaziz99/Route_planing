@@ -1,9 +1,9 @@
 <template>
-    <div :class="{'notification-container': true, 'notification-container-empty' : items.length===0}">
+    <div :class="{'notification-container': true, 'notification-container-empty' : items.length === 0}">
     <transition-group name="ntf" tag="div" mode="out"  >
-        <div v-for="item in items" :key="item.id"  :class="'notification notification-'+item.options.type"  @click="removeItem(item.id)">
+        <div v-for="item in items" :key="item.id"  :class="'notification notification-' + item.options.type"  @click="removeItem(item.id)">
            <div class="notification-message">
-              <h4 class="title" v-if="item.title">{{ item.title }}</h4>
+              <h6 v-if="item.title">{{ item.title }}</h6>
               <div class="message" v-if="item.message" v-html="item.message"/>
             </div>
         </div>
@@ -26,6 +26,11 @@ export default {
       idx: 0
     }
   },
+  watch: {
+    title: val => {
+      console.log(val)
+    }
+  },
   methods: {
     createUUID () {
       const pattern = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
@@ -36,6 +41,7 @@ export default {
       })
     },
     addItem (type, title, message, options) {
+      // console.log(title)
       let defaultOptions = {
         type: type,
         duration: this.options.duration,
@@ -50,7 +56,7 @@ export default {
         title: title,
         options: itemOptions
       }
-
+      // console.log(newItem)
       this.items.push(newItem)
 
       if (itemOptions.permanent === false) {

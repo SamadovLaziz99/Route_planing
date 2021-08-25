@@ -114,9 +114,12 @@ export default {
         },
         properties: {
           iconContent: 'Coozin',
-          hintContent: 'Coozin Home'
+          hintContent: 'Coozin Home',
+          balloonContentBody: "Coozin Home",
+          balloonContentFooter: "Coozin",
         }
-      }, {
+      },
+      {
         preset: 'islands#redHomeCircleIcon',
         draggable: false,
       })
@@ -158,7 +161,9 @@ export default {
           coordinates: coords
         },
         properties: {
-          hintContent: name
+          hintContent: name,
+          balloonContentBody: `Coozin's ${ name }`,
+          balloonContentFooter: "Coozin",
         }
       }, {
         preset: 'islands#greenAutoCircleIcon',
@@ -175,7 +180,9 @@ export default {
         },
         properties: {
           iconContent: 'Vendors',
-          hintContent: name
+          hintContent: name,
+          balloonContentBody: `Coozin's ${ name }`,
+          balloonContentFooter: "Coozin",
         }
       }, {
         preset: 'islands#blueFoodCircleIcon',

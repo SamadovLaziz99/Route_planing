@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import AuthGuard from "./utils/auth.guard";
+// import AuthGuard from "./utils/auth.guard";
+import NewGuard from "./utils/new.guard"
 import { adminRoot } from "./constants/config";
 // import { UserRole } from "./utils/auth.roles";
 
@@ -43,6 +44,12 @@ const routes = [
           {
             path: "list",
             component: () => import("./views/app/orders/List"),
+            children: []
+          },
+          {
+            path: "details/:id",
+            name: "orderDetails",
+            component: () => import("./views/app/orders/Details"),
             children: []
           },
           {
@@ -437,10 +444,12 @@ const routes = [
   },
   {
     path: "/error",
+    name: "error",
     component: () => import(/* webpackChunkName: "error" */ "./views/Error")
   },
   {
     path: "/unauthorized",
+    name: "unauthorized",
     component: () => import(/* webpackChunkName: "error" */ "./views/Unauthorized")
   },
   {
@@ -450,21 +459,25 @@ const routes = [
     children: [
       {
         path: "login",
+        name: 'login',
         component: () =>
           import(/* webpackChunkName: "user" */ "./views/user/Login")
       },
       {
         path: "register",
+        name: "register",
         component: () =>
           import(/* webpackChunkName: "user" */ "./views/user/Register")
       },
       {
         path: "forgot-password",
+        name: "forgot-password",
         component: () =>
           import(/* webpackChunkName: "user" */ "./views/user/ForgotPassword")
       },
       {
         path: "reset-password",
+        name: "reset-password",
         component: () =>
           import(/* webpackChunkName: "user" */ "./views/user/ResetPassword")
       },
@@ -482,5 +495,5 @@ const router = new VueRouter({
   routes,
   mode: "history",
 });
-router.beforeEach(AuthGuard);
+router.beforeEach(NewGuard);
 export default router;

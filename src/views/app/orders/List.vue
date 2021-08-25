@@ -80,12 +80,11 @@
           hover
           :items="items"
           :fields="fields"
-          selectable
           select-mode="multi"
         >
           <template #cell(action)="row">
             <div style="display: flex">
-              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
+              <div @click="$router.push({ name: 'orderDetails', params: { id: row.item.customer } })" class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               <div class="glyph-icon simple-icon-pencil mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
               <div class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
             </div>

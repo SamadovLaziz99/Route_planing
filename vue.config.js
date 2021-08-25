@@ -1,5 +1,9 @@
 const CopyPlugin = require('copy-webpack-plugin')
+const path = require('path')
 
+function resolve (dir) {
+  return path.join(__dirname, dir)
+}
 module.exports = {
 
   pages: {
@@ -25,6 +29,8 @@ module.exports = {
   },
 
   chainWebpack: config => {
+    config.resolve.alias
+      .set('@', resolve('src'))
     config.plugins.delete('prefetch-index'),
     config.module
       .rule('vue')

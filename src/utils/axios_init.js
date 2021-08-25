@@ -1,44 +1,44 @@
 import axios from 'axios'
 import store from '../store'
-import { t } from '../locales/i18n'
+import i18n from '../locales/i18n'
 const token = localStorage.getItem('token')
 
 function unauthorized(msg) {
-  errorNotification(t('unauthorized'), msg)
+  errorNotification(i18n.t('unauthorized.title'), msg)
   store.dispatch('signOut')
 }
 
 function errorNotification (title, msg) {
   store.dispatch('error_alert', {
     title: title,
-    message: msg
+    message: msg.detail
   })
 }
 
 function ErrorHandler(error) {
   if (error.message.startsWith('timeout')) {
-    errorNotification(t('timeout'))
+    errorNotification(i18n.t('timeout'))
   }
   if (error.response) {
-    const _error = error.response
-    switch (_error.status) {
+    const _error = error.response.data
+    switch (error.response.status) {
       case 400:
-        errorNotification(t('bad_request'), _error.message)
+        errorNotification(i18n.t('bad_request'), _error.message)
         break
       case 401:
-        unauthorized(_error.message)
+        unauthorized(_error)
         break
       case 403:
-        errorNotification(t('forbidden'), _error.message)
+        errorNotification(i18n.t('forbidden'), _error.message)
         break
       case 404:
-        errorNotification(t('not_found'), _error.message)
+        errorNotification(i18n.t('not_found'), _error.message)
         break
       case 422:
-        errorNotification(t('unprocessable_entity'), _error.message)
+        errorNotification(i18n.t('unprocessable_entity'), _error.message)
         break
       case 500:
-        errorNotification(t('internal_server_error'), _error.message)
+        errorNotification(i18n.t('internal_server_error'), _error.message)
         break
       default:
         break

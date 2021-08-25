@@ -41,7 +41,7 @@ export const currentUser = {
   date: 'Last seen today 15:24',
   role: UserRole.Admin
 }
-
+export const whiteList = ['login', 'register', 'forgot-password', 'reset-password']
 export const isAuthGuardActive = true
 export const themeRadiusStorageKey = 'theme_radius'
 export const themeSelectedColorStorageKey = 'theme_selected_color'

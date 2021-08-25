@@ -4,7 +4,7 @@
       ref="vuetable"
       :api-url="bestsellers.apiUrl"
       :fields="bestsellers.fields"
-      :per-page="10"
+      :per-page="6"
       pagination-path
       @vuetable:pagination-data="onPaginationData"
     ></vuetable>

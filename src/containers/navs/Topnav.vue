@@ -174,7 +174,7 @@
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
           </template>
-          <b-dropdown-item>Account</b-dropdown-item>
+          <b-dropdown-item @click="$store.dispatch('success_alert', { title: 'Hello World!', message: 'Salom aleykum' })">Account</b-dropdown-item>
           <b-dropdown-item>Features</b-dropdown-item>
           <b-dropdown-item>History</b-dropdown-item>
           <b-dropdown-item>Support</b-dropdown-item>
@@ -220,7 +220,11 @@ export default {
       localeOptions,
       buyUrl,
       notifications,
-      isDarkActive: false
+      isDarkActive: false,
+      currentUser: {
+        title: 'Oybek Mukhiddinov',
+        img: 'https://mukhiddinov.uz/img/image9.dab66668.jpg'
+      }
     };
   },
   methods: {
@@ -302,7 +306,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      currentUser: "currentUser",
+      // currentUser: "currentUser",
       menuType: "getMenuType",
       menuClickCount: "getMenuClickCount",
       selectedMenuHasSubItems: "getSelectedMenuHasSubItems"
