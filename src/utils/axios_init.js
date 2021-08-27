@@ -1,11 +1,14 @@
 import axios from 'axios'
 import store from '../store'
 import i18n from '../locales/i18n'
-const token = localStorage.getItem('token')
+import router from "../router";
+const token = localStorage.getItem('token') || store.state.auth.token
 
 function unauthorized(msg) {
   errorNotification(i18n.t('unauthorized.title'), msg)
-  store.dispatch('signOut')
+  store.dispatch('signOut').then(res => {
+    router.push({ name: 'login' })
+  })
 }
 
 function errorNotification (title, msg) {
