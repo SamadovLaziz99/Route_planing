@@ -60,8 +60,6 @@ const init = {
         Math.round((e.loaded * 100) / e.total)
       },
     }
-    console.log('Token', token)
-    console.log(store)
     if (token || store.getters.token) {
       config.headers = {
         Authorization: 'Bearer ' + (token || store.getters.token),

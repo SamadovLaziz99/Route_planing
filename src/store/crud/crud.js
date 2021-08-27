@@ -60,11 +60,25 @@ export default function (param) {
         })
       },
 
+      // get id
+      [camelize(`get by id ${param}`)]: function ({ commit }, payload) {
+        // commit(_mutations.pending, true)
+        return new Promise((resolve, reject) => {
+          axios_init.get(`${param}/${payload}/`, ).then(res => {
+            resolve(res)
+          }).catch(error => {
+            reject(error)
+          }).finally(() => {
+            // commit(_mutations.pending, false)
+          })
+        })
+      },
+
       //post
       [camelize(`post ${param}`)]: function ({ commit }, payload) {
         commit(_mutations.pending, true)
         return new Promise((resolve, reject) => {
-          axios_init.post(`${param}/`, payload).then(res => {
+          axios_init.post(`${param}/`, payload.data).then(res => {
             resolve(res)
           }).catch(error => {
             reject(error)
@@ -78,7 +92,7 @@ export default function (param) {
       [camelize(`put ${param}`)]: function ({ commit }, payload) {
         commit(_mutations.pending, true)
         return new Promise((resolve, reject) => {
-          axios_init.put(`${param}/${ payload.id }`, payload.data).then(res => {
+          axios_init.put(`${param}/${ payload.id }/`, payload.data).then(res => {
             resolve(res)
           }).catch(error => {
             reject(error)

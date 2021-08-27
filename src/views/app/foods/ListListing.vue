@@ -31,12 +31,12 @@
         <b-row v-else-if="displayMode==='list'" key="list">
             <b-colxx xxs="12" class="mb-3" v-for="(item,index) in items" :key="index" :id="item.id">
                 <data-list-item
+                        ref="dataListItem"
                         :key="item.id"
                         :data="item"
                         :selected-items="selectedItems"
                         @view="view"
                         @edit="edit"
-                        @remove="remove"
                         v-contextmenu:contextmenu
                 />
 <!--              @toggle-item="toggleItem"-->
@@ -115,10 +115,7 @@ export default {
     },
     edit (id) {
       this.$emit('edit', id)
-    },
-    remove (id) {
-      this.$emit('remove', id)
-    },
+    }
   }
 };
 </script>

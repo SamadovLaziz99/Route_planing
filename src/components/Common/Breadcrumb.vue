@@ -23,7 +23,6 @@ export default {
   },
   mounted() {
     let path = this.$route.path.substr(1);
-    console.log('Path', path)
     let rawPaths = path.split("/");
 
     for (var pName in this.$route.params) {

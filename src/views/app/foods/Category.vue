@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-colxx class="disable-text-selection">
-      <crud-modal ref="crudModal" @closeable="closed" name="category.create">
+      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'category.update' : 'category.create'">
         <div slot="content">
           <b-form class="av-tooltip tooltip-right-bottom">
             <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
@@ -22,17 +22,17 @@
           </b-form>
         </div>
         <div slot="action">
-          <b-button @click="submit" type="submit"
-                    :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+          <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
                 <span class="bounce3"></span>
             </span>
-            <span class="label">Submit</span>
+            <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
           </b-button>
         </div>
       </crud-modal>
+      <DeleteConfirmModal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
       <list-page-heading
         :title="$t('menu.foods_category')"
         :displayMode="displayMode"
@@ -56,18 +56,18 @@
       </list-page-heading>
       <template v-if="!load">
         <list-page-listing
+          ref="listPageListing"
           :displayMode="displayMode"
           :items="items"
           :selectedItems="selectedItems"
           :lastPage="Math.ceil(pagination.total / 15)"
           :perPage="15"
-          :page="pagination.current"
+          :page="pagination.page"
           :changePage="changePage"
           :handleContextMenu="handleContextMenu"
           :onContextMenuAction="onContextMenuAction"
           @view="viewItem"
           @edit="editItem"
-          @remove="removeItem"
         ></list-page-listing>
       </template>
       <template v-else>
@@ -80,6 +80,7 @@
 <script>
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
+import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
 import { mapGetters } from "vuex";
 import { camelize } from "../../../utils";
 import { validationMixin } from "vuelidate";
@@ -87,6 +88,7 @@ import { required } from "vuelidate/lib/validators";
 const _page = 'categories'
 const actions = {
   get: camelize(`get ${_page}`),
+  getById: camelize(`get by id ${_page}`),
   post: camelize(`post ${_page}`),
   put: camelize(`put ${_page}`),
   remove: camelize(`delete ${_page}`),
@@ -101,7 +103,8 @@ const getters = {
 export default {
   components: {
     "list-page-heading": ListPageHeading,
-    "list-page-listing": ListPageListing
+    "list-page-listing": ListPageListing,
+    DeleteConfirmModal
   },
   validations: {
     form: {
@@ -125,6 +128,7 @@ export default {
   data() {
     return {
       form: {
+        id: null,
         name: {
           uz: '',
           ru: '',
@@ -134,26 +138,22 @@ export default {
       },
       actions: actions,
       getters: getters,
-      isLoad: false,
       displayMode: "list",
       sort: {},
       sortOptions: [
         {
-          column: "vendor",
-          label: "Vendors"
+          column: "name",
+          label: "Name"
         },
         {
-          column: "category",
-          label: "Category"
+          column: "position",
+          label: "Position"
         }
       ],
       page: 1,
-      perPage: 4,
       search: "",
       from: 0,
       to: 0,
-      total: 0,
-      lastPage: 0,
       selectedItems: []
     };
   },
@@ -169,7 +169,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          action: ['view', 'edit', 'delete'],
+          action: ['edit', 'delete']
         }
       })
     }
@@ -181,9 +181,12 @@ export default {
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.$store.dispatch(actions.post, {
-          name: this.form.name,
-          position: parseInt(this.form.position)
+        this.$store.dispatch(this.form.id ? actions.put : actions.post, {
+          id: this.form.id,
+          data: {
+            name: this.form.name,
+            position: parseInt(this.form.position)
+          }
         }).then(res => {
           this.$refs.crudModal.hideModal()
           this.getData()
@@ -194,14 +197,26 @@ export default {
       console.log(id)
     },
     editItem (id) {
-      console.log(id)
+      this.$store.dispatch(actions.getById, id).then(res => {
+        this.form.id = res.id
+        this.form.name = res.name
+        this.form.position = res.position
+        this.$bvModal.show('crudModal')
+      })
     },
     removeItem (id) {
-      this.$store.dispatch(actions.remove, id)
+      this.$store.dispatch(actions.remove, id).then(res => {
+        this.$store.commit('DELETE_MODAL', {
+          isShow: false,
+          data: {}
+        })
+        this.getData()
+      })
     },
     clear() {
       this.$v.$reset()
       this.form = {
+        id: null,
         name: {
           uz: '',
           ru: '',
@@ -240,10 +255,8 @@ export default {
       this.$store.dispatch(actions.get, {
         page: this.page
       }).then(res => {
-        console.log(this.pagination)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
-        console.log('Categories: ', res)
       })
     }
   },

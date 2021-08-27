@@ -1,5 +1,6 @@
 {
   "category.create": "Create category",
+  "category.update": "Update category",
   "position": "Position",
   "uz": "uzbek",
   "ru": "russian",
@@ -13,6 +14,8 @@
   "delete": "Delete",
   "update": "Update",
   "please.enter": "Please enter your - ",
+  "want.delete": "Do you want delete?",
+  "filter.by": "Filter By: ",
   "general": {
     "copyright": "Piaf Vue © 2018 All Rights Reserved."
   },
@@ -62,7 +65,7 @@
     "orders_list": "Orders List",
     "orders_history": "Orders History",
     "history": "History",
-    "category": "Category",
+    "categories": "Categories",
     "transactions": "Transactions",
     "foods": "Foods",
     "foods_list": "Foods List",

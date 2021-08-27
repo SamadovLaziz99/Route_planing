@@ -1,36 +1,79 @@
 <template>
   <b-row>
     <b-colxx class="disable-text-selection">
+      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
+        <div slot="content">
+          <b-form class="av-tooltip tooltip-right-bottom">
+            <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group :label="$t('pages.category')" class="has-float-label mb-4">
+              <v-select :options="categories" v-model="form.category" />
+            </b-form-group>
+            <b-form-group :label="$t('position')" class="has-float-label mb-4">
+              <b-form-input type="number" v-model="form.position"/>
+            </b-form-group>
+            <b-form-group :label="$t('pages.status')">
+              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
+            </b-form-group>
+          </b-form>
+        </div>
+        <div slot="action">
+          <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <span class="spinner d-inline-block">
+                <span class="bounce1"></span>
+                <span class="bounce2"></span>
+                <span class="bounce3"></span>
+            </span>
+            <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
+          </b-button>
+        </div>
+      </crud-modal>
+      <DeleteConfirmModal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
       <list-page-heading
         :title="$t('menu.foods_collection')"
-        :selectAll="selectAll"
-        :isSelectedAll="isSelectedAll"
-        :isAnyItemSelected="isAnyItemSelected"
-        :keymap="keymap"
         :displayMode="displayMode"
-        :changeDisplayMode="changeDisplayMode"
         :sortOptions="sortOptions"
         :changeOrderBy="changeOrderBy"
-        :changePageSize="changePageSize"
         :sort="sort"
         :searchChange="searchChange"
         :from="from"
         :to="to"
-        :total="total"
-        :perPage="perPage"
-      ></list-page-heading>
-      <template v-if="isLoad">
+        :total="pagination.total"
+        :perPage="15"
+      >
+        <b-button
+          slot="action"
+          v-b-modal.crudModal
+          variant="primary"
+          size="lg"
+          :class="{ 'top-right-button': true }"
+        >{{ $t('pages.add-new') }}
+        </b-button>
+      </list-page-heading>
+      <template v-if="!load">
         <list-page-listing
+          ref="listPageListing"
           :displayMode="displayMode"
           :items="items"
           :selectedItems="selectedItems"
-          :toggleItem="toggleItem"
-          :lastPage="lastPage"
-          :perPage="perPage"
-          :page="page"
+          :lastPage="Math.ceil(pagination.total / 15)"
+          :perPage="15"
+          :page="pagination.page"
           :changePage="changePage"
           :handleContextMenu="handleContextMenu"
           :onContextMenuAction="onContextMenuAction"
+          @view="viewItem"
+          @edit="editItem"
         ></list-page-listing>
       </template>
       <template v-else>
@@ -41,78 +84,183 @@
 </template>
 
 <script>
-import axios from "axios";
-import { apiUrl } from "../../../constants/config";
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
-
+import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
+import { mapGetters } from "vuex";
+import { camelize } from "../../../utils";
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+const _page = 'collections'
+const actions = {
+  get: camelize(`get ${_page}`),
+  getById: camelize(`get by id ${_page}`),
+  post: camelize(`post ${_page}`),
+  put: camelize(`put ${_page}`),
+  remove: camelize(`delete ${_page}`),
+}
+const getters = {
+  load: camelize(`load ${_page}`),
+  data: camelize(`data ${_page}`),
+  pending: camelize(`pending ${_page}`),
+  deleting: camelize(`deleting ${_page}`),
+  pagination: camelize(`pagination ${_page}`),
+}
 export default {
   components: {
     "list-page-heading": ListPageHeading,
-    "list-page-listing": ListPageListing
+    "list-page-listing": ListPageListing,
+    DeleteConfirmModal
   },
+  validations: {
+    form: {
+      name: {
+        uz: {
+          required
+        },
+        ru: {
+          required
+        },
+        oz: {
+          required
+        }
+      }
+    }
+  },
+  mixins: [validationMixin],
   data() {
     return {
-      isLoad: false,
-      apiBase: apiUrl + "/cakes/fordatatable",
+      form: {
+        id: null,
+        name: {
+          uz: '',
+          ru: '',
+          oz: ''
+        },
+        position: null,
+        active: true,
+        category: null
+      },
+      statuses: [
+        {
+          text: "ACTIVE",
+          value: true
+        },
+        {
+          text: "INACTIVE",
+          value: false
+        }
+      ],
+      categories: [],
+      actions: actions,
+      getters: getters,
       displayMode: "list",
       sort: {},
       sortOptions: [
         {
-          column: "vendor",
-          label: "Vendors"
+          column: "name",
+          label: "Name"
         },
         {
-          column: "category",
-          label: "Category"
+          column: "position",
+          label: "Position"
         }
       ],
       page: 1,
-      perPage: 4,
       search: "",
       from: 0,
       to: 0,
-      total: 0,
-      lastPage: 0,
-      items: [],
       selectedItems: []
     };
   },
+  watch: {
+    'form.active': function (val) {
+      console.log(val)
+    }
+  },
+  computed: {
+    ...mapGetters({
+      data: getters.data,
+      load: getters.load,
+      pending: getters.pending,
+      deleting: getters.deleting,
+      pagination: getters.pagination
+    }),
+    items() {
+      return this.data.map(e => {
+        return {
+          ...e,
+          action: ['edit', 'delete']
+        }
+      })
+    }
+  },
+  mounted() {
+    this.getData()
+    this.$store.dispatch('getCategories').then(res => {
+      this.categories = res.map(e => {
+        return {
+          label: e.name[this.$lang],
+          value: e.id
+        }
+      })
+    })
+  },
   methods: {
-    loadItems() {
-      this.isLoad = false;
-
-      axios
-        .get(this.apiUrl)
-        .then(response => {
-          return response.data;
+    submit() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        const _form = { ...this.form }
+        delete _form.id
+        _form.category = this.form.category?.value
+        _form.position = parseInt(this.form.position)
+        this.$store.dispatch(this.form.id ? actions.put : actions.post, {
+          id: this.form.id,
+          data: _form
+        }).then(res => {
+          this.$refs.crudModal.hideModal()
+          this.getData()
         })
-        .then(res => {
-          this.total = res.total;
-          this.from = res.from;
-          this.to = res.to;
-          this.items = res.data.map(x => {
-            return {
-              ...x,
-              position: 1,
-              count: 41,
-              action: ['view', 'edit', 'delete'],
-              img: x.img.replace("/img/", "/img/products/")
-            };
-          });
-          this.perPage = res.per_page;
-          this.selectedItems = [];
-          this.lastPage = res.last_page;
-          this.isLoad = true;
-        });
+      }
     },
-
-    changeDisplayMode(displayType) {
-      this.displayMode = displayType;
+    viewItem (id) {
+      console.log(id)
     },
-    changePageSize(perPage) {
-      this.page = 1;
-      this.perPage = perPage;
+    editItem (id) {
+      this.$store.dispatch(actions.getById, id).then(res => {
+        const _form = { ...res }
+        delete _form.created_at
+        delete _form.updated_at
+        _form.category = this.categories.filter(e => e.value === res.category)[0]
+        this.form = _form
+        this.$bvModal.show('crudModal')
+      })
+    },
+    removeItem (id) {
+      this.$store.dispatch(actions.remove, id).then(res => {
+        this.$store.commit('DELETE_MODAL', {
+          isShow: false,
+          data: {}
+        })
+        this.getData()
+      })
+    },
+    clear() {
+      this.$v.$reset()
+      this.form = {
+        id: null,
+        name: {
+          uz: '',
+          ru: '',
+          oz: ''
+        },
+        position: null,
+        active: true
+      }
+    },
+    closed(e) {
+      this.clear()
+      console.log(e)
     },
     changeOrderBy(sort) {
       this.sort = sort;
@@ -120,56 +268,6 @@ export default {
     searchChange(val) {
       this.search = val;
       this.page = 1;
-    },
-
-    selectAll(isToggle) {
-      if (this.selectedItems.length >= this.items.length) {
-        if (isToggle) this.selectedItems = [];
-      } else {
-        this.selectedItems = this.items.map(x => x.id);
-      }
-    },
-    keymap(event) {
-      switch (event.srcKey) {
-        case "select":
-          this.selectAll(false);
-          break;
-        case "undo":
-          this.selectedItems = [];
-          break;
-      }
-    },
-    getIndex(value, arr, prop) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][prop] === value) {
-          return i;
-        }
-      }
-      return -1;
-    },
-    toggleItem(event, itemId) {
-      if (event.shiftKey && this.selectedItems.length > 0) {
-        let itemsForToggle = this.items;
-        var start = this.getIndex(itemId, itemsForToggle, "id");
-        var end = this.getIndex(
-          this.selectedItems[this.selectedItems.length - 1],
-          itemsForToggle,
-          "id"
-        );
-        itemsForToggle = itemsForToggle.slice(
-          Math.min(start, end),
-          Math.max(start, end) + 1
-        );
-        this.selectedItems.push(
-          ...itemsForToggle.map(item => {
-            return item.id;
-          })
-        );
-      } else {
-        if (this.selectedItems.includes(itemId)) {
-          this.selectedItems = this.selectedItems.filter(x => x !== itemId);
-        } else this.selectedItems.push(itemId);
-      }
     },
     handleContextMenu(vnode) {
       if (!this.selectedItems.includes(vnode.key)) {
@@ -182,34 +280,18 @@ export default {
         this.selectedItems
       );
     },
-    changePage(pageNum) {
-      this.page = pageNum;
+    changePage(n) {
+      this.page = n
+      this.getData()
+    },
+    getData() {
+      this.$store.dispatch(actions.get, {
+        page: this.page
+      }).then(res => {
+        this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
+        this.from = (this.pagination.page - 1) * 15
+      })
     }
   },
-  computed: {
-    isSelectedAll() {
-      return this.selectedItems.length >= this.items.length;
-    },
-    isAnyItemSelected() {
-      return (
-        this.selectedItems.length > 0 &&
-        this.selectedItems.length < this.items.length
-      );
-    },
-    apiUrl() {
-      return `${this.apiBase}?sort=${this.sort.column}&page=${this.page}&per_page=${this.perPage}&search=${this.search}`;
-    }
-  },
-  watch: {
-    search() {
-      this.page = 1;
-    },
-    apiUrl() {
-      this.loadItems();
-    }
-  },
-  mounted() {
-    this.loadItems();
-  }
 };
 </script>
