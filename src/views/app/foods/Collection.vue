@@ -3,29 +3,49 @@
     <b-colxx class="disable-text-selection">
       <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
         <div slot="content">
-          <b-form class="av-tooltip tooltip-right-bottom">
-            <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('pages.category')" class="has-float-label mb-4">
-              <v-select :options="categories" v-model="form.category" />
-            </b-form-group>
-            <b-form-group :label="$t('position')" class="has-float-label mb-4">
-              <b-form-input type="number" v-model="form.position"/>
-            </b-form-group>
-            <b-form-group :label="$t('pages.status')">
-              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
-            </b-form-group>
-          </b-form>
+          <b-tabs fill content-class="tab-content" nav-class="separator-tabs">
+            <b-tab title="MAIN">
+              <div class="mt-4"></div>
+              <b-form class="av-tooltip tooltip-right-bottom">
+                <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
+                  <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
+                  <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
+                  <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
+                  <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
+                  <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
+                  <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group :label="$t('pages.category')" class="has-float-label mb-4">
+                  <v-select :options="categories" v-model="form.category" />
+                </b-form-group>
+                <b-form-group :label="$t('position')" class="has-float-label mb-4">
+                  <b-form-input type="number" v-model="form.position"/>
+                </b-form-group>
+                <b-form-group :label="$t('pages.status')">
+                  <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
+                </b-form-group>
+              </b-form>
+            </b-tab>
+            <b-tab title="FOODS">
+              <div class="mt-4"></div>
+              <vue-perfect-scrollbar
+                class="scroll dashboard-list-with-thumbs"
+                style="height: 470px !important;"
+                :settings="{ suppressScrollX: true, wheelPropagation: false }"
+              >
+                <foods-card
+                  v-for="(order,index) in products.slice(0,6)"
+                  :order="order"
+                  detail-path="#"
+                  :key="index"
+                />
+              </vue-perfect-scrollbar>
+            </b-tab>
+          </b-tabs>
         </div>
         <div slot="action">
           <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
@@ -86,6 +106,9 @@
 <script>
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
+// import RecentOrderItem from "../../../components/Listing/RecentOrderItem";
+import FoodsCard from "./components/FoodsCard";
+import products from "../../../data/products";
 import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
 import { mapGetters } from "vuex";
 import { camelize } from "../../../utils";
@@ -110,7 +133,8 @@ export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
-    DeleteConfirmModal
+    DeleteConfirmModal,
+    'foods-card': FoodsCard
   },
   validations: {
     form: {
@@ -130,6 +154,7 @@ export default {
   mixins: [validationMixin],
   data() {
     return {
+      products,
       form: {
         id: null,
         name: {
