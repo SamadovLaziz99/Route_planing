@@ -61,9 +61,10 @@ const init = {
       },
     }
     console.log('Token', token)
-    if (token) {
+    console.log(store)
+    if (token || store.getters.token) {
       config.headers = {
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + (token || store.getters.token),
       }
     }
     if (data) config.data = data
