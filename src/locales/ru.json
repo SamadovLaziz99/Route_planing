@@ -1,4 +1,18 @@
 {
+  "category.create": "Create category",
+  "position": "Position",
+  "uz": "uzbek",
+  "ru": "russian",
+  "oz": "cyrillic",
+  "name": "Name ",
+  "dark_mode": "Dark Mode",
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "save": "Save",
+  "add": "Add",
+  "delete": "Delete",
+  "update": "Update",
+  "please.enter": "Please enter your - ",
   "general": {
     "copyright": "Piaf Vue © 2018 All Rights Reserved."
   },
@@ -11,7 +25,6 @@
     "unauthorized": "Unauthorized",
     "timeout": "Time Out. Please check your internet!"
   },
-  "dark_mode": "Темный режим",
   "unauthorized": {
     "title": "Unauthorized Access Attempt",
     "detail": "You are not authorized to view the page you are trying to access."
@@ -32,37 +45,43 @@
     "username": "Username"
   },
   "order": {
-    "all": "Все заказы",
-    "pending": "В ожидании",
-    "accepted": "Принято",
-    "in_progress": "В ходе выполнения",
-    "shipping": "Перевозки",
-    "finished": "Законченный",
-    "cancelled": "Отменено"
+    "all": "All Orders",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "in_progress": "In progress",
+    "shipping": "Shipping",
+    "finished": "Finished",
+    "cancelled": "Cancelled"
   },
   "menu": {
-    "list": "Список",
     "home": "Home",
+    "list": "List",
     "app": "Home",
     "dashboards": "Dashboards",
     "orders": "Orders",
     "orders_list": "Orders List",
     "orders_history": "Orders History",
+    "history": "History",
+    "category": "Category",
     "transactions": "Transactions",
     "foods": "Foods",
     "foods_list": "Foods List",
     "foods_unit": "Foods Unit",
+    "unit": " Unit",
     "foods_category": "Foods Category",
+    "collection": "Collection",
     "foods_collection": "Foods Collection",
     "users": "Users",
     "users_list": "Users List",
     "employees": "Employees",
     "vendors": "Vendors",
+    "vendor-detail": "Vendor Details",
     "couriers": "Couriers",
     "settings": "Settings",
     "roles": "Roles",
     "main_settings": "Main settings",
     "banner": "Banner",
+    "maps": "Maps",
     "video_tutorial": "Video tutorial",
     "management_team": "Management team",
     "default": "Default",
@@ -508,14 +527,10 @@
     "firstname-message": "Please enter your first name!",
     "lastname": "Last name",
     "lastname-message": "Please enter your last name!",
-
-
     "password-confirm": "Confirm Password",
     "validation-bootstrap": "Bootstrap Validation",
     "validation-vuelidate": "Vuelidate Validation",
     "name": "Name"
-
-
   },
   "form-components": {
     "custom-inputs": "Custom Inputs",

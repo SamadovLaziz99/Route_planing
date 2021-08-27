@@ -53,7 +53,7 @@ const data = [
       {
         icon: "iconsminds-box-with-folders",
         label: "menu.foods_category",
-        to: `${adminRoot}/foods/category`,
+        to: `${adminRoot}/foods/categories`,
         // roles: [UserRole.Admin],
       },
       {

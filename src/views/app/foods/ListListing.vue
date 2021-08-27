@@ -14,7 +14,6 @@
                         :key="item.id"
                         :data="item"
                         :selected-items="selectedItems"
-                        @toggle-item="toggleItem"
                         v-contextmenu:contextmenu
                 />
             </b-colxx>
@@ -25,7 +24,6 @@
                         :key="item.id"
                         :data="item"
                         :selected-items="selectedItems"
-                        @toggle-item="toggleItem"
                         v-contextmenu:contextmenu
                 />
             </b-colxx>
@@ -36,9 +34,12 @@
                         :key="item.id"
                         :data="item"
                         :selected-items="selectedItems"
-                        @toggle-item="toggleItem"
+                        @view="view"
+                        @edit="edit"
+                        @remove="remove"
                         v-contextmenu:contextmenu
                 />
+<!--              @toggle-item="toggleItem"-->
             </b-colxx>
         </b-row>
         <b-row v-if="lastPage > 1 ">
@@ -108,7 +109,16 @@ export default {
   methods: {
     linkGen(pageNum) {
       return "#page-" + pageNum;
-    }
+    },
+    view (id) {
+      this.$emit('view', id)
+    },
+    edit (id) {
+      this.$emit('edit', id)
+    },
+    remove (id) {
+      this.$emit('remove', id)
+    },
   }
 };
 </script>

@@ -81,7 +81,8 @@ const routes = [
             children: []
           },
           {
-            path: "category",
+            path: "categories",
+            name: "categories",
             component: () => import("./views/app/foods/Category"),
             children: []
           },

@@ -1,4 +1,14 @@
 {
+  "category.create": "Create category",
+  "position": "Position",
+  "uz": "uzbek",
+  "ru": "russian",
+  "oz": "cyrillic",
+  "name": "Name ",
+  "dark_mode": "Dark Mode",
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "please.enter": "Please enter your - ",
   "general": {
     "copyright": "Piaf Vue © 2018 All Rights Reserved."
   },
@@ -15,7 +25,6 @@
     "title": "Unauthorized Access Attempt",
     "detail": "You are not authorized to view the page you are trying to access."
   },
-  "dark_mode": "Dark Mode",
   "user": {
     "login-title": "Login",
     "register": "Register",
@@ -514,14 +523,10 @@
     "firstname-message": "Please enter your first name!",
     "lastname": "Last name",
     "lastname-message": "Please enter your last name!",
-
-
     "password-confirm": "Confirm Password",
     "validation-bootstrap": "Bootstrap Validation",
     "validation-vuelidate": "Vuelidate Validation",
     "name": "Name"
-
-
   },
   "form-components": {
     "custom-inputs": "Custom Inputs",

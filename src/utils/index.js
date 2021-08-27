@@ -1,7 +1,5 @@
 import { defaultDirection, defaultColor, themeSelectedColorStorageKey, themeRadiusStorageKey, localeOptions, defaultLocale } from '../constants/config'
 
-
-
 export const mapOrder = (array, order, key) => {
   array.sort(function (a, b) {
     var A = a[key]
@@ -77,7 +75,6 @@ export const setDirection = localValue => {
   }
   localStorage.setItem('direction', direction)
 }
-
 
 export const getThemeColor = () => {
   let color = defaultColor;
@@ -161,4 +158,10 @@ export const setCurrentUser = (user) => {
   } catch (error) {
     console.log(">>>> src/utils/index.js : setCurrentUser -> error", error)
   }
+}
+
+export const camelize = (str) => {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+    return index === 0 ? word.toLowerCase() : word.toUpperCase();
+  }).replace(/\s+/g, '');
 }

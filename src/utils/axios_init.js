@@ -11,7 +11,7 @@ function unauthorized(msg) {
 function errorNotification (title, msg) {
   store.dispatch('error_alert', {
     title: title,
-    message: msg.detail
+    message: msg?.detail
   })
 }
 
@@ -88,7 +88,7 @@ const init = {
   put(url, data, params) {
     return this.request('PUT', url, params, data)
   },
-  remove(url, data, params) {
+  remove(url, params) {
     return this.request('DELETE', url, params, undefined)
   },
 }

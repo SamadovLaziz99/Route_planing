@@ -10,6 +10,7 @@ import survey from './modules/survey'
 import alert from "./modules/alert";
 import auth from "./modules/auth";
 import { setCurrentLanguage } from '../utils'
+import crud from "./crud/crud";
 
 Vue.use(Vuex)
 
@@ -34,6 +35,8 @@ export default new Vuex.Store({
     todo,
     survey,
     alert,
-    auth
+    auth,
+    categories: crud('categories'),
+    foods: crud('foods')
   }
 })
