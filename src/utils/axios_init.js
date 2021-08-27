@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store'
 import i18n from '../locales/i18n'
 import router from "../router";
-const token = localStorage.getItem('token') || store.state.auth.token
+const token = localStorage.getItem('token') || store.getters.token
 
 function unauthorized(msg) {
   errorNotification(i18n.t('unauthorized.title'), msg)
@@ -60,9 +60,9 @@ const init = {
         Math.round((e.loaded * 100) / e.total)
       },
     }
-    if (token) {
+    if (localStorage.getItem('token') || store.getters.token) {
       config.headers = {
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + localStorage.getItem('token') || store.getters.token,
       }
     }
     if (data) config.data = data
