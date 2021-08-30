@@ -4,10 +4,10 @@
     <div class="pl-2 d-flex flex-grow-1 min-width-zero">
       <div
         class="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-        <router-link :to="`?p=${data.id}`" class="w-40 w-sm-100">
+        <div class="w-40 w-sm-100">
           <p v-if="data.name" class="list-item-heading mb-0 truncate">{{ data.name[$lang] }}</p>
           <p v-if="data.title" class="list-item-heading mb-0 truncate">{{ data.title }}</p>
-        </router-link>
+        </div>
         <p v-if="data.vendor" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.vendor }}</p>
         <p v-if="data.category" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.category }}</p>
         <p v-if="data.unit" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.unit }}</p>

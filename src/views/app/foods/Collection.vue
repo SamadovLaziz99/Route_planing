@@ -37,13 +37,27 @@
                 style="height: 470px !important;"
                 :settings="{ suppressScrollX: true, wheelPropagation: false }"
               >
-                <foods-card
-                  v-for="(order,index) in products.slice(0,6)"
-                  :order="order"
-                  detail-path="#"
-                  :key="index"
-                />
+                <b-form-group>
+                  <b-form-checkbox-group
+                    id="checkbox-group-2"
+                    v-model="foods"
+                    name="flavour-2"
+                  >
+                    <b-form-checkbox v-for="(order,index) in products.slice(0,6)" :value="order" :key="index" :class="{
+                      'foods': !foods.includes(order),
+                      'activeFoods': foods.includes(order)
+                    }">
+                        <foods-card
+                          :order="order"
+                          detail-path="#"
+                        />
+                    </b-form-checkbox>
+                  </b-form-checkbox-group>
+                </b-form-group>
               </vue-perfect-scrollbar>
+            </b-tab>
+            <b-tab title="BANNER">
+              <image-uploader/>
             </b-tab>
           </b-tabs>
         </div>
@@ -106,7 +120,6 @@
 <script>
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
-// import RecentOrderItem from "../../../components/Listing/RecentOrderItem";
 import FoodsCard from "./components/FoodsCard";
 import products from "../../../data/products";
 import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
@@ -155,6 +168,7 @@ export default {
   data() {
     return {
       products,
+      foods: [],
       form: {
         id: null,
         name: {
@@ -199,6 +213,9 @@ export default {
     };
   },
   watch: {
+    foods (e) {
+      console.log(e)
+    },
     'form.active': function (val) {
       console.log(val)
     }
@@ -320,3 +337,32 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.foods {
+  width: 100% !important;
+  border-radius: 10px;
+  margin: 5px 0;
+  .custom-control-label {
+    width: 100%;
+    cursor: pointer;
+    border-radius: 0.75rem !important;
+  }
+  .custom-control-label:hover {
+    background: aliceblue;
+  }
+}
+.activeFoods {
+  width: 100% !important;
+  border-radius: 10px;
+  margin: 5px 0;
+  .custom-control-label {
+    width: 100%;
+    cursor: pointer;
+    border-radius: 0.75rem !important;
+    background: #fff8f0;
+  }
+  .custom-control-label:hover {
+    background: #fff8f0;
+  }
+}
+</style>

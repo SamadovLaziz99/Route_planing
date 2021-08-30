@@ -1,9 +1,8 @@
 {
   "name": "Coozin",
-  "version": "1.0.0",
+  "version": "5.2.2",
   "description": "Coozin - Food delivery | Admin Panel",
   "author": "Oybek Mukhiddinov",
-  "license": "ISC",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
