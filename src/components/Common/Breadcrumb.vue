@@ -24,20 +24,23 @@ export default {
   mounted() {
     let path = this.$route.path.substr(1);
     let rawPaths = path.split("/");
-
-    for (var pName in this.$route.params) {
-      if (rawPaths.includes(this.$route.params[pName])) {
-        rawPaths = rawPaths.filter(x => x !== this.$route.params[pName]);
+    // for (var pName in this.$route.params) {
+    //   if (rawPaths.includes(this.$route.params[pName])) {
+    //     rawPaths = rawPaths.filter(x => x !== this.$route.params[pName]);
+    //   }
+    // }
+    const paramValues = Object.values(this.$route.params)
+    const _paths = rawPaths.filter(p => !paramValues.includes(p))
+    _paths.map((sub, index) => {
+      if (isNaN(parseInt(sub))) {
+        this.items.push({
+          text:
+            "/" + sub !== adminRoot
+              ? this.$t("menu." + sub)
+              : this.$t("menu.home"),
+          to: this.getUrl(path, sub, index)
+        });
       }
-    }
-    rawPaths.map((sub, index) => {
-      this.items.push({
-        text:
-          "/" + sub !== adminRoot
-            ? this.$t("menu." + sub)
-            : this.$t("menu.home"),
-        to: this.getUrl(path, sub, index)
-      });
     });
   }
 };

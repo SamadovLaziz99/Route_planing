@@ -14,7 +14,6 @@
           :key="item.id"
           :data="item"
           :selected-items="selectedItems"
-          @toggle-item="toggleItem"
           v-contextmenu:contextmenu
         />
       </b-colxx>
@@ -25,7 +24,6 @@
           :key="item.id"
           :data="item"
           :selected-items="selectedItems"
-          @toggle-item="toggleItem"
           v-contextmenu:contextmenu
         />
       </b-colxx>
@@ -33,12 +31,15 @@
     <b-row v-else-if="displayMode==='list'" key="list">
       <b-colxx xxs="12" class="mb-3" v-for="(item,index) in items" :key="index" :id="item.id">
         <data-list-item
+          ref="dataListItem"
           :key="item.id"
           :data="item"
           :selected-items="selectedItems"
-          @toggle-item="toggleItem"
+          @view="view"
+          @edit="edit"
           v-contextmenu:contextmenu
         />
+        <!--              @toggle-item="toggleItem"-->
       </b-colxx>
     </b-row>
     <b-row v-if="lastPage > 1 ">
@@ -108,6 +109,12 @@ export default {
   methods: {
     linkGen(pageNum) {
       return "#page-" + pageNum;
+    },
+    view (id) {
+      this.$emit('view', id)
+    },
+    edit (id) {
+      this.$emit('edit', id)
     }
   }
 };

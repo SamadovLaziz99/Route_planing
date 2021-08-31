@@ -75,6 +75,18 @@ const routes = [
             children: []
           },
           {
+            path: "create",
+            name: 'food_create',
+            component: () => import("./views/app/foods/FoodCrud"),
+            children: []
+          },
+          {
+            path: "update/:id",
+            name: 'food_update',
+            component: () => import("./views/app/foods/FoodCrud"),
+            children: []
+          },
+          {
             path: "details",
             name: 'food_detail',
             component: () => import("./views/app/foods/Details"),
@@ -118,6 +130,12 @@ const routes = [
           {
             path: "vendors",
             component: () => import("./views/app/employees/Vendors"),
+            children: []
+          },
+          {
+            path: "vendors/create",
+            name: 'vendor_create',
+            component: () => import("./views/app/employees/VendorCrud"),
             children: []
           },
           {

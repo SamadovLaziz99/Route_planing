@@ -7,11 +7,14 @@ import CrudModal from "./components/CrudModal";
 import ImageUploadContainer from "./components/ImageUploadContainer";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import InputTag from "./components/Form/InputTag";
+
 
 Vue.component('v-select', vSelect)
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);
 Vue.component('b-colxx', Colxx);
+Vue.component('input-tag', InputTag);
 Vue.component('vue-perfect-scrollbar', vuePerfectScrollbar);
 Vue.component('crud-modal', CrudModal)
 Vue.component('image-uploader', ImageUploadContainer)

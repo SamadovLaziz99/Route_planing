@@ -6,7 +6,7 @@
     @hide="hide"
     modal-class="modal-right"
   >
-    <slot name="content"></slot>
+    <slot name="content" style="overflow-y: scroll"></slot>
     <template slot="modal-footer">
       <b-button
         variant="outline-secondary"

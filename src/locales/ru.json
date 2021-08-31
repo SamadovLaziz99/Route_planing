@@ -12,10 +12,12 @@
   "save": "Save",
   "add": "Add",
   "delete": "Delete",
+  "create": "Create",
   "update": "Update",
   "please.enter": "Please enter your - ",
   "want.delete": "Do you want delete?",
   "filter.by": "Filter By: ",
+  "description": "Description ",
   "general": {
     "copyright": "Piaf Vue © 2018 All Rights Reserved."
   },
@@ -60,6 +62,8 @@
     "home": "Home",
     "list": "List",
     "app": "Home",
+    "create": "Create",
+    "update": "Update",
     "dashboards": "Dashboards",
     "orders": "Orders",
     "orders_list": "Orders List",
