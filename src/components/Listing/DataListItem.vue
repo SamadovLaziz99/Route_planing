@@ -5,7 +5,7 @@
       <div
         class="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
         <div class="w-40 w-sm-100">
-          <p v-if="data.name" class="list-item-heading mb-0 truncate">{{ data.name[$lang] }}</p>
+          <p v-if="data.name" class="list-item-heading mb-0 truncate">{{ data.name[$lang] || data.name }}</p>
           <p v-if="data.title" class="list-item-heading mb-0 truncate">{{ data.title }}</p>
         </div>
         <p v-if="data.vendor" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.vendor }}</p>

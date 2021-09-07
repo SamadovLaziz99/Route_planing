@@ -76,14 +76,14 @@ const data = [
     label: "menu.users",
     to: `${adminRoot}/users`,
     // roles: [UserRole.Admin, UserRole.Editor],
-    subs: [
-      {
-        icon: "simple-icon-people",
-        label: "menu.users_list",
-        to: `${adminRoot}/users/list`,
-        // roles: [UserRole.Admin],
-      }
-    ]
+    // subs: [
+    //   {
+    //     icon: "simple-icon-people",
+    //     label: "menu.users_list",
+    //     to: `${adminRoot}/users/list`,
+    //     // roles: [UserRole.Admin],
+    //   }
+    // ]
   },
   {
     id: "employees",
@@ -105,15 +105,15 @@ const data = [
         // roles: [UserRole.Admin],
       },
       // {
-      //   icon: "simple-icon-map",
-      //   label: "menu.maps",
-      //   to: `${adminRoot}/employees/maps`,
+      //   icon: "iconsminds-conference",
+      //   label: "menu.management_team",
+      //   to: `${adminRoot}/employees/management_team`,
       //   // roles: [UserRole.Admin],
       // },
       {
         icon: "iconsminds-conference",
-        label: "menu.management_team",
-        to: `${adminRoot}/employees/management_team`,
+        label: "menu.system_users",
+        to: `${adminRoot}/employees/system_users`,
         // roles: [UserRole.Admin],
       }
     ]

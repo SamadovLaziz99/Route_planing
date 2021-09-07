@@ -112,14 +112,16 @@ const routes = [
       },
       {
         path: "users",
-        component: () => import("./views/app/pages"),
-        redirect: `${adminRoot}/users/list`,
+        name: 'users',
+        component: () => import("./views/app/users/List"),
+        // redirect: `${adminRoot}/users/list`,
         children: [
-          {
-            path: "list",
-            component: () => import("./views/app/users/List"),
-            children: []
-          }
+          // {
+          //   path: "list",
+          //   name: 'users',
+          //   component: () => import("./views/app/users/List"),
+          //   children: []
+          // }
         ]
       },
       {
@@ -129,6 +131,7 @@ const routes = [
         children: [
           {
             path: "vendors",
+            name: "vendors",
             component: () => import("./views/app/employees/Vendors"),
             children: []
           },
@@ -149,17 +152,23 @@ const routes = [
             component: () => import("./views/app/employees/Couriers"),
             children: []
           },
+          {
+            path: "system_users",
+            name: 'user',
+            component: () => import("./views/app/employees/SystemUsers"),
+            children: []
+          },
           // {
           //   path: "maps",
           //   name: 'maps',
           //   component: () => import("./views/app/map/Map"),
           //   children: []
           // },
-          {
-            path: "management_team",
-            component: () => import("./views/app/employees/ManagementTeam"),
-            children: []
-          }
+          // {
+          //   path: "management_team",
+          //   component: () => import("./views/app/employees/ManagementTeam"),
+          //   children: []
+          // }
         ]
       },
       {
@@ -198,7 +207,8 @@ const routes = [
           },
           {
             path: "video_tutorial",
-            component: () => import("./views/Defaults"),
+            name: 'videos',
+            component: () => import("./views/app/settings/Videos"),
             children: []
           },
           {

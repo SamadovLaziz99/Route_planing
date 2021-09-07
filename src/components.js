@@ -4,6 +4,7 @@ import RefreshButton from './components/Common/RefreshButton'
 import Colxx from './components/Common/Colxx'
 import vuePerfectScrollbar from 'vue-perfect-scrollbar'
 import CrudModal from "./components/CrudModal";
+import DeleteConfirmModal from "./components/DeleteConfirmModal";
 import ImageUploadContainer from "./components/ImageUploadContainer";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
@@ -11,6 +12,7 @@ import InputTag from "./components/Form/InputTag";
 
 
 Vue.component('v-select', vSelect)
+Vue.component('remove-modal', DeleteConfirmModal)
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);
 Vue.component('b-colxx', Colxx);

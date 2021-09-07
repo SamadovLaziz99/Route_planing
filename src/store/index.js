@@ -42,6 +42,9 @@ export default new Vuex.Store({
     foods: crud('food'),
     units: crud('units'),
     collections: crud('collections'),
-    vendors: crud('vendors')
+    vendors: crud('vendors'),
+    users: crud('users'),
+    system_users: crud('user'),
+    videos: crud('videos')
   }
 })

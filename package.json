@@ -17,6 +17,7 @@
     "chart.js": "2.9.4",
     "core-js": "^3.14.0",
     "firebase": "^8.6.5",
+    "moment": "^2.29.1",
     "v-contextmenu": "^2.9.0",
     "video.js": "^7.12.3",
     "vue": "^2.6.14",

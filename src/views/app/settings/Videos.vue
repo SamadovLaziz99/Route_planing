@@ -1,23 +1,38 @@
 <template>
   <b-row>
     <b-colxx class="disable-text-selection">
-      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'category.update' : 'category.create'">
+      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'videos.update' : 'videos.create'">
         <div slot="content">
           <b-form class="av-tooltip tooltip-right-bottom">
-            <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
+            <b-form-group :label="$t('name')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name')}}</b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
+            <b-form-group :label="$t('language')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.language.$model" :state="!$v.form.language.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.language.required">{{ $t('please.enter') + $t('language')}}</b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
+            <b-form-group :label="$t('url')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.url.$model" :state="!$v.form.url.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.url.required">{{ $t('please.enter') + $t('url')}}</b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group :label="$t('position')" class="has-float-label mb-4">
-              <b-form-input type="number" v-model="form.position"/>
+            <b-form-group :label="$t('type')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.type.$model" :state="!$v.form.type.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('type')}}</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group :label="$t('category')" class="has-float-label mb-4">
+              <v-select :options="categories" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error" />
+<!--              <b-form-input type="text" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error"/>-->
+              <b-form-invalid-feedback v-if="!$v.form.category.required">{{ $t('please.enter') + $t('category')}}</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
+              <v-select :options="vendors" v-model.trim="$v.form.vendor.$model" :state="!$v.form.vendor.$error" />
+<!--              <b-form-input type="text" />-->
+              <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor')}}</b-form-invalid-feedback>
+            </b-form-group>
+            <b-form-group :label="$t('description')" class="has-float-label mb-4">
+              <b-textarea v-model="form.description" :rows="3" :max-rows="5" />
+<!--              <b-form-input type="text" v-model="form.description"/>-->
             </b-form-group>
           </b-form>
         </div>
@@ -34,7 +49,7 @@
       </crud-modal>
       <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
       <list-page-heading
-        :title="$t('menu.foods_category')"
+        :title="$t('menu.videos')"
         :displayMode="displayMode"
         :sortOptions="sortOptions"
         :changeOrderBy="changeOrderBy"
@@ -83,8 +98,8 @@ import ListPageListing from "./ListListing";
 import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-const _page = 'categories'
 import { actions, getters } from "../../../utils/store_schema";
+const _page = 'videos'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
@@ -94,17 +109,21 @@ export default {
   validations: {
     form: {
       name: {
-        uz: {
-          required
-        },
-        ru: {
-          required
-        },
-        oz: {
-          required
-        }
+        required
       },
-      position: {
+      language: {
+        required
+      },
+      url: {
+        required
+      },
+      type: {
+        required
+      },
+      category: {
+        required
+      },
+      vendor: {
         required
       }
     }
@@ -114,13 +133,16 @@ export default {
     return {
       form: {
         id: null,
-        name: {
-          uz: '',
-          ru: '',
-          oz: ''
-        },
-        position: null
+        name: '',
+        description: '',
+        language: '',
+        url: '',
+        type: '',
+        category: null,
+        vendor: null
       },
+      categories: [],
+      vendors: [],
       displayMode: "list",
       sort: {},
       sortOptions: [
@@ -153,17 +175,35 @@ export default {
   },
   mounted() {
     this.getData()
+    this.$store.dispatch('getCategories').then(res => {
+      this.categories = res.map(e => {
+        return {
+          label: e.name[this.$lang],
+          value: e.id
+        }
+      })
+    })
+    this.$store.dispatch('getVendors').then(res => {
+      this.vendors = res.map(e => {
+        return {
+          label: e.user.first_name + ' ' + e.user.last_name,
+          value: e.id
+        }
+      })
+    })
   },
   methods: {
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        const _form = { ...this.form }
+        delete _form.id
+        _form.category = this.form.category.value ? this.form.category.value : this.form.category
+        _form.vendor = this.form.vendor.value ? this.form.vendor.value : this.form.vendor
+        _form.slug = this.form.url
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
-          data: {
-            name: this.form.name,
-            position: parseInt(this.form.position)
-          }
+          data: _form
         }).then(res => {
           this.$refs.crudModal.hideModal()
           this.getData()
@@ -175,9 +215,11 @@ export default {
     },
     editItem (id) {
       this.$store.dispatch(getById, id).then(res => {
-        this.form.id = res.id
-        this.form.name = res.name
-        this.form.position = res.position
+        const _data = { ...res }
+        delete _data.created_at
+        delete _data.updated_at
+        delete _data.slug
+        this.form = _data
         this.$bvModal.show('crudModal')
       })
     },
@@ -194,12 +236,13 @@ export default {
       this.$v.$reset()
       this.form = {
         id: null,
-        name: {
-          uz: '',
-          ru: '',
-          oz: ''
-        },
-        position: null
+        name: '',
+        description: '',
+        language: '',
+        url: '',
+        type: '',
+        category: null,
+        vendor: null
       }
     },
     closed(e) {

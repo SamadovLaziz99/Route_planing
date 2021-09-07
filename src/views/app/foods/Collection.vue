@@ -72,7 +72,7 @@
           </b-button>
         </div>
       </crud-modal>
-      <DeleteConfirmModal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+      <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
       <list-page-heading
         :title="$t('menu.foods_collection')"
         :displayMode="displayMode"
@@ -122,31 +122,16 @@ import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import products from "../../../data/products";
-import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
 import { mapGetters } from "vuex";
-import { camelize } from "../../../utils";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 const _page = 'collections'
-const actions = {
-  get: camelize(`get ${_page}`),
-  getById: camelize(`get by id ${_page}`),
-  post: camelize(`post ${_page}`),
-  put: camelize(`put ${_page}`),
-  remove: camelize(`delete ${_page}`),
-}
-const getters = {
-  load: camelize(`load ${_page}`),
-  data: camelize(`data ${_page}`),
-  pending: camelize(`pending ${_page}`),
-  deleting: camelize(`deleting ${_page}`),
-  pagination: camelize(`pagination ${_page}`),
-}
+import { actions, getters } from "../../../utils/store_schema";
+const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
-    DeleteConfirmModal,
     'foods-card': FoodsCard
   },
   validations: {
@@ -191,8 +176,6 @@ export default {
         }
       ],
       categories: [],
-      actions: actions,
-      getters: getters,
       displayMode: "list",
       sort: {},
       sortOptions: [
@@ -221,13 +204,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      data: getters.data,
-      load: getters.load,
-      pending: getters.pending,
-      deleting: getters.deleting,
-      pagination: getters.pagination
-    }),
+    ...mapGetters(getters(_page)),
     items() {
       return this.data.map(e => {
         return {
@@ -256,7 +233,7 @@ export default {
         delete _form.id
         _form.category = this.form.category?.value
         _form.position = parseInt(this.form.position)
-        this.$store.dispatch(this.form.id ? actions.put : actions.post, {
+        this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: _form
         }).then(res => {
@@ -269,7 +246,7 @@ export default {
       console.log(id)
     },
     editItem (id) {
-      this.$store.dispatch(actions.getById, id).then(res => {
+      this.$store.dispatch(getById, id).then(res => {
         const _form = { ...res }
         delete _form.created_at
         delete _form.updated_at
@@ -279,7 +256,7 @@ export default {
       })
     },
     removeItem (id) {
-      this.$store.dispatch(actions.remove, id).then(res => {
+      this.$store.dispatch(remove, id).then(res => {
         this.$store.commit('DELETE_MODAL', {
           isShow: false,
           data: {}
@@ -327,7 +304,7 @@ export default {
       this.getData()
     },
     getData() {
-      this.$store.dispatch(actions.get, {
+      this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15

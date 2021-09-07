@@ -12,10 +12,10 @@
               <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>
               <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{ $t('please.enter') + $t('last.name') }}</b-form-invalid-feedback>
             </b-form-group>
-            <b-form-group :label="$t('phone')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.phone.$model" :state="!$v.form.phone.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.phone.required">{{ $t('please.enter') + $t('username') }}</b-form-invalid-feedback>
-              <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX XX XX</b-form-invalid-feedback>
+            <b-form-group :label="$t('username')" class="has-float-label mb-4">
+              <b-form-input type="text" v-model.trim="$v.form.username.$model" :state="!$v.form.username.$error"/>
+              <b-form-invalid-feedback v-if="!$v.form.username.required">{{ $t('please.enter') + $t('username') }}</b-form-invalid-feedback>
+              <b-form-invalid-feedback v-if="!$v.form.username.minLength">{{ $t('username') }} is minimumm 6 characters</b-form-invalid-feedback>
             </b-form-group>
             <b-form-group :label="$t('email')" class="has-float-label mb-4">
               <b-form-input type="text" v-model.trim="$v.form.email.$model" :state="!$v.form.email.$error"/>
@@ -31,9 +31,9 @@
               <b-form-input type="text" v-model.trim="$v.form.re_password.$model" :state="!$v.form.re_password.$error"/>
               <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{ $t('re.password.error') }}</b-form-invalid-feedback>
             </b-form-group>
-<!--            <b-form-group :label="$t('pages.status')">-->
-<!--              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />-->
-<!--            </b-form-group>-->
+            <b-form-group :label="$t('pages.status')">
+              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />
+            </b-form-group>
           </b-form>
         </div>
         <div slot="action">
@@ -82,7 +82,7 @@
           </template>
           <template #cell(action)="row">
             <div style="display: flex">
-<!--              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
+              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
               <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
             </div>
@@ -90,8 +90,8 @@
           <template #cell(status)="row">
             <b-badge pill variant="primary">Pending</b-badge>
           </template>
-          <template #cell(created_at)="row">
-            {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
+          <template #cell(date_joined)="row">
+            {{ moment(row.item.date_joined).format('YYYY-MM-DD HH:mm') }}
           </template>
           <template #cell(selection)="{ rowSelected }">
             <template v-if="rowSelected">
@@ -116,7 +116,7 @@ import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
 import { actions, getters } from "../../../utils/store_schema";
 import moment from 'moment'
-const _page = 'users'
+const _page = 'user'
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -131,12 +131,12 @@ export default {
       last_name: {
         required
       },
+      username: {
+        required,
+        minLength: minLength(6)
+      },
       email: {
         required, email
-      },
-      phone: {
-        required,
-        valid: (e) => /^[+][9][9][8]\d{9}$/.test(e)
       },
       password: {
         required,
@@ -154,15 +154,27 @@ export default {
   data() {
     return {
       action: actions(_page),
+      statuses: [
+        {
+          text: "ACTIVE",
+          value: true
+        },
+        {
+          text: "INACTIVE",
+          value: false
+        }
+      ],
       form: {
         id: null,
         first_name: '',
         last_name: '',
-        phone: '',
+        username: '',
         email: '',
         password: null,
         re_password: null,
-        balance: 0
+        is_active: true,
+        groups: [],
+        user_permissions: []
       },
       sort: {
         column: "title",
@@ -181,13 +193,12 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
+          key: 'username',
+          label: 'Username',
+          // tdClass: 'firstColumn'
+        },{
           key: 'email',
           label: 'Email',
-          // tdClass: 'firstColumn'
-        },
-        {
-          key: 'phone',
-          label: 'Phone',
           // tdClass: 'firstColumn'
         },
         // {
@@ -201,7 +212,7 @@ export default {
         //   tdClass: 'text-muted'
         // },
         {
-          key: 'created_at',
+          key: 'date_joined',
           label: 'Registration date',
           tdClass: 'text-muted'
         },
@@ -218,10 +229,6 @@ export default {
   },
   methods: {
     moment,
-    validPh (value) {
-      console.log(value)
-      return /^[+][9][9][8]\d{9}$/.test(value)
-    },
     closed (e) {
       console.log(e)
       this.clear()
@@ -232,11 +239,13 @@ export default {
         id: null,
         first_name: '',
         last_name: '',
-        phone: '',
+        username: '',
         email: '',
         password: null,
         re_password: null,
-        balance: 0
+        is_active: true,
+        groups: [],
+        user_permissions: []
       }
     },
     edit (item) {
@@ -277,13 +286,11 @@ export default {
       })
     },
     changePagination (e) {
-      this.page = e
-      this.getData()
-      console.log(this.$route)
-      // let _query = { ...this.$route.query }
-      // _query.page = e
-      // _query.limit = this.pagination.limit
-      // this.routePusher(_query)
+      this.pagination.page = e
+      let _query = { ...this.$route.query }
+      _query.page = e
+      _query.limit = this.pagination.limit
+      this.routePusher(_query)
     },
     changeOrderBy(sort) {
       this.sort = sort;
@@ -320,12 +327,7 @@ export default {
     },
   },
   mounted() {
-    const _hash = this.$route.hash
-    let _page;
-    if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
-      this.page = parseInt(_page)
-    }
+    console.log(this.$route.hash)
     this.getData()
   }
 };

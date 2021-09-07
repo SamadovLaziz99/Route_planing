@@ -59,6 +59,7 @@
     "cancelled": "Cancelled"
   },
   "menu": {
+    "system_users": "System Users",
     "home": "Home",
     "list": "List",
     "app": "Home",
@@ -137,7 +138,6 @@
     "hidden": "Hidden",
     "visible": "Visible",
     "tables": "Tables",
-    "maps": "Maps",
     "landingpage": "Landing Page",
     "multipage-home": "Multipage Home",
     "singlepage-home": "Singlepage Home",

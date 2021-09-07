@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-colxx class="disable-text-selection">
-      <DeleteConfirmModal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+      <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
       <list-page-heading
         :title="$t('menu.foods_list')"
         :displayMode="displayMode"
@@ -51,7 +51,6 @@ import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import products from "../../../data/products";
-import DeleteConfirmModal from "../../../components/DeleteConfirmModal";
 import { mapGetters } from "vuex";
 import { camelize } from "../../../utils";
 import { validationMixin } from "vuelidate";
@@ -75,7 +74,6 @@ export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
-    DeleteConfirmModal,
     'foods-card': FoodsCard
   },
   validations: {

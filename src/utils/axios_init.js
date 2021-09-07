@@ -12,9 +12,10 @@ function unauthorized(msg) {
 }
 
 function errorNotification (title, msg) {
+  console.log(msg)
   store.dispatch('error_alert', {
     title: title,
-    message: msg?.detail
+    message: msg
   })
 }
 
@@ -26,7 +27,7 @@ function ErrorHandler(error) {
     const _error = error.response.data
     switch (error.response.status) {
       case 400:
-        errorNotification(i18n.t('bad_request'), _error.message)
+        errorNotification(i18n.t('bad_request'), _error)
         break
       case 401:
         unauthorized(_error)
