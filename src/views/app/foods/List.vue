@@ -1,49 +1,52 @@
 <template>
-  <b-row>
-    <b-colxx class="disable-text-selection">
-      <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
-      <list-page-heading
-        :title="$t('menu.foods_list')"
-        :displayMode="displayMode"
-        :sortOptions="sortOptions"
-        :changeOrderBy="changeOrderBy"
-        :sort="sort"
-        :searchChange="searchChange"
-        :from="from"
-        :to="to"
-        :total="pagination.total"
-        :perPage="15"
-      >
-        <b-button
-          slot="action"
-          variant="primary"
-          size="lg"
-          @click="$router.push({ name: 'food_create' })"
-          :class="{ 'top-right-button': true }"
-        >{{ $t('pages.add-new') }}
-        </b-button>
-      </list-page-heading>
-      <template v-if="!load">
-        <list-page-listing
-          ref="listPageListing"
+  <div>
+    <b-row v-if="!error">
+      <b-colxx class="disable-text-selection">
+        <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+        <list-page-heading
+          :title="$t('menu.foods_list')"
           :displayMode="displayMode"
-          :items="items"
-          :selectedItems="selectedItems"
-          :lastPage="Math.ceil(pagination.total / 15)"
+          :sortOptions="sortOptions"
+          :changeOrderBy="changeOrderBy"
+          :sort="sort"
+          :searchChange="searchChange"
+          :from="from"
+          :to="to"
+          :total="pagination.total"
           :perPage="15"
-          :page="pagination.page"
-          :changePage="changePage"
-          :handleContextMenu="handleContextMenu"
-          :onContextMenuAction="onContextMenuAction"
-          @view="viewItem"
-          @edit="editItem"
-        ></list-page-listing>
-      </template>
-      <template v-else>
-        <div class="loading"></div>
-      </template>
-    </b-colxx>
-  </b-row>
+        >
+          <b-button
+            slot="action"
+            variant="primary"
+            size="lg"
+            @click="$router.push({ name: 'food_create' })"
+            :class="{ 'top-right-button': true }"
+          >{{ $t('pages.add-new') }}
+          </b-button>
+        </list-page-heading>
+        <template v-if="!load">
+          <list-page-listing
+            ref="listPageListing"
+            :displayMode="displayMode"
+            :items="items"
+            :selectedItems="selectedItems"
+            :lastPage="Math.ceil(pagination.total / 15)"
+            :perPage="15"
+            :page="pagination.page"
+            :changePage="changePage"
+            :handleContextMenu="handleContextMenu"
+            :onContextMenuAction="onContextMenuAction"
+            @view="viewItem"
+            @edit="editItem"
+          ></list-page-listing>
+        </template>
+        <template v-else>
+          <div class="loading"></div>
+        </template>
+      </b-colxx>
+    </b-row>
+    <error-page v-else :error="error"/>
+  </div>
 </template>
 
 <script>
@@ -140,6 +143,7 @@ export default {
     },
     viewItem (id) {
       console.log(id)
+      this.$router.push({ name: 'food_detail', params: { id: id } })
     },
     editItem (id) {
       this.$store.dispatch(getById, id).then(res => {

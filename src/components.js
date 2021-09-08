@@ -9,9 +9,11 @@ import ImageUploadContainer from "./components/ImageUploadContainer";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import InputTag from "./components/Form/InputTag";
+import ErrorPage from "./views/app/statuses/ErrorPage";
 
 
 Vue.component('v-select', vSelect)
+Vue.component('error-page', ErrorPage)
 Vue.component('remove-modal', DeleteConfirmModal)
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);

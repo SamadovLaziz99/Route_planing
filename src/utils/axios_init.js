@@ -12,7 +12,6 @@ function unauthorized(msg) {
 }
 
 function errorNotification (title, msg) {
-  console.log(msg)
   store.dispatch('error_alert', {
     title: title,
     message: msg

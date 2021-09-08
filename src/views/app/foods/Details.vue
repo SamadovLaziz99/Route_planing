@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-row>
+    <b-row v-if="!errorFood">
       <b-colxx xxs="12">
-        <h1>{{ $route.query.food }}</h1>
+        <h1>Details</h1>
         <div class="top-right-button-container">
           <b-dropdown
             id="ddown5"
@@ -16,7 +16,7 @@
             <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>
           </b-dropdown>
         </div>
-        <piaf-breadcrumb />
+        <piaf-breadcrumb/>
         <b-tabs nav-class="separator-tabs ml-0 mb-5" content-class="tab-content">
           <b-tab :title="$t('pages.details')">
             <b-row>
@@ -24,10 +24,10 @@
                 <b-card class="mb-4" no-body>
                   <div class="position-absolute card-top-buttons">
                     <b-button variant="outline-white" class="icon-button">
-                      <i class="simple-icon-pencil" />
+                      <i class="simple-icon-pencil"/>
                     </b-button>
                   </div>
-                  <img src="/assets/img/details/1.jpg" alt="Detail" class="card-img-top" />
+                  <img src="/assets/img/details/1.jpg" alt="Detail" class="card-img-top"/>
                   <b-card-body>
                     <p class="text-muted text-small mb-2">{{ $t('pages.description') }}</p>
                     <p class="mb-3">
@@ -35,8 +35,8 @@
                       exclusively brings you the classic chocolate cake.
                       This cake is the one you always dream of-moist cake
                       and creamy chocolate frosting.
-                      <br />
-                      <br />This cake proudly serves itself for a family
+                      <br/>
+                      <br/>This cake proudly serves itself for a family
                       gathering, a dinner party, a birthday celebration, a
                       baby christening, and a gift to someone special or
                       simply to have on hand on the cake stand at home
@@ -94,23 +94,23 @@
           <b-tab :title="$t('pages.orders')">
             <b-row>
               <b-colxx>
-<!--                <div class="d-flex flex-grow-2 min-width-zero">-->
-<!--                  <b-card-body class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">-->
-<!--                    <div class="list-item-heading mb-1 truncate w-40 w-xs-100">-->
-<!--                      Name-->
-<!--                    </div>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Phone</p>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Payment Type</p>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Price</p>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Order Time</p>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Delivery Time</p>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Date</p>-->
-<!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Status</p>-->
-<!--&lt;!&ndash;                    <div class="w-15 w-xs-100 text-right">&ndash;&gt;-->
-<!--&lt;!&ndash;                      <b-badge pill variant="danger`">Status</b-badge>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                  </b-card-body>-->
-<!--                </div>-->
+                <!--                <div class="d-flex flex-grow-2 min-width-zero">-->
+                <!--                  <b-card-body class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">-->
+                <!--                    <div class="list-item-heading mb-1 truncate w-40 w-xs-100">-->
+                <!--                      Name-->
+                <!--                    </div>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Phone</p>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Payment Type</p>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Price</p>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Order Time</p>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Delivery Time</p>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Date</p>-->
+                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Status</p>-->
+                <!--&lt;!&ndash;                    <div class="w-15 w-xs-100 text-right">&ndash;&gt;-->
+                <!--&lt;!&ndash;                      <b-badge pill variant="danger`">Status</b-badge>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+                <!--                  </b-card-body>-->
+                <!--                </div>-->
                 <order-item
                   v-for="(order,index) in _oders"
                   :key="index"
@@ -123,6 +123,7 @@
         </b-tabs>
       </b-colxx>
     </b-row>
+    <error-page v-else :error="errorFood"/>
   </div>
 </template>
 
@@ -131,10 +132,12 @@ import Stars from "../../../components/Common/Stars";
 import RadialProgressCard from "../../../components/Cards/RadialProgressCard";
 import CommentItem from "../../../components/Listing/CommentItem";
 import OrderItem from "../../../components/Listing/OrderItem";
-import { comments } from "../../../data/comments";
+import {comments} from "../../../data/comments";
 import orders from "../../../data/orders";
 import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
+import { getters } from "../../../utils/store_schema";
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -149,12 +152,14 @@ export default {
     return {
       isLoad: false,
       comments: comments.slice(0, 5),
+      food: null,
       orders
     };
   },
   methods: {},
   computed: {
-    _oders () {
+    ...mapGetters(['errorFood']),
+    _oders() {
       return this.orders.map(e => {
         return {
           ...e,
@@ -169,9 +174,9 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.isLoad = true;
-    }, 50);
+    this.$store.dispatch('getByIdFood', this.$route.params.id).then(res => {
+      this.food = res
+    })
   }
 };
 </script>

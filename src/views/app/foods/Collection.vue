@@ -1,49 +1,50 @@
 <template>
-  <b-row>
-    <b-colxx class="disable-text-selection">
-      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
-        <div slot="content">
-          <b-tabs fill content-class="tab-content" nav-class="separator-tabs">
-            <b-tab title="MAIN">
-              <div class="mt-4"></div>
-              <b-form class="av-tooltip tooltip-right-bottom">
-                <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
-                  <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
-                  <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
-                  <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
-                  <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
-                  <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
-                  <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
-                </b-form-group>
-                <b-form-group :label="$t('pages.category')" class="has-float-label mb-4">
-                  <v-select :options="categories" v-model="form.category" />
-                </b-form-group>
-                <b-form-group :label="$t('position')" class="has-float-label mb-4">
-                  <b-form-input type="number" v-model="form.position"/>
-                </b-form-group>
-                <b-form-group :label="$t('pages.status')">
-                  <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
-                </b-form-group>
-              </b-form>
-            </b-tab>
-            <b-tab title="FOODS">
-              <div class="mt-4"></div>
-              <vue-perfect-scrollbar
-                class="scroll dashboard-list-with-thumbs"
-                style="height: 470px !important;"
-                :settings="{ suppressScrollX: true, wheelPropagation: false }"
-              >
-                <b-form-group>
-                  <b-form-checkbox-group
-                    id="checkbox-group-2"
-                    v-model="foods"
-                    name="flavour-2"
-                  >
-                    <b-form-checkbox v-for="(order,index) in products.slice(0,6)" :value="order" :key="index" :class="{
+  <div>
+    <b-row v-if="!error">
+      <b-colxx class="disable-text-selection">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
+          <div slot="content">
+            <b-tabs fill content-class="tab-content" nav-class="separator-tabs">
+              <b-tab title="MAIN">
+                <div class="mt-4"></div>
+                <b-form class="av-tooltip tooltip-right-bottom">
+                  <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
+                    <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
+                    <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
+                  </b-form-group>
+                  <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
+                    <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
+                    <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
+                  </b-form-group>
+                  <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
+                    <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
+                    <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
+                  </b-form-group>
+                  <b-form-group :label="$t('pages.category')" class="has-float-label mb-4">
+                    <v-select :options="categories" v-model="form.category" />
+                  </b-form-group>
+                  <b-form-group :label="$t('position')" class="has-float-label mb-4">
+                    <b-form-input type="number" v-model="form.position"/>
+                  </b-form-group>
+                  <b-form-group :label="$t('pages.status')">
+                    <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
+                  </b-form-group>
+                </b-form>
+              </b-tab>
+              <b-tab title="FOODS">
+                <div class="mt-4"></div>
+                <vue-perfect-scrollbar
+                  class="scroll dashboard-list-with-thumbs"
+                  style="height: 470px !important;"
+                  :settings="{ suppressScrollX: true, wheelPropagation: false }"
+                >
+                  <b-form-group>
+                    <b-form-checkbox-group
+                      id="checkbox-group-2"
+                      v-model="foods"
+                      name="flavour-2"
+                    >
+                      <b-form-checkbox v-for="(order,index) in products.slice(0,6)" :value="order" :key="index" :class="{
                       'foods': !foods.includes(order),
                       'activeFoods': foods.includes(order)
                     }">
@@ -51,70 +52,72 @@
                           :order="order"
                           detail-path="#"
                         />
-                    </b-form-checkbox>
-                  </b-form-checkbox-group>
-                </b-form-group>
-              </vue-perfect-scrollbar>
-            </b-tab>
-            <b-tab title="BANNER">
-              <image-uploader/>
-            </b-tab>
-          </b-tabs>
-        </div>
-        <div slot="action">
-          <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+                      </b-form-checkbox>
+                    </b-form-checkbox-group>
+                  </b-form-group>
+                </vue-perfect-scrollbar>
+              </b-tab>
+              <b-tab title="BANNER">
+                <image-uploader/>
+              </b-tab>
+            </b-tabs>
+          </div>
+          <div slot="action">
+            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
                 <span class="bounce3"></span>
             </span>
-            <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
-          </b-button>
-        </div>
-      </crud-modal>
-      <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
-      <list-page-heading
-        :title="$t('menu.foods_collection')"
-        :displayMode="displayMode"
-        :sortOptions="sortOptions"
-        :changeOrderBy="changeOrderBy"
-        :sort="sort"
-        :searchChange="searchChange"
-        :from="from"
-        :to="to"
-        :total="pagination.total"
-        :perPage="15"
-      >
-        <b-button
-          slot="action"
-          v-b-modal.crudModal
-          variant="primary"
-          size="lg"
-          :class="{ 'top-right-button': true }"
-        >{{ $t('pages.add-new') }}
-        </b-button>
-      </list-page-heading>
-      <template v-if="!load">
-        <list-page-listing
-          ref="listPageListing"
+              <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
+            </b-button>
+          </div>
+        </crud-modal>
+        <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+        <list-page-heading
+          :title="$t('menu.foods_collection')"
           :displayMode="displayMode"
-          :items="items"
-          :selectedItems="selectedItems"
-          :lastPage="Math.ceil(pagination.total / 15)"
+          :sortOptions="sortOptions"
+          :changeOrderBy="changeOrderBy"
+          :sort="sort"
+          :searchChange="searchChange"
+          :from="from"
+          :to="to"
+          :total="pagination.total"
           :perPage="15"
-          :page="pagination.page"
-          :changePage="changePage"
-          :handleContextMenu="handleContextMenu"
-          :onContextMenuAction="onContextMenuAction"
-          @view="viewItem"
-          @edit="editItem"
-        ></list-page-listing>
-      </template>
-      <template v-else>
-        <div class="loading"></div>
-      </template>
-    </b-colxx>
-  </b-row>
+        >
+          <b-button
+            slot="action"
+            v-b-modal.crudModal
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+          >{{ $t('pages.add-new') }}
+          </b-button>
+        </list-page-heading>
+        <template v-if="!load">
+          <list-page-listing
+            ref="listPageListing"
+            :displayMode="displayMode"
+            :items="items"
+            :selectedItems="selectedItems"
+            :lastPage="Math.ceil(pagination.total / 15)"
+            :perPage="15"
+            :page="pagination.page"
+            :changePage="changePage"
+            :handleContextMenu="handleContextMenu"
+            :onContextMenuAction="onContextMenuAction"
+            @view="viewItem"
+            @edit="editItem"
+          ></list-page-listing>
+        </template>
+        <template v-else>
+          <div class="loading"></div>
+        </template>
+      </b-colxx>
+    </b-row>
+    <error-page v-else :error="error"/>
+  </div>
 </template>
 
 <script>

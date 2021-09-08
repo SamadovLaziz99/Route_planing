@@ -5,6 +5,7 @@ export default function (param) {
   const _mutations = {
     error: `ERROR_${toUpper}`,
     load: `LOAD_${toUpper}`,
+    oneLoad: `ONE_LOAD_${toUpper}`,
     pending: `PENDING_${toUpper}`,
     deleting: `DELETING_${toUpper}`,
     data: `GET_${toUpper}`,
@@ -13,6 +14,7 @@ export default function (param) {
   return {
     state: {
       loading: false,
+      oneLoading: false,
       pending: false,
       deleting: false,
       error: null,
@@ -24,6 +26,7 @@ export default function (param) {
     },
     getters: {
       [camelize(`load ${param}`)]: function (state) { return state.loading },
+      [camelize(`one load ${param}`)]: function (state) { return state.oneLoading },
       [camelize(`pending ${param}`)]: function (state) { return state.pending },
       [camelize(`deleting ${param}`)]: function (state) { return state.deleting },
       [camelize(`data ${param}`)]: function (state) { return state.data },
@@ -34,6 +37,7 @@ export default function (param) {
       [_mutations.error]: function (state, payload) { state.error = payload },
       [_mutations.data]: function (state, payload) { state.data = payload },
       [_mutations.load]: function (state, payload) { state.loading = payload },
+      [_mutations.oneLoad]: function (state, payload) { state.oneLoading = payload },
       [_mutations.pending]: function (state, payload) { state.pending = payload },
       [_mutations.deleting]: function (state, payload) { state.deleting = payload },
       [_mutations.pagination]: function (state, payload) { state.pagination = payload }
@@ -53,6 +57,7 @@ export default function (param) {
             })
             resolve(_res)
           }).catch(error => {
+            commit(_mutations.error, error)
             reject(error)
           }).finally(() => {
             commit(_mutations.load, false)
@@ -62,14 +67,15 @@ export default function (param) {
 
       // get id
       [camelize(`get by id ${param}`)]: function ({ commit }, payload) {
-        // commit(_mutations.pending, true)
+        commit(_mutations.oneLoad, true)
         return new Promise((resolve, reject) => {
           axios_init.get(`${param}/${payload}/`, ).then(res => {
             resolve(res)
           }).catch(error => {
+            commit(_mutations.error, error)
             reject(error)
           }).finally(() => {
-            // commit(_mutations.pending, false)
+            commit(_mutations.oneLoad, false)
           })
         })
       },
@@ -81,6 +87,7 @@ export default function (param) {
           axios_init.post(`${param}/`, payload.data).then(res => {
             resolve(res)
           }).catch(error => {
+            // commit(_mutations.error, error)
             reject(error)
           }).finally(() => {
             commit(_mutations.pending, false)
@@ -95,6 +102,7 @@ export default function (param) {
           axios_init.put(`${param}/${ payload.id }/`, payload.data).then(res => {
             resolve(res)
           }).catch(error => {
+            // commit(_mutations.error, error)
             reject(error)
           }).finally(() => {
             commit(_mutations.pending, false)
@@ -109,6 +117,7 @@ export default function (param) {
           axios_init.remove(`${param}/${ payload }`).then(res => {
             resolve(res)
           }).catch(error => {
+            // commit(_mutations.error, error)
             reject(error)
           }).finally(() => {
             commit(_mutations.deleting, false)

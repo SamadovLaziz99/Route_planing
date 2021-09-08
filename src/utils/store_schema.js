@@ -14,6 +14,7 @@ export const getters = (param) => {
   return {
     load: camelize(`load ${param}`),
     data: camelize(`data ${param}`),
+    error: camelize(`error ${param}`),
     pending: camelize(`pending ${param}`),
     deleting: camelize(`deleting ${param}`),
     pagination: camelize(`pagination ${param}`),

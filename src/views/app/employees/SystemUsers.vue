@@ -1,111 +1,114 @@
 <template>
-  <b-row>
-    <b-colxx class="disable-text-selection" style="padding: 0">
-      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'user.update' : 'user.create'">
-        <div slot="content">
-          <b-form class="av-tooltip tooltip-right-bottom">
-            <b-form-group :label="$t('first.name')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.first_name.$model" :state="!$v.form.first_name.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.first_name.required">{{ $t('please.enter') + $t('first.name') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('last.name')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{ $t('please.enter') + $t('last.name') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('username')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.username.$model" :state="!$v.form.username.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.username.required">{{ $t('please.enter') + $t('username') }}</b-form-invalid-feedback>
-              <b-form-invalid-feedback v-if="!$v.form.username.minLength">{{ $t('username') }} is minimumm 6 characters</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('email')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.email.$model" :state="!$v.form.email.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.email.required">{{ $t('please.enter') + $t('email') }}</b-form-invalid-feedback>
-              <b-form-invalid-feedback v-if="!$v.form.email.email">{{ $t('error.email') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group v-if="!form.id" :label="$t('password')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.password.$model" :state="!$v.form.password.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.password.required">{{ $t('please.enter') + $t('password') }}</b-form-invalid-feedback>
-              <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6 characters</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.re_password.$model" :state="!$v.form.re_password.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{ $t('re.password.error') }}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('pages.status')">
-              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />
-            </b-form-group>
-          </b-form>
-        </div>
-        <div slot="action">
-          <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+  <div>
+    <b-row v-if="!error">
+      <b-colxx class="disable-text-selection" style="padding: 0">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'user.update' : 'user.create'">
+          <div slot="content">
+            <b-form class="av-tooltip tooltip-right-bottom">
+              <b-form-group :label="$t('first.name')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.first_name.$model" :state="!$v.form.first_name.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.first_name.required">{{ $t('please.enter') + $t('first.name') }}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('last.name')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{ $t('please.enter') + $t('last.name') }}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('username')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.username.$model" :state="!$v.form.username.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.username.required">{{ $t('please.enter') + $t('username') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.username.minLength">{{ $t('username') }} is minimumm 6 characters</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('email')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.email.$model" :state="!$v.form.email.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.email.required">{{ $t('please.enter') + $t('email') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.email.email">{{ $t('error.email') }}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group v-if="!form.id" :label="$t('password')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.password.$model" :state="!$v.form.password.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.password.required">{{ $t('please.enter') + $t('password') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6 characters</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.re_password.$model" :state="!$v.form.re_password.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{ $t('re.password.error') }}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('pages.status')">
+                <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />
+              </b-form-group>
+            </b-form>
+          </div>
+          <div slot="action">
+            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
                 <span class="bounce3"></span>
             </span>
-            <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
-          </b-button>
-        </div>
-      </crud-modal>
-      <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
-      <list-page-heading
-        :title="$t('menu.users')"
-        :changeOrderBy="changeOrderBy"
-        :sort="sort"
-        :searchChange="searchChange"
-        :from="from"
-        :to="to"
-        :total="pagination.total"
-        :perPage="15"
-      >
-        <b-button
-          slot="action"
-          v-b-modal.crudModal
-          variant="primary"
-          size="lg"
-          :class="{ 'top-right-button': true }"
-        >{{ $t('pages.add-new') }}
-        </b-button>
-      </list-page-heading>
-      <b-card :title="$t(`menu.users`)">
-        <b-table
-          hover
-          :items="data"
-          :fields="fields"
-          :busy="load"
+              <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
+            </b-button>
+          </div>
+        </crud-modal>
+        <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+        <list-page-heading
+          :title="$t('menu.users')"
+          :changeOrderBy="changeOrderBy"
+          :sort="sort"
+          :searchChange="searchChange"
+          :from="from"
+          :to="to"
+          :total="pagination.total"
+          :perPage="15"
         >
-          <template #table-busy>
-            <div class="text-center text-danger my-2">
-              <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
-            </div>
-          </template>
-          <template #cell(action)="row">
-            <div style="display: flex">
-              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
-              <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-              <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-            </div>
-          </template>
-          <template #cell(status)="row">
-            <b-badge pill variant="primary">Pending</b-badge>
-          </template>
-          <template #cell(date_joined)="row">
-            {{ moment(row.item.date_joined).format('YYYY-MM-DD HH:mm') }}
-          </template>
-          <template #cell(selection)="{ rowSelected }">
-            <template v-if="rowSelected">
-              <div class="glyph-icon simple-icon-check"></div>
+          <b-button
+            slot="action"
+            v-b-modal.crudModal
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+          >{{ $t('pages.add-new') }}
+          </b-button>
+        </list-page-heading>
+        <b-card :title="$t(`menu.users`)">
+          <b-table
+            hover
+            :items="data"
+            :fields="fields"
+            :busy="load"
+          >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
             </template>
-            <template v-else>
-              <!--          <div class="glyph-icon simple-icon-user"></div>-->
+            <template #cell(action)="row">
+              <div style="display: flex">
+                <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+              </div>
             </template>
-          </template>
-        </b-table>
-        <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
-      </b-card>
-    </b-colxx>
-  </b-row>
+            <template #cell(status)="row">
+              <b-badge pill variant="primary">Pending</b-badge>
+            </template>
+            <template #cell(date_joined)="row">
+              {{ moment(row.item.date_joined).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(selection)="{ rowSelected }">
+              <template v-if="rowSelected">
+                <div class="glyph-icon simple-icon-check"></div>
+              </template>
+              <template v-else>
+                <!--          <div class="glyph-icon simple-icon-user"></div>-->
+              </template>
+            </template>
+          </b-table>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+        </b-card>
+      </b-colxx>
+    </b-row>
+    <error-page v-else :error="error"/>
+  </div>
 </template>
 
 <script>
@@ -117,6 +120,7 @@ import {validationMixin} from "vuelidate";
 import { actions, getters } from "../../../utils/store_schema";
 import moment from 'moment'
 const _page = 'user'
+const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -153,7 +157,6 @@ export default {
   },
   data() {
     return {
-      action: actions(_page),
       statuses: [
         {
           text: "ACTIVE",
@@ -267,7 +270,7 @@ export default {
         delete _form.id
         delete _form.re_password
         // if (this.form.id) delete _form.password
-        this.$store.dispatch(this.form.id ? this.action.put : this.action.post, {
+        this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: _form
         }).then(res => {
@@ -277,7 +280,7 @@ export default {
       }
     },
     getData() {
-      this.$store.dispatch(this.action.get, {
+      this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
         console.log(res)
@@ -311,7 +314,6 @@ export default {
       );
     },
     removeItem(e) {
-      let { remove } = this.action
       this.$store.dispatch(remove, e).then(res => {
         this.$store.commit('DELETE_MODAL', {
           isShow: false,

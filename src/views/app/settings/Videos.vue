@@ -1,95 +1,98 @@
 <template>
-  <b-row>
-    <b-colxx class="disable-text-selection">
-      <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'videos.update' : 'videos.create'">
-        <div slot="content">
-          <b-form class="av-tooltip tooltip-right-bottom">
-            <b-form-group :label="$t('name')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name')}}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('language')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.language.$model" :state="!$v.form.language.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.language.required">{{ $t('please.enter') + $t('language')}}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('url')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.url.$model" :state="!$v.form.url.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.url.required">{{ $t('please.enter') + $t('url')}}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('type')" class="has-float-label mb-4">
-              <b-form-input type="text" v-model.trim="$v.form.type.$model" :state="!$v.form.type.$error"/>
-              <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('type')}}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('category')" class="has-float-label mb-4">
-              <v-select :options="categories" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error" />
-<!--              <b-form-input type="text" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error"/>-->
-              <b-form-invalid-feedback v-if="!$v.form.category.required">{{ $t('please.enter') + $t('category')}}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
-              <v-select :options="vendors" v-model.trim="$v.form.vendor.$model" :state="!$v.form.vendor.$error" />
-<!--              <b-form-input type="text" />-->
-              <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor')}}</b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group :label="$t('description')" class="has-float-label mb-4">
-              <b-textarea v-model="form.description" :rows="3" :max-rows="5" />
-<!--              <b-form-input type="text" v-model="form.description"/>-->
-            </b-form-group>
-          </b-form>
-        </div>
-        <div slot="action">
-          <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+  <div>
+    <b-row v-if="!error">
+      <b-colxx class="disable-text-selection">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'videos.update' : 'videos.create'">
+          <div slot="content">
+            <b-form class="av-tooltip tooltip-right-bottom">
+              <b-form-group :label="$t('name')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name')}}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('language')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.language.$model" :state="!$v.form.language.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.language.required">{{ $t('please.enter') + $t('language')}}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('url')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.url.$model" :state="!$v.form.url.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.url.required">{{ $t('please.enter') + $t('url')}}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('type')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.type.$model" :state="!$v.form.type.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('type')}}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('category')" class="has-float-label mb-4">
+                <v-select :options="categories" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error" />
+                <!--              <b-form-input type="text" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error"/>-->
+                <b-form-invalid-feedback v-if="!$v.form.category.required">{{ $t('please.enter') + $t('category')}}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
+                <v-select :options="vendors" v-model.trim="$v.form.vendor.$model" :state="!$v.form.vendor.$error" />
+                <!--              <b-form-input type="text" />-->
+                <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor')}}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('description')" class="has-float-label mb-4">
+                <b-textarea v-model="form.description" :rows="3" :max-rows="5" />
+                <!--              <b-form-input type="text" v-model="form.description"/>-->
+              </b-form-group>
+            </b-form>
+          </div>
+          <div slot="action">
+            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
                 <span class="bounce3"></span>
             </span>
-            <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
-          </b-button>
-        </div>
-      </crud-modal>
-      <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
-      <list-page-heading
-        :title="$t('menu.videos')"
-        :displayMode="displayMode"
-        :sortOptions="sortOptions"
-        :changeOrderBy="changeOrderBy"
-        :sort="sort"
-        :searchChange="searchChange"
-        :from="from"
-        :to="to"
-        :total="pagination.total"
-        :perPage="15"
-      >
-        <b-button
-          slot="action"
-          v-b-modal.crudModal
-          variant="primary"
-          size="lg"
-          :class="{ 'top-right-button': true }"
-        >{{ $t('pages.add-new') }}
-        </b-button>
-      </list-page-heading>
-      <template v-if="!load">
-        <list-page-listing
-          ref="listPageListing"
+              <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
+            </b-button>
+          </div>
+        </crud-modal>
+        <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+        <list-page-heading
+          :title="$t('menu.videos')"
           :displayMode="displayMode"
-          :items="items"
-          :selectedItems="selectedItems"
-          :lastPage="Math.ceil(pagination.total / 15)"
+          :sortOptions="sortOptions"
+          :changeOrderBy="changeOrderBy"
+          :sort="sort"
+          :searchChange="searchChange"
+          :from="from"
+          :to="to"
+          :total="pagination.total"
           :perPage="15"
-          :page="pagination.page"
-          :changePage="changePage"
-          :handleContextMenu="handleContextMenu"
-          :onContextMenuAction="onContextMenuAction"
-          @view="viewItem"
-          @edit="editItem"
-        ></list-page-listing>
-      </template>
-      <template v-else>
-        <div class="loading"></div>
-      </template>
-    </b-colxx>
-  </b-row>
+        >
+          <b-button
+            slot="action"
+            v-b-modal.crudModal
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+          >{{ $t('pages.add-new') }}
+          </b-button>
+        </list-page-heading>
+        <template v-if="!load">
+          <list-page-listing
+            ref="listPageListing"
+            :displayMode="displayMode"
+            :items="items"
+            :selectedItems="selectedItems"
+            :lastPage="Math.ceil(pagination.total / 15)"
+            :perPage="15"
+            :page="pagination.page"
+            :changePage="changePage"
+            :handleContextMenu="handleContextMenu"
+            :onContextMenuAction="onContextMenuAction"
+            @view="viewItem"
+            @edit="editItem"
+          ></list-page-listing>
+        </template>
+        <template v-else>
+          <div class="loading"></div>
+        </template>
+      </b-colxx>
+    </b-row>
+    <error-page v-else :error="error"/>
+  </div>
 </template>
 
 <script>
