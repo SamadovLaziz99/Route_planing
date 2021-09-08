@@ -24,9 +24,9 @@
         <p v-if="data.position" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.position }}</p>
         <p v-if="data.description" class="mb-0 text-muted text-small w-20 w-sm-100">{{ data.description }}</p>
         <p v-if="data.address" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.address }}</p>
-        <p v-if="data.ingredients" class="mb-0 text-muted text-small w-30">
-          <b-badge style="margin: 2px" v-for="ing in data.ingredients" :key="ing" pill variant="outline-primary">{{ing}}</b-badge>
-        </p>
+<!--        <p v-if="data.ingredients" class="mb-0 text-muted text-small w-30">-->
+<!--          <b-badge style="margin: 2px" v-for="ing in data.ingredients" :key="ing" pill variant="outline-primary">{{ing}}</b-badge>-->
+<!--        </p>-->
 <!--        <p v-if="data.about_me" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.about_me }}</p>-->
         <div v-if="data.is_parent" class="w-15 w-sm-100">
           <b-badge pill variant="primary">{{ data.is_parent === 'active' ? 'Parent' : 'Child' }}</b-badge>
@@ -38,13 +38,16 @@
       </div>
       <div v-if="data.action" class="d-flex custom-control custom-checkbox pl-1 align-self-center pr-4">
         <!--          <b-tooltip target="view_button" title="View"></b-tooltip>-->
-        <div v-if="data.action.includes('view')" id="view_button"
+        <div @click="view(data.id)" v-if="data.action.includes('view')" id="view_button"
              class="glyph-icon simple-icon-eye mr-2 action_button"></div>
         <!--          <b-tooltip target="edit_button" title="Edit"></b-tooltip>-->
         <div @click="$router.push(data.router ? data.router : '#')" v-if="data.action.includes('edit')" id="edit_button"
              class="glyph-icon simple-icon-pencil mr-2 action_button"></div>
         <!--          <b-tooltip target="delete_button" title="Delete"></b-tooltip>-->
-        <div v-if="data.action.includes('delete')" id="delete_button"
+        <div @click="$store.commit('DELETE_MODAL', {
+          isShow: true,
+          data: data
+        })" v-if="data.action.includes('delete')" id="delete_button"
              class="glyph-icon simple-icon-trash mr-2 action_button"></div>
       </div>
       <!--        <div class="custom-control custom-checkbox pl-1 align-self-center pr-4">-->
@@ -67,7 +70,13 @@ export default {
   methods: {
     toggleItem(event, itemId) {
       this.$emit('toggle-item', event, itemId)
-    }
+    },
+    view(id) {
+      this.$emit('view', id)
+    },
+    edit(id) {
+      this.$emit('edit', id)
+    },
   }
 }
 </script>

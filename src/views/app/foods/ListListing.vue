@@ -23,6 +23,8 @@
                 <thumb-list-item
                         :key="item.id"
                         :data="item"
+                        @view="view"
+                        @edit="edit"
                         :selected-items="selectedItems"
                         v-contextmenu:contextmenu
                 />
