@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="uploader" @dragover.prevent @drop.prevent>
+    <div
+      :class="{'uploader': true, 'drag_active': drag_active}"
+      @dragover.prevent="dragover"
+      @dragleave.prevent="dragend"
+      @drop.prevent>
       <div @drop="dragFile" class="drag">
         <h6 style="margin-top: 50px">Drag and Drop upload file here</h6>
         <label for="uploader">
@@ -33,6 +37,7 @@ export default {
     return {
       imageURL: null,
       files: [],
+      drag_active: false
     }
   },
   watch: {
@@ -47,16 +52,6 @@ export default {
       await reader.readAsDataURL(img)
       return reader
     },
-    // async imageParse (e) {
-    //   let _img;
-    //   await this.$imgUploader(e).then(res => {
-    //     _img = res.image
-    //   })
-    //   console.log(_img)
-    // },
-    // iio (e) {
-    //   return e
-    // },
     async gene(e) {
       await this.getBase64(e, (e, image) => {
         this.imageURL = image
@@ -93,8 +88,11 @@ export default {
         })
       }
     },
-    dragover() {
+    dragover(e) {
       console.log('drag')
+    },
+    dragend (e) {
+      console.log('DRAG ENd', e)
     },
     drop(e) {
       console.log('drop', e)
@@ -149,7 +147,6 @@ export default {
   width: 100%;
   border: 3px dashed #bbbbbb;
   border-radius: 10px;
-
   .drag {
     height: 150px;
     display: flex;
@@ -171,6 +168,12 @@ export default {
     }
   }
 }
+.drag_active {
+  animation: border 1s infinite;
+}
+.uploader:hover {
+  background: red;
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: all .5s;
@@ -179,5 +182,15 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
   transform: translateY(-30px);
+}
+@keyframes border {
+  0%, 100% {
+    border: 3px dashed #bbbbbb;
+    background: aliceblue;
+  }
+  50% {
+    background: #deebff;
+    border: 4px dashed #bbbbbb;
+  }
 }
 </style>

@@ -62,9 +62,10 @@ export default {
   align-items: center;
   flex-flow: column;
   img {
-    width: 40%;
-    height: 40%;
+    width: 30%;
+    height: 30%;
     transform: translateY(-20px);
+    margin-top: 15px;
   }
   .actions {
     display: flex;

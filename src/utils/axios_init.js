@@ -53,7 +53,7 @@ const init = {
   request(method, url, params, data) {
     const config = {
       baseURL: process.env.VUE_APP_BASE_URL,
-      timeout: 10000,
+      timeout: 20000,
       url: url,
       method: method,
       onUploadProgress: function (e) {

@@ -115,9 +115,10 @@
             </b-form-group>
           </b-form>
         </b-card>
-        <b-card :title="$t('images')" class="mb-4">
-          <image-uploader/>
-        </b-card>
+        <dropzone/>
+<!--        <b-card :title="$t('images')" class="mb-4">-->
+<!--          -->
+<!--        </b-card>-->
       </b-colxx>
 <!--      ACTION CONTENT-->
 

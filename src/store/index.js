@@ -12,6 +12,7 @@ import auth from "./modules/auth";
 import { setCurrentLanguage } from '../utils'
 import crud from "./crud/crud";
 import modals from "./modules/modals";
+import upload from "./modules/upload";
 
 Vue.use(Vuex)
 
@@ -38,6 +39,7 @@ export default new Vuex.Store({
     alert,
     auth,
     modals,
+    upload,
     categories: crud('categories'),
     foods: crud('food'),
     units: crud('units'),

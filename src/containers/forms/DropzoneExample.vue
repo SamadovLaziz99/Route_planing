@@ -5,7 +5,14 @@
         <b-form>
           <b-row>
             <b-colxx xxs="12">
-              <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
+              <vue-dropzone
+                ref="myVueDropzone"
+                id="dropzone"
+                :options="dropzoneOptions"
+                @vdropzone-file-added="addedFile"
+                @vdropzone-sending="customUpload"
+              >
+              </vue-dropzone>
             </b-colxx>
           </b-row>
         </b-form>
@@ -21,19 +28,31 @@ export default {
     "vue-dropzone": VueDropzone
   },
   data() {
+    const token = localStorage.getItem('token')
     return {
       dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailHeight: 160,
+        url: "https://coozin.cookzy.uz/food/media/",
+        method: "POST",
+        thumbnailHeight: 200,
         maxFilesize: 2,
         previewTemplate: this.dropzoneTemplate(),
         headers: {
-          "My-Awesome-Header": "header value"
+          "Authorization": 'Bearer ' + token,
+          "Access-Control-Allow-Origin": '*'
         }
       }
     };
   },
   methods: {
+    addedFile(file) {
+      console.log(file)
+    },
+    customUpload (file, xhr, formData) {
+      formData.append('url', file)
+      formData.append('type', 'image')
+      formData.append('mediable_id', 1)
+      formData.delete('file');
+    },
     dropzoneTemplate() {
       return `<div class="dz-preview dz-file-preview mb-3">
                   <div class="d-flex flex-row "> <div class="p-0 w-30 position-relative">

@@ -10,9 +10,10 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import InputTag from "./components/Form/InputTag";
 import ErrorPage from "./views/app/statuses/ErrorPage";
-
+import Dropzone from "./containers/forms/DropzoneExample";
 
 Vue.component('v-select', vSelect)
+Vue.component('dropzone', Dropzone)
 Vue.component('error-page', ErrorPage)
 Vue.component('remove-modal', DeleteConfirmModal)
 Vue.component('piaf-breadcrumb', Breadcrumb);
