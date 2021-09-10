@@ -1,17 +1,23 @@
 <template>
   <b-row>
     <b-colxx xxs="12">
-      <b-card class="mb-4" :title="$t('form-components.dropzone')">
+      <b-card class="mb-4" :title="$t('images')">
         <b-form>
           <b-row>
             <b-colxx xxs="12">
               <vue-dropzone
                 ref="myVueDropzone"
                 id="dropzone"
+                :useCustomSlot="true"
                 :options="dropzoneOptions"
-                @vdropzone-file-added="addedFile"
                 @vdropzone-sending="customUpload"
+                @vdropzone-removed-file="removeFile"
+                @vdropzone-success="success"
               >
+                <div class="dropzone-custom-content">
+                  <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
+                  <div class="subtitle">...or click to select a file from your computer</div>
+                </div>
               </vue-dropzone>
             </b-colxx>
           </b-row>
@@ -24,6 +30,7 @@
 import VueDropzone from "vue2-dropzone";
 
 export default {
+  props: ['media'],
   components: {
     "vue-dropzone": VueDropzone
   },
@@ -33,25 +40,49 @@ export default {
       dropzoneOptions: {
         url: "https://coozin.cookzy.uz/food/media/",
         method: "POST",
-        thumbnailHeight: 200,
+        thumbnailHeight: 150,
         maxFilesize: 2,
         previewTemplate: this.dropzoneTemplate(),
         headers: {
           "Authorization": 'Bearer ' + token,
-          "Access-Control-Allow-Origin": '*'
+          'Cache-Control': null,
+          'X-Requested-With': null
         }
-      }
+      },
+      files: []
     };
   },
   methods: {
-    addedFile(file) {
-      console.log(file)
+    success (file, res) {
+      // console.log(file)
+      // console.log(res)
+      this.files.push({
+        ...file,
+        id: res.id
+      })
+    },
+    setDefaultImage (file, url) {
+      this.$refs.myVueDropzone.manuallyAddFile(file, url)
+    },
+    removeFile (file, error, xhr) {
+      try {
+        if (this.$refs.vueDropzone.dropzone.disabled !== true) {
+          if (file.manuallyAdded) {
+            this.$store.dispatch('deleteMedia', file.id)
+          }
+          if (file.upload.uuid) {
+            const _id = this.files.filter(e => e.upload.uuid === file.upload.uuid)[0].id
+            this.$store.dispatch('deleteMedia', _id)
+          }
+        }
+      }
+      catch (e) {}
     },
     customUpload (file, xhr, formData) {
       formData.append('url', file)
-      formData.append('type', 'image')
-      formData.append('mediable_id', 1)
-      formData.delete('file');
+      formData.append('type', this.media.type)
+      formData.append('mediable_id', this.media.id)
+      // formData.delete('file');
     },
     dropzoneTemplate() {
       return `<div class="dz-preview dz-file-preview mb-3">

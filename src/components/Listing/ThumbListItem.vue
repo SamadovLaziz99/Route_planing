@@ -6,12 +6,12 @@
     <div class="pl-2 d-flex flex-grow-1 min-width-zero">
       <div
         class="card-body align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero align-items-lg-center">
-        <router-link :to="data.router ? data.router : '#'" class="w-40 w-sm-100">
+        <router-link :to="(data.routes && data.routes.view) ? data.routes.view : '#'" class="w-40 w-sm-100">
           <p v-if="data.fullname" class="list-item-heading mb-0 truncate">{{ data.fullname }}</p>
-          <p v-else class="list-item-heading mb-0 truncate">{{ data.name }}</p>
+          <p v-if="data.name" class="list-item-heading mb-0 truncate">{{ data.name | foodName }}</p>
           <p v-if="data.user" class="list-item-heading mb-0 truncate">{{ data.user.first_name + ' ' + data.user.last_name }}</p>
         </router-link>
-        <p v-if="data.slug" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.slug }}</p>
+<!--        <p v-if="data.slug" class="mb-0 text-muted text-small w-20 w-sm-100">{{ data.slug }}</p>-->
         <p v-if="data.phone" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.phone }}</p>
         <p v-if="data.category" class="mb-0 text-muted text-small w-15 w-sm-100">{{ $t(data.category.name[$lang]) }}</p>
         <p v-if="data.vendor && data.vendor.user" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.vendor.user.first_name }}</p>
@@ -22,7 +22,7 @@
         <p v-if="data.from_field" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.from_field }}</p>
         <p v-if="data.to" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.to }}</p>
         <p v-if="data.position" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.position }}</p>
-        <p v-if="data.description" class="mb-0 text-muted text-small w-20 w-sm-100">{{ data.description }}</p>
+<!--        <p v-if="data.description" class="mb-0 text-muted text-small w-20 w-sm-100">{{ data.description }}</p>-->
         <p v-if="data.address" class="mb-0 text-muted text-small w-15 w-sm-100">{{ data.address }}</p>
 <!--        <p v-if="data.ingredients" class="mb-0 text-muted text-small w-30">-->
 <!--          <b-badge style="margin: 2px" v-for="ing in data.ingredients" :key="ing" pill variant="outline-primary">{{ing}}</b-badge>-->
@@ -41,7 +41,7 @@
         <div @click="view(data.id)" v-if="data.action.includes('view')" id="view_button"
              class="glyph-icon simple-icon-eye mr-2 action_button"></div>
         <!--          <b-tooltip target="edit_button" title="Edit"></b-tooltip>-->
-        <div @click="$router.push(data.router ? data.router : '#')" v-if="data.action.includes('edit')" id="edit_button"
+        <div @click="$router.push((data.routes && data.routes.edit) ? data.routes.edit : '#')" v-if="data.action.includes('edit')" id="edit_button"
              class="glyph-icon simple-icon-pencil mr-2 action_button"></div>
         <!--          <b-tooltip target="delete_button" title="Delete"></b-tooltip>-->
         <div @click="$store.commit('DELETE_MODAL', {
@@ -65,6 +65,12 @@ export default {
   data() {
     return {
       image: this.$route.name === 'vendors' ? defaultImageProfile : defaultImage
+    }
+  },
+  filters: {
+    foodName (e) {
+      if (e.length > 30) return e.slice(0, 30) + ' ...'
+      else return e
     }
   },
   methods: {

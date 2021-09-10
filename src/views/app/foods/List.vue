@@ -102,10 +102,18 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          router: {
-            name: 'food_update',
-            params: {
-              id: e.id
+          routes: {
+            view: {
+              name: 'food_detail',
+              params: {
+                id: e.id
+              }
+            },
+            edit: {
+              name: 'food_update',
+              params: {
+                id: e.id
+              }
             }
           },
           action: ['view', 'edit', 'delete']
@@ -114,6 +122,12 @@ export default {
     }
   },
   mounted() {
+    const _hash = this.$route.hash
+    let _page;
+    if (_hash) {
+      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      this.page = parseInt(_page)
+    }
     this.getData()
     this.$store.dispatch('getCategories').then(res => {
       this.categories = res.map(e => {
@@ -207,7 +221,7 @@ export default {
       this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })

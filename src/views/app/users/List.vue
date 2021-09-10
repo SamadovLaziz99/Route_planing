@@ -15,7 +15,7 @@
               </b-form-group>
               <b-form-group :label="$t('phone')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.phone.$model" :state="!$v.form.phone.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{ $t('please.enter') + $t('username') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{ $t('please.enter') + $t('phone') }}</b-form-invalid-feedback>
                 <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX XX XX</b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('email')" class="has-float-label mb-4">

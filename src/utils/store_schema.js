@@ -13,6 +13,7 @@ export const actions = (param) => {
 export const getters = (param) => {
   return {
     load: camelize(`load ${param}`),
+    loadOne: camelize(`one load ${param}`),
     data: camelize(`data ${param}`),
     error: camelize(`error ${param}`),
     pending: camelize(`pending ${param}`),

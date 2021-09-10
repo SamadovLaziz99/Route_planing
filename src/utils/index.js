@@ -165,8 +165,13 @@ export const camelize = (str) => {
     return index === 0 ? word.toLowerCase() : word.toUpperCase();
   }).replace(/\s+/g, '');
 }
+
 export const getBase64 =  (img, callback) => {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
   reader.readAsDataURL(img)
+}
+
+export const imageProxy = (url, size) => {
+  return `https://imageproxy.cookzy.uz/${size}/${url}`
 }

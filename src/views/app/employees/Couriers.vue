@@ -1,139 +1,317 @@
 <template>
-  <b-row>
-    <b-colxx class="disable-text-selection">
-      <list-page-heading
-        :title="$t('menu.couriers')"
-        :selectAll="selectAll"
-        :isSelectedAll="isSelectedAll"
-        :isAnyItemSelected="isAnyItemSelected"
-        :keymap="keymap"
-        :displayMode="displayMode"
-        :changeDisplayMode="changeDisplayMode"
-        :sortOptions="sortOptions"
-        :changeOrderBy="changeOrderBy"
-        :changePageSize="changePageSize"
-        :sort="sort"
-        :searchChange="searchChange"
-        :from="from"
-        :to="to"
-        :total="total"
-        :perPage="perPage"
-      ></list-page-heading>
-      <template v-if="isLoad">
-        <list-page-listing
-          :displayMode="displayMode"
-          :items="items"
-          :selectedItems="selectedItems"
-          :toggleItem="toggleItem"
-          :lastPage="lastPage"
-          :perPage="perPage"
-          :page="page"
-          :changePage="changePage"
-          :handleContextMenu="handleContextMenu"
-          :onContextMenuAction="onContextMenuAction"
-        ></list-page-listing>
-      </template>
-      <template v-else>
-        <div class="loading"></div>
-      </template>
-    </b-colxx>
-  </b-row>
+  <div>
+    <b-row v-if="!error">
+      <b-colxx class="disable-text-selection" style="padding: 0">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'couriers.update' : 'couriers.create'">
+          <div slot="content">
+            <b-form class="av-tooltip tooltip-right-bottom">
+              <b-form-group :label="$t('name')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}</b-form-invalid-feedback>
+              </b-form-group>
+<!--              <b-form-group :label="$t('last.name')" class="has-float-label mb-4">-->
+<!--                <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>-->
+<!--                <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{ $t('please.enter') + $t('last.name') }}</b-form-invalid-feedback>-->
+<!--              </b-form-group>-->
+              <b-form-group :label="$t('phone')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.phone.$model" :state="!$v.form.phone.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{ $t('please.enter') + $t('phone') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX XX XX</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('users')" class="has-float-label mb-4">
+                <v-select :options="users" v-model.trim="$v.form.user.$model"  :state="!$v.form.user.$error"/>
+                <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.user.required) ? 'block' : 'none'}`">
+                  {{ $t('please.enter') + $t('users') }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('apelsin_account')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model="form.apelsin_account"/>
+<!--                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}</b-form-invalid-feedback>-->
+              </b-form-group>
+              <b-form-group :label="$t('apelsin_account')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model="form.apelsin_token"/>
+              </b-form-group>
+              <b-form-group :label="$t('car_model')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model="form.details.car_model"/>
+              </b-form-group>
+              <b-form-group :label="$t('car_number')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model="form.details.car_number"/>
+              </b-form-group>
+              <b-form-group :label="$t('car_color')" class="has-float-label mb-4">
+                <v-select :options="colors" v-model="form.details.car_color"/>
+              </b-form-group>
+              <b-form-group :label="$t('pages.status')">
+                <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
+              </b-form-group>
+            </b-form>
+          </div>
+          <div slot="action">
+            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <span class="spinner d-inline-block">
+                <span class="bounce1"></span>
+                <span class="bounce2"></span>
+                <span class="bounce3"></span>
+            </span>
+              <span class="label">{{ form.id ? $t('update') : $t('save') }}</span>
+            </b-button>
+          </div>
+        </crud-modal>
+        <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+        <list-page-heading
+          :title="$t('menu.couriers')"
+          :changeOrderBy="changeOrderBy"
+          :sort="sort"
+          :searchChange="searchChange"
+          :from="from"
+          :to="to"
+          :total="pagination.total"
+          :perPage="15"
+        >
+          <b-button
+            slot="action"
+            v-b-modal.crudModal
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+          >{{ $t('pages.add-new') }}
+          </b-button>
+        </list-page-heading>
+        <b-card :title="$t(`menu.couriers`)">
+          <b-table
+            hover
+            :items="data"
+            :fields="fields"
+            :busy="load"
+          >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+            <template #cell(action)="row">
+              <div style="display: flex">
+                <!--              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+              </div>
+            </template>
+            <template #cell(active)="row">
+              <b-badge v-if="row.item.active" pill variant="outline-primary">Active</b-badge>
+              <b-badge v-else pill variant="outline-light">Inactive</b-badge>
+            </template>
+            <template #cell(created_at)="row">
+              {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(selection)="{ rowSelected }">
+              <template v-if="rowSelected">
+                <div class="glyph-icon simple-icon-check"></div>
+              </template>
+              <template v-else>
+                <!--          <div class="glyph-icon simple-icon-user"></div>-->
+              </template>
+            </template>
+          </b-table>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+        </b-card>
+      </b-colxx>
+    </b-row>
+    <error-page v-else :error="error"/>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
-import { apiUrl } from "../../../constants/config";
 import ListPageHeading from "./Heading";
-import ListPageListing from "./Listing";
+import Pagination from "../../../components/TableComponents/Pagination";
+import {mapGetters} from "vuex";
+import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
+import {validationMixin} from "vuelidate";
+import { actions, getters } from "../../../utils/store_schema";
+import moment from 'moment'
+const _page = 'couriers'
+const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
-    "list-page-listing": ListPageListing
+    Pagination
+    // TableSimple
+  },
+  validations: {
+    form: {
+      name: {
+        required
+      },
+      phone: {
+        required,
+        valid: (e) => /^[+][9][9][8]\d{9}$/.test(e)
+      },
+      user: {
+        required
+      }
+    }
+  },
+  mixins: [validationMixin],
+  computed: {
+    ...mapGetters(getters(_page)),
   },
   data() {
     return {
-      isLoad: false,
-      apiBase: apiUrl + "/cakes/fordatatable",
-      displayMode: "thumb",
-      sort: {},
-      sortOptions: [
+      isValidCustom: false,
+      statuses: [
         {
-          column: "vendor",
-          label: "Vendors"
+          text: "ACTIVE",
+          value: true
         },
         {
-          column: "category",
-          label: "Category"
+          text: "INACTIVE",
+          value: false
         }
       ],
-      // vendors: [
-      //   { name: 'James', phone: '+998900006996', image: '1.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'Robert', phone: '+998900006996', image: '2.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'John', phone: '+998900006996', image: '3.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'Michael', phone: '+998900006996', image: '4.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'William', phone: '+998900006996', image: '5.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'David', phone: '+998900006996', image: '6.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'Richard', phone: '+998900006996', image: '7.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'Joseph', phone: '+998900006996', image: '8.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'Thomas', phone: '+998900006996', image: '9.jpg',  reg_date: '12-07-2021 08:42' },
-      //   { name: 'Charles', phone: '+998900006996', image: '10.jpg',  reg_date: '12-07-2021 08:42' },
-      // ],
-      page: 1,
-      perPage: 4,
+      colors: [
+        { label: 'White', value: 'white' },
+        { label: 'Black', value: 'Black' },
+        { label: 'Blue', value: 'blue' },
+        { label: 'Light Green', value: 'light-green' },
+        { label: 'Choco', value: 'choco' },
+      ],
+      form: {
+        id: null,
+        name: '',
+        phone: '',
+        details: {},
+        user: null,
+        active: true,
+        apelsin_account: '',
+        apelsin_token: ''
+      },
+      sort: {
+        column: "title",
+        label: "Product Name"
+      },
       search: "",
+      fields: [
+        {
+          key: 'name',
+          label: 'Name',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'phone',
+          label: 'Phone',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'details.car_model',
+          label: 'Car Model',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'details.car_number',
+          label: 'Car Number',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'details.car_color.label',
+          label: 'Car Color',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'created_at',
+          label: 'Registration date',
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'active',
+          label: 'Status',
+          // tdClass: 'text-muted'
+        },
+        {
+          key: 'action',
+          label: 'Action',
+          // tdClass: 'thirdRow'
+        }
+      ],
+      page: 1,
       from: 0,
       to: 0,
-      total: 0,
-      lastPage: 0,
-      items: [],
-      selectedItems: []
+      users: []
     };
   },
   methods: {
-    loadItems() {
-      this.isLoad = false;
-
-      axios
-        .get(this.apiUrl)
-        .then(response => {
-          return response.data;
+    moment,
+    validPh (value) {
+      console.log(value)
+      return /^[+][9][9][8]\d{9}$/.test(value)
+    },
+    closed (e) {
+      console.log(e)
+      this.clear()
+    },
+    clear() {
+      this.$v.$reset()
+      this.isValidCustom = false
+      this.form = {
+        id: null,
+        name: '',
+        phone: '',
+        details: {},
+        user: null,
+        active: true,
+        apelsin_account: '',
+        apelsin_token: ''
+      }
+    },
+    edit (item) {
+      const _data = { ...item.item }
+      delete _data.external_id
+      delete _data.created_at
+      delete _data.updated_at
+      console.log(_data)
+      this.form = _data
+      const _user = this.users.filter(e => e.value === _data.user)[0]
+      if (_user) {
+        this.form.user = {
+          label: _user.label,
+          value: _user.value
+        }
+      }
+      this.$bvModal.show('crudModal')
+    },
+    submit() {
+      this.$v.$touch();
+      this.isValidCustom = true
+      console.log(this.$v)
+      if (!this.$v.$invalid) {
+        const _form = { ...this.form }
+        delete _form.id
+        _form.user = this.form.user.value || this.form.user
+        // if (this.form.id) delete _form.password
+        this.$store.dispatch(this.form.id ? put : post, {
+          id: this.form.id,
+          data: _form
+        }).then(res => {
+          this.$refs.crudModal.hideModal()
+          this.getData()
         })
-        .then(res => {
-          this.total = res.total;
-          this.from = res.from;
-          this.to = res.to;
-          console.log(res.data)
-          this.items = res.data.map((x, index) => {
-            return {
-              ...x,
-              fullname: 'Robert William',
-              phone: '+9989908890036',
-              car_model: 'Sedan',
-              plate_number: '65 627',
-              // router: {
-              //   name: 'vendor-detail',
-              //   query: {
-              //     vendor: 'Sara Korthey',
-              //     id: x.id
-              //   },
-              // },
-              action: ['view', 'edit', 'delete'],
-              img: `../../../assets/img/profiles/${index + 3}.jpg`
-            };
-          });
-          this.perPage = res.per_page;
-          this.selectedItems = [];
-          this.lastPage = res.last_page;
-          this.isLoad = true;
-        });
+      }
     },
-
-    changeDisplayMode(displayType) {
-      this.displayMode = displayType;
+    getData() {
+      this.$store.dispatch(get, {
+        page: this.page
+      }).then(res => {
+        console.log(res)
+        this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
+        this.from = (this.pagination.page - 1) * 15
+      })
     },
-    changePageSize(perPage) {
-      this.page = 1;
-      this.perPage = perPage;
+    changePagination (e) {
+      this.page = e
+      this.getData()
+      console.log(this.$route)
+      // let _query = { ...this.$route.query }
+      // _query.page = e
+      // _query.limit = this.pagination.limit
+      // this.routePusher(_query)
     },
     changeOrderBy(sort) {
       this.sort = sort;
@@ -142,95 +320,40 @@ export default {
       this.search = val;
       this.page = 1;
     },
-
-    selectAll(isToggle) {
-      if (this.selectedItems.length >= this.items.length) {
-        if (isToggle) this.selectedItems = [];
-      } else {
-        this.selectedItems = this.items.map(x => x.id);
-      }
-    },
-    keymap(event) {
-      switch (event.srcKey) {
-        case "select":
-          this.selectAll(false);
-          break;
-        case "undo":
-          this.selectedItems = [];
-          break;
-      }
-    },
-    getIndex(value, arr, prop) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][prop] === value) {
-          return i;
-        }
-      }
-      return -1;
-    },
-    toggleItem(event, itemId) {
-      if (event.shiftKey && this.selectedItems.length > 0) {
-        let itemsForToggle = this.items;
-        var start = this.getIndex(itemId, itemsForToggle, "id");
-        var end = this.getIndex(
-          this.selectedItems[this.selectedItems.length - 1],
-          itemsForToggle,
-          "id"
-        );
-        itemsForToggle = itemsForToggle.slice(
-          Math.min(start, end),
-          Math.max(start, end) + 1
-        );
-        this.selectedItems.push(
-          ...itemsForToggle.map(item => {
-            return item.id;
-          })
-        );
-      } else {
-        if (this.selectedItems.includes(itemId)) {
-          this.selectedItems = this.selectedItems.filter(x => x !== itemId);
-        } else this.selectedItems.push(itemId);
-      }
-    },
-    handleContextMenu(vnode) {
-      if (!this.selectedItems.includes(vnode.key)) {
-        this.selectedItems = [vnode.key];
-      }
-    },
-    onContextMenuAction(action) {
-      console.log(
-        "context menu item clicked - " + action + ": ",
-        this.selectedItems
-      );
-    },
-    changePage(pageNum) {
-      this.page = pageNum;
-    }
-  },
-  computed: {
-    isSelectedAll() {
-      return this.selectedItems.length >= this.items.length;
-    },
-    isAnyItemSelected() {
-      return (
-        this.selectedItems.length > 0 &&
-        this.selectedItems.length < this.items.length
-      );
-    },
-    apiUrl() {
-      return `${this.apiBase}?sort=${this.sort.column}&page=${this.page}&per_page=${this.perPage}&search=${this.search}`;
+    removeItem(e) {
+      this.$store.dispatch(remove, e).then(res => {
+        this.$store.commit('DELETE_MODAL', {
+          isShow: false,
+          data: {}
+        })
+        this.getData()
+      })
     }
   },
   watch: {
     search() {
       this.page = 1;
     },
-    apiUrl() {
-      this.loadItems();
-    }
   },
   mounted() {
-    this.loadItems();
+    const _hash = this.$route.hash
+    let _page;
+    if (_hash) {
+      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      this.page = parseInt(_page)
+    }
+    this.getData()
+    this.$store.dispatch('getUsers').then(res => {
+      console.log(res)
+      this.users = res.map(e => {
+        return {
+          label: e.first_name + ' ' + e.last_name,
+          value: e.id
+        }
+      })
+    })
   }
 };
 </script>
+<style>
+</style>

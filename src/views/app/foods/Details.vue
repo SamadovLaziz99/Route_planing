@@ -1,8 +1,9 @@
 <template>
   <div>
     <b-row v-if="!errorFood">
-      <b-colxx xxs="12">
-        <h1>Details</h1>
+      <div v-if="oneLoadFood && !food" class="loading"></div>
+      <b-colxx v-if="food" xxs="12">
+        <h1>{{ food.name }}</h1>
         <div class="top-right-button-container">
           <b-dropdown
             id="ddown5"
@@ -27,58 +28,54 @@
                       <i class="simple-icon-pencil"/>
                     </b-button>
                   </div>
-                  <img src="/assets/img/details/1.jpg" alt="Detail" class="card-img-top"/>
+                  <img :src="foodImage" alt="Detail" class="card-img-top"/>
                   <b-card-body>
                     <p class="text-muted text-small mb-2">{{ $t('pages.description') }}</p>
                     <p class="mb-3">
-                      It’s all about simplicity…Less is more. Chocolate Cake
-                      exclusively brings you the classic chocolate cake.
-                      This cake is the one you always dream of-moist cake
-                      and creamy chocolate frosting.
-                      <br/>
-                      <br/>This cake proudly serves itself for a family
-                      gathering, a dinner party, a birthday celebration, a
-                      baby christening, and a gift to someone special or
-                      simply to have on hand on the cake stand at home
-                      served with an ice cold glass of milk!
+                      {{ food.description }}
                     </p>
                     <p class="text-muted text-small mb-2">{{ $t('pages.rating') }}</p>
                     <div class="mb-3">
-                      <stars value="4" :disabled="true"></stars>
+                      <stars :value="food.ratings_avg" :disabled="true"></stars>
                     </div>
                     <p class="text-muted text-small mb-2">{{ $t('pages.price') }}</p>
-                    <p class="mb-3">$8,14</p>
+                    <p class="mb-3">{{ new Intl.NumberFormat().format(food.price) }} sum</p>
+                    <p class="text-muted text-small mb-2">{{ $t('category') }}</p>
+                    <p class="mb-3">{{ food.category.name[$lang]}}</p>
+                    <p class="text-muted text-small mb-2">{{ $t('unit') }}</p>
+                    <p class="mb-3">{{ food.unit.name[$lang]}}</p>
+                    <p class="text-muted text-small mb-2">{{ $t('preparation_time') }}</p>
+                    <p class="mb-3">{{ food.preparation_time }} minutes</p>
                     <p class="text-muted text-small mb-2">{{ $t('pages.ingredients') }}</p>
                     <div class="mb-3">
                       <p class="d-sm-inline-block mb-1">
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Flour</b-badge>
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Chocolate</b-badge>
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Caster Sugar</b-badge>
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Baking Powder</b-badge>
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Milk</b-badge>
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Eggs</b-badge>
-                        <b-badge pill variant="outline-secondary" class="mb-1 mr-1">Vegetable Oil</b-badge>
+                        <b-badge v-for="ing in food.ingredients" :key="ing" pill variant="outline-secondary" class="mb-1 mr-1">{{ ing }}</b-badge>
                       </p>
                     </div>
-                    <p class="text-muted text-small mb-2">{{ $t('pages.is-vegan') }}</p>
-                    <p>No</p>
+                    <p class="text-muted text-small mb-2">{{ $t('created_at') }}</p>
+                    <p>{{ moment(food.created_at).format('YYYY-MM-DD HH:mm') }}</p>
                   </b-card-body>
                 </b-card>
-                <radial-progress-card
-                  :title="$t('pages.order-status')"
-                  :percent="85"
-                  no-suffle
-                  class="mb-4"
-                />
-                <radial-progress-card
-                  :title="$t('pages.bake-progress')"
-                  :percent="40"
-                  no-suffle
-                  class="mb-4"
-                />
+                <b-card :title="$t('maps.yandex')" class="mb-4">
+                  <yandex-map :coords="[food.latitude, food.longitude]" :zoom="12" class="map-item" map-type="map" :controls="['zoomControl']">
+                    <ymap-marker marker-id="123" :coords="[food.latitude, food.longitude]" :hint-content="food.vendor.user.first_name + ' ' + food.vendor.user.last_name" ></ymap-marker>
+                  </yandex-map>
+                </b-card>
+<!--                <radial-progress-card-->
+<!--                  :title="$t('pages.order-status')"-->
+<!--                  :percent="85"-->
+<!--                  no-suffle-->
+<!--                  class="mb-4"-->
+<!--                />-->
+<!--                <radial-progress-card-->
+<!--                  :title="$t('pages.bake-progress')"-->
+<!--                  :percent="40"-->
+<!--                  no-suffle-->
+<!--                  class="mb-4"-->
+<!--                />-->
               </b-colxx>
               <b-colxx xxs="12" lg="8">
-                <small-line-charts itemClass="dashboard-small-chart" v-if="isLoad"></small-line-charts>
+<!--                <small-line-charts itemClass="dashboard-small-chart" v-if="isLoad"></small-line-charts>-->
                 <website-visit-chart-card class="mb-4"></website-visit-chart-card>
                 <b-card class="mb-4" :title="$t('pages.comments')">
                   <comment-item
@@ -137,6 +134,7 @@ import orders from "../../../data/orders";
 import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
 import { getters } from "../../../utils/store_schema";
+import moment from "moment";
 import {mapGetters} from "vuex";
 
 export default {
@@ -153,12 +151,16 @@ export default {
       isLoad: false,
       comments: comments.slice(0, 5),
       food: null,
+      defImage: '/assets/img/details/1.jpg',
+      foodImage: null,
       orders
     };
   },
-  methods: {},
+  methods: {
+    moment
+  },
   computed: {
-    ...mapGetters(['errorFood']),
+    ...mapGetters(['errorFood', 'oneLoadFood']),
     _oders() {
       return this.orders.map(e => {
         return {
@@ -176,6 +178,7 @@ export default {
   mounted() {
     this.$store.dispatch('getByIdFood', this.$route.params.id).then(res => {
       this.food = res
+      this.foodImage = (res.media && res.media.length > 0) ? this.$imgProxy(res.media[0].url, '500x350') : this.defImage
     })
   }
 };

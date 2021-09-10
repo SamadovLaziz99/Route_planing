@@ -3246,8 +3246,8 @@ body.default-transition main {
 
 .card-img-top {
   width: 100%;
-  border-top-left-radius: calc(0.15rem - 1px);
-  border-top-right-radius: calc(0.15rem - 1px);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 .card-img-left {
@@ -6149,7 +6149,7 @@ i.large-icon {
   }
 }
 .map-item {
-  height: 400px;
+  height: 300px;
   width: 100%;
 }
 
