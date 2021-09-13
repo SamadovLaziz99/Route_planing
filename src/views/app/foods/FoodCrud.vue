@@ -61,8 +61,8 @@
 
                   <b-colxx xxs="12" md="4">
                     <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
-                      <v-select :options="vendors" v-model.trim="$v.form.vendor_id.$model"  :state="!$v.form.vendor_id.$error"/>
-                      <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.vendor_id.required) ? 'block' : 'none'}`">
+                      <v-select :options="vendors" v-model.trim="$v.form.vendor.$model"  :state="!$v.form.vendor.$error"/>
+                      <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.vendor.required) ? 'block' : 'none'}`">
                         {{ $t('please.enter') + $t('vendor') }}
                       </b-form-invalid-feedback>
                     </b-form-group>
@@ -215,7 +215,7 @@ export default {
     form: {
       name: {required},
       preparation_time: {required},
-      vendor_id: {required},
+      vendor: {required},
       price: {required},
       ingredients: {required},
       min_amount: {required},
@@ -232,7 +232,7 @@ export default {
         name: '',
         description: '',
         preparation_time: null,
-        vendor_id: null,
+        vendor: null,
         active: true,
         cola_combo: true,
         price: null,
@@ -268,7 +268,7 @@ export default {
           value: res.unit.id
         }
         const { first_name, last_name } = res.vendor.user
-        _form.vendor_id = {
+        _form.vendor = {
           label: first_name + ' ' + last_name,
           value: res.vendor.id
         }
@@ -331,7 +331,7 @@ export default {
           const _form = { ...this.form }
           delete _form.id
           _form.category = this.form.category?.value
-          _form.vendor_id = this.form.vendor_id?.value
+          _form.vendor = this.form.vendor?.value
           _form.unit = this.form.unit?.value
           _form.min_amount = parseInt(this.form.min_amount)
           _form.preparation_time = parseInt(this.form.preparation_time)

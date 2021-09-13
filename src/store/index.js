@@ -48,6 +48,7 @@ export default new Vuex.Store({
     users: crud('users'),
     system_users: crud('user'),
     videos: crud('videos'),
-    couriers: crud('couriers')
+    couriers: crud('couriers'),
+    orders: crud('orders')
   }
 })
