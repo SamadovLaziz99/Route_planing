@@ -81,10 +81,13 @@ export default function (param) {
       },
 
       //post
-      [camelize(`post ${param}`)]: function ({ commit }, payload) {
+      [camelize(`post ${param}`)]: function ({ commit, dispatch }, payload) {
         commit(_mutations.pending, true)
         return new Promise((resolve, reject) => {
           axios_init.post(`${param}/`, payload.data).then(res => {
+            dispatch('success_alert', {
+              title: `${param.slice(0, 1).toUpperCase() + param.slice(1)} created successfully`
+            })
             resolve(res)
           }).catch(error => {
             // commit(_mutations.error, error)
@@ -96,10 +99,13 @@ export default function (param) {
       },
 
       //update
-      [camelize(`put ${param}`)]: function ({ commit }, payload) {
+      [camelize(`put ${param}`)]: function ({ commit, dispatch }, payload) {
         commit(_mutations.pending, true)
         return new Promise((resolve, reject) => {
           axios_init.put(`${param}/${ payload.id }/`, payload.data).then(res => {
+            dispatch('success_alert', {
+              title: `${param.slice(0, 1).toUpperCase() + param.slice(1)} updated successfully`
+            })
             resolve(res)
           }).catch(error => {
             // commit(_mutations.error, error)
@@ -111,10 +117,13 @@ export default function (param) {
       },
 
       //delete
-      [camelize(`delete ${param}`)]: function ({ commit }, payload) {
+      [camelize(`delete ${param}`)]: function ({ commit, dispatch }, payload) {
         commit(_mutations.deleting, true)
         return new Promise((resolve, reject) => {
           axios_init.remove(`${param}/${ payload }`).then(res => {
+            dispatch('success_alert', {
+              title: `${param.slice(0, 1).toUpperCase() + param.slice(1)} deleted successfully`
+            })
             resolve(res)
           }).catch(error => {
             // commit(_mutations.error, error)

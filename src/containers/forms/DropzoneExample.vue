@@ -37,6 +37,7 @@ export default {
   data() {
     const token = localStorage.getItem('token')
     return {
+      destroyed: false,
       dropzoneOptions: {
         url: "https://coozin.cookzy.uz/food/media/",
         method: "POST",
@@ -52,6 +53,15 @@ export default {
       files: []
     };
   },
+  watch: {
+    $route: (val) => {
+      console.log(val)
+    }
+  },
+  beforeDestroy() {
+    console.log('before destroy')
+    this.destroyed = true
+  },
   methods: {
     success (file, res) {
       // console.log(file)
@@ -65,18 +75,22 @@ export default {
       this.$refs.myVueDropzone.manuallyAddFile(file, url)
     },
     removeFile (file, error, xhr) {
-      try {
-        if (this.$refs.vueDropzone.dropzone.disabled !== true) {
-          if (file.manuallyAdded) {
-            this.$store.dispatch('deleteMedia', file.id)
-          }
-          if (file.upload.uuid) {
-            const _id = this.files.filter(e => e.upload.uuid === file.upload.uuid)[0].id
-            this.$store.dispatch('deleteMedia', _id)
-          }
+      console.log('Removedddddddddddddd')
+      if (!this.destroyed) {
+        if (file.manuallyAdded) {
+          this.$store.dispatch('deleteMedia', file.id)
+        }
+        if (file.upload.uuid) {
+          const _id = this.files.filter(e => e.upload.uuid === file.upload.uuid)[0].id
+          this.$store.dispatch('deleteMedia', _id)
         }
       }
-      catch (e) {}
+      // try {
+      //   if (this.$refs.vueDropzone.dropzone.disabled !== true) {
+      //
+      //   }
+      // }
+      // catch (e) {}
     },
     customUpload (file, xhr, formData) {
       formData.append('url', file)
@@ -100,7 +114,7 @@ export default {
                     <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                     <div class="dz-error-message"><span data-dz-errormessage></span></div>
                   </div>
-                  <a href="#" class="remove" data-dz-remove> <i class="glyph-icon simple-icon-trash"></i> </a>
+                  <a href="#" class="remove" style="cursor: pointer" data-dz-remove> <i class="glyph-icon simple-icon-trash"></i> </a>
                 </div>
         `;
     }

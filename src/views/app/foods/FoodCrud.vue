@@ -143,7 +143,7 @@
 
                   <b-colxx xxs="12" md="12">
                     <b-form-group :label="$t('description')" class="has-float-label mb-4">
-                      <b-textarea :rows="4" :max-rows="4"/>
+                      <b-textarea v-model="form.description" :rows="4" :max-rows="4"/>
                     </b-form-group>
                   </b-colxx>
 
@@ -330,19 +330,22 @@ export default {
       if (!this.$v.$invalid) {
           const _form = { ...this.form }
           delete _form.id
-          _form.category = this.form.category?.value
-          _form.vendor = this.form.vendor?.value
-          _form.unit = this.form.unit?.value
+          _form.category_id = this.form.category?.value
+          _form.vendor_id = this.form.vendor?.value
+          _form.unit_id = this.form.unit?.value
           _form.min_amount = parseInt(this.form.min_amount)
           _form.preparation_time = parseInt(this.form.preparation_time)
           _form.price = parseInt(this.form.price)
           _form.sale_price = parseInt(this.form.sale_price)
+          delete _form.category
+          delete _form.unit
+          delete _form.vendor
           console.log(_form)
           this.$store.dispatch(this.id ? put : post, {
             id: this.id,
             data: _form
           }).then(res => {
-            console.log(res)
+            this.$router.go(-1)
           })
         }
     }

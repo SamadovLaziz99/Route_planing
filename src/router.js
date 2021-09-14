@@ -142,7 +142,13 @@ const routes = [
             children: []
           },
           {
-            path: "vendor-detail",
+            path: "vendors/update/:id",
+            name: 'vendor_update',
+            component: () => import("./views/app/employees/VendorCrud"),
+            children: []
+          },
+          {
+            path: "vendor-detail/:id",
             name: "vendor-detail",
             component: () => import("./views/app/employees/VendorDetails"),
             children: []

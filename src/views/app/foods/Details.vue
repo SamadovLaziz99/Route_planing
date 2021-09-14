@@ -57,8 +57,8 @@
                   </b-card-body>
                 </b-card>
                 <b-card :title="$t('maps.yandex')" class="mb-4">
-                  <yandex-map :coords="[food.latitude, food.longitude]" :zoom="12" class="map-item" map-type="map" :controls="['zoomControl']">
-                    <ymap-marker marker-id="123" :coords="[food.latitude, food.longitude]" :hint-content="food.vendor.user.first_name + ' ' + food.vendor.user.last_name" ></ymap-marker>
+                  <yandex-map :coords="[food.vendor.latitude, food.vendor.longitude]" :zoom="15" class="map-item" map-type="map" :controls="['zoomControl']">
+                    <ymap-marker marker-id="123" :coords="[food.vendor.latitude, food.vendor.longitude]" :hint-content="food.vendor.user.first_name + ' ' + food.vendor.user.last_name" ></ymap-marker>
                   </yandex-map>
                 </b-card>
 <!--                <radial-progress-card-->
@@ -77,6 +77,10 @@
               <b-colxx xxs="12" lg="8">
 <!--                <small-line-charts itemClass="dashboard-small-chart" v-if="isLoad"></small-line-charts>-->
                 <website-visit-chart-card class="mb-4"></website-visit-chart-card>
+                <b-card v-if="food.video_url" class="mb-4" :title="$t('videos')">
+                  <iframe style="border: none; outline: none; width: 100%; height: 400px" :src="food.video_url.replace('/watch?v=', '/embed/')">
+                  </iframe>
+                </b-card>
                 <b-card class="mb-4" :title="$t('pages.comments')">
                   <comment-item
                     v-for="(comment,index) in comments"
@@ -178,6 +182,7 @@ export default {
   mounted() {
     this.$store.dispatch('getByIdFood', this.$route.params.id).then(res => {
       this.food = res
+      console.log(res)
       this.foodImage = (res.media && res.media.length > 0) ? this.$imgProxy(res.media[0].url, '500x350') : this.defImage
     })
   }

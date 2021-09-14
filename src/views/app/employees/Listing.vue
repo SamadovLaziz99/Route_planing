@@ -24,6 +24,7 @@
           :key="item.id"
           :data="item"
           :selected-items="selectedItems"
+          @view="view"
           v-contextmenu:contextmenu
         />
       </b-colxx>

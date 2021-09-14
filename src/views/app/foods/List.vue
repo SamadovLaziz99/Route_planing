@@ -125,7 +125,7 @@ export default {
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      _page = this.$route.hash.slice(6)
       this.page = parseInt(_page)
     }
     this.getData()

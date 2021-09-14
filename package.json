@@ -40,6 +40,7 @@
     "vue-yandex-maps": "^0.10.12",
     "vue2-dropzone": "^3.6.0",
     "vue2-google-maps": "^0.10.7",
+    "vue2-timepicker": "^1.1.6",
     "vuedraggable": "^2.24.3",
     "vuejs-datepicker": "^1.6.2",
     "vuelidate": "^0.7.6",

@@ -142,10 +142,12 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          router: {
-            name: 'food_update',
-            params: {
-              id: e.id
+          routes: {
+            edit: {
+              name: 'vendor_update',
+              params: {
+                id: e.id
+              }
             }
           },
           action: ['view', 'edit', 'delete']
@@ -154,6 +156,12 @@ export default {
     }
   },
   mounted() {
+    const _hash = this.$route.hash
+    let _page;
+    if (_hash) {
+      _page = this.$route.hash.slice(6)
+      this.page = parseInt(_page)
+    }
     this.getData()
     this.$store.dispatch('getCategories').then(res => {
       this.categories = res.map(e => {
@@ -182,17 +190,23 @@ export default {
       }
     },
     viewItem (id) {
-      console.log(id)
+      this.$router.push({
+        name: 'vendor-detail',
+        params: {
+          id: id
+        }
+      })
     },
     editItem (id) {
-      this.$store.dispatch(getById, id).then(res => {
-        const _form = { ...res }
-        delete _form.created_at
-        delete _form.updated_at
-        _form.category = this.categories.filter(e => e.value === res.category)[0]
-        this.form = _form
-        this.$bvModal.show('crudModal')
-      })
+      console.log(id)
+      // this.$store.dispatch(getById, id).then(res => {
+      //   const _form = { ...res }
+      //   delete _form.created_at
+      //   delete _form.updated_at
+      //   _form.category = this.categories.filter(e => e.value === res.category)[0]
+      //   this.form = _form
+      //   this.$bvModal.show('crudModal')
+      // })
     },
     removeItem (id) {
       this.$store.dispatch(remove, id).then(res => {

@@ -99,7 +99,7 @@ $error-color: #c43d4b;
 /* 01.Base */
 html {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: $background-color;
 }
 
@@ -278,6 +278,29 @@ hr {
     transform: scale(0.6);
     width: 30px;
     height: 30px;
+  }
+}
+.vue__time-picker {
+    width: 100% !important;
+  .display-time {
+    border-radius: $border-radius;
+    width: 100% !important;
+    height: 2.7em !important;
+    padding: .3em .6em !important;
+  }
+  .drop-down {
+    .select-list {
+      .hours {
+        .active {
+          background: $theme-color-1 !important;
+        }
+      }
+      .minutes {
+        .active {
+          background: $theme-color-1 !important;
+        }
+      }
+    }
   }
 }
 

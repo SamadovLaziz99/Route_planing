@@ -11,8 +11,11 @@ import "vue-select/dist/vue-select.css";
 import InputTag from "./components/Form/InputTag";
 import ErrorPage from "./views/app/statuses/ErrorPage";
 import Dropzone from "./containers/forms/DropzoneExample";
-
+import VueTimepicker from 'vue2-timepicker'
+// CSS
+import 'vue2-timepicker/dist/VueTimepicker.css'
 Vue.component('v-select', vSelect)
+Vue.component('timepicker', VueTimepicker)
 Vue.component('dropzone', Dropzone)
 Vue.component('error-page', ErrorPage)
 Vue.component('remove-modal', DeleteConfirmModal)
