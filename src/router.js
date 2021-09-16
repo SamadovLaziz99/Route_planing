@@ -48,7 +48,7 @@ const routes = [
           },
           {
             path: "details/:id",
-            name: "orderDetails",
+            name: "order_details",
             component: () => import("./views/app/orders/Details"),
             children: []
           },
@@ -127,7 +127,7 @@ const routes = [
       {
         path: "employees",
         component: () => import("./views/app/pages"),
-        redirect: `${adminRoot}/employees/list`,
+        redirect: `${adminRoot}/employees/vendors`,
         children: [
           {
             path: "vendors",

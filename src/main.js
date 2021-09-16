@@ -10,7 +10,7 @@ import './use'
 import './globals'
 import './components'
 import './maps/yandex'
-
+import './utils/socket'
 firebase.initializeApp(firebaseConfig);
 Vue.config.productionTip = false
 

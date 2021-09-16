@@ -38,7 +38,7 @@ export default {
     },
     info_alert({}, payload) {
       const { title, message } = payload
-      notify.starter('secondary filled', title, message, { duration: 5000, permanent: false })
+      notify.starter('info filled', title, message, { duration: 5000, permanent: false })
     },
   }
 }

@@ -1,88 +1,145 @@
 <template>
-  <b-row>
-    <b-colxx class="disable-text-selection" style="padding: 0">
-      <list-page-heading
-        :title="$t('menu.orders_history')"
-        :selectAll="selectAll"
-        :isSelectedAll="isSelectedAll"
-        :isAnyItemSelected="isAnyItemSelected"
-        :keymap="keymap"
-        :rangepicker="false"
-        :changeOrderBy="changeOrderBy"
-        :changePageSize="changePageSize"
-        :sort="sort"
-        :searchChange="searchChange"
-        :from="((pagination.page - 1) * pagination.limit) + 1"
-        :to="(pagination.page * pagination.limit) > pagination.total ? pagination.total : (pagination.page * pagination.limit)"
-        :total="pagination.total"
-        :perPage="pagination.limit"
-      ></list-page-heading>
-      <b-tabs card v-model="activeTab" @input="changeTabs">
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.finished') }}</div>
-              <b-badge variant="danger">15</b-badge>
-            </div>
-          </template>
-        </b-tab>
-        <b-tab style="padding: 0.6rem">
-          <template #title>
-            <div style="display: flex">
-              <div style="margin-right: 10px">{{ $t('order.cancelled') }}</div>
-              <b-badge variant="danger">8</b-badge>
-            </div>
-          </template>
-        </b-tab>
-      </b-tabs>
-      <b-card :title="$t(`order.${$route.query.type}`)">
-        <b-table
-          hover
-          :items="items"
-          :fields="fields"
-          selectable
-          select-mode="multi"
-        >
-          <template #cell(action)="row">
-            <div style="display: flex">
-              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
-              <div class="glyph-icon simple-icon-pencil mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
-              <div class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>
-            </div>
-          </template>
-          <template #cell(status)="row">
-            <b-badge pill variant="primary">Pending</b-badge>
-          </template>
-          <template #cell(selection)="{ rowSelected }">
-            <template v-if="rowSelected">
-              <div class="glyph-icon simple-icon-check"></div>
+  <div>
+    <b-row v-if="!error">
+      <b-colxx class="disable-text-selection" style="padding: 0">
+        <list-page-heading
+          :title="$t('menu.orders_history')"
+          :rangepicker="false"
+          :changeOrderBy="changeOrderBy"
+          :sort="sort"
+          :searchChange="searchChange"
+          :from="from"
+          :to="to"
+          :total="pagination.total"
+          :perPage="15"
+        ></list-page-heading>
+        <b-tabs card v-model="activeTab" @input="changeTabs">
+          <b-tab style="padding: 0.6rem" v-for="tab in tabs" :key="tab.name">
+            <template #title>
+              <div style="display: flex">
+                <div style="margin-right: 10px">{{ $t(tab.name) }}</div>
+                <b-badge variant="primary">{{ tab.count }}</b-badge>
+              </div>
             </template>
-            <template v-else>
-              <!--          <div class="glyph-icon simple-icon-user"></div>-->
+          </b-tab>
+          <!--          <b-tab style="padding: 0.6rem">-->
+          <!--            <template #title>-->
+          <!--              <div style="display: flex">-->
+          <!--                <div style="margin-right: 10px">{{ $t('order.pending') }}</div>-->
+          <!--                <b-badge variant="danger">15</b-badge>-->
+          <!--              </div>-->
+          <!--            </template>-->
+          <!--          </b-tab>-->
+          <!--          <b-tab style="padding: 0.6rem">-->
+          <!--            <template #title>-->
+          <!--              <div style="display: flex">-->
+          <!--                <div style="margin-right: 10px">{{ $t('order.accepted') }}</div>-->
+          <!--                <b-badge variant="primary">10</b-badge>-->
+          <!--              </div>-->
+          <!--            </template>-->
+          <!--          </b-tab>-->
+          <!--          <b-tab style="padding: 0.6rem">-->
+          <!--            <template #title>-->
+          <!--              <div style="display: flex">-->
+          <!--                <div style="margin-right: 10px">{{ $t('order.in_process') }}</div>-->
+          <!--                <b-badge variant="danger">9</b-badge>-->
+          <!--              </div>-->
+          <!--            </template>-->
+          <!--          </b-tab>-->
+          <!--          <b-tab style="padding: 0.6rem">-->
+          <!--            <template #title>-->
+          <!--              <div style="display: flex">-->
+          <!--                <div style="margin-right: 10px">{{ $t('order.shipping') }}</div>-->
+          <!--                <b-badge variant="danger">20</b-badge>-->
+          <!--              </div>-->
+          <!--            </template>-->
+          <!--          </b-tab>-->
+          <!--          <b-tab style="padding: 0.6rem">-->
+          <!--            <template #title>-->
+          <!--              <div style="display: flex">-->
+          <!--                <div style="margin-right: 10px">{{ $t('order.finished') }}</div>-->
+          <!--                <b-badge variant="danger">15</b-badge>-->
+          <!--              </div>-->
+          <!--            </template>-->
+          <!--          </b-tab>-->
+          <!--          <b-tab style="padding: 0.6rem">-->
+          <!--            <template #title>-->
+          <!--              <div style="display: flex">-->
+          <!--                <div style="margin-right: 10px">{{ $t('order.cancelled') }}</div>-->
+          <!--                <b-badge variant="danger">8</b-badge>-->
+          <!--              </div>-->
+          <!--            </template>-->
+          <!--          </b-tab>-->
+        </b-tabs>
+        <b-card :title="$t(`order.${$route.query.type}`)">
+          <b-table
+            hover
+            :items="data"
+            :fields="fields"
+            :busy="load"
+          >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
             </template>
-          </template>
-        </b-table>
-        <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
-      </b-card>
-    </b-colxx>
-  </b-row>
+            <template #cell(action)="{ item }">
+              <div style="display: flex">
+                <div @click="$router.push({ name: 'order_details', params: { id: item.id } })" class="glyph-icon simple-icon-eye mr-2 w-100 text-center action_button" id="view_button" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <!--                <div class="glyph-icon simple-icon-pencil mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
+                <!--                <div class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
+              </div>
+            </template>
+            <template #cell(status)="{ item }">
+              <b-badge pill :variant="badgeType(item.status)">{{ $t(item.status) }}</b-badge>
+            </template>
+            <template #cell(time)="{ item }">
+              {{ moment(item.created_at).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(delivery_time)="{ item }">
+              {{ moment(item.delivery_time).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(vendor)="{ item }">
+              {{ item.vendor.user.first_name + ' ' + item.vendor.user.last_name }}
+            </template>
+            <template #cell(customer)="{ item }">
+              {{ item.user.first_name + ' ' + item.user.last_name }}
+            </template>
+            <!--            <template #cell(selection)="{ rowSelected }">-->
+            <!--              <template v-if="rowSelected">-->
+            <!--                <div class="glyph-icon simple-icon-check"></div>-->
+            <!--              </template>-->
+            <!--              <template v-else>-->
+            <!--                &lt;!&ndash;          <div class="glyph-icon simple-icon-user"></div>&ndash;&gt;-->
+            <!--              </template>-->
+            <!--            </template>-->
+          </b-table>
+          <Pagination v-if="!load" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+        </b-card>
+      </b-colxx>
+    </b-row>
+    <error-page v-else :error="error"/>
+  </div>
 </template>
 
 <script>
 import ListPageHeading from "./Heading";
 import Pagination from "../../../components/TableComponents/Pagination";
+import { actions, getters } from "../../../utils/store_schema";
+import { mapGetters } from "vuex";
+import moment from "moment";
+const _page = 'orders'
+const { get, getById } = actions(_page)
+
 export default {
   components: {
     "list-page-heading": ListPageHeading,
     Pagination
+    // TableSimple
   },
   data() {
     return {
-      pagination: {
-        page: 1,
-        limit: 10,
-        total: 100
-      },
       activeTab: 0,
       isLoad: false,
       sort: {
@@ -90,12 +147,18 @@ export default {
         label: "Product Name"
       },
       search: "",
+      // order.all
+      // order.pending
+      // order.accepted
+      // order.in_process
+      // order.shipping
+      // order.finished
+      // order.cancelled
+      tabs: [
+        { name: 'order.finished', count: 15 },
+        { name: 'order.cancelled', count: 20 },
+      ],
       fields: [
-        {
-          key: 'selection',
-          label: '',
-          // tdClass: 'selectColumn'
-        },
         {
           key: 'customer',
           label: 'Customer',
@@ -107,14 +170,21 @@ export default {
           tdClass: 'text-muted'
         },
         {
-          key: 'payment_type',
-          label: 'Payment Type',
+          key: 'additional_phone',
+          label: 'Phone',
           tdClass: 'text-muted'
         },
         {
-          key: 'price',
+          key: 'payment_type',
+          label: 'Payment Type',
+          tdClass: 'text-muted',
+          class: 'text-center'
+        },
+        {
+          key: 'order_price',
           label: 'Order Price',
-          tdClass: 'text-muted'
+          tdClass: 'text-muted',
+          class: 'text-center'
         },
         {
           key: 'time',
@@ -122,43 +192,32 @@ export default {
           tdClass: 'text-muted'
         },
         {
-          key: 'delivery',
+          key: 'delivery_time',
           label: 'Delivery time',
           tdClass: 'text-muted'
         },
         {
           key: 'status',
           label: 'Status',
+          class: 'text-center'
           // tdClass: 'secondColumn'
         },
         {
           key: 'action',
           label: 'Action',
-          // tdClass: 'thirdRow'
+          class: 'text-center'
         }
       ],
-      items: [
-        { customer: 'Dickerson', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 21, last_name: 'Macdonald' },
-        { customer: 'Larsen', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 26, last_name: 'Shaw' },
-        { customer: 'Geneva', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 15, last_name: 'Wilson',},
-        { customer: 'Thor', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 49, last_name: 'MacDonald',},
-        { customer: 'Dick', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 53, last_name: 'Dunlap' },
-        { customer: 'Dickerson', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 21, last_name: 'Macdonald' },
-        { customer: 'Larsen', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 26, last_name: 'Shaw' },
-        { customer: 'Geneva', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 15, last_name: 'Wilson',},
-        { customer: 'Thor', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 49, last_name: 'MacDonald',},
-        { customer: 'Dick', vendor: 'Cooker', payment_type: 'card', price: '1000$', time: '2 hours', delivery: '1 hour', status: 'pending...',  age: 53, last_name: 'Dunlap' },
-      ],
-      selectedItems: []
+      page: 1,
+      from: 0,
+      to: 0
     };
   },
   methods: {
+    moment,
     changePagination (e) {
-      this.pagination.page = e
-      let _query = { ...this.$route.query }
-      _query.page = e
-      _query.limit = this.pagination.limit
-      this.routePusher(_query)
+      this.page = e
+      this.getData()
     },
     changeTabs (e) {
       this.findRoutesWithKey(e)
@@ -175,7 +234,9 @@ export default {
     changeRoutetypeWithKey(type) {
       let _query = { ...this.$route.query }
       _query.type = type
+      this.page = 1
       this.routePusher(_query)
+      this.getData()
     },
     findRoutesWithKey (key) {
       switch (key) {
@@ -186,104 +247,73 @@ export default {
         default: break;
       }
     },
+    badgeType(type) {
+      switch (type) {
+        case 'pending': return 'info'
+          break;
+        case 'accepted': return 'secondary'
+          break;
+        case 'in_process': return 'light'
+          break;
+        case 'shipping': return 'dark'
+          break;
+        case 'finished': return 'success'
+          break;
+        case 'cancelled': return 'danger'
+          break;
+        default: return 'primary'
+          break;
+      }
+    },
     findTabsWithType (type) {
       switch (type) {
-        case 'finished': this.changeActiveTab(0)
+        case 'all': this.changeActiveTab(0)
           break;
-        case 'cancelled': this.changeActiveTab(1)
+        case 'pending': this.changeActiveTab(1)
+          break;
+        case 'accepted': this.changeActiveTab(2)
+          break;
+        case 'in_process': this.changeActiveTab(3)
+          break;
+        case 'shipping': this.changeActiveTab(4)
+          break;
+        case 'finished': this.changeActiveTab(5)
+          break;
+        case 'cancelled': this.changeActiveTab(6)
           break;
         default: break;
       }
     },
-    changePageSize(limit) {
-      this.pagination.page = 1
-      this.pagination.limit = limit
-      let _query = { ...this.$route.query }
-      _query.page = 1
-      _query.limit = limit
-      this.routePusher(_query)
-
-    },
+    // changePageSize(limit) {
+    //   this.pagination.page = 1
+    //   this.pagination.limit = limit
+    //   let _query = { ...this.$route.query }
+    //   _query.page = 1
+    //   _query.limit = limit
+    //   this.routePusher(_query)
+    //
+    // },
     changeOrderBy(sort) {
-      console.log(sort)
       this.sort = sort;
     },
     searchChange(val) {
       this.search = val;
       this.page = 1;
     },
-
-    selectAll(isToggle) {
-      if (this.selectedItems.length >= this.items.length) {
-        if (isToggle) this.selectedItems = [];
-      } else {
-        this.selectedItems = this.items.map(x => x.id);
-      }
-    },
-    keymap(event) {
-      switch (event.srcKey) {
-        case "select":
-          this.selectAll(false);
-          break;
-        case "undo":
-          this.selectedItems = [];
-          break;
-      }
-    },
-    getIndex(value, arr, prop) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][prop] === value) {
-          return i;
-        }
-      }
-      return -1;
-    },
-    toggleItem(event, itemId) {
-      if (event.shiftKey && this.selectedItems.length > 0) {
-        let itemsForToggle = this.items;
-        var start = this.getIndex(itemId, itemsForToggle, "id");
-        var end = this.getIndex(
-          this.selectedItems[this.selectedItems.length - 1],
-          itemsForToggle,
-          "id"
-        );
-        itemsForToggle = itemsForToggle.slice(
-          Math.min(start, end),
-          Math.max(start, end) + 1
-        );
-        this.selectedItems.push(
-          ...itemsForToggle.map(item => {
-            return item.id;
-          })
-        );
-      } else {
-        if (this.selectedItems.includes(itemId)) {
-          this.selectedItems = this.selectedItems.filter(x => x !== itemId);
-        } else this.selectedItems.push(itemId);
-      }
-    },
-    handleContextMenu(vnode) {
-      if (!this.selectedItems.includes(vnode.key)) {
-        this.selectedItems = [vnode.key];
-      }
-    },
-    onContextMenuAction(action) {
-      console.log(
-        "context menu item clicked - " + action + ": ",
-        this.selectedItems
-      );
-    },
+    getData () {
+      this.$store.dispatch(get, {
+        page: this.page,
+        status: this.$route.query.type
+      }).then(res => {
+        console.log(res)
+        console.log(this.pagination)
+        this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
+        this.from = (this.pagination.page - 1) * 15
+      })
+    }
   },
   computed: {
-    isSelectedAll() {
-      return this.selectedItems.length >= this.items.length;
-    },
-    isAnyItemSelected() {
-      return (
-        this.selectedItems.length > 0 &&
-        this.selectedItems.length < this.items.length
-      );
-    }
+    ...mapGetters(getters(_page))
   },
   watch: {
     search() {
@@ -291,13 +321,20 @@ export default {
     },
   },
   mounted() {
+    const _hash = this.$route.hash
+    let _page;
+    if (_hash) {
+      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      this.page = parseInt(_page)
+    }
     const { type } = this.$route.query
-    console.log(type)
     if (!type) {
       this.$router.push({ name: this.$route.name, query: { type: 'finished' } })
+      this.getData()
     } else {
       setTimeout(() => {
         this.findTabsWithType(type)
+        this.getData()
       }, 100)
     }
     // this.loadItems();

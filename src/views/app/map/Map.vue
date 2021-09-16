@@ -191,6 +191,21 @@ export default {
       this.geoObjects.cookers.push(point)
       this.map.geoObjects.add(point)
     },
+    oneRouteCreator (state) {
+      this.maps.route(state.coords, {
+        multiRoute: true,
+        mapStateAutoApply: state?.mapStateAutoApply,
+      }).done(function (route) {
+        console.log(route)
+        // console.log(route.getWayPoints().getLength())
+        // console.log(route.model.getReferencePoints())
+        route.options.set("mapStateAutoApply", true);
+        this.geoObjects.route = route
+        this.map.geoObjects.add(route);
+      }, function (err) {
+        throw err;
+      }, this);
+    },
     routeCreator (state) {
       const _oldRoute = this.geoObjects.route
       if (_oldRoute) this.map.geoObjects.remove(_oldRoute)
@@ -199,7 +214,7 @@ export default {
           multiRoute: true,
           mapStateAutoApply: state?.mapStateAutoApply,
         }).done(function (route) {
-          // console.log(route)
+          console.log(route)
           // console.log(route.getWayPoints().getLength())
           // console.log(route.model.getReferencePoints())
           route.options.set("mapStateAutoApply", true);
@@ -213,7 +228,7 @@ export default {
     multiRoute () {
       const multiRoute = new this.maps.multiRouter.MultiRoute({
         referencePoints: [
-          this.home_coord,
+          [41.321352, 69.289203],
           [41.313705, 69.280240]
         ],
         params: {
@@ -232,7 +247,12 @@ export default {
       this.couriers.forEach((e, i) => {
         this.courierPoint(e, `Courier ${ i + 1 }`)
       })
-      // this.routeCreator()
+      this.oneRouteCreator({
+        coords: [
+          [41.321352, 69.289203],
+          [41.313705, 69.280240]
+        ]
+      })
       // this.multiRoute()
     },
     initMap () {
@@ -246,10 +266,10 @@ export default {
         this.map.events.add('click', (e) => this.clickedMap(e))
         this.map.container.fitToViewport();
         this.drawPointers()
-        setInterval(() => {
-          this.courierRealTime(this.courierWay[this.count])
-          this.count += this.vector
-        }, 1000)
+        // setInterval(() => {
+        //   this.courierRealTime(this.courierWay[this.count])
+        //   this.count += this.vector
+        // }, 1000)
       })
         .catch(error => console.log('Failed to load Yandex Maps', error))
     },

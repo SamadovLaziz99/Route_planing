@@ -18,6 +18,15 @@
   "want.delete": "Do you want delete?",
   "filter.by": "Filter By: ",
   "description": "Description ",
+  "cash": "Cash",
+  "status": "Status",
+  "user.details": "User details",
+  "vendor.details": "Vendor details",
+  "foods": "Foods",
+  "vendor.and.user.map" : "Vendor and user points",
+  "payment.type": "Payment Type",
+  "created.time": "Created Type",
+  "delivery.time": "Delivery Type",
   "general": {
     "copyright": "Piaf Vue © 2018 All Rights Reserved."
   },
@@ -53,7 +62,7 @@
     "all": "All Orders",
     "pending": "Pending",
     "accepted": "Accepted",
-    "in_progress": "In progress",
+    "in_process": "In process",
     "shipping": "Shipping",
     "finished": "Finished",
     "cancelled": "Cancelled"

@@ -69,20 +69,20 @@
           </div>
           <div class="float-md-right pt-1">
             <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>
-            <b-dropdown
-              id="ddown2"
-              right
-              :text="`${perPage}`"
-              variant="outline-dark"
-              class="d-inline-block"
-              size="xs"
-            >
-              <b-dropdown-item
-                v-for="(size,index) in pageSizes"
-                :key="index"
-                @click="changePageSize(size)"
-              >{{ size }}</b-dropdown-item>
-            </b-dropdown>
+<!--            <b-dropdown-->
+<!--              id="ddown2"-->
+<!--              right-->
+<!--              :text="`${perPage}`"-->
+<!--              variant="outline-dark"-->
+<!--              class="d-inline-block"-->
+<!--              size="xs"-->
+<!--            >-->
+<!--              <b-dropdown-item-->
+<!--                v-for="(size,index) in pageSizes"-->
+<!--                :key="index"-->
+<!--                @click="changePageSize(size)"-->
+<!--              >{{ size }}</b-dropdown-item>-->
+<!--            </b-dropdown>-->
           </div>
         </b-collapse>
       </div>

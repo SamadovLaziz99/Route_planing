@@ -53,7 +53,7 @@ const init = {
   request(method, url, params, data) {
     const config = {
       baseURL: process.env.VUE_APP_BASE_URL,
-      timeout: 20000,
+      timeout: 120000,
       url: url,
       method: method,
       onUploadProgress: function (e) {
@@ -87,6 +87,9 @@ const init = {
   },
   post(url, data, params) {
     return this.request('POST', url, params, data)
+  },
+  patch(url, data, params) {
+    return this.request('PATCH', url, params, data)
   },
   put(url, data, params) {
     return this.request('PUT', url, params, data)

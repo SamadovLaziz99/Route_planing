@@ -55,25 +55,61 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <template v-if="!load">
-          <list-page-listing
-            ref="listPageListing"
-            :displayMode="displayMode"
+        <b-card :title="$t(`menu.users`)">
+          <b-table
+            hover
             :items="items"
-            :selectedItems="selectedItems"
-            :lastPage="Math.ceil(pagination.total / 15)"
-            :perPage="15"
-            :page="pagination.page"
-            :changePage="changePage"
-            :handleContextMenu="handleContextMenu"
-            :onContextMenuAction="onContextMenuAction"
-            @view="viewItem"
-            @edit="editItem"
-          ></list-page-listing>
-        </template>
-        <template v-else>
-          <div class="loading"></div>
-        </template>
+            :fields="fields"
+            :busy="load"
+          >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+            <template #cell(action)="row">
+              <div style="display: flex">
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="editItem(row.item.id)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+              </div>
+            </template>
+            <template #cell(name)="row">
+              <div>{{ row.item.name[$lang] }}</div>
+            </template>
+            <template #cell(status)="row">
+              <b-badge pill variant="primary">Pending</b-badge>
+            </template>
+            <template #cell(created_at)="row">
+              {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(selection)="{ rowSelected }">
+              <template v-if="rowSelected">
+                <div class="glyph-icon simple-icon-check"></div>
+              </template>
+              <template v-else>
+                <!--          <div class="glyph-icon simple-icon-user"></div>-->
+              </template>
+            </template>
+          </b-table>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+        </b-card>
+<!--        <template v-if="!load">-->
+<!--          <list-page-listing-->
+<!--            ref="listPageListing"-->
+<!--            :displayMode="displayMode"-->
+<!--            :items="items"-->
+<!--            :selectedItems="selectedItems"-->
+<!--            :lastPage="Math.ceil(pagination.total / 15)"-->
+<!--            :perPage="15"-->
+<!--            :page="pagination.page"-->
+<!--            :changePage="changePage"-->
+<!--            :handleContextMenu="handleContextMenu"-->
+<!--            :onContextMenuAction="onContextMenuAction"-->
+<!--            @view="viewItem"-->
+<!--            @edit="editItem"-->
+<!--          ></list-page-listing>-->
+<!--        </template>-->
       </b-colxx>
     </b-row>
     <error-page v-else :error="error"/>
@@ -86,13 +122,16 @@ import ListPageListing from "./ListListing";
 import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import Pagination from "@/components/TableComponents/Pagination";
 const _page = 'categories'
 import { actions, getters } from "../../../utils/store_schema";
 const { get, getById, put, post, remove } = actions(_page)
+import moment from "moment";
 export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
+    Pagination
   },
   validations: {
     form: {
@@ -140,7 +179,28 @@ export default {
       search: "",
       from: 0,
       to: 0,
-      selectedItems: []
+      fields: [
+        {
+          key: 'name',
+          label: 'Name',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'position',
+          label: 'Position',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'created_at',
+          label: 'Registration date',
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'action',
+          label: 'Action',
+          // tdClass: 'thirdRow'
+        }
+      ],
     };
   },
   computed: {
@@ -158,6 +218,7 @@ export default {
     this.getData()
   },
   methods: {
+    moment,
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
@@ -183,6 +244,10 @@ export default {
         this.form.position = res.position
         this.$bvModal.show('crudModal')
       })
+    },
+    changePagination(e) {
+      this.page = e
+      this.getData()
     },
     removeItem (id) {
       this.$store.dispatch(remove, id).then(res => {
