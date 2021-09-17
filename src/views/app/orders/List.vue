@@ -14,62 +14,14 @@
           :perPage="15"
         ></list-page-heading>
         <b-tabs card v-model="activeTab" @input="changeTabs">
-          <b-tab style="padding: 0.6rem" v-for="tab in tabs" :key="tab.name">
+          <b-tab style="padding: 0.6rem" v-for="tab in orderStats" :key="tab.name">
             <template #title>
               <div style="display: flex">
                 <div style="margin-right: 10px">{{ $t(tab.name) }}</div>
-                <b-badge variant="primary">{{ tab.count }}</b-badge>
+                <b-badge variant="primary" v-if="tab.count > 0">{{ tab.count }}</b-badge>
               </div>
             </template>
           </b-tab>
-<!--          <b-tab style="padding: 0.6rem">-->
-<!--            <template #title>-->
-<!--              <div style="display: flex">-->
-<!--                <div style="margin-right: 10px">{{ $t('order.pending') }}</div>-->
-<!--                <b-badge variant="danger">15</b-badge>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </b-tab>-->
-<!--          <b-tab style="padding: 0.6rem">-->
-<!--            <template #title>-->
-<!--              <div style="display: flex">-->
-<!--                <div style="margin-right: 10px">{{ $t('order.accepted') }}</div>-->
-<!--                <b-badge variant="primary">10</b-badge>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </b-tab>-->
-<!--          <b-tab style="padding: 0.6rem">-->
-<!--            <template #title>-->
-<!--              <div style="display: flex">-->
-<!--                <div style="margin-right: 10px">{{ $t('order.in_process') }}</div>-->
-<!--                <b-badge variant="danger">9</b-badge>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </b-tab>-->
-<!--          <b-tab style="padding: 0.6rem">-->
-<!--            <template #title>-->
-<!--              <div style="display: flex">-->
-<!--                <div style="margin-right: 10px">{{ $t('order.shipping') }}</div>-->
-<!--                <b-badge variant="danger">20</b-badge>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </b-tab>-->
-<!--          <b-tab style="padding: 0.6rem">-->
-<!--            <template #title>-->
-<!--              <div style="display: flex">-->
-<!--                <div style="margin-right: 10px">{{ $t('order.finished') }}</div>-->
-<!--                <b-badge variant="danger">15</b-badge>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </b-tab>-->
-<!--          <b-tab style="padding: 0.6rem">-->
-<!--            <template #title>-->
-<!--              <div style="display: flex">-->
-<!--                <div style="margin-right: 10px">{{ $t('order.cancelled') }}</div>-->
-<!--                <b-badge variant="danger">8</b-badge>-->
-<!--              </div>-->
-<!--            </template>-->
-<!--          </b-tab>-->
         </b-tabs>
         <b-card :title="$t(`order.${$route.query.type}`)">
           <b-table
@@ -79,7 +31,7 @@
             :busy="load"
           >
             <template #table-busy>
-              <div class="text-center text-danger my-2">
+              <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
                 <strong>Loading...</strong>
               </div>
@@ -87,8 +39,6 @@
             <template #cell(action)="{ item }">
               <div style="display: flex">
                 <div @click="$router.push({ name: 'order_details', params: { id: item.id } })" class="glyph-icon simple-icon-eye mr-2 w-100 text-center action_button" id="view_button" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-<!--                <div class="glyph-icon simple-icon-pencil mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
-<!--                <div class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
               </div>
             </template>
             <template #cell(status)="{ item }">
@@ -106,14 +56,6 @@
             <template #cell(customer)="{ item }">
               {{ item.user.first_name + ' ' + item.user.last_name }}
             </template>
-<!--            <template #cell(selection)="{ rowSelected }">-->
-<!--              <template v-if="rowSelected">-->
-<!--                <div class="glyph-icon simple-icon-check"></div>-->
-<!--              </template>-->
-<!--              <template v-else>-->
-<!--                &lt;!&ndash;          <div class="glyph-icon simple-icon-user"></div>&ndash;&gt;-->
-<!--              </template>-->
-<!--            </template>-->
           </b-table>
           <Pagination v-if="!load" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
         </b-card>
@@ -154,13 +96,6 @@ export default {
       // order.shipping
       // order.finished
       // order.cancelled
-      tabs: [
-        { name: 'order.all', count: 15 },
-        { name: 'order.pending', count: 20 },
-        { name: 'order.accepted', count: 9 },
-        { name: 'order.in_process', count: 7 },
-        { name: 'order.shipping', count: 6 },
-      ],
       fields: [
         {
           key: 'customer',
@@ -243,20 +178,20 @@ export default {
     },
     findRoutesWithKey (key) {
       switch (key) {
-        case 0: this.changeRoutetypeWithKey('all')
+        // case 0: this.changeRoutetypeWithKey('all')
+        //   break;
+        case 0: this.changeRoutetypeWithKey('pending')
           break;
-        case 1: this.changeRoutetypeWithKey('pending')
+        case 1: this.changeRoutetypeWithKey('accepted')
           break;
-        case 2: this.changeRoutetypeWithKey('accepted')
+        case 2: this.changeRoutetypeWithKey('in_process')
           break;
-        case 3: this.changeRoutetypeWithKey('in_process')
+        case 3: this.changeRoutetypeWithKey('shipping')
           break;
-        case 4: this.changeRoutetypeWithKey('shipping')
-          break;
-        case 5: this.changeRoutetypeWithKey('finished')
-          break;
-        case 6: this.changeRoutetypeWithKey('cancelled')
-          break;
+        // case 5: this.changeRoutetypeWithKey('finished')
+        //   break;
+        // case 6: this.changeRoutetypeWithKey('cancelled')
+        //   break;
         default: break;
       }
     },
@@ -280,20 +215,18 @@ export default {
     },
     findTabsWithType (type) {
       switch (type) {
-        case 'all': this.changeActiveTab(0)
+        case 'pending': this.changeActiveTab(0)
           break;
-        case 'pending': this.changeActiveTab(1)
+        case 'accepted': this.changeActiveTab(1)
           break;
-        case 'accepted': this.changeActiveTab(2)
+        case 'in_process': this.changeActiveTab(2)
           break;
-        case 'in_process': this.changeActiveTab(3)
+        case 'shipping': this.changeActiveTab(3)
           break;
-        case 'shipping': this.changeActiveTab(4)
-          break;
-        case 'finished': this.changeActiveTab(5)
-          break;
-        case 'cancelled': this.changeActiveTab(6)
-          break;
+        // case 'finished': this.changeActiveTab(4)
+        //   break;
+        // case 'cancelled': this.changeActiveTab(5)
+        //   break;
         default: break;
       }
     },
@@ -314,9 +247,10 @@ export default {
       this.page = 1;
     },
     getData () {
+      this.$store.dispatch('getOrderStats')
       this.$store.dispatch(get, {
         page: this.page,
-        status: this.$route.query.type === 'all' ? undefined : this.$route.query.type
+        status: this.$route.query.type
       }).then(res => {
         console.log(res)
         console.log(this.pagination)
@@ -326,7 +260,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(getters(_page))
+    ...mapGetters(getters(_page)),
+    ...mapGetters(['orderStats'])
   },
   watch: {
     search() {
@@ -342,7 +277,7 @@ export default {
     }
     const { type } = this.$route.query
     if (!type) {
-      this.$router.push({ name: this.$route.name, query: { type: 'all' } })
+      this.$router.push({ name: this.$route.name, query: { type: 'pending' } })
       this.getData()
     } else {
       setTimeout(() => {

@@ -73,6 +73,9 @@ export default {
       if (val < 1) this.vector = 1
     }
   },
+  mounted() {
+
+  },
   methods: {
     clickedMap (e) {
       this.rightBar = false
@@ -154,11 +157,14 @@ export default {
         ]
       })
     },
-    courierPoint (coords, name) {
+    courierPoint (el, name) {
       const point = new this.maps.GeoObject({
         geometry: {
           type: 'Point',
-          coordinates: coords
+          coordinates: [
+            parseFloat(el.location[0].latitude),
+            parseFloat(el.location[0].longitude)
+          ]
         },
         properties: {
           hintContent: name,
@@ -244,8 +250,11 @@ export default {
       this.cookers.forEach((e, i) => {
         this.cookerPoint(e, `Vendor ${ i + 1 }`)
       })
-      this.couriers.forEach((e, i) => {
-        this.courierPoint(e, `Courier ${ i + 1 }`)
+      // this.couriers.forEach((e, i) => {
+      //   this.courierPoint(e, `Courier ${ i + 1 }`)
+      // })
+      this.$store.getters.courierLocations.forEach(e => {
+        this.courierPoint(e, e.name)
       })
       this.oneRouteCreator({
         coords: [
@@ -265,7 +274,9 @@ export default {
         })
         this.map.events.add('click', (e) => this.clickedMap(e))
         this.map.container.fitToViewport();
-        this.drawPointers()
+        this.$store.dispatch('courierLocation').then(res => {
+          this.drawPointers()
+        })
         // setInterval(() => {
         //   this.courierRealTime(this.courierWay[this.count])
         //   this.count += this.vector

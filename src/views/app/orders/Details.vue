@@ -242,7 +242,7 @@ export default {
         }
       }).then(res => {
         this.order.status = this.status
-
+        this.$refs.changeStatusModal.hide()
       }).finally(() => {
         this.pendingStatus = false
       })

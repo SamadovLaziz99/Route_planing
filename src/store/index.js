@@ -14,7 +14,7 @@ import crud from "./crud/crud";
 import modals from "./modules/modals";
 import upload from "./modules/upload";
 import socket from "./modules/socket";
-
+import location from "./modules/location";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -42,6 +42,7 @@ export default new Vuex.Store({
     modals,
     upload,
     socket,
+    location,
     categories: crud('categories'),
     foods: crud('food'),
     units: crud('units'),

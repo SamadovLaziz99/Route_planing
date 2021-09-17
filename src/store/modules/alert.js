@@ -29,15 +29,15 @@ export default {
       notify.starter('success filled', title, message, { duration: 5000, permanent: false })
     },
     error_alert({}, payload) {
-      const { title, message } = payload
-      notify.starter('error filled', title, message, { duration: 5000, permanent: false })
+      const { title, message, duration } = payload
+      notify.starter('error filled', title, message, { duration: duration || 5000, permanent: false })
     },
     warning_alert({}, payload) {
       const { title, message } = payload
       notify.starter('warning filled', title, message, { duration: 5000, permanent: false })
     },
     info_alert({}, payload) {
-      const { title, message } = payload
+      const { title, message, duration } = payload
       notify.starter('info filled', title, message, { duration: 5000, permanent: false })
     },
   }

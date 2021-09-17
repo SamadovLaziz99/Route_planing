@@ -1,10 +1,19 @@
 <template>
     <div :class="{'notification-container': true, 'notification-container-empty' : items.length === 0}">
     <transition-group name="ntf" tag="div" mode="out"  >
-        <div v-for="item in items" :key="item.id"  :class="'notification notification-' + item.options.type"  @click="removeItem(item.id)">
+        <div v-for="item in items" :key="item.id"  :class="'notification notification-' + item.options.type"  @click="removeItem(item.id, item)">
            <div class="notification-message">
               <h6 v-if="item.title">{{ item.title }}</h6>
-              <div class="message" v-if="item.message" v-html="item.message"/>
+              <div class="message" v-if="item.message && (item.message !== 'socket_error')" v-html="item.message"/>
+               <b-button
+                   v-if="item.options.type === 'error filled' && item.message === 'socket_error'"
+                 @click="document.location.reload()"
+                 variant="primary"
+                 size="xs"
+                 :class="{ 'top-right-button': true }"
+                 style="position:absolute; right: 35%; bottom: 5%"
+               >Reload Page
+               </b-button>
             </div>
         </div>
     </transition-group>
@@ -19,7 +28,7 @@ export default {
       title: null,
       options: {
         type: 'success',
-        duration: 2000,
+        duration: 20000,
         permanent: false
       },
       items: [],
@@ -61,11 +70,14 @@ export default {
 
       if (itemOptions.permanent === false) {
         setTimeout(() => {
-          this.removeItem(idx)
+          this.removeItem(idx, {})
         }, itemOptions.duration)
       }
     },
-    removeItem (uid) {
+    removeItem (uid, item) {
+      if (item.message && (item.message === 'socket_error')) {
+        document.location.reload()
+      }
       this.items = Object.assign([], this.items.filter(x => x.id !== uid))
     },
     removeAll () {

@@ -22,54 +22,6 @@
               </div>
             </template>
           </b-tab>
-          <!--          <b-tab style="padding: 0.6rem">-->
-          <!--            <template #title>-->
-          <!--              <div style="display: flex">-->
-          <!--                <div style="margin-right: 10px">{{ $t('order.pending') }}</div>-->
-          <!--                <b-badge variant="danger">15</b-badge>-->
-          <!--              </div>-->
-          <!--            </template>-->
-          <!--          </b-tab>-->
-          <!--          <b-tab style="padding: 0.6rem">-->
-          <!--            <template #title>-->
-          <!--              <div style="display: flex">-->
-          <!--                <div style="margin-right: 10px">{{ $t('order.accepted') }}</div>-->
-          <!--                <b-badge variant="primary">10</b-badge>-->
-          <!--              </div>-->
-          <!--            </template>-->
-          <!--          </b-tab>-->
-          <!--          <b-tab style="padding: 0.6rem">-->
-          <!--            <template #title>-->
-          <!--              <div style="display: flex">-->
-          <!--                <div style="margin-right: 10px">{{ $t('order.in_process') }}</div>-->
-          <!--                <b-badge variant="danger">9</b-badge>-->
-          <!--              </div>-->
-          <!--            </template>-->
-          <!--          </b-tab>-->
-          <!--          <b-tab style="padding: 0.6rem">-->
-          <!--            <template #title>-->
-          <!--              <div style="display: flex">-->
-          <!--                <div style="margin-right: 10px">{{ $t('order.shipping') }}</div>-->
-          <!--                <b-badge variant="danger">20</b-badge>-->
-          <!--              </div>-->
-          <!--            </template>-->
-          <!--          </b-tab>-->
-          <!--          <b-tab style="padding: 0.6rem">-->
-          <!--            <template #title>-->
-          <!--              <div style="display: flex">-->
-          <!--                <div style="margin-right: 10px">{{ $t('order.finished') }}</div>-->
-          <!--                <b-badge variant="danger">15</b-badge>-->
-          <!--              </div>-->
-          <!--            </template>-->
-          <!--          </b-tab>-->
-          <!--          <b-tab style="padding: 0.6rem">-->
-          <!--            <template #title>-->
-          <!--              <div style="display: flex">-->
-          <!--                <div style="margin-right: 10px">{{ $t('order.cancelled') }}</div>-->
-          <!--                <b-badge variant="danger">8</b-badge>-->
-          <!--              </div>-->
-          <!--            </template>-->
-          <!--          </b-tab>-->
         </b-tabs>
         <b-card :title="$t(`order.${$route.query.type}`)">
           <b-table
@@ -79,7 +31,7 @@
             :busy="load"
           >
             <template #table-busy>
-              <div class="text-center text-danger my-2">
+              <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
                 <strong>Loading...</strong>
               </div>
@@ -106,14 +58,6 @@
             <template #cell(customer)="{ item }">
               {{ item.user.first_name + ' ' + item.user.last_name }}
             </template>
-            <!--            <template #cell(selection)="{ rowSelected }">-->
-            <!--              <template v-if="rowSelected">-->
-            <!--                <div class="glyph-icon simple-icon-check"></div>-->
-            <!--              </template>-->
-            <!--              <template v-else>-->
-            <!--                &lt;!&ndash;          <div class="glyph-icon simple-icon-user"></div>&ndash;&gt;-->
-            <!--              </template>-->
-            <!--            </template>-->
           </b-table>
           <Pagination v-if="!load" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
         </b-card>
@@ -147,13 +91,6 @@ export default {
         label: "Product Name"
       },
       search: "",
-      // order.all
-      // order.pending
-      // order.accepted
-      // order.in_process
-      // order.shipping
-      // order.finished
-      // order.cancelled
       tabs: [
         { name: 'order.finished', count: 15 },
         { name: 'order.cancelled', count: 20 },

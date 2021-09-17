@@ -10,7 +10,7 @@ export default function (param) {
     deleting: `DELETING_${toUpper}`,
     data: `GET_${toUpper}`,
     pagination: `PAGINATION_${toUpper}`,
-    changeOne: `CHANGE_ONE_${toUpper}`
+    removeOne: `REMOVE_ONE_${toUpper}`
   }
   return {
     state: {
@@ -42,7 +42,7 @@ export default function (param) {
       [_mutations.pending]: function (state, payload) { state.pending = payload },
       [_mutations.deleting]: function (state, payload) { state.deleting = payload },
       [_mutations.pagination]: function (state, payload) { state.pagination = payload },
-      [_mutations.changeOne]: function (state, payload) { state.data[payload.index] = payload.data }
+      [_mutations.removeOne]: function (state, payload) { state.data.splice(payload, 1) }
     },
     actions: {
       // get    getSomething
