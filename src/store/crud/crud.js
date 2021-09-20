@@ -50,7 +50,7 @@ export default function (param) {
         commit(_mutations.load, true)
         return new Promise((resolve, reject) => {
           axios_init.get(`${param}/`, params).then(res => {
-            const _res = res.results
+            const _res = res.results || res
             const _total = res.count
             commit(_mutations.data, _res)
             commit(_mutations.pagination, {

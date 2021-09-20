@@ -186,7 +186,7 @@ const routes = [
           {
             path: "map",
             name: "maps",
-            component: () => import("./views/app/map/Map"),
+            component: () => import("./views/app/map/LibMap"),
             // meta: { roles: [UserRole.Admin] },
           }
         ]
