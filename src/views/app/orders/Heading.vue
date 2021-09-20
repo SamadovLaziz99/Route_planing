@@ -3,12 +3,12 @@
     <b-colxx xxs="12">
       <h1>{{ title }}</h1>
       <div class="top-right-button-container">
-        <b-button
-          v-b-modal.modalright
-          variant="primary"
-          size="lg"
-          class="top-right-button"
-        >{{ $t('pages.add-new') }}</b-button>
+<!--        <b-button-->
+<!--          v-b-modal.modalright-->
+<!--          variant="primary"-->
+<!--          size="lg"-->
+<!--          class="top-right-button"-->
+<!--        >{{ $t('pages.add-new') }}</b-button>-->
         <!--        <b-button-group>-->
         <!--          <b-dropdown split right @click="selectAll(true)" class="check-button" variant="primary">-->
         <!--            <label-->

@@ -2,10 +2,17 @@
   <div class="icon-cards-row">
     <glide-component :settings="glideIconsOption">
       <icon-card
+        v-if="item.status !== 'cancelled' && item.status !== 'finished'"
         :title="$t('status')"
         icon="simple-icon-pin"
         :value="$t(`order.${item.status}`)"
         v-b-modal.changeStatusModal
+      />
+      <icon-card
+        v-else
+        :title="$t('status')"
+        icon="simple-icon-pin"
+        :value="$t(`order.${item.status}`)"
       />
       <icon-card
         :title="$t('payment.type')"

@@ -15,6 +15,7 @@ import modals from "./modules/modals";
 import upload from "./modules/upload";
 import socket from "./modules/socket";
 import location from "./modules/location";
+import universal from "./modules/universal";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -33,6 +34,7 @@ export default new Vuex.Store({
   },
   modules: {
     menu,
+    universal,
     user,
     chat,
     todo,

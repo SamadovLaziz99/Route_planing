@@ -14,11 +14,11 @@
           :perPage="15"
         ></list-page-heading>
         <b-tabs card v-model="activeTab" @input="changeTabs">
-          <b-tab style="padding: 0.6rem" v-for="tab in tabs" :key="tab.name">
+          <b-tab style="padding: 0.6rem" v-for="tab in orderStatsHistory" :key="tab.name">
             <template #title>
               <div style="display: flex">
                 <div style="margin-right: 10px">{{ $t(tab.name) }}</div>
-                <b-badge variant="primary">{{ tab.count }}</b-badge>
+                <b-badge variant="primary" v-if="tab.count > 0">{{ tab.count }}</b-badge>
               </div>
             </template>
           </b-tab>
@@ -238,6 +238,7 @@ export default {
       this.page = 1;
     },
     getData () {
+      this.$store.dispatch('getOrderStats')
       this.$store.dispatch(get, {
         page: this.page,
         status: this.$route.query.type
@@ -250,7 +251,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(getters(_page))
+    ...mapGetters(getters(_page)),
+    ...mapGetters([
+      'orderStatsHistory'
+    ])
   },
   watch: {
     search() {

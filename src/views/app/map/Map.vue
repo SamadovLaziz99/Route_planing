@@ -272,6 +272,7 @@ export default {
           zoom: 15,
           controls: ['zoomControl', 'fullscreenControl']
         })
+        console.log(this.map, this.maps)
         this.map.events.add('click', (e) => this.clickedMap(e))
         this.map.container.fitToViewport();
         this.$store.dispatch('courierLocation').then(res => {

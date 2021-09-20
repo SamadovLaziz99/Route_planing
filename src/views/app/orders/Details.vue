@@ -109,19 +109,19 @@
 <!--                        <span style="color: #8f8f8f; font-weight: normal; line-height: 2; font-size: 14px;">02.02.2019</span>-->
 <!--                      </td>-->
 <!--                    </tr>-->
-                    <tr style="width: 100%">
+                    <tr v-if="orderFoods" style="width: 100%">
                       <td colSpan="3" style="padding-top:10px; width: 100%">
                         <table style="width: 100%">
-                          <tr v-for="n in 5" :key="n">
+                          <tr v-for="food in orderFoods" :key="food.id">
                             <td style="padding-top:0px; padding-bottom: 20px; width:120px ">
                               <img src="https://coloredstrategies.com/mailing/product-1.jpg" style="width: 100px; height: 75px; object-fit: cover; border-radius: 3px; " />
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px;">
-                              <h4 style="font-size: 15px;"><a href="#" style="text-decoration: none; font-weight:500;">To'y oshi</a></h4>
-                              <p style="font-size: 12px;">Coca Cola bilan</p>
+                              <h4 style="font-size: 15px;"><router-link :to="{ name: 'food_detail', params: { id: food.id } }" style="text-decoration: none; font-weight:500;">{{ food.name }}</router-link></h4>
+                              <p style="font-size: 12px;">{{ food.description }}</p>
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px; text-align: right;">
-                              <p style="font-size: 13px; line-height: 1; color:#f18024;  margin-top:5px; vertical-align:top; white-space:nowrap;">25 000 {{ $t('sum') }}</p>
+                              <p style="font-size: 13px; line-height: 1; color:#f18024;  margin-top:5px; vertical-align:top; white-space:nowrap;">{{ food.price }} {{ $t('sum') }}</p>
                             </td>
                           </tr>
                         </table>
@@ -230,7 +230,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(getters('orders'))
+    ...mapGetters(getters('orders')),
+    ...mapGetters(['orderFoods'])
   },
   methods: {
     changeStatus () {
@@ -249,6 +250,9 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('getOrderFoods', this.$route.params.id).then(res => {
+      console.log(res)
+    })
     this.$store.dispatch('getByIdOrders', this.$route.params.id).then(res => {
       this.order = res
       this.status = res.status

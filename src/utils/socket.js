@@ -27,6 +27,7 @@ ws.onmessage = function (e) {
     const _data = { ...data }
     delete _data.type
     store.dispatch('setOrderStats', data)
+    store.dispatch('setOrderStatsHistory', data)
   }
 }
 
