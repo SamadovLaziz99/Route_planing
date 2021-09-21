@@ -3,7 +3,8 @@
     <yandex-map :coords="center" :zoom="15" class="yandexMap" map-type="map" :controls="['zoomControl', 'fullscreenControl', 'trafficControl']">
       <ymap-marker
         v-for="cr in courierLocations"
-        :marker-id="cr.location[0].id"
+        :marker-id="'courier' + cr.location[0].id"
+        :key="'courier' + cr.location[0].id"
         :coords="[parseFloat(cr.location[0].latitude), parseFloat(cr.location[0].longitude)]"
         :hint-content="cr.name"
         :icon="iconGenerator(icons.empty)"
@@ -11,6 +12,7 @@
       <ymap-marker
         v-for="vendor in dataVendors"
         :marker-id="'chef' + vendor.id"
+        :key="'chef' + vendor.id"
         :coords="[parseFloat(vendor.latitude), parseFloat(vendor.longitude)]"
         :hint-content="vendor.user.first_name + ' ' + vendor.user.last_name"
         :icon="iconGenerator(icons.chef)"
@@ -107,6 +109,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('courierLocation')
+    this.$store.dispatch('getCouriers')
     this.$store.dispatch('getVendors', {
       no_page: true
     })

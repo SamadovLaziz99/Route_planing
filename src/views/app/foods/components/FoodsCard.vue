@@ -1,21 +1,25 @@
 <template>
   <div class="d-flex flex-row mb-0" style="width: 100% !important;">
     <div class="d-block position-relative">
-      <img :src="order.img" :alt="order.title" class="list-thumbnail border-0" style="height: 70px !important;" />
+<!--      <img :src="imageProxy(order.media[0].url)" :alt="order.title" class="list-thumbnail border-0" style="height: 70px !important;" />-->
       <b-badge :variant="order.statusColor" pill class="position-absolute badge-top-right">{{order.status}}</b-badge>
     </div>
     <div class="pl-3 pt-2 pr-2 pb-2">
       <div>
-        <p class="list-item-heading m-0" style="margin-top: -5px !important;">{{ order.title }}</p>
-        <p class="text-muted mb-1 text-small">Vendor: John Doe</p>
-        <p class="text-muted mb-1 text-small">Category: Salat</p>
+        <p class="list-item-heading m-0" style="margin-top: -5px !important;">{{ order.title || order.name }}</p>
+        <p class="text-muted mb-1 text-small">Vendor: {{ order.vendor.user.first_name + ' ' + order.vendor.user.last_name }}</p>
+        <p class="text-muted mb-1 text-small">Category: {{ order.category.name[$lang] }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { imageProxy } from "../../../../utils";
 export default {
-  props: ['order', 'detailPath']
+  props: ['order', 'detailPath'],
+  methods: {
+    imageProxy
+  }
 }
 </script>

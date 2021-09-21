@@ -93,7 +93,7 @@ export default {
       // catch (e) {}
     },
     customUpload (file, xhr, formData) {
-      formData.append('url', file)
+      // formData.append('file', file)
       formData.append('type', this.media.type)
       formData.append('mediable_id', this.media.id)
       // formData.delete('file');

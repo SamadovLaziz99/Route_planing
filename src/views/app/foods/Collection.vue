@@ -41,15 +41,15 @@
                   <b-form-group>
                     <b-form-checkbox-group
                       id="checkbox-group-2"
-                      v-model="foods"
+                      v-model="form.foods"
                       name="flavour-2"
                     >
-                      <b-form-checkbox v-for="(order,index) in products.slice(0,6)" :value="order" :key="index" :class="{
-                      'foods': !foods.includes(order),
-                      'activeFoods': foods.includes(order)
+                      <b-form-checkbox v-for="(food, index) in dataFood" :value="food.id" :key="food.id" :class="{
+                      'foods': !form.foods.includes(food.id),
+                      'activeFoods': form.foods.includes(food.id)
                     }">
                         <foods-card
-                          :order="order"
+                          :order="food"
                           detail-path="#"
                         />
                       </b-form-checkbox>
@@ -95,25 +95,67 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <template v-if="!load">
-          <list-page-listing
-            ref="listPageListing"
-            :displayMode="displayMode"
+        <b-card :title="$t(`menu.users`)">
+          <b-table
+            hover
             :items="items"
-            :selectedItems="selectedItems"
-            :lastPage="Math.ceil(pagination.total / 15)"
-            :perPage="15"
-            :page="pagination.page"
-            :changePage="changePage"
-            :handleContextMenu="handleContextMenu"
-            :onContextMenuAction="onContextMenuAction"
-            @view="viewItem"
-            @edit="editItem"
-          ></list-page-listing>
-        </template>
-        <template v-else>
-          <div class="loading"></div>
-        </template>
+            :fields="fields"
+            :busy="load"
+          >
+            <template #table-busy>
+              <div class="text-center text-danger my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+            <template #cell(action)="row">
+              <div style="display: flex">
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="editItem(row.item.id)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+              </div>
+            </template>
+            <template #cell(name)="row">
+              <div>{{ row.item.name[$lang] }}</div>
+            </template>
+            <template #cell(category)="row">
+              <div>{{ row.item.category ? row.item.category.name[$lang] : '' }}</div>
+            </template>
+            <template #cell(status)="row">
+              <b-badge pill variant="primary">Pending</b-badge>
+            </template>
+            <template #cell(created_at)="row">
+              {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(selection)="{ rowSelected }">
+              <template v-if="rowSelected">
+                <div class="glyph-icon simple-icon-check"></div>
+              </template>
+              <template v-else>
+                <!--          <div class="glyph-icon simple-icon-user"></div>-->
+              </template>
+            </template>
+          </b-table>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+        </b-card>
+<!--        <template v-if="!load">-->
+<!--          <list-page-listing-->
+<!--            ref="listPageListing"-->
+<!--            :displayMode="displayMode"-->
+<!--            :items="items"-->
+<!--            :selectedItems="selectedItems"-->
+<!--            :lastPage="Math.ceil(pagination.total / 15)"-->
+<!--            :perPage="15"-->
+<!--            :page="pagination.page"-->
+<!--            :changePage="changePage"-->
+<!--            :handleContextMenu="handleContextMenu"-->
+<!--            :onContextMenuAction="onContextMenuAction"-->
+<!--            @view="viewItem"-->
+<!--            @edit="editItem"-->
+<!--          ></list-page-listing>-->
+<!--        </template>-->
+<!--        <template v-else>-->
+<!--          <div class="loading"></div>-->
+<!--        </template>-->
       </b-colxx>
     </b-row>
     <error-page v-else :error="error"/>
@@ -124,7 +166,9 @@
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
+import Pagination from "../../../components/TableComponents/Pagination";
 import products from "../../../data/products";
+import moment from "moment";
 import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
@@ -135,7 +179,8 @@ export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
-    'foods-card': FoodsCard
+    'foods-card': FoodsCard,
+    Pagination
   },
   validations: {
     form: {
@@ -156,7 +201,28 @@ export default {
   data() {
     return {
       products,
-      foods: [],
+      fields: [
+        {
+          key: 'name',
+          label: 'Name',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'category',
+          label: 'Category',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'created_at',
+          label: 'Registration date',
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'action',
+          label: 'Action',
+          // tdClass: 'thirdRow'
+        }
+      ],
       form: {
         id: null,
         name: {
@@ -164,6 +230,7 @@ export default {
           ru: '',
           oz: ''
         },
+        foods: [],
         position: null,
         active: true,
         category: null
@@ -208,6 +275,7 @@ export default {
   },
   computed: {
     ...mapGetters(getters(_page)),
+    ...mapGetters(['dataFood']),
     items() {
       return this.data.map(e => {
         return {
@@ -219,6 +287,7 @@ export default {
   },
   mounted() {
     this.getData()
+    this.$store.dispatch('getFood')
     this.$store.dispatch('getCategories').then(res => {
       this.categories = res.map(e => {
         return {
@@ -229,13 +298,16 @@ export default {
     })
   },
   methods: {
+    moment,
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         const _form = { ...this.form }
         delete _form.id
-        _form.category = this.form.category?.value
+        _form.category_id = this.form.category?.value
         _form.position = parseInt(this.form.position)
+        _form.food_ids = this.form.foods
+        delete _form.foods
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: _form
@@ -250,11 +322,17 @@ export default {
     },
     editItem (id) {
       this.$store.dispatch(getById, id).then(res => {
-        const _form = { ...res }
-        delete _form.created_at
-        delete _form.updated_at
-        _form.category = this.categories.filter(e => e.value === res.category)[0]
-        this.form = _form
+        this.form = {
+          id: res.id,
+          name: res.name,
+          foods: res.foods.map(e => e.id),
+          position: res.position,
+          active: res.active,
+          category: {
+            label: res.category.name[this.$lang],
+            value: res.category.id
+          }
+        }
         this.$bvModal.show('crudModal')
       })
     },
@@ -283,6 +361,10 @@ export default {
     closed(e) {
       this.clear()
       console.log(e)
+    },
+    changePagination(e) {
+      this.page = e
+      this.getData()
     },
     changeOrderBy(sort) {
       this.sort = sort;

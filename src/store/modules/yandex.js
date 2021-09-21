@@ -20,7 +20,7 @@ export default {
         params: {
           lang: 'ru_RU',
           rll: '69.289203,41.321352~69.28024,41.313705',
-          apikey: '8fb635ed-f033-4166-8286-a5388bb7d9a9',
+          apikey: '1abe9aa1-66ec-4c7f-8b93-a4e0bc25319e',
           token: 'b7a8293b48490c22e8a5774393dd0d2e',
           rtm: 'atm',
           results: 1

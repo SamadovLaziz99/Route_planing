@@ -10,7 +10,7 @@
           </b-tab>
           <b-tab :title="$t('menu.couriers').toUpperCase()">
             <div class="mt-3">
-              <b-card no-body class="d-flex mb-2 shadow" v-for="( item, index) in tickets" :key="`faq_${index}`">
+              <b-card no-body class="d-flex mb-2 shadow" v-for="( item, index) in dataCouriers" :key="`faq_${index}`">
                 <div :class="`pl-3 pr-3 ${ active === index ? 'collapse_top' : '' }`">
                   <div @click="clicked(index)">
                     <list-card
@@ -40,6 +40,8 @@
 import tickets from "../../../data/tickets";
 import ListCard from "./ListCard";
 import TimeLine from "./TimeLine";
+import { mapGetters } from "vuex";
+
 export default {
   props: ['route'],
   components: {
@@ -51,6 +53,9 @@ export default {
       active: -1,
       tickets
     };
+  },
+  computed: {
+    ...mapGetters(['dataCouriers'])
   },
   watch: {
     active (val) {
