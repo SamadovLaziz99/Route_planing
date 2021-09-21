@@ -175,3 +175,11 @@ export const getBase64 =  (img, callback) => {
 export const imageProxy = (url, size) => {
   return `https://imageproxy.cookzy.uz/${size}/${url}`
 }
+
+
+export const routeOptimized = (data) =>  {
+  if (data.features.length < 2) {
+    routeOptimized(data)
+  }
+  else return data.properties
+}

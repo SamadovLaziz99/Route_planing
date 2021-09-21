@@ -256,12 +256,12 @@ export default {
       this.$store.getters.courierLocations.forEach(e => {
         this.courierPoint(e, e.name)
       })
-      // this.oneRouteCreator({
-      //   coords: [
-      //     [41.321352, 69.289203],
-      //     [41.313705, 69.280240]
-      //   ]
-      // })
+      this.oneRouteCreator({
+        coords: [
+          [41.321352, 69.289203],
+          [41.313705, 69.280240]
+        ]
+      })
       // this.multiRoute()
     },
     initMap () {

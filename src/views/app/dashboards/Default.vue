@@ -38,70 +38,70 @@
         <best-sellers :title="$t('dashboards.best-sellers')"></best-sellers>
       </b-colxx>
     </b-row>
-    <b-row>
-      <b-colxx sm="12" lg="4" class="mb-4">
-        <profile-statuses></profile-statuses>
-      </b-colxx>
-      <b-colxx md="6" lg="4" class="mb-4">
-        <gradient-card>
-          <b-badge pill variant="theme-3" class="align-self-start mb-3">{{ $t('dashboards.piaf') }}</b-badge>
-          <p class="lead text-white">{{ $t('dashboards.magic-is-in-the-details') }}</p>
-          <p class="text-white">{{ $t('dashboards.yes-it-is-indeed') }}</p>
-        </gradient-card>
-      </b-colxx>
-      <b-colxx md="6" lg="4" class="mb-4">
-        <cakes></cakes>
-      </b-colxx>
-    </b-row>
-    <sortable-statictics-row></sortable-statictics-row>
-    <b-row>
-      <b-colxx sm="12" md="6" class="mb-4">
-        <website-visit-chart-card></website-visit-chart-card>
-      </b-colxx>
-      <b-colxx sm="12" md="6" class="mb-4">
-        <converconversion-rates-chart-card></converconversion-rates-chart-card>
-      </b-colxx>
-    </b-row>
-    <b-row>
-      <b-colxx lg="12" md="6" xl="4">
-        <b-row>
-          <b-colxx lg="4" xl="12" class="mb-4">
-            <gradient-with-radial-progress-card
-              icon="iconsminds-clock"
-              :title="`5 ${$t('dashboards.files')}`"
-              :detail="$t('dashboards.pending-for-print')"
-              :percent="5*100/12"
-              progressText="5/12"
-            />
-          </b-colxx>
-          <b-colxx lg="4" xl="12" class="mb-4">
-            <gradient-with-radial-progress-card
-              icon="iconsminds-male"
-              :title="`4 ${$t('dashboards.orders')}`"
-              :detail="$t('dashboards.on-approval-process')"
-              :percent="4*100/6"
-              progressText="4/6"
-            />
-          </b-colxx>
-          <b-colxx lg="4" xl="12" class="mb-4">
-            <gradient-with-radial-progress-card
-              icon="iconsminds-bell"
-              :title="`8 ${$t('dashboards.alerts')}`"
-              :detail="$t('dashboards.waiting-for-notice')"
-              :percent="8*100/10"
-              progressText="8/10"
-            />
-          </b-colxx>
-        </b-row>
-      </b-colxx>
-      <b-colxx lg="6" md="6" xl="4" sm="12" class="mb-4">
-        <advanced-search></advanced-search>
-      </b-colxx>
-      <b-colxx lg="6" xl="4" class="mb-4">
-        <small-line-charts itemClass="dashboard-small-chart"></small-line-charts>
-        <top-rated-items></top-rated-items>
-      </b-colxx>
-    </b-row>
+<!--    <b-row>-->
+<!--      <b-colxx sm="12" lg="4" class="mb-4">-->
+<!--        <profile-statuses></profile-statuses>-->
+<!--      </b-colxx>-->
+<!--      <b-colxx md="6" lg="4" class="mb-4">-->
+<!--        <gradient-card>-->
+<!--          <b-badge pill variant="theme-3" class="align-self-start mb-3">{{ $t('dashboards.piaf') }}</b-badge>-->
+<!--          <p class="lead text-white">{{ $t('dashboards.magic-is-in-the-details') }}</p>-->
+<!--          <p class="text-white">{{ $t('dashboards.yes-it-is-indeed') }}</p>-->
+<!--        </gradient-card>-->
+<!--      </b-colxx>-->
+<!--      <b-colxx md="6" lg="4" class="mb-4">-->
+<!--        <cakes></cakes>-->
+<!--      </b-colxx>-->
+<!--    </b-row>-->
+<!--    <sortable-statictics-row></sortable-statictics-row>-->
+<!--    <b-row>-->
+<!--      <b-colxx sm="12" md="6" class="mb-4">-->
+<!--        <website-visit-chart-card></website-visit-chart-card>-->
+<!--      </b-colxx>-->
+<!--      <b-colxx sm="12" md="6" class="mb-4">-->
+<!--        <converconversion-rates-chart-card></converconversion-rates-chart-card>-->
+<!--      </b-colxx>-->
+<!--    </b-row>-->
+<!--    <b-row>-->
+<!--      <b-colxx lg="12" md="6" xl="4">-->
+<!--        <b-row>-->
+<!--          <b-colxx lg="4" xl="12" class="mb-4">-->
+<!--            <gradient-with-radial-progress-card-->
+<!--              icon="iconsminds-clock"-->
+<!--              :title="`5 ${$t('dashboards.files')}`"-->
+<!--              :detail="$t('dashboards.pending-for-print')"-->
+<!--              :percent="5*100/12"-->
+<!--              progressText="5/12"-->
+<!--            />-->
+<!--          </b-colxx>-->
+<!--          <b-colxx lg="4" xl="12" class="mb-4">-->
+<!--            <gradient-with-radial-progress-card-->
+<!--              icon="iconsminds-male"-->
+<!--              :title="`4 ${$t('dashboards.orders')}`"-->
+<!--              :detail="$t('dashboards.on-approval-process')"-->
+<!--              :percent="4*100/6"-->
+<!--              progressText="4/6"-->
+<!--            />-->
+<!--          </b-colxx>-->
+<!--          <b-colxx lg="4" xl="12" class="mb-4">-->
+<!--            <gradient-with-radial-progress-card-->
+<!--              icon="iconsminds-bell"-->
+<!--              :title="`8 ${$t('dashboards.alerts')}`"-->
+<!--              :detail="$t('dashboards.waiting-for-notice')"-->
+<!--              :percent="8*100/10"-->
+<!--              progressText="8/10"-->
+<!--            />-->
+<!--          </b-colxx>-->
+<!--        </b-row>-->
+<!--      </b-colxx>-->
+<!--      <b-colxx lg="6" md="6" xl="4" sm="12" class="mb-4">-->
+<!--        <advanced-search></advanced-search>-->
+<!--      </b-colxx>-->
+<!--      <b-colxx lg="6" xl="4" class="mb-4">-->
+<!--        <small-line-charts itemClass="dashboard-small-chart"></small-line-charts>-->
+<!--        <top-rated-items></top-rated-items>-->
+<!--      </b-colxx>-->
+<!--    </b-row>-->
   </div>
 </template>
 

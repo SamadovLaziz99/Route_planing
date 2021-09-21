@@ -2,12 +2,12 @@
   <div id="app-container" :class="getMenuType">
     <topnav />
     <sidebar />
-    <main :class="`${$route.name === 'maps' ? 'responsiveMain' : ''}`">
+    <main :class="`${($route.name === 'maps' || $route.name === 'maps2') ? 'responsiveMain' : ''}`">
       <div class="container-fluid">
         <slot></slot>
       </div>
     </main>
-    <footer-component v-if="$route.name !== 'maps'" />
+    <footer-component v-if="$route.name !== 'maps' && $route.name !== 'maps2'" />
   </div>
 </template>
 

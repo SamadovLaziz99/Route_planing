@@ -634,7 +634,6 @@ p {
     margin-top: $navbar-height-xs;
   }
 }
-
 .mapRightBar {
   width: 400px;
   height: 100%;
@@ -688,6 +687,40 @@ p {
 }
 .mapRightBar_active {
   transform: translateX(0px);
+}
+.routeDetailsContent {
+  position: absolute;
+  width: 400px;
+  height: 500px;
+  top: 2%;
+  left: 10%;
+  .details {
+    width: 100%;
+    height: 100%;
+    .detail_row {
+      margin: 15px 0;
+      .icon {
+        font-size: 30px;
+        color: $theme_color-1;
+        display: flex;
+        align-items: center;
+        //margin-right: 10px;
+        .item_name {
+          font-size: 14px;
+          color: $primary-color;
+          margin-left: 5px;
+          font-family: "Nunito", sans-serif !important;
+        }
+      }
+      .item_title {
+        font-size: 14px;
+        margin-top: 7px;
+      }
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
 }
 
 // ======= YANDEX MAP ===========

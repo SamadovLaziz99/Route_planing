@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:relative;">
     <yandex-map :coords="center" :zoom="15" class="yandexMap" map-type="map" :controls="['zoomControl', 'fullscreenControl', 'trafficControl']">
       <ymap-marker
         v-for="cr in courierLocations"
@@ -21,6 +21,61 @@
         <div class="simple-icon-layers icon"></div>
       </div>
       <right-bar @getOneRoute="getOneRoute" :route="route"/>
+    </div>
+    <div class="routeDetailsContent">
+      <b-card style="width: 100%; height: 100%" :title="$t('route.details')" class="mb-4">
+        <b-close-button />
+        <div class="details">
+          <div class="detail_row">
+            <span class="iconsminds-shopping-cart icon">
+              <span class="item_name">Order</span>
+            </span>
+              <span class="item_title"># 1231321</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-male icon">
+              <span class="item_name">Customer</span>
+            </span>
+            <span class="item_title">Boyimjon Hoshimjonov</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-smartphone-4 icon">
+              <span class="item_name">Customer Phone</span>
+            </span>
+            <span class="item_title">+998997032053</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-chef-hat icon">
+              <span class="item_name">Vendor</span>
+            </span>
+            <span class="item_title">Cooker</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-scooter icon">
+              <span class="item_name">Courier</span>
+            </span>
+            <span class="item_title">John Doe</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-road-2 icon">
+              <span class="item_name">Distance</span>
+            </span>
+            <span class="item_title">8 km</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-clock icon">
+              <span class="item_name">Duration</span>
+            </span>
+            <span class="item_title">45 min</span>
+          </div>
+          <div class="detail_row">
+            <span class="iconsminds-traffic-light icon">
+              <span class="item_name">Duration Traffic Jump</span>
+            </span>
+            <span class="item_title">55 min</span>
+          </div>
+        </div>
+      </b-card>
     </div>
   </div>
 </template>
@@ -55,6 +110,7 @@ export default {
     this.$store.dispatch('getVendors', {
       no_page: true
     })
+    this.$store.dispatch('getOneRoute')
   },
   computed: {
     ...mapGetters(['courierLocations', 'dataVendors'])

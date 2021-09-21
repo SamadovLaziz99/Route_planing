@@ -11,6 +11,7 @@ import "vue-select/dist/vue-select.css";
 import InputTag from "./components/Form/InputTag";
 import ErrorPage from "./views/app/statuses/ErrorPage";
 import Dropzone from "./containers/forms/DropzoneExample";
+import CloseButton from './components/Common/CloseButton'
 import VueTimepicker from 'vue2-timepicker'
 // CSS
 import 'vue2-timepicker/dist/VueTimepicker.css'
@@ -21,6 +22,7 @@ Vue.component('error-page', ErrorPage)
 Vue.component('remove-modal', DeleteConfirmModal)
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);
+Vue.component('b-close-button', CloseButton)
 Vue.component('b-colxx', Colxx);
 Vue.component('input-tag', InputTag);
 Vue.component('vue-perfect-scrollbar', vuePerfectScrollbar);

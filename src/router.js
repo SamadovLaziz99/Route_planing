@@ -192,6 +192,20 @@ const routes = [
         ]
       },
       {
+        path: "maps2",
+        component: () => import("./views/app/map"),
+        redirect: `${ adminRoot }/maps2/map2`,
+        // meta: { roles: [UserRole.Admin, UserRole.Editor] },
+        children: [
+          {
+            path: "map2",
+            name: "maps2",
+            component: () => import("./views/app/map/Map"),
+            // meta: { roles: [UserRole.Admin] },
+          }
+        ]
+      },
+      {
         path: "settings",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/settings/list`,
