@@ -159,7 +159,7 @@
                   </b-form-invalid-feedback>
                 </b-form-group>
               </b-card>
-              <dropzone ref="dropzone" v-if="$route.params.id" :media="{ id: $route.params.id, type: 'image' }"/>
+              <dropzone ref="dropzone" v-if="$route.params.id" url="food" :media="{ id: $route.params.id, type: 'image' }"/>
             </b-colxx>
             <!--      ACTION CONTENT-->
             <b-colxx xxs="12" md="12">

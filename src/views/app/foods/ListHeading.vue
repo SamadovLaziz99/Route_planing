@@ -32,7 +32,7 @@
             </b-dropdown>
 
             <div class="search-sm d-inline-block float-md-left mr-1 align-top">
-              <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />
+              <b-input :placeholder="$t('menu.search')"  @input="change" />
             </div>
           </div>
           <div class="float-md-right pt-1">
@@ -51,6 +51,7 @@ import {
   ImageListIcon
 } from "../../../components/Svg";
 import AddNewModal from "../../../containers/pages/AddNewModal";
+import debounce from 'debounce'
 export default {
   components: {
     "data-list-icon": DataListIcon,
@@ -77,8 +78,14 @@ export default {
     "perPage"
   ],
   data() {
+    this.change = debounce(this.change, 1000)
     return {
     };
+  },
+  methods: {
+    change (val) {
+      this.$emit('searchChange', val)
+    }
   }
 };
 </script>

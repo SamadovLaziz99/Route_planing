@@ -1,36 +1,37 @@
 <template>
-  <b-row>
-    <b-colxx xxs="12">
-      <b-card class="mb-4" :title="$t('images')">
-        <b-form>
-          <b-row>
-            <b-colxx xxs="12">
-              <vue-dropzone
-                ref="myVueDropzone"
-                id="dropzone"
-                :useCustomSlot="true"
-                :options="dropzoneOptions"
-                @vdropzone-sending="customUpload"
-                @vdropzone-removed-file="removeFile"
-                @vdropzone-success="success"
-              >
-                <div class="dropzone-custom-content">
-                  <h3 class="dropzone-custom-title">Drag and drop to upload content!</h3>
-                  <div class="subtitle">...or click to select a file from your computer</div>
-                </div>
-              </vue-dropzone>
-            </b-colxx>
-          </b-row>
-        </b-form>
-      </b-card>
-    </b-colxx>
-  </b-row>
+  <vue-dropzone
+    ref="myVueDropzone"
+    id="dropzone"
+    :useCustomSlot="true"
+    :options="dropzoneOptions"
+    @vdropzone-sending="customUpload"
+    @vdropzone-removed-file="removeFile"
+    @vdropzone-success="success"
+    :destroyDropzone="destroy"
+  >
+    <div class="dropzone-custom-content">
+      <h4 class="dropzone-custom-title">Drag and drop to upload content!</h4>
+    </div>
+  </vue-dropzone>
+<!--  <b-row>-->
+<!--    <b-colxx xxs="12">-->
+<!--      <b-card class="mb-4" :title="$t('images')">-->
+<!--        <b-form>-->
+<!--          <b-row>-->
+<!--            <b-colxx xxs="12">-->
+<!--              -->
+<!--            </b-colxx>-->
+<!--          </b-row>-->
+<!--        </b-form>-->
+<!--      </b-card>-->
+<!--    </b-colxx>-->
+<!--  </b-row>-->
 </template>
 <script>
 import VueDropzone from "vue2-dropzone";
 
 export default {
-  props: ['media'],
+  props: ['media', 'url', 'destroy'],
   components: {
     "vue-dropzone": VueDropzone
   },
@@ -39,11 +40,12 @@ export default {
     return {
       destroyed: false,
       dropzoneOptions: {
-        url: "https://coozin.cookzy.uz/food/media/",
+        url: `https://coozin.cookzy.uz/${this.url}/media/`,
         method: "POST",
         thumbnailHeight: 150,
         maxFilesize: 2,
         previewTemplate: this.dropzoneTemplate(),
+        uploadMultiple: false,
         headers: {
           "Authorization": 'Bearer ' + token,
           'Cache-Control': null,

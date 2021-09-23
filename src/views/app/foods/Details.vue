@@ -54,6 +54,9 @@
                     </div>
                     <p class="text-muted text-small mb-2">{{ $t('created_at') }}</p>
                     <p>{{ moment(food.created_at).format('YYYY-MM-DD HH:mm') }}</p>
+                    <p class="text-muted text-small mb-2">{{ $t('status') }}</p>
+                    <switches theme="custom" color="primary-inverse"
+                              class="vue-switcher-small"></switches>
                   </b-card-body>
                 </b-card>
                 <b-card :title="$t('maps.yandex')" class="mb-4">
@@ -95,23 +98,6 @@
           <b-tab :title="$t('pages.orders')">
             <b-row>
               <b-colxx>
-                <!--                <div class="d-flex flex-grow-2 min-width-zero">-->
-                <!--                  <b-card-body class="align-self-center d-flex flex-column flex-md-row justify-content-between min-width-zero align-items-md-center">-->
-                <!--                    <div class="list-item-heading mb-1 truncate w-40 w-xs-100">-->
-                <!--                      Name-->
-                <!--                    </div>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Phone</p>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Payment Type</p>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Price</p>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Order Time</p>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Delivery Time</p>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Date</p>-->
-                <!--                    <p class="mb-1 text-muted text-small w-15 w-xs-100">Status</p>-->
-                <!--&lt;!&ndash;                    <div class="w-15 w-xs-100 text-right">&ndash;&gt;-->
-                <!--&lt;!&ndash;                      <b-badge pill variant="danger`">Status</b-badge>&ndash;&gt;-->
-                <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-                <!--                  </b-card-body>-->
-                <!--                </div>-->
                 <order-item
                   v-for="(order,index) in _oders"
                   :key="index"
@@ -138,12 +124,14 @@ import orders from "../../../data/orders";
 import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
 import { getters } from "../../../utils/store_schema";
+import Switches from "vue-switches";
 import moment from "moment";
 import {mapGetters} from "vuex";
 
 export default {
   components: {
     stars: Stars,
+    'switches': Switches,
     "radial-progress-card": RadialProgressCard,
     "comment-item": CommentItem,
     "order-item": OrderItem,

@@ -4,7 +4,7 @@
       <b-colxx class="disable-text-selection">
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
           <div slot="content">
-            <b-tabs fill content-class="tab-content" nav-class="separator-tabs">
+            <b-tabs v-if="!loadOne" fill content-class="tab-content" v-model="activeTab" nav-class="separator-tabs">
               <b-tab title="MAIN">
                 <div class="mt-4"></div>
                 <b-form class="av-tooltip tooltip-right-bottom">
@@ -21,7 +21,8 @@
                     <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
                   </b-form-group>
                   <b-form-group :label="$t('pages.category')" class="has-float-label mb-4">
-                    <v-select :options="categories" v-model="form.category" />
+                    <v-select :options="categories" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error" />
+                    <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.category.required) ? 'block' : 'none'}`">{{ $t('please.enter') + $t('category') }}</b-form-invalid-feedback>
                   </b-form-group>
                   <b-form-group :label="$t('position')" class="has-float-label mb-4">
                     <b-form-input type="number" v-model="form.position"/>
@@ -45,8 +46,8 @@
                       name="flavour-2"
                     >
                       <b-form-checkbox v-for="(food, index) in dataFood" :value="food.id" :key="food.id" :class="{
-                      'foods': !form.foods.includes(food.id),
-                      'activeFoods': form.foods.includes(food.id)
+                      'foods': !form.foods.length && form.foods.includes(food.id),
+                      'activeFoods': form.foods.length && form.foods.includes(food.id)
                     }">
                         <foods-card
                           :order="food"
@@ -57,10 +58,21 @@
                   </b-form-group>
                 </vue-perfect-scrollbar>
               </b-tab>
-              <b-tab title="BANNER">
-                <image-uploader/>
+              <b-tab title="BANNER" v-if="form.id">
+                <div style="margin: 20px 0">
+                  <h4>Banner</h4>
+                </div>
+                <dropzone ref="dropzoneBanner" v-if="form.id" url="collections" :media="{ id: form.id, type: 'banner' }" :destroy="true"/>
+                <div style="margin: 20px 0">
+                  <h4>Feature</h4>
+                </div>
+                <dropzone ref="dropzone" v-if="form.id" url="collections" :media="{ id: form.id, type: 'image' }" :destroy="true"/>
               </b-tab>
             </b-tabs>
+            <div v-else class="text-center text-primary my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
           </div>
           <div slot="action">
             <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
@@ -95,7 +107,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.users`)">
+        <b-card :title="$t(`menu.foods_collection`)">
           <b-table
             hover
             :items="items"
@@ -137,25 +149,6 @@
           </b-table>
           <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
         </b-card>
-<!--        <template v-if="!load">-->
-<!--          <list-page-listing-->
-<!--            ref="listPageListing"-->
-<!--            :displayMode="displayMode"-->
-<!--            :items="items"-->
-<!--            :selectedItems="selectedItems"-->
-<!--            :lastPage="Math.ceil(pagination.total / 15)"-->
-<!--            :perPage="15"-->
-<!--            :page="pagination.page"-->
-<!--            :changePage="changePage"-->
-<!--            :handleContextMenu="handleContextMenu"-->
-<!--            :onContextMenuAction="onContextMenuAction"-->
-<!--            @view="viewItem"-->
-<!--            @edit="editItem"-->
-<!--          ></list-page-listing>-->
-<!--        </template>-->
-<!--        <template v-else>-->
-<!--          <div class="loading"></div>-->
-<!--        </template>-->
       </b-colxx>
     </b-row>
     <error-page v-else :error="error"/>
@@ -167,7 +160,6 @@ import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import Pagination from "../../../components/TableComponents/Pagination";
-import products from "../../../data/products";
 import moment from "moment";
 import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
@@ -194,13 +186,14 @@ export default {
         oz: {
           required
         }
-      }
+      },
+      category: { required }
     }
   },
   mixins: [validationMixin],
   data() {
     return {
-      products,
+      activeTab: 0,
       fields: [
         {
           key: 'name',
@@ -223,6 +216,7 @@ export default {
           // tdClass: 'thirdRow'
         }
       ],
+      isValidCustom: false,
       form: {
         id: null,
         name: {
@@ -301,7 +295,15 @@ export default {
     moment,
     submit() {
       this.$v.$touch();
-      if (!this.$v.$invalid) {
+      this.isValidCustom = true
+      console.log(this.$v)
+      if (this.$v.$invalid) {
+        this.activeTab = 0
+      }
+      if (this.form.foods.length < 1) {
+        this.activeTab = 1
+      }
+      if (!this.$v.$invalid && this.form.foods.length > 0) {
         const _form = { ...this.form }
         delete _form.id
         _form.category_id = this.form.category?.value
@@ -321,7 +323,14 @@ export default {
       console.log(id)
     },
     editItem (id) {
+      this.$bvModal.show('crudModal')
       this.$store.dispatch(getById, id).then(res => {
+        const e = res.media[0]
+        setTimeout(() => {
+          this.$refs.dropzoneBanner.setDefaultImage({
+            size: e.size, name: e.path, type: e.mime_type, id: e.id
+          }, e.url)
+        }, 0)
         this.form = {
           id: res.id,
           name: res.name,
@@ -333,7 +342,6 @@ export default {
             value: res.category.id
           }
         }
-        this.$bvModal.show('crudModal')
       })
     },
     removeItem (id) {
@@ -349,13 +357,15 @@ export default {
       this.$v.$reset()
       this.form = {
         id: null,
-        name: {
-          uz: '',
-          ru: '',
-          oz: ''
+          name: {
+            uz: '',
+            ru: '',
+            oz: ''
         },
-        position: null,
-        active: true
+        foods: [],
+          position: null,
+          active: true,
+          category: null
       }
     },
     closed(e) {
@@ -372,17 +382,6 @@ export default {
     searchChange(val) {
       this.search = val;
       this.page = 1;
-    },
-    handleContextMenu(vnode) {
-      if (!this.selectedItems.includes(vnode.key)) {
-        this.selectedItems = [vnode.key];
-      }
-    },
-    onContextMenuAction(action) {
-      console.log(
-        "context menu item clicked - " + action + ": ",
-        this.selectedItems
-      );
     },
     changePage(n) {
       this.page = n

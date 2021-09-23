@@ -9,7 +9,7 @@
           :sortOptions="sortOptions"
           :changeOrderBy="changeOrderBy"
           :sort="sort"
-          :searchChange="searchChange"
+          @searchChange="searchChange"
           :from="from"
           :to="to"
           :total="pagination.total"
@@ -56,6 +56,7 @@ import FoodsCard from "./components/FoodsCard";
 import products from "../../../data/products";
 import { mapGetters } from "vuex";
 import { actions, getters } from "../../../utils/store_schema";
+import {imageProxy} from "../../../utils";
 const _page = 'food'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
@@ -82,7 +83,7 @@ export default {
         }
       ],
       page: 1,
-      search: "",
+      search: null,
       from: 0,
       to: 0,
       selectedItems: []
@@ -102,6 +103,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
+          img: imageProxy(e.media[0].url, '600x425'),
           routes: {
             view: {
               name: 'food_detail',
@@ -199,8 +201,10 @@ export default {
       this.sort = sort;
     },
     searchChange(val) {
+      console.log(val)
       this.search = val;
       this.page = 1;
+      this.getData()
     },
     handleContextMenu(vnode) {
       if (!this.selectedItems.includes(vnode.key)) {
@@ -219,7 +223,8 @@ export default {
     },
     getData() {
       this.$store.dispatch(get, {
-        page: this.page
+        page: this.page,
+        q: this.search
       }).then(res => {
         // console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
