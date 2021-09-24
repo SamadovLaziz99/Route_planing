@@ -7,7 +7,7 @@
         <slot></slot>
       </div>
     </main>
-    <footer-component v-if="$route.name !== 'maps' && $route.name !== 'maps2'" />
+<!--    <footer-component v-if="$route.name !== 'maps' && $route.name !== 'maps2'" />-->
   </div>
 </template>
 

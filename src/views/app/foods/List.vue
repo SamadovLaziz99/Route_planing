@@ -97,7 +97,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          img: imageProxy(e.media[0].url, '600x425'),
+          img: e.media.length > 0 ? imageProxy(e.media[0].url, '150x110') : undefined,
           routes: {
             view: {
               name: 'food_detail',

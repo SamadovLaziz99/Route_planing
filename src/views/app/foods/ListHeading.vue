@@ -19,14 +19,14 @@
           <div class="d-md-inline-block pt-1 w-100">
             <b-row>
               <b-colxx xxs="12" md="3">
-                <v-select v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
+                <v-select v-if="$route.name === 'food_list'" v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
               </b-colxx>
               <b-colxx xxs="12" md="3">
-                <v-select v-model="filters.category" @input="changeCategory" style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('categories')"/>
+                <v-select v-if="$route.name === 'food_list'" v-model="filters.category" @input="changeCategory" style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('categories')"/>
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('menu.search')" @input="search" v-model="filters.search"  />
+                  <b-input v-if="$route.name === 'food_list'" class="search_input" :placeholder="$t('menu.search')" @input="search" v-model="filters.search"  />
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="3">

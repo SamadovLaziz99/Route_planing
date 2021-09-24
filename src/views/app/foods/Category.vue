@@ -55,7 +55,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.users`)">
+        <b-card :title="$t(`menu.foods_category`)">
           <b-table
             hover
             :items="items"

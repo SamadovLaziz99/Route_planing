@@ -59,12 +59,12 @@
 
 <script>
 import defaultImage from '@/assets/img/cards/thumb-1.jpg'
-import defaultImageProfile from '@/assets/img/profiles/4.jpg'
+import {imageProxy} from "../../utils";
 export default {
   props: ['data', 'selectedItems'],
   data() {
     return {
-      image: this.$route.name === 'vendors' ? defaultImageProfile : defaultImage
+      image: this.$route.name === 'vendors' ? imageProxy('https://image.freepik.com/free-photo/portrait-happy-male-chef-dressed-uniform_171337-5354.jpg', '150x120') : defaultImage
     }
   },
   filters: {

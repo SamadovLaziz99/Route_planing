@@ -59,6 +59,7 @@ import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import {actions, getters} from "../../../utils/store_schema";
+import {imageProxy} from "../../../utils";
 const _page = 'vendors'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
@@ -142,6 +143,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
+          img: e.media.length > 0 ? imageProxy(e.media[0].url, '150x85') : undefined,
           routes: {
             edit: {
               name: 'vendor_update',
