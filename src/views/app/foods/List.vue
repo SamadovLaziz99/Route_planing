@@ -6,10 +6,7 @@
         <list-page-heading
           :title="$t('menu.foods_list')"
           :displayMode="displayMode"
-          :sortOptions="sortOptions"
-          :changeOrderBy="changeOrderBy"
-          :sort="sort"
-          @searchChange="searchChange"
+          @filters="filterChanging"
           :from="from"
           :to="to"
           :total="pagination.total"
@@ -37,7 +34,6 @@
             :handleContextMenu="handleContextMenu"
             :onContextMenuAction="onContextMenuAction"
             @view="viewItem"
-            @edit="editItem"
           ></list-page-listing>
         </template>
         <template v-else>
@@ -53,7 +49,6 @@
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
-import products from "../../../data/products";
 import { mapGetters } from "vuex";
 import { actions, getters } from "../../../utils/store_schema";
 import {imageProxy} from "../../../utils";
@@ -67,7 +62,6 @@ export default {
   },
   data() {
     return {
-      products,
       foods: [],
       categories: [],
       displayMode: "thumb",
@@ -83,9 +77,9 @@ export default {
         }
       ],
       page: 1,
-      search: null,
       from: 0,
       to: 0,
+      filters: null,
       selectedItems: []
     };
   },
@@ -125,22 +119,22 @@ export default {
   },
   mounted() {
     const _hash = this.$route.hash
+    const _query = this.$route.query
+    this.filters = _query
     let _page;
     if (_hash) {
       _page = this.$route.hash.slice(6)
       this.page = parseInt(_page)
     }
     this.getData()
-    this.$store.dispatch('getCategories').then(res => {
-      this.categories = res.map(e => {
-        return {
-          label: e.name[this.$lang],
-          value: e.id
-        }
-      })
-    })
   },
   methods: {
+    filterChanging (val) {
+      this.filters = val
+      this.page = 1
+      this.$router.push({ name: this.$route.name, query: this.filters })
+      this.getData()
+    },
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
@@ -160,16 +154,6 @@ export default {
     viewItem (id) {
       console.log(id)
       this.$router.push({ name: 'food_detail', params: { id: id } })
-    },
-    editItem (id) {
-      this.$store.dispatch(getById, id).then(res => {
-        const _form = { ...res }
-        delete _form.created_at
-        delete _form.updated_at
-        _form.category = this.categories.filter(e => e.value === res.category)[0]
-        this.form = _form
-        this.$bvModal.show('crudModal')
-      })
     },
     removeItem (id) {
       this.$store.dispatch(remove, id).then(res => {
@@ -200,12 +184,6 @@ export default {
     changeOrderBy(sort) {
       this.sort = sort;
     },
-    searchChange(val) {
-      console.log(val)
-      this.search = val;
-      this.page = 1;
-      this.getData()
-    },
     handleContextMenu(vnode) {
       if (!this.selectedItems.includes(vnode.key)) {
         this.selectedItems = [vnode.key];
@@ -224,9 +202,8 @@ export default {
     getData() {
       this.$store.dispatch(get, {
         page: this.page,
-        q: this.search
+        ...this.filters
       }).then(res => {
-        // console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })

@@ -168,6 +168,11 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('getOrders', {
+      food_id: this.$route.params.id
+    }).then(res => {
+      console.log(res)
+    })
     this.$store.dispatch('getByIdFood', this.$route.params.id).then(res => {
       this.food = res
       console.log(res)

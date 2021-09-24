@@ -71,6 +71,7 @@ const routes = [
         children: [
           {
             path: "list",
+            name: 'food_list',
             component: () => import("./views/app/foods/List"),
             children: []
           },

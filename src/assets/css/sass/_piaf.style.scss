@@ -4011,6 +4011,10 @@ div[data-notify="container"] {
 .vue-tagsinput--focused {
   border: 1px solid rgba($theme-color-1, 0.6) !important;
 }
+.search_input {
+  padding: 8px 1rem !important;
+  border-radius: 0 !important;
+}
 
 .vue-tagsinput-tag,
 .v-select .vs__selected {

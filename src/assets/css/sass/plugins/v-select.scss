@@ -12,7 +12,9 @@
       display: flex;
       padding: 0 10px 0 3px;
     }
-
+    .vs__search::placeholder {
+      color: rgba($primary-color, 0.8) !important;;
+    }
     .vs__selected-options {
       outline: initial !important;
       box-shadow: none !important;
@@ -99,9 +101,12 @@
     }
 
     .vs__actions .vs__clear {
-      display: none;
+      margin-top: 6px;
+      fill: rgba($primary-color, 0.4) !important;;
     }
-
+    .vs__actions .vs__clear:hover {
+      background: transparent !important;
+    }
     .vs__actions svg {
       width: 15px;
       height: 15px;
