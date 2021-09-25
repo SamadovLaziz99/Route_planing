@@ -19,20 +19,22 @@ export default {
       const res = await axios.get('https://api-maps.yandex.ru/services/route/2.0/', {
         params: {
           lang: 'ru_RU',
-          rll: '69.289203,41.321352~69.28024,41.313705',
+          rll: params,
           apikey: '1abe9aa1-66ec-4c7f-8b93-a4e0bc25319e',
-          token: 'b7a8293b48490c22e8a5774393dd0d2e',
+          token: 'de45c668b77617b375eabda142aa1908',
           rtm: 'atm',
           results: 1
         }
       })
       let _data = res.data
       let _route = _data.features[0].features[0].properties.PathMetaData
-      commit('SET_ONE_ROUTE', {
+      const _result = {
         distance: _route.Distance,
         duration: _route.Duration,
         durationTraffic: _route.DurationInTraffic
-      })
+      }
+      commit('SET_ONE_ROUTE', _result)
+      return _result
       // console.log(routeOptimized(_data))
     }
   }

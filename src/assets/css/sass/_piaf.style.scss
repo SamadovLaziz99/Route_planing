@@ -732,7 +732,7 @@ $line-color: $theme-color-1;
   padding: 10px;
   //background: #ececec;
   border-radius: 10px;
-  border-top-left-radius: 0;
+  //border-top-left-radius: 0;
   transition: all, .8s;
   cursor: pointer;
   box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
@@ -750,7 +750,7 @@ $line-color: $theme-color-1;
 .marker {
   font-size: 16px;
   font-weight: bold;
-  margin-right: 5px;
+  margin-right: 4px;
 }
 
 .info-toggle {

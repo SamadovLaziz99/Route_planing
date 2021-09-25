@@ -2,21 +2,24 @@
   <div class="history-tl-container">
 <!--    <div class="timeline">-->
       <ul class="tl">
-        <li v-for="timeline in timelines" :key="timeline.distance" class="tl-item" ng-repeat="item in retailer_history">
-          <div :class="`title ${ (route && route.coords && route.coords === timeline.coords) ? 'title_active' : '' }`">
+        <li v-for="item in items" :key="item.id" class="tl-item" ng-repeat="item in retailer_history">
+<!--          <div :class="`title ${ (route && route.coords && route.coords === timeline.coords) ? 'title_active' : '' }`">-->
+          <div :class="`title ${ parseInt($route.query.order_id) === item.id ? 'title_active' : '' }`" @click="viewItem(item)">
             <div class="order_number">
-              #1001100011
+              #{{ item.id }}
             </div>
-            <div @click="setRoute(timeline)">
-              <div class="item-title"><span class="iconsminds-map-marker-2 marker red"></span>Coozin Home</div>
-              <div class="item-title"><span class="iconsminds-map-marker-2 marker green"></span>{{ timeline.point }}</div>
-              <div class="item-title"><span class="iconsminds-clock marker blue"></span>{{ timeline.time }}</div>
-              <div class="item-title"><span class="iconsminds-scooter marker orange"></span>{{ timeline.distance }}</div>
+            <div :class="`order_status badge-outline-${badgeType(item.status)}`">
+              {{ $t(`order.${item.status}`) }}
             </div>
-            <div class="d-flex justify-content-between align-items-center pt-2">
-              <span>Courier: </span>
-              <v-select style="min-width: 180px;" :options="tickets" label="title" index="detail"/>
+            <div style="width: 100%; margin-top: 25px">
+              <div class="item-title"><span class="iconsminds-doctor marker orange"></span>{{ item.user.first_name }} {{ item.user.last_name }}</div>
+                <div class="item-title"><span class="iconsminds-map-marker-2 marker red"></span>{{ item.vendor.address }}</div>
+                <div class="item-title"><span class="iconsminds-map-marker-2 marker green"></span>{{ item.user_address.address_name }}</div>
             </div>
+<!--            <div class="d-flex justify-content-between align-items-center pt-2">-->
+<!--              <span>Courier: </span>-->
+<!--              <v-select style="min-width: 180px;" :options="tickets" label="title" index="detail"/>-->
+<!--            </div>-->
           </div>
         </li>
       </ul>
@@ -25,48 +28,46 @@
 </template>
 
 <script>
-import tickets from "../../../data/tickets";
+// import tickets from "../../../data/tickets";
+import {mapGetters} from "vuex";
 export default {
   name: "TimeLine",
-  props: ['route'],
+  props: ['route', 'items'],
   data () {
     return {
-      tickets,
-      timelines: [
-        {
-          point: 'махалля Мирзо Улугбек, 7/2/24',
-          time: '1 hour 32 minutes',
-          distance: '7.3 km (7360 m)',
-          coords: [
-            [41.341908, 69.301433],
-            [41.332883, 69.299342]
-          ]
-        },
-        {
-          point: 'махалля Акбаробод, 3/1/4',
-          time: '2 hour 12 minutes',
-          distance: '14.8 km (14810 m)',
-          coords: [
-            [41.319747, 69.290714],
-            [41.329049, 69.273511]
-          ]
-        },
-        {
-          point: 'махалля Отчопар-2, 5/2/14',
-          time: '26 minutes',
-          distance: '2.4 km (2450 m)',
-          coords: [
-            [41.315371, 69.270112],
-            [41.325344, 69.325486]
-          ]
-        }
-      ]
     }
   },
+  computed: {
+    ...mapGetters(['dataOrders'])
+  },
   methods: {
-    setRoute (timeline) {
-      this.$emit('get', timeline.coords)
-    }
+    viewItem (item) {
+      this.$router.push({
+        name: this.$route.name,
+        query: {
+          order_id: item.id
+        }
+      })
+      this.$emit('selectedItem', item)
+    },
+    badgeType(type) {
+      switch (type) {
+        case 'pending': return 'info'
+          break;
+        case 'accepted': return 'secondary'
+          break;
+        case 'in_process': return 'primary'
+          break;
+        case 'shipping': return 'dark'
+          break;
+        case 'finished': return 'success'
+          break;
+        case 'cancelled': return 'danger'
+          break;
+        default: return 'primary'
+          break;
+      }
+    },
   }
 }
 </script>
@@ -79,6 +80,16 @@ export default {
   background: #e7e7e7;
   border-radius: inherit;
   border-bottom-right-radius: 0;
+  border-top-left-radius: 0;
+  padding: 5px 10px;
+}
+.order_status {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
   padding: 5px 10px;
 }
 </style>

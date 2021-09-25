@@ -4,15 +4,19 @@
         class="rightbar_container yandexRightBar pr-3 pl-3"
         :settings="{ suppressScrollX: true, wheelPropagation: false }"
       >
-        <b-tabs fill content-class="tab-content" nav-class="separator-tabs">
+        <b-tabs fill content-class="tab-content" nav-class="separator-tabs" @input="tabChange">
           <b-tab :title="$t('order.all').toUpperCase()">
-            <TimeLine @get="getRoute" :route="route"/>
+            <TimeLine v-if="!loadOrders" :items="dataOrders" @selectedItem="selectedItem"/>
+            <div v-else class="text-center text-primary my-2 mt-5">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
           </b-tab>
           <b-tab :title="$t('menu.couriers').toUpperCase()">
             <div class="mt-3">
               <b-card no-body class="d-flex mb-2 shadow" v-for="( item, index) in dataCouriers" :key="`faq_${index}`">
                 <div :class="`pl-3 pr-3 ${ active === index ? 'collapse_top' : '' }`">
-                  <div @click="clicked(index)">
+                  <div @click="clicked(index, item)">
                     <list-card
                       v-b-toggle="`faq_${index}`"
                       style="cursor: pointer"
@@ -25,7 +29,7 @@
                 </div>
                 <b-collapse :id="`faq_${index}`" accordion="faq-accordion" role="tabpanel">
                   <div class="pl-4 pt-4">
-                    <TimeLine @get="getRoute" :route="route"/>
+                    <TimeLine :items="[]"/>
                   </div>
                 </b-collapse>
               </b-card>
@@ -55,18 +59,26 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['dataCouriers'])
-  },
-  watch: {
-    active (val) {
-      console.log(val)
-    }
+    ...mapGetters(['dataCouriers', 'dataOrders', 'loadOrders'])
   },
   methods: {
-    getRoute (e) {
-      this.$emit('getOneRoute', e)
+    selectedItem (e) {
+      this.$emit('selectedItem', e)
     },
-    clicked (id) {
+    tabChange (e) {
+      console.log(e)
+      if (e === 0 && this.dataOrders && !this.dataOrders.length) {
+
+      }
+    },
+    clicked (id, item) {
+      this.$store.dispatch('getOrders', {
+        courier_id: item.id
+      }).then(res => {
+        console.log(res)
+      })
+      console.log(id)
+      console.log(item)
       this.active = id
     }
   }

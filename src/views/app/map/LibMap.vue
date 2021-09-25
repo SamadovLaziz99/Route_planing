@@ -10,6 +10,21 @@
         :icon="iconGenerator(icons.empty)"
       ></ymap-marker>
       <ymap-marker
+        v-for="cr in routedCouriers"
+        :marker-id="'courier_routed' + cr.location[0].id"
+        :key="'courier_routed' + cr.location[0].id"
+        :coords="[parseFloat(cr.location[0].latitude), parseFloat(cr.location[0].longitude)]"
+        :hint-content="cr.name"
+        :icon="iconGenerator(icons.empty, cr.route)"
+      ></ymap-marker>
+      <ymap-marker
+        v-if="client"
+        :marker-id="'client' + client.id"
+        :coords="[parseFloat(client.latitude), parseFloat(client.longitude)]"
+        :hint-content="client.name"
+        :icon="iconGenerator(icons.client)"
+      ></ymap-marker>
+      <ymap-marker
         v-for="vendor in dataVendors"
         :marker-id="'chef' + vendor.id"
         :key="'chef' + vendor.id"
@@ -22,75 +37,23 @@
       <div class="rightToggle" @click="rightBar = !rightBar">
         <div class="simple-icon-layers icon"></div>
       </div>
-      <right-bar @getOneRoute="getOneRoute" :route="route"/>
+      <right-bar @selectedItem="selectedItem"/>
     </div>
-    <div class="routeDetailsContent">
-      <b-card style="width: 100%; height: 100%" :title="$t('route.details')" class="mb-4">
-        <b-close-button />
-        <div class="details">
-          <div class="detail_row">
-            <span class="iconsminds-shopping-cart icon">
-              <span class="item_name">Order</span>
-            </span>
-              <span class="item_title"># 1231321</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-male icon">
-              <span class="item_name">Customer</span>
-            </span>
-            <span class="item_title">Boyimjon Hoshimjonov</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-smartphone-4 icon">
-              <span class="item_name">Customer Phone</span>
-            </span>
-            <span class="item_title">+998997032053</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-chef-hat icon">
-              <span class="item_name">Vendor</span>
-            </span>
-            <span class="item_title">Cooker</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-scooter icon">
-              <span class="item_name">Courier</span>
-            </span>
-            <span class="item_title">John Doe</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-road-2 icon">
-              <span class="item_name">Distance</span>
-            </span>
-            <span class="item_title">8 km</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-clock icon">
-              <span class="item_name">Duration</span>
-            </span>
-            <span class="item_title">45 min</span>
-          </div>
-          <div class="detail_row">
-            <span class="iconsminds-traffic-light icon">
-              <span class="item_name">Duration Traffic Jump</span>
-            </span>
-            <span class="item_title">55 min</span>
-          </div>
-        </div>
-      </b-card>
-    </div>
+    <OrderMapDetailCard :order="order" @close="closeRouteDetails"/>
   </div>
 </template>
 
 <script>
 import RightBar from "./RightBar";
+import OrderMapDetailCard from "../orders/OrderMapDetailCard";
 import { mapGetters } from "vuex";
 import client from '@/assets/icons/client.svg'
 import chef from '@/assets/icons/chef.svg'
 import empty from '@/assets/icons/empty.svg'
 export default {
   components: {
-    'right-bar': RightBar
+    'right-bar': RightBar,
+    OrderMapDetailCard
   },
   data () {
     return {
@@ -104,7 +67,10 @@ export default {
       route: {
         stop: true,
         coords: []
-      }
+      },
+      order: null,
+      client: null,
+      routedCouriers: []
     }
   },
   mounted() {
@@ -113,31 +79,83 @@ export default {
     this.$store.dispatch('getVendors', {
       no_page: true
     })
-    this.$store.dispatch('getOneRoute')
+    this.$store.dispatch('getOrders', { status: 'map' })
   },
   computed: {
-    ...mapGetters(['courierLocations', 'dataVendors'])
+    ...mapGetters(['courierLocations', 'dataVendors', 'oneRoute'])
   },
   methods: {
-    getOneRoute () {
-      console.log('salom')
+    closeRouteDetails () {
+      this.order = null
+      this.client = null
+      this.routedCouriers = []
+      this.$router.push({ name: this.$route.name })
+      console.log(this.routedCouriers)
     },
-    iconGenerator (image) {
+    routeSetterOnCourier (e) {
+      this.routedCouriers = []
+      this.courierLocations.forEach(el => {
+        const _user_coords = e.user_address.longitude + ',' + e.user_address.latitude
+        this.$store.dispatch('getOneRoute', `${_user_coords}~${el.location[0].longitude + ',' + el.location[0].latitude}`).then(res => {
+          this.routedCouriers.push({
+            ...el,
+            route: res
+          })
+        })
+      })
+    },
+    selectedItem (e) {
+      // Example location for routing '69.289203,41.321352~69.28024,41.313705'
+      this.client = null
+      this.routedCouriers = null
+      const _coords = `${e.user_address.longitude + ',' + e.user_address.latitude}~${e.vendor.longitude + ',' + e.vendor.latitude}`
+      this.$store.dispatch('getOneRoute', _coords).then(res => {
+        this.order = {
+          ...e,
+          route: res
+        }
+        this.client = {
+          id: e.id,
+          longitude: e.user_address.longitude,
+          latitude: e.user_address.latitude,
+          name: e.user.first_name + ' ' + e.user.last_name
+        }
+      })
+      this.routeSetterOnCourier(e)
+    },
+    iconGenerator (image, content) {
       return {
         layout: 'default#imageWithContent',
         imageHref: image,
         imageSize: [43, 43],
         imageOffset: [0, 0],
         // content: '123 v12',
-        contentOffset: [0, 15],
-        // contentLayout: '<div style="background: red; width: 50px; color: #FFFFFF; font-weight: bold;">$[properties.iconContent]</div>'
+        contentOffset: [-60, 44],
+        contentLayout: content ? `<div class="marker_content">
+            <div><span class="iconsminds-clock marker orange"></span>${content.duration.text}</div>
+            <div class="ml-1"><span class="iconsminds-scooter marker blue" style="font-size: 18px"></span>${content.distance.text}</div>
+        </div>` : ''
       }
     }
+  },
+  destroyed() {
+    this.$router.push({ name: this.$route.name })
   }
 }
 </script>
 
 <style>
+.marker_content {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  background: white;
+  padding: 5px;
+  border-radius: 4px;
+  width: 150px;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  /*font-weight: bold;*/
+}
 .ymaps-2-1-79-controls__toolbar_right {
   margin-right: 45px !important;
   /*position: absolute !important;*/

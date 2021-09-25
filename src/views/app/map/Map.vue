@@ -36,32 +36,7 @@ export default {
         couriers: [],
         route: null
       },
-      cookers: [
-        [41.367250, 69.285450],
-        [41.352607, 69.288931],
-        [41.317424, 69.280236],
-        [41.343303, 69.305773],
-        [41.324419, 69.301903],
-        [41.321352, 69.289203],
-        [41.314956, 69.299522],
-        [41.315629, 69.287863]
-      ],
-      couriers: [
-        [41.358062, 69.275527],
-        [41.339381, 69.260325],
-        [41.330396, 69.283734],
-        [41.315159, 69.289003],
-        [41.311251, 69.268272],
-        [41.307083, 69.294877]
-      ],
       courierWay: way,
-      home_coords: [
-        [41.324174, 69.290130],
-        [41.324759, 69.290031],
-        [41.325001, 69.289160],
-        [41.325194, 69.287582],
-        [41.325534, 69.282935]
-      ],
       coordinates: [ 41.312947, 69.280204 ],
       homeIcon: homeIcon,
       cookerIcon: cookerIcon
@@ -72,9 +47,6 @@ export default {
       if (val > 136) this.vector = -1
       if (val < 1) this.vector = 1
     }
-  },
-  mounted() {
-
   },
   methods: {
     clickedMap (e) {
@@ -246,16 +218,16 @@ export default {
       this.map.geoObjects.add(multiRoute);
     },
     drawPointers () {
-      this.homePoint()
-      this.cookers.forEach((e, i) => {
-        this.cookerPoint(e, `Vendor ${ i + 1 }`)
-      })
+      // this.homePoint()
+      // this.cookers.forEach((e, i) => {
+      //   this.cookerPoint(e, `Vendor ${ i + 1 }`)
+      // })
       // this.couriers.forEach((e, i) => {
       //   this.courierPoint(e, `Courier ${ i + 1 }`)
       // })
-      this.$store.getters.courierLocations.forEach(e => {
-        this.courierPoint(e, e.name)
-      })
+      // this.$store.getters.courierLocations.forEach(e => {
+      //   this.courierPoint(e, e.name)
+      // })
       this.oneRouteCreator({
         coords: [
           [41.321352, 69.289203],

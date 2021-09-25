@@ -126,14 +126,14 @@ const data = [
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: []
   },
-  // {
-  //   id: "maps2",
-  //   icon: "simple-icon-map",
-  //   label: "menu.maps2",
-  //   to: `${adminRoot}/maps2`,
-  //   // roles: [UserRole.Admin, UserRole.Editor],
-  //   subs: []
-  // },
+  {
+    id: "maps2",
+    icon: "simple-icon-map",
+    label: "menu.maps2",
+    to: `${adminRoot}/maps2`,
+    // roles: [UserRole.Admin, UserRole.Editor],
+    subs: []
+  },
   {
     id: "settings",
     icon: "simple-icon-settings",
