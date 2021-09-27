@@ -2,10 +2,12 @@
 
 .dropzone {
     min-height: 115px;
-    border: 1px solid $separator-color;
+    //border: 1px solid $separator-color;
     background: $input-background;
+    box-shadow: 0 1px 15px rgba(0, 0, 0, 0.04), 0 1px 6px rgba(0, 0, 0, 0.04);
     padding: 10px 10px;
-    border-radius: $border-radius;
+    border-radius: 10px;
+    border: none;
     color: $primary-color;
     height: auto;
 

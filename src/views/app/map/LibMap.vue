@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative;">
-    <yandex-map :coords="center" :zoom="15" class="yandexMap" map-type="map" :controls="['zoomControl', 'fullscreenControl', 'trafficControl']">
+    <yandex-map  :coords="center" :zoom="15" class="yandexMap" map-type="map" :controls="['zoomControl', 'fullscreenControl', 'trafficControl']">
       <ymap-marker
         v-for="cr in courierLocations"
         :marker-id="'courier' + cr.location[0].id"
@@ -10,6 +10,7 @@
         :icon="iconGenerator(icons.empty)"
       ></ymap-marker>
       <ymap-marker
+        v-if="routeMode"
         v-for="cr in routedCouriers"
         :marker-id="'courier_routed' + cr.location[0].id"
         :key="'courier_routed' + cr.location[0].id"
@@ -62,6 +63,7 @@ export default {
         chef,
         empty
       },
+      routeMode: false,
       rightBar: false,
       center: [41.312947, 69.280204],
       route: {
@@ -82,13 +84,15 @@ export default {
     this.$store.dispatch('getOrders', { status: 'map' })
   },
   computed: {
-    ...mapGetters(['courierLocations', 'dataVendors', 'oneRoute'])
+    ...mapGetters(['courierLocations', 'dataVendors', 'oneRoute', 'copyCourierLocations'])
   },
   methods: {
     closeRouteDetails () {
       this.order = null
       this.client = null
+      this.routeMode = false
       this.routedCouriers = []
+      // this.$store.dispatch('showCourierLocation')
       this.$router.push({ name: this.$route.name })
       console.log(this.routedCouriers)
     },
@@ -96,6 +100,7 @@ export default {
       this.routedCouriers = []
       this.courierLocations.forEach(el => {
         const _user_coords = e.user_address.longitude + ',' + e.user_address.latitude
+        // debugger
         this.$store.dispatch('getOneRoute', `${_user_coords}~${el.location[0].longitude + ',' + el.location[0].latitude}`).then(res => {
           this.routedCouriers.push({
             ...el,
@@ -103,11 +108,14 @@ export default {
           })
         })
       })
+      setTimeout(() => {
+        this.routeMode = true
+      }, 500)
     },
     selectedItem (e) {
       // Example location for routing '69.289203,41.321352~69.28024,41.313705'
       this.client = null
-      this.routedCouriers = null
+      // debugger
       const _coords = `${e.user_address.longitude + ',' + e.user_address.latitude}~${e.vendor.longitude + ',' + e.vendor.latitude}`
       this.$store.dispatch('getOneRoute', _coords).then(res => {
         this.order = {
@@ -121,6 +129,7 @@ export default {
           name: e.user.first_name + ' ' + e.user.last_name
         }
       })
+      // this.$store.dispatch('hiddenCourierLocation')
       this.routeSetterOnCourier(e)
     },
     iconGenerator (image, content) {

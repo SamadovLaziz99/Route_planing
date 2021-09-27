@@ -178,6 +178,11 @@ export default {
       console.log(res)
       this.foodImage = (res.media && res.media.length > 0) ? this.$imgProxy(res.media[0].url, '500x350') : this.defImage
     })
+    this.$store.dispatch('getOrders', {
+      food_id: this.$route.params.id
+    }).then(res => {
+      console.log(res)
+    })
   }
 };
 </script>

@@ -21,24 +21,73 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <template v-if="!load">
-          <list-page-listing
-            ref="listPageListing"
-            :displayMode="displayMode"
+        <b-card :title="$t(`menu.foods_collection`)">
+          <b-table
+            hover
             :items="items"
-            :selectedItems="selectedItems"
-            :lastPage="Math.ceil(pagination.total / 15)"
-            :perPage="15"
-            :page="pagination.page"
-            :changePage="changePage"
-            :handleContextMenu="handleContextMenu"
-            :onContextMenuAction="onContextMenuAction"
-            @view="viewItem"
-          ></list-page-listing>
-        </template>
-        <template v-else>
-          <div class="loading"></div>
-        </template>
+            :fields="fields"
+            :busy="load"
+          >
+            <template #table-busy>
+              <div class="text-center text-primary my-2">
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+            <template #cell(action)="row">
+              <div style="display: flex">
+                <div class="glyph-icon simple-icon-eye mr-2" @click="$router.push({ name: 'food_detail', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="$router.push({ name: 'food_update', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+              </div>
+            </template>
+            <template #cell(image)="row">
+                <img class="food_img" :src="row.item.img" :alt="row.item.name">
+            </template>
+            <template #cell(category)="row">
+              <div>{{ row.item.category ? row.item.category.name[$lang] : '' }}</div>
+            </template>
+            <template #cell(unit)="row">
+              <div>{{ row.item.unit ? row.item.unit.name[$lang] : '' }}</div>
+            </template>
+            <template #cell(vendor)="row">
+              <div>{{ row.item.vendor ? row.item.vendor.user.first_name + ' ' + row.item.vendor.user.last_name : '' }}</div>
+            </template>
+<!--            <template #cell(status)="row">-->
+<!--              <b-badge pill variant="primary">Pending</b-badge>-->
+<!--            </template>-->
+<!--            <template #cell(created_at)="row">-->
+<!--              {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}-->
+<!--            </template>-->
+<!--            <template #cell(selection)="{ rowSelected }">-->
+<!--              <template v-if="rowSelected">-->
+<!--                <div class="glyph-icon simple-icon-check"></div>-->
+<!--              </template>-->
+<!--              <template v-else>-->
+<!--                &lt;!&ndash;          <div class="glyph-icon simple-icon-user"></div>&ndash;&gt;-->
+<!--              </template>-->
+<!--            </template>-->
+          </b-table>
+          <Pagination v-if="pagination.total > 15" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePage"/>
+        </b-card>
+<!--        <template v-if="!load">-->
+<!--          <list-page-listing-->
+<!--            ref="listPageListing"-->
+<!--            :displayMode="displayMode"-->
+<!--            :items="items"-->
+<!--            :selectedItems="selectedItems"-->
+<!--            :lastPage="Math.ceil(pagination.total / 15)"-->
+<!--            :perPage="15"-->
+<!--            :page="pagination.page"-->
+<!--            :changePage="changePage"-->
+<!--            :handleContextMenu="handleContextMenu"-->
+<!--            :onContextMenuAction="onContextMenuAction"-->
+<!--            @view="viewItem"-->
+<!--          ></list-page-listing>-->
+<!--        </template>-->
+<!--        <template v-else>-->
+<!--          <div class="loading"></div>-->
+<!--        </template>-->
       </b-colxx>
     </b-row>
     <error-page v-else :error="error"/>
@@ -51,14 +100,17 @@ import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import { mapGetters } from "vuex";
 import { actions, getters } from "../../../utils/store_schema";
+import Pagination from "../../../components/TableComponents/Pagination";
 import {imageProxy} from "../../../utils";
+import moment from "moment";
 const _page = 'food'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
-    'foods-card': FoodsCard
+    'foods-card': FoodsCard,
+    Pagination
   },
   data() {
     return {
@@ -80,7 +132,57 @@ export default {
       from: 0,
       to: 0,
       filters: null,
-      selectedItems: []
+      fields: [
+        {
+          key: 'image',
+          label: 'Image'
+        },
+        {
+          key: 'name',
+          label: 'Name',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'category',
+          label: 'Category',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'unit',
+          label: 'Unit',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'vendor',
+          label: 'Vendor',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'price',
+          label: 'Price',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'sale_price',
+          label: 'Sale Price',
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'preparation_time',
+          label: 'Preparation Time',
+          // tdClass: 'firstColumn'
+        },
+        // {
+        //   key: 'created_at',
+        //   label: 'Registration date',
+        //   tdClass: 'text-muted'
+        // },
+        {
+          key: 'action',
+          label: 'Action',
+          // tdClass: 'thirdRow'
+        }
+      ],
     };
   },
   watch: {
@@ -97,22 +199,22 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          img: e.media.length > 0 ? imageProxy(e.media[0].url, '150x110') : undefined,
-          routes: {
-            view: {
-              name: 'food_detail',
-              params: {
-                id: e.id
-              }
-            },
-            edit: {
-              name: 'food_update',
-              params: {
-                id: e.id
-              }
-            }
-          },
-          action: ['view', 'edit', 'delete']
+          img: e.image ? imageProxy(e.image, '120x90') : undefined,
+          // routes: {
+          //   view: {
+          //     name: 'food_detail',
+          //     params: {
+          //       id: e.id
+          //     }
+          //   },
+          //   edit: {
+          //     name: 'food_update',
+          //     params: {
+          //       id: e.id
+          //     }
+          //   }
+          // },
+          // action: ['view', 'edit', 'delete']
         }
       })
     }
@@ -129,6 +231,7 @@ export default {
     this.getData()
   },
   methods: {
+    moment,
     filterChanging (val) {
       this.filters = val
       this.page = 1
@@ -238,5 +341,8 @@ export default {
   .custom-control-label:hover {
     background: #fff8f0;
   }
+}
+.food_img {
+  border-radius: 10px;
 }
 </style>

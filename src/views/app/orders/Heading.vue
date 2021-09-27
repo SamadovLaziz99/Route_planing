@@ -2,39 +2,9 @@
   <b-row>
     <b-colxx xxs="12">
       <h1>{{ title }}</h1>
-      <div class="top-right-button-container">
-<!--        <b-button-->
-<!--          v-b-modal.modalright-->
-<!--          variant="primary"-->
-<!--          size="lg"-->
-<!--          class="top-right-button"-->
-<!--        >{{ $t('pages.add-new') }}</b-button>-->
-        <!--        <b-button-group>-->
-        <!--          <b-dropdown split right @click="selectAll(true)" class="check-button" variant="primary">-->
-        <!--            <label-->
-        <!--              class="custom-control custom-checkbox pl-4 mb-0 d-inline-block"-->
-        <!--              slot="button-content"-->
-        <!--            >-->
-        <!--              <input-->
-        <!--                class="custom-control-input"-->
-        <!--                type="checkbox"-->
-        <!--                :checked="isSelectedAll"-->
-        <!--                v-shortkey="{select: ['ctrl','a'], undo: ['ctrl','d']}"-->
-        <!--                @shortkey="keymap"-->
-        <!--              />-->
-        <!--              <span-->
-        <!--                :class="{-->
-        <!--                'custom-control-label' :true,-->
-        <!--                'indeterminate' : isAnyItemSelected-->
-        <!--                }"-->
-        <!--              >&nbsp;</span>-->
-        <!--            </label>-->
-        <!--            <b-dropdown-item>{{$t('pages.delete')}}</b-dropdown-item>-->
-        <!--            <b-dropdown-item>{{$t('pages.another-action')}}</b-dropdown-item>-->
-        <!--          </b-dropdown>-->
-        <!--        </b-button-group>-->
-      </div>
-      <add-new-modal :categories="categories" :statuses="statuses"></add-new-modal>
+<!--      <div class="top-right-button-container">-->
+<!--      </div>-->
+<!--      <add-new-modal :categories="categories" :statuses="statuses"></add-new-modal>-->
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
         <b-button
@@ -45,44 +15,49 @@
           {{ $t('pages.display-options') }}
           <i class="simple-icon-arrow-down align-middle" />
         </b-button>
-        <b-collapse id="displayOptions" class="d-md-block">
-          <div class="d-block d-md-inline-block pt-1">
-            <b-dropdown
-              id="ddown1"
-              :text="`${$t('pages.orderby')} ${sort.label}`"
-              variant="outline-dark"
-              class="mr-1 float-md-left btn-group"
-              size="xs"
-            >
-              <b-dropdown-item
-                v-for="(order,index) in sortOptions"
-                :key="index"
-                @click="changeOrderBy(order)"
-              >{{ order.label }}</b-dropdown-item>
-            </b-dropdown>
-            <div class="search-sm d-inline-block float-md-left mr-1 align-top">
-              <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />
-            </div>
-            <div v-if="!rangepicker" class="d-inline-block float-md-left mr-1 align-top">
-              <DateRangePicker placeholder="Start Date" secondPlaceholder="End Date" @input="changeDatePicker" rangeSeparator="~" v-model="date" :dayStr="['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"/>
-            </div>
-          </div>
-          <div class="float-md-right pt-1">
-            <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>
+<!--        <b-collapse id="displayOptions" class="d-md-block">-->
+<!--          <div class="d-block d-md-inline-block pt-1">-->
 <!--            <b-dropdown-->
-<!--              id="ddown2"-->
-<!--              right-->
-<!--              :text="`${perPage}`"-->
+<!--              id="ddown1"-->
+<!--              :text="`${$t('pages.orderby')} ${sort.label}`"-->
 <!--              variant="outline-dark"-->
-<!--              class="d-inline-block"-->
+<!--              class="mr-1 float-md-left btn-group"-->
 <!--              size="xs"-->
 <!--            >-->
 <!--              <b-dropdown-item-->
-<!--                v-for="(size,index) in pageSizes"-->
+<!--                v-for="(order,index) in sortOptions"-->
 <!--                :key="index"-->
-<!--                @click="changePageSize(size)"-->
-<!--              >{{ size }}</b-dropdown-item>-->
+<!--                @click="changeOrderBy(order)"-->
+<!--              >{{ order.label }}</b-dropdown-item>-->
 <!--            </b-dropdown>-->
+<!--            <div class="search-sm d-inline-block float-md-left mr-1 align-top">-->
+<!--              <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />-->
+<!--            </div>-->
+<!--            <div v-if="!rangepicker" class="d-inline-block float-md-left mr-1 align-top">-->
+<!--              <DateRangePicker placeholder="Start Date" secondPlaceholder="End Date" @input="changeDatePicker" rangeSeparator="~" v-model="date" :dayStr="['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"/>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="float-md-right pt-1">-->
+<!--            <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>-->
+<!--&lt;!&ndash;            <b-dropdown&ndash;&gt;-->
+<!--&lt;!&ndash;              id="ddown2"&ndash;&gt;-->
+<!--&lt;!&ndash;              right&ndash;&gt;-->
+<!--&lt;!&ndash;              :text="`${perPage}`"&ndash;&gt;-->
+<!--&lt;!&ndash;              variant="outline-dark"&ndash;&gt;-->
+<!--&lt;!&ndash;              class="d-inline-block"&ndash;&gt;-->
+<!--&lt;!&ndash;              size="xs"&ndash;&gt;-->
+<!--&lt;!&ndash;            >&ndash;&gt;-->
+<!--&lt;!&ndash;              <b-dropdown-item&ndash;&gt;-->
+<!--&lt;!&ndash;                v-for="(size,index) in pageSizes"&ndash;&gt;-->
+<!--&lt;!&ndash;                :key="index"&ndash;&gt;-->
+<!--&lt;!&ndash;                @click="changePageSize(size)"&ndash;&gt;-->
+<!--&lt;!&ndash;              >{{ size }}</b-dropdown-item>&ndash;&gt;-->
+<!--&lt;!&ndash;            </b-dropdown>&ndash;&gt;-->
+<!--          </div>-->
+<!--        </b-collapse>-->
+        <b-collapse id="displayOptions" class="d-md-block">
+          <div class="d-md-inline-block pt-1 w-100">
+            <slot></slot>
           </div>
         </b-collapse>
       </div>
@@ -97,7 +72,7 @@ import {
   ImageListIcon
 } from "../../../components/Svg";
 import AddNewModal from "../../../containers/pages/AddNewModal";
-import { DateRangePicker } from '@livelybone/vue-datepicker'
+// import { DateRangePicker } from '@livelybone/vue-datepicker'
 import '@livelybone/vue-datepicker/lib/css/index.css'
 export default {
   components: {
@@ -105,7 +80,7 @@ export default {
     "thumb-list-icon": ThumbListIcon,
     "image-list-icon": ImageListIcon,
     "add-new-modal": AddNewModal,
-    DateRangePicker
+    // DateRangePicker
   },
   props: [
     "title",
@@ -128,53 +103,20 @@ export default {
   ],
   data() {
     return {
-      categories: [
-        {
-          label: "Cakes",
-          value: "Cakes"
-        },
-        {
-          label: "Cupcakes",
-          value: "Cupcakes"
-        },
-        {
-          label: "Desserts",
-          value: "Desserts"
-        }
-      ],
-      statuses: [
-        {
-          text: "ON HOLD",
-          value: "ON HOLD"
-        },
-        {
-          text: "PROCESSED",
-          value: "PROCESSED"
-        }
-      ],
-      sortOptions: [
-        {
-          column: "title",
-          label: "Product Name"
-        },
-        {
-          column: "category",
-          label: "Category"
-        },
-        {
-          column: "status",
-          label: "Status"
-        }
-      ],
       date: [],
-      pageSizes: [5, 10, 20]
+      filters: {
+        vendor: null
+      }
     };
   },
   methods: {
-    changeDatePicker (e) {
-      this.date = e
-    }
-  }
+    // changeDatePicker (e) {
+    //   this.date = e
+    // },
+  },
+  // mounted() {
+  //   this.$store.dispatch('getVendors')
+  // }
 };
 </script>
 <style>

@@ -6,13 +6,37 @@
           :title="$t('menu.orders_list')"
           :rangepicker="true"
           :changeOrderBy="changeOrderBy"
-          :sort="sort"
           :searchChange="searchChange"
           :from="from"
           :to="to"
           :total="pagination.total"
           :perPage="15"
-        ></list-page-heading>
+        >
+          <b-row style="padding: 0 10px">
+            <b-colxx xxs="12" md="2">
+                              <v-select v-if="$route.name === 'order_list'" v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
+            </b-colxx>
+            <b-colxx xxs="12" md="2">
+                              <v-select v-if="$route.name === 'order_list'" v-model="filters.food" @input="changeFood" style="width: 100%" class="mb-2" :options="foods" :placeholder="$t('foods')"/>
+            </b-colxx>
+            <b-colxx xxs="12" md="2">
+                              <v-select v-if="$route.name === 'order_list'" v-model="filters.courier" @input="changeCouriers" style="width: 100%" class="mb-2" :options="couriers" :placeholder="$t('couriers')"/>
+            </b-colxx>
+            <b-colxx xxs="12" md="2">
+                              <v-select v-if="$route.name === 'order_list'" v-model="filters.payment_type" @input="changePaymentType" style="width: 100%" class="mb-2" :options="payment_types" :placeholder="$t('payment_type')"/>
+            </b-colxx>
+            <b-colxx xxs="12" md="3">
+              <div class="d-inline-block mb-2 float-md-left align-top w-100">
+                <b-input v-if="$route.name === 'order_list'" class="search_input" :placeholder="$t('menu.search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search" v-model="filters.search"  />
+              </div>
+            </b-colxx>
+            <b-colxx xxs="12" md="1">
+              <div class="float-md-right pt-1">
+                <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ pagination.total }}</span>
+              </div>
+            </b-colxx>
+          </b-row>
+        </list-page-heading>
         <b-tabs card v-model="activeTab" @input="changeTabs">
           <b-tab style="padding: 0.6rem" v-for="tab in orderStats" :key="tab.name">
             <template #title>
@@ -29,7 +53,11 @@
             :items="data"
             :fields="fields"
             :busy="load"
+            show-empty
           >
+            <template #empty>
+              <EmptyBox style="margin-top: 50px"/>
+            </template>
             <template #table-busy>
               <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
@@ -46,6 +74,9 @@
             </template>
             <template #cell(time)="{ item }">
               {{ moment(item.created_at).format('YYYY-MM-DD HH:mm') }}
+            </template>
+            <template #cell(id)="{ item }">
+              <div>#{{ item.id }}</div>
             </template>
             <template #cell(delivery_time)="{ item }">
               {{ moment(item.delivery_time).format('YYYY-MM-DD HH:mm') }}
@@ -69,7 +100,9 @@
 import ListPageHeading from "./Heading";
 import Pagination from "../../../components/TableComponents/Pagination";
 import { actions, getters } from "../../../utils/store_schema";
+import EmptyBox from "../../../components/EmptyBox";
 import { mapGetters } from "vuex";
+import debounce from "debounce";
 import moment from "moment";
 const _page = 'orders'
 const { get, getById } = actions(_page)
@@ -77,26 +110,20 @@ const { get, getById } = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
-    Pagination
+    Pagination,
+    EmptyBox
     // TableSimple
   },
   data() {
+    this.search = debounce(this.search, 800)
     return {
       activeTab: 0,
-      isLoad: false,
-      sort: {
-        column: "title",
-        label: "Product Name"
-      },
-      search: "",
-      // order.all
-      // order.pending
-      // order.accepted
-      // order.in_process
-      // order.shipping
-      // order.finished
-      // order.cancelled
       fields: [
+        {
+          key: 'id',
+          label: 'Id',
+          tdClass: 'firstColumn'
+        },
         {
           key: 'customer',
           label: 'Customer',
@@ -148,11 +175,54 @@ export default {
       ],
       page: 1,
       from: 0,
-      to: 0
+      to: 0,
+      payment_types: [
+        {
+          label: 'Cash',
+          value: 'cash'
+        },
+        {
+          label: 'Card',
+          value: 'card'
+        }
+      ],
+      filters: {
+        type: 'pending',
+        search: null,
+        vendor: null,
+        food: null,
+        courier: null,
+        payment_type: null
+      }
     };
   },
   methods: {
     moment,
+    search (e) {
+      this.page = 1
+      this.routePusher()
+      this.getData()
+    },
+    changeVendor (e) {
+      this.page = 1
+      this.routePusher()
+      this.getData()
+    },
+    changeFood (e) {
+      this.page = 1
+      this.routePusher()
+      this.getData()
+    },
+    changeCouriers (e) {
+      this.page = 1
+      this.routePusher()
+      this.getData()
+    },
+    changePaymentType (e) {
+      this.page = 1
+      this.routePusher()
+      this.getData()
+    },
     changePagination (e) {
       this.page = e
       this.getData()
@@ -160,10 +230,16 @@ export default {
     changeTabs (e) {
       this.findRoutesWithKey(e)
     },
-    routePusher (query) {
+    routePusher () {
+      let _query = { ...this.$route.query }
+      _query.food_id = this.filters.food?.value,
+      _query.courier_id = this.filters.courier?.value,
+      _query.vendor_id = this.filters.vendor?.value,
+      _query.q = this.filters.search,
+      _query.payment_type = this.filters.payment_type?.value
       this.$router.push({
         name: this.name,
-        query: query
+        query: _query
       }).catch(() => {})
     },
     changeActiveTab(e) {
@@ -173,7 +249,11 @@ export default {
       let _query = { ...this.$route.query }
       _query.type = type
       this.page = 1
-      this.routePusher(_query)
+      this.filters.type = type
+      this.$router.push({
+        name: this.name,
+        query:_query
+      }).catch(() => {})
       this.getData()
     },
     findRoutesWithKey (key) {
@@ -230,15 +310,6 @@ export default {
         default: break;
       }
     },
-    // changePageSize(limit) {
-    //   this.pagination.page = 1
-    //   this.pagination.limit = limit
-    //   let _query = { ...this.$route.query }
-    //   _query.page = 1
-    //   _query.limit = limit
-    //   this.routePusher(_query)
-    //
-    // },
     changeOrderBy(sort) {
       this.sort = sort;
     },
@@ -247,10 +318,14 @@ export default {
       this.page = 1;
     },
     getData () {
-      this.$store.dispatch('getOrderStats')
       this.$store.dispatch(get, {
         page: this.page,
-        status: this.$route.query.type
+        status: this.$route.query.type,
+        food_id: this.filters.food?.value,
+        vendor_id: this.filters.vendor?.value,
+        courier_id: this.filters.courier?.value,
+        q: this.filters.search,
+        payment_type: this.filters.payment_type?.value
       }).then(res => {
         console.log(res)
         console.log(this.pagination)
@@ -261,31 +336,60 @@ export default {
   },
   computed: {
     ...mapGetters(getters(_page)),
-    ...mapGetters(['orderStats'])
-  },
-  watch: {
-    search() {
-      this.page = 1;
+    ...mapGetters(['orderStats', 'dataVendors', 'dataFood', 'dataCouriers']),
+    vendors () {
+      return this.dataVendors.map(e => {
+        const { first_name, last_name } = e.user
+        return {
+          label: first_name + ' ' + last_name,
+          value: e.id
+        }
+      })
     },
+    foods () {
+      return this.dataFood.map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
+    couriers () {
+      return this.dataCouriers.map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    }
   },
-  mounted() {
+  watch: {},
+  async mounted() {
+    const _query = this.$route.query
+    await this.$store.dispatch('getVendors')
+    await this.$store.dispatch('getFood')
+    await this.$store.dispatch('getCouriers')
+    this.$store.dispatch('getOrderStats')
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
       _page = this.$route.hash.slice(this.$route.hash.length - 1)
       this.page = parseInt(_page)
     }
-    const { type } = this.$route.query
-    if (!type) {
-      this.$router.push({ name: this.$route.name, query: { type: 'pending' } })
-      this.getData()
-    } else {
+    console.log(_query)
+    if (_query) {
+      const { food_id, courier_id, vendor_id, q, type, payment_type } = _query
+      this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
+      this.filters.vendor = this.vendors.filter(e => e.value === parseInt(vendor_id))[0]
+      this.filters.courier = this.couriers.filter(e => e.value === parseInt(courier_id))[0]
+      this.filters.payment_type = this.payment_types.filter(e => e.value === parseInt(payment_type))[0]
+      this.filters.search = q
+      this.filters.type = type
       setTimeout(() => {
         this.findTabsWithType(type)
         this.getData()
       }, 100)
     }
-    // this.loadItems();
   }
 };
 </script>

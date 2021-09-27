@@ -73,7 +73,7 @@ export default {
         id: res.id
       })
     },
-    setDefaultImage (file, url) {
+      setDefaultImage (file, url) {
       this.$refs.myVueDropzone.manuallyAddFile(file, url)
     },
     removeFile (file, error, xhr) {

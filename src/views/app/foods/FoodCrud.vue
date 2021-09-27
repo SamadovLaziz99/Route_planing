@@ -274,15 +274,15 @@ export default {
         }
         console.log(res)
         setTimeout(() => {
-          if (res.media && res.media.length) {
+          if (res.media && res.media.length > 0) {
             res.media.forEach(e => {
-              if (!e.small_size_url)
+              // if (!e.small_size_url)
               this.$refs.dropzone.setDefaultImage({
                 size: e.size, name: e.path, type: e.mime_type, id: e.id
               }, e.url)
             })
           }
-        }, 100)
+        }, 200)
       })
     }
     this.getCategories()

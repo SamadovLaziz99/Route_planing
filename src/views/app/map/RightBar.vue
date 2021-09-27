@@ -68,7 +68,9 @@ export default {
     tabChange (e) {
       console.log(e)
       if (e === 0 && this.dataOrders && !this.dataOrders.length) {
-
+        this.$store.dispatch('getOrders', {
+          status: 'map'
+        })
       }
     },
     clicked (id, item) {

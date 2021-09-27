@@ -43,6 +43,7 @@ const routes = [
         children: [
           {
             path: "list",
+            name: 'order_list',
             component: () => import("./views/app/orders/List"),
             children: []
           },
