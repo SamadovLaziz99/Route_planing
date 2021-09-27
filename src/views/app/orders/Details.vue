@@ -169,7 +169,7 @@
 </template>
 
 <script>
-import BestSellers from "../../../containers/dashboards/BestSellers";
+// import BestSellers from "../../../containers/dashboards/BestSellers";
 import Cakes from "../../../containers/dashboards/Cakes";
 import ConversionRatesChartCard from "../../../containers/dashboards/ConversionRatesChartCard";
 import IconCardsCarousel from "./DetailsCard";
@@ -185,7 +185,7 @@ import { blogCategories } from "../../../data/blog";
 export default {
   components: {
     Tables,
-    "best-sellers": BestSellers,
+    // "best-sellers": BestSellers,
     cakes: Cakes,
     "converconversion-rates-chart-card": ConversionRatesChartCard,
     "icon-cards-carousel": IconCardsCarousel,

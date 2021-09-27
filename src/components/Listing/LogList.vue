@@ -3,13 +3,13 @@
     <tbody>
         <tr v-for="(log, index) in logs" :log="log" :key="index">
             <td>
-                <span :class="`log-indicator align-middle ${log.color}`" />
+                <span :class="`log-indicator align-middle border-theme-1`" />
             </td>
             <td>
-                <span class="font-weight-medium">{{ log.label }}</span>
+                <span class="font-weight-medium">{{ log.food__category__name[$lang] }}</span>
             </td>
             <td class="text-right">
-                <span class="text-muted">{{ log.time }}</span>
+                <span class="text-muted">{{ log.count }}</span>
             </td>
         </tr>
     </tbody>

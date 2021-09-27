@@ -1,18 +1,18 @@
 <template>
   <div class="icon-cards-row">
     <glide-component :settings="glideIconsOption">
-      <icon-card :title="$t('dashboards.pending-orders')" icon="iconsminds-clock" :value="14" />
+      <icon-card :title="$t('active_users')" icon="simple-icon-user" :value="stats.active_users" />
       <icon-card
-        :title="$t('dashboards.completed-orders')"
-        icon="iconsminds-basket-coins"
-        :value="32"
+        :title="$t('all_couriers')"
+        icon="iconsminds-scooter"
+        :value="stats.all_couriers"
       />
       <icon-card
-        :title="$t('dashboards.refund-requests')"
-        icon="iconsminds-arrow-refresh"
-        :value="74"
+        :title="$t('all_users')"
+        icon="simple-icon-people"
+        :value="stats.all_users"
       />
-      <icon-card :title="$t('dashboards.new-comments')" icon="iconsminds-mail-read" :value="25" />
+      <icon-card :title="$t('all_vendors')" icon="iconsminds-chef-hat" :value="stats.all_vendors" />
     </glide-component>
   </div>
 </template>
@@ -21,6 +21,7 @@ import GlideComponent from "../../components/Carousel/GlideComponent";
 import IconCard from "../../components/Cards/IconCard";
 
 export default {
+  props: ['stats'],
   components: {
     "glide-component": GlideComponent,
     "icon-card": IconCard

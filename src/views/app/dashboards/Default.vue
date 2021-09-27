@@ -8,36 +8,49 @@
     </b-row>
     <b-row>
       <b-colxx xl="6" lg="12">
-        <icon-cards-carousel></icon-cards-carousel>
+        <transition name="fade">
+          <icon-cards-carousel v-if="statsTop" :stats="statsTop"></icon-cards-carousel>
+        </transition>
         <b-row>
           <b-colxx md="12" class="mb-4">
-            <sales-chart-card></sales-chart-card>
+            <transition name="fade">
+              <sales-chart-card v-if="statsWeek && statsMonth && chartOff" :title="orderStatsWeek ? 'Week' : 'Month'" :chart-data="orderStatsWeek ? statsWeek : statsMonth" @changeStatus="changeOrderStatus"></sales-chart-card>
+            </transition>
           </b-colxx>
         </b-row>
       </b-colxx>
       <b-colxx lg="12" xl="6" class="mb-4">
-        <recent-orders></recent-orders>
+        <transition name="fade">
+          <recent-orders v-if="statsFoods" :items="statsFoods"></recent-orders>
+        </transition>
       </b-colxx>
     </b-row>
     <b-row>
       <b-colxx lg="4" md="12" class="mb-4">
-        <product-categories-polar-area></product-categories-polar-area>
+<!--        <product-categories-polar-area></product-categories-polar-area>-->
+        <transition name="fade">
+          <tickets v-if="statsVendors" name="Vendors" :items="statsVendors"></tickets>
+        </transition>
       </b-colxx>
       <b-colxx lg="4" md="6" class="mb-4">
-        <logs></logs>
+        <transition name="fade">
+          <logs v-if="statsCategories" name="Categories" :items="statsCategories"></logs>
+        </transition>
       </b-colxx>
       <b-colxx lg="4" md="6" class="mb-4">
-        <tickets></tickets>
+        <transition name="fade">
+          <tickets v-if="statsUsers" name="Users" :items="statsUsers"></tickets>
+        </transition>
       </b-colxx>
     </b-row>
-    <b-row>
-      <b-colxx xl="6" lg="12" class="mb-4">
-        <calendar></calendar>
-      </b-colxx>
-      <b-colxx xl="6" lg="12" class="mb-4">
-        <best-sellers :title="$t('dashboards.best-sellers')"></best-sellers>
-      </b-colxx>
-    </b-row>
+<!--    <b-row>-->
+<!--      <b-colxx xl="6" lg="12" class="mb-4">-->
+<!--        <calendar></calendar>-->
+<!--      </b-colxx>-->
+<!--      <b-colxx xl="6" lg="12" class="mb-4">-->
+<!--        <best-sellers :title="$t('dashboards.best-sellers')"></best-sellers>-->
+<!--      </b-colxx>-->
+<!--    </b-row>-->
 <!--    <b-row>-->
 <!--      <b-colxx sm="12" lg="4" class="mb-4">-->
 <!--        <profile-statuses></profile-statuses>-->
@@ -124,6 +137,7 @@ import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import SortableStaticticsRow from "../../../containers/dashboards/SortableStaticticsRow";
 import TopRatedItems from "../../../containers/dashboards/TopRatedItems";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -145,6 +159,42 @@ export default {
     "website-visit-chart-card": WebsiteVisitsChartCard,
     "gradient-card": GradientCard,
     "gradient-with-radial-progress-card": GradientWithRadialProgressCard
+  },
+  data () {
+    return {
+      orderStatsWeek: true,
+      chartOff: true
+    }
+  },
+  computed: {
+    ...mapGetters(['statsCategories', 'statsFoods', 'statsMonth', 'statsTop', 'statsUsers', 'statsVendors', 'statsWeek'])
+  },
+  methods: {
+    changeOrderStatus (e) {
+      console.log(e)
+      this.chartOff = false
+      this.orderStatsWeek = (e === 'Week')
+      setTimeout(() => {
+        this.chartOff = true
+      })
+    }
+  },
+  mounted() {
+    this.$store.dispatch('statsCategories')
+    this.$store.dispatch('statsFoods')
+    this.$store.dispatch('statsMonth')
+    this.$store.dispatch('statsTop')
+    this.$store.dispatch('statsUsers')
+    this.$store.dispatch('statsVendors')
+    this.$store.dispatch('statsWeek')
   }
 };
 </script>
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

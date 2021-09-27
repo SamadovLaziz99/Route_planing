@@ -17,6 +17,7 @@ import socket from "./modules/socket";
 import location from "./modules/location";
 import universal from "./modules/universal";
 import yandex from "./modules/yandex";
+import statistics from "./modules/statistics";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -47,6 +48,7 @@ export default new Vuex.Store({
     socket,
     location,
     yandex,
+    statistics,
     categories: crud('categories'),
     foods: crud('food'),
     units: crud('units'),

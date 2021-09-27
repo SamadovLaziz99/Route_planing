@@ -6,9 +6,9 @@
       :settings="{ suppressScrollX: true, wheelPropagation: false }"
     >
       <recent-order-item
-        v-for="(order,index) in products.slice(0,6)"
-        :order="order"
-        detail-path="#"
+        v-for="(item,index) in items"
+        :order="item"
+        :detail-path="{ name: 'food_detail', params: { id: item.food } }"
         :key="index"
       />
     </vue-perfect-scrollbar>
@@ -19,6 +19,7 @@ import RecentOrderItem from "../../components/Listing/RecentOrderItem";
 import products from "../../data/products";
 
 export default {
+  props: ['items'],
   components: {
     "recent-order-item": RecentOrderItem
   },

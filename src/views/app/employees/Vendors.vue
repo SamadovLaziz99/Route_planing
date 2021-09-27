@@ -143,7 +143,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          img: e.media.length > 0 ? imageProxy(e.media[0].url, '150x85') : undefined,
+          img: e.image ? imageProxy(e.image, '150x85') : undefined,
           routes: {
             edit: {
               name: 'vendor_update',

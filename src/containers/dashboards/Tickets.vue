@@ -1,13 +1,16 @@
 <template>
-  <b-card :title="$t('dashboards.tickets')">
+  <b-card :title="$t(name)">
     <vue-perfect-scrollbar
       class="scroll dashboard-list-with-user"
       :settings="{ suppressScrollX: true, wheelPropagation: false }"
     >
       <list-with-user-item
-        v-for="(ticket, index) in tickets"
+        v-for="(ticket, index) in items"
         :data="ticket"
-        detail-path="#"
+        :detail-path="ticket.vendor ? {
+          name: 'vendor-detail',
+          params: { id: ticket.vendor }
+        } : '#'"
         :key="index"
       />
     </vue-perfect-scrollbar>
@@ -18,6 +21,7 @@ import ListWithUserItem from "../../components/Listing/ListWithUserItem";
 import tickets from "../../data/tickets";
 
 export default {
+  props: ['name', 'items'],
   components: {
     "list-with-user-item": ListWithUserItem
   },
