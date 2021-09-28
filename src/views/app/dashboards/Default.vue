@@ -43,6 +43,10 @@
         </transition>
       </b-colxx>
     </b-row>
+    <div v-if="!statsFoods && !statsCategories && !statsMonth && !statsTop && !statsUsers && !statsWeek && !statsVendors" class="text-center text-primary my-2">
+      <b-spinner class="align-middle"></b-spinner>
+      <strong>Loading...</strong>
+    </div>
 <!--    <b-row>-->
 <!--      <b-colxx xl="6" lg="12" class="mb-4">-->
 <!--        <calendar></calendar>-->

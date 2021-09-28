@@ -17,9 +17,9 @@
                 <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('position')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model="form.position"/>
-              </b-form-group>
+<!--              <b-form-group :label="$t('position')" class="has-float-label mb-4">-->
+<!--                <b-form-input type="number" v-model="form.position"/>-->
+<!--              </b-form-group>-->
             </b-form>
           </div>
           <div slot="action">
@@ -146,9 +146,9 @@ export default {
           required
         }
       },
-      position: {
-        required
-      }
+      // position: {
+      //   required
+      // }
     }
   },
   mixins: [validationMixin],
@@ -226,7 +226,7 @@ export default {
           id: this.form.id,
           data: {
             name: this.form.name,
-            position: parseInt(this.form.position)
+            position: this.form.position ? parseInt(this.form.position) : ((this.page - 1) * 15 + (this.items.length < 15 ? (this.items.length + 1) : 1))
           }
         }).then(res => {
           this.$refs.crudModal.hideModal()
@@ -300,6 +300,17 @@ export default {
       this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
+        res.forEach((e, i) => {
+          if (e.position !== (i + 1)) {
+            this.$store.dispatch(put, {
+              id: e.id,
+              data: {
+                name: e.name,
+                position: i + 1
+              }
+            })
+          }
+        })
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })
