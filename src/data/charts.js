@@ -20,21 +20,21 @@ export const lineChartData = {
   ]
 }
 
-export const polarAreaChartData = {
-  labels: ['Cakes', 'Desserts', 'Cupcakes'],
-  datasets: [
-    {
-      data: [80, 90, 70],
-      borderWidth: 2,
-      borderColor: [colors.themeColor1, colors.themeColor2, colors.themeColor3],
-      backgroundColor: [
-        colors.themeColor1_10,
-        colors.themeColor2_10,
-        colors.themeColor3_10
-      ]
-    }
-  ]
-}
+  export const polarAreaChartData = {
+    labels: ['Cakes', 'Desserts', 'Cupcakes'],
+    datasets: [
+      {
+        data: [80, 90, 70],
+        borderWidth: 2,
+        borderColor: [colors.themeColor1, colors.themeColor2, colors.themeColor3],
+        backgroundColor: [
+          colors.themeColor1_10,
+          colors.themeColor2_10,
+          colors.themeColor3_10
+        ]
+      }
+    ]
+  }
 
 export const areaChartData = {
   labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],

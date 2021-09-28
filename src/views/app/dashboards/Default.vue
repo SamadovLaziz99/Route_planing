@@ -14,32 +14,45 @@
         <b-row>
           <b-colxx md="12" class="mb-4">
             <transition name="fade">
-              <sales-chart-card v-if="statsWeek && statsMonth && chartOff" :title="orderStatsWeek ? 'Week' : 'Month'" :chart-data="orderStatsWeek ? statsWeek : statsMonth" @changeStatus="changeOrderStatus"></sales-chart-card>
+              <sales-chart-card v-if="statsWeek && statsMonth && chartOff" :title="orderStatsWeek ? $t('weekly') : $t('monthly')" :chart-data="orderStatsWeek ? statsWeek : statsMonth" @changeStatus="changeOrderStatus"></sales-chart-card>
             </transition>
           </b-colxx>
         </b-row>
       </b-colxx>
       <b-colxx lg="12" xl="6" class="mb-4">
         <transition name="fade">
-          <recent-orders v-if="statsFoods" :items="statsFoods"></recent-orders>
+          <recent-orders v-if="statsFoods" :items="statsFoods" name="top_foods"></recent-orders>
         </transition>
       </b-colxx>
     </b-row>
     <b-row>
       <b-colxx lg="4" md="12" class="mb-4">
-<!--        <product-categories-polar-area></product-categories-polar-area>-->
+        <product-categories-polar-area v-if="statsCategories" :name="$t('top_categories')" :items="statsCategories.toplist"></product-categories-polar-area>
+<!--        <transition name="fade">-->
+<!--          <tickets v-if="statsVendors" name="Vendors" :items="statsVendors"></tickets>-->
+<!--        </transition>-->
+      </b-colxx>
+      <b-colxx lg="4" md="6" class="mb-4">
         <transition name="fade">
-          <tickets v-if="statsVendors" name="Vendors" :items="statsVendors"></tickets>
+          <logs v-if="statsCategories" name="orders_by_categories" :items="statsCategories.all"></logs>
         </transition>
       </b-colxx>
       <b-colxx lg="4" md="6" class="mb-4">
         <transition name="fade">
-          <logs v-if="statsCategories" name="Categories" :items="statsCategories"></logs>
+          <tickets v-if="statsUsers" name="top_users" :items="statsUsers"></tickets>
         </transition>
       </b-colxx>
-      <b-colxx lg="4" md="6" class="mb-4">
+    </b-row>
+    <b-row>
+      <b-colxx xl="6" lg="12" class="mb-4">
         <transition name="fade">
-          <tickets v-if="statsUsers" name="Users" :items="statsUsers"></tickets>
+          <best-sellers v-if="statsVendors" :title="$t('top_vendors')" :items="statsVendors"></best-sellers>
+        </transition>
+      </b-colxx>
+      <b-colxx xl="6" lg="12" class="mb-4">
+        <transition name="fade">
+          <calendar v-if="statsVendors"></calendar>
+<!--          <best-sellers v-if="statsVendors" :title="$t('top_vendors')" :items="statsVendors"></best-sellers>-->
         </transition>
       </b-colxx>
     </b-row>
@@ -47,14 +60,6 @@
       <b-spinner class="align-middle"></b-spinner>
       <strong>Loading...</strong>
     </div>
-<!--    <b-row>-->
-<!--      <b-colxx xl="6" lg="12" class="mb-4">-->
-<!--        <calendar></calendar>-->
-<!--      </b-colxx>-->
-<!--      <b-colxx xl="6" lg="12" class="mb-4">-->
-<!--        <best-sellers :title="$t('dashboards.best-sellers')"></best-sellers>-->
-<!--      </b-colxx>-->
-<!--    </b-row>-->
 <!--    <b-row>-->
 <!--      <b-colxx sm="12" lg="4" class="mb-4">-->
 <!--        <profile-statuses></profile-statuses>-->
@@ -183,14 +188,15 @@ export default {
       })
     }
   },
-  mounted() {
-    this.$store.dispatch('statsCategories')
-    this.$store.dispatch('statsFoods')
-    this.$store.dispatch('statsMonth')
-    this.$store.dispatch('statsTop')
-    this.$store.dispatch('statsUsers')
-    this.$store.dispatch('statsVendors')
-    this.$store.dispatch('statsWeek')
+  async mounted() {
+    await this.$store.dispatch('statsTop')
+    await this.$store.dispatch('statsFoods')
+    await this.$store.dispatch('statsWeek')
+    await this.$store.dispatch('statsMonth')
+    await this.$store.dispatch('statsCategories')
+    await this.$store.dispatch('statsUsers')
+    await this.$store.dispatch('statsVendors')
+
   }
 };
 </script>

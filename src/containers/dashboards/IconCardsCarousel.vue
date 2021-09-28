@@ -7,12 +7,12 @@
         icon="iconsminds-scooter"
         :value="stats.all_couriers"
       />
+      <icon-card :title="$t('all_vendors')" icon="iconsminds-chef-hat" :value="stats.all_vendors" />
       <icon-card
         :title="$t('all_users')"
         icon="simple-icon-people"
         :value="stats.all_users"
       />
-      <icon-card :title="$t('all_vendors')" icon="iconsminds-chef-hat" :value="stats.all_vendors" />
     </glide-component>
   </div>
 </template>

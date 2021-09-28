@@ -1,9 +1,9 @@
 <template>
-  <b-card :title="$t('dashboards.sales')">
+  <b-card :title="$t('sales')">
     <template #header>
-      <b-dropdown style="position: absolute; right: 4%; top: 5%" variant="primary" right :text="title">
-        <b-dropdown-item @click="changeStatus('Week')"> Week </b-dropdown-item>
-        <b-dropdown-item @click="changeStatus('Month')"> Month </b-dropdown-item>
+      <b-dropdown style="position: absolute; right: 4%; top: 8%" variant="primary" right :text="title">
+        <b-dropdown-item @click="changeStatus('Week')"> {{ $t('weekly') }} </b-dropdown-item>
+        <b-dropdown-item @click="changeStatus('Month')"> {{ $t('monthly') }} </b-dropdown-item>
       </b-dropdown>
     </template>
     <div class="dashboard-line-chart">
@@ -21,12 +21,6 @@ export default {
   props: ['chartData', 'title'],
   components: {
     "line-chart": LineChart
-  },
-  data() {
-    return {
-      // lineChartData
-      // status: 'Week'
-    };
   },
   computed: {
     chart () {

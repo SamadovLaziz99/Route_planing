@@ -6,10 +6,10 @@
     <div class="pl-3 pr-2">
         <router-link :to="detailPath">
             <p class="font-weight-medium mb-0 ">{{ data.vendor__user__first_name || data.user__first_name }} {{ data.vendor__user__last_name || data.user__last_name }}</p>
-            <p v-if="data.sales_count" class="text-muted mb-0 text-small">Sales: {{ data.sales_count }}</p>
-            <p v-if="data.order_count" class="text-muted mb-0 text-small">Order Count: {{ data.order_count }}</p>
-            <p v-if="data.total_sum" class="text-muted mb-0 text-small">Salary: {{ data.total_sum }}</p>
-            <p v-if="data.user__created_at" class="text-muted mb-0 text-small">Reg date: {{ moment(data.user__created_at).format('YYYY-MM-DD') }}</p>
+            <p v-if="data.sales_count" class="text-muted mb-0 text-small">{{ $t('sales') }}: {{ data.sales_count }}</p>
+            <p v-if="data.order_count" class="text-muted mb-0 text-small">{{ $t('orders_count') }}: {{ data.order_count }}</p>
+            <p v-if="data.total_sum" class="text-muted mb-0 text-small">{{ $t('salary') }}: {{ data.total_sum }}</p>
+            <p v-if="data.user__created_at" class="text-muted mb-0 text-small">{{ $t('reg.date') }}: {{ moment(data.user__created_at).format('YYYY-MM-DD') }}</p>
         </router-link>
     </div>
 </div>

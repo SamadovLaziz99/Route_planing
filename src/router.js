@@ -55,6 +55,7 @@ const routes = [
           },
           {
             path: "history",
+            name: "order_history",
             component: () => import("./views/app/orders/History"),
             children: []
           },

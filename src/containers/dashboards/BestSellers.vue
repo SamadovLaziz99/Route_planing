@@ -1,60 +1,59 @@
 <template>
   <b-card :title="title">
-    <vuetable
-      ref="vuetable"
-      :api-url="bestsellers.apiUrl"
-      :fields="bestsellers.fields"
-      :per-page="6"
-      pagination-path
-      @vuetable:pagination-data="onPaginationData"
-    ></vuetable>
-    <vuetable-pagination-bootstrap
-      ref="pagination"
-      @vuetable-pagination:change-page="onChangePage"
-    />
+    <vue-perfect-scrollbar
+      class="scroll"
+      style="height: 500px"
+      :settings="{ suppressScrollX: true, wheelPropagation: false }"
+    >
+      <vuetable
+        ref="vuetable"
+        :data="items"
+        :fields="bestsellers.fields"
+        :api-mode="false"
+      >
+      </vuetable>
+    </vue-perfect-scrollbar>
   </b-card>
 </template>
 <script>
 import Vuetable from "vuetable-2/src/components/Vuetable";
-import VuetablePaginationBootstrap from "../../components/Common/VuetablePaginationBootstrap";
-import { apiUrl } from "../../constants/config";
+// import VuetablePaginationBootstrap from "../../components/Common/VuetablePaginationBootstrap";
+// import { apiUrl } from "../../constants/config";
 
 export default {
-  props: ["title"],
+  props: ["title", "items"],
   components: {
     vuetable: Vuetable,
-    "vuetable-pagination-bootstrap": VuetablePaginationBootstrap
+    // "vuetable-pagination-bootstrap": VuetablePaginationBootstrap
   },
   data() {
     return {
       bestsellers: {
-        apiUrl: apiUrl + "/cakes/fordatatable",
+        // apiUrl: apiUrl + "/cakes/fordatatable",
         fields: [
           {
-            name: "title",
-            sortField: "title",
-            title: "Name",
+            name: "vendor__user__first_name",
+            title: "First Name",
             titleClass: "",
             dataClass: "list-item-heading"
           },
           {
-            name: "sales",
-            sortField: "sales",
+            name: "vendor__user__last_name",
+            title: "Last Name",
+            titleClass: "",
+            dataClass: "text-muted"
+          },
+          {
+            name: "sales_count",
+            // sortField: "stock",
             title: "Sales",
             titleClass: "",
             dataClass: "text-muted"
           },
           {
-            name: "stock",
-            sortField: "stock",
-            title: "Stock",
-            titleClass: "",
-            dataClass: "text-muted"
-          },
-          {
-            name: "category",
-            sortField: "category",
-            title: "Category",
+            name: "total_sum",
+            // sortField: "category",
+            title: "Total",
             titleClass: "",
             dataClass: "text-muted"
           },
@@ -63,13 +62,13 @@ export default {
     };
   },
   methods: {
-    onPaginationData(paginationData) {
-      this.$refs.pagination.setPaginationData(paginationData);
-    },
-    onChangePage(page) {
-      console.log(page)
-      this.$refs.vuetable.changePage(page);
-    }
+    // onPaginationData(paginationData) {
+    //   this.$refs.pagination.setPaginationData(paginationData);
+    // },
+    // onChangePage(page) {
+    //   console.log(page)
+    //   this.$refs.vuetable.changePage(page);
+    // }
   }
 };
 </script>

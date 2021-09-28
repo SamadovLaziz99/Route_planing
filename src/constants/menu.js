@@ -20,13 +20,25 @@ const data = [
       {
         icon: "iconsminds-shop-4",
         label: "menu.orders_list",
-        to: `${adminRoot}/orders/list`,
+        to: {
+          name: 'order_list',
+          query: {
+            type: 'pending'
+          }
+        }
+        // to: `${adminRoot}/orders/list`,
         // roles: [UserRole.Admin],
       },
       {
         icon: "iconsminds-cash-register-2",
         label: "menu.orders_history",
-        to: `${adminRoot}/orders/history`,
+        to: {
+          name: 'order_history',
+          query: {
+            type: 'finished'
+          }
+        }
+        // to: `${adminRoot}/orders/history`,
         // roles: [UserRole.Admin],
       },
       {

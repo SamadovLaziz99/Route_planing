@@ -1,5 +1,5 @@
 <template>
-  <b-card :title="$t('dashboards.recent-orders')">
+  <b-card :title="$t(name)">
     <b-refresh-button @click="refreshButtonClick" />
     <vue-perfect-scrollbar
       class="scroll dashboard-list-with-thumbs"
@@ -19,7 +19,7 @@ import RecentOrderItem from "../../components/Listing/RecentOrderItem";
 import products from "../../data/products";
 
 export default {
-  props: ['items'],
+  props: ['items', 'name'],
   components: {
     "recent-order-item": RecentOrderItem
   },

@@ -364,11 +364,11 @@ export default {
     }
   },
   watch: {},
-  async mounted() {
+  mounted() {
     const _query = this.$route.query
-    await this.$store.dispatch('getVendors')
-    await this.$store.dispatch('getFood')
-    await this.$store.dispatch('getCouriers')
+    this.$store.dispatch('getVendors', { no_page: true })
+    this.$store.dispatch('getFood')
+    this.$store.dispatch('getCouriers')
     this.$store.dispatch('getOrderStats')
     const _hash = this.$route.hash
     let _page;
@@ -376,7 +376,6 @@ export default {
       _page = this.$route.hash.slice(this.$route.hash.length - 1)
       this.page = parseInt(_page)
     }
-    console.log(_query)
     if (_query) {
       const { food_id, courier_id, vendor_id, q, type, payment_type } = _query
       this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
