@@ -545,7 +545,7 @@ const routes = [
 const router = new VueRouter({
   linkActiveClass: "active",
   routes,
-  mode: "hash",
+  mode: "history",
 });
 router.beforeEach(NewGuard);
 export default router;
