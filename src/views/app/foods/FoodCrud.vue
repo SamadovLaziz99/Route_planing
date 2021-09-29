@@ -4,14 +4,14 @@
       <div v-if="!loadOne">
         <b-row>
           <b-colxx xxs="12">
-            <h1>Food {{ id ? $t('update') : $t('create') }}</h1>
+            <h1>{{ $t('food') }} {{ id ? $t('update') : $t('create') }}</h1>
             <piaf-breadcrumb/>
           </b-colxx>
         </b-row>
         <b-form @submit.prevent="submit" class="av-tooltip tooltip-right-bottom">
           <b-row>
             <b-colxx xxs="12" md="8">
-              <b-card :title="$t('forms.basic')" class="mb-4">
+              <b-card :title="id ? $t('form.edition') : $t('form.creation')" class="mb-4">
                 <b-row>
                   <div class="lang-tabs">
                     <!--              <b-colxx xxs="12" md="12">-->
@@ -125,14 +125,14 @@
                   <b-colxx xxs="12" md="4" class="mb-2">
                     <div class="d-flex justify-content-between">
                       <div class="d-flex mt-2">
-                        <span>Status</span>
+                        <span>{{ $t('status') }}</span>
                         <b-form-group class="ml-2">
                           <switches v-model="form.active" theme="custom" color="primary-inverse"
                                     class="vue-switcher-small"></switches>
                         </b-form-group>
                       </div>
                       <div class="d-flex mt-2">
-                        <span>Cola Combo</span>
+                        <span>{{ $t('cola_combo') }}</span>
                         <b-form-group class="ml-2">
                           <switches v-model="form.cola_combo" theme="custom" color="primary-inverse"
                                     class="vue-switcher-small"></switches>

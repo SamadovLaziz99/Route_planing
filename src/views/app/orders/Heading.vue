@@ -1,20 +1,20 @@
 <template>
   <b-row>
     <b-colxx xxs="12">
-      <h1>{{ title }}</h1>
-<!--      <div class="top-right-button-container">-->
-<!--      </div>-->
-<!--      <add-new-modal :categories="categories" :statuses="statuses"></add-new-modal>-->
+      <h1 class="ml-xs-2">{{ title }}</h1>
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
-        <b-button
-          variant="empty"
-          class="pt-0 pl-0 d-inline-block d-md-none"
-          v-b-toggle.displayOptions
-        >
-          {{ $t('pages.display-options') }}
-          <i class="simple-icon-arrow-down align-middle" />
-        </b-button>
+        <div class="d-flex justify-content-between">
+          <div></div>
+          <b-button
+            variant="primary"
+            class="d-inline-block d-md-none mr-2"
+            v-b-toggle.displayOptions
+          >
+            {{ $t('filters') }}
+            <i class="simple-icon-arrow-down align-middle" />
+          </b-button>
+        </div>
 <!--        <b-collapse id="displayOptions" class="d-md-block">-->
 <!--          <div class="d-block d-md-inline-block pt-1">-->
 <!--            <b-dropdown-->
@@ -55,7 +55,7 @@
 <!--&lt;!&ndash;            </b-dropdown>&ndash;&gt;-->
 <!--          </div>-->
 <!--        </b-collapse>-->
-        <b-collapse id="displayOptions" class="d-md-block">
+        <b-collapse id="displayOptions" class="d-md-block mt-2">
           <div class="d-md-inline-block pt-1 w-100">
             <slot></slot>
           </div>

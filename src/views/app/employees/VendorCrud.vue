@@ -4,14 +4,14 @@
       <div v-if="!loadOne">
         <b-row>
           <b-colxx xxs="12">
-            <h1>Vendor {{ id ? $t('update') : $t('create') }}</h1>
+            <h1>{{ $t('vendor') }} {{ id ? $t('update') : $t('create') }}</h1>
             <piaf-breadcrumb/>
           </b-colxx>
         </b-row>
         <b-form @submit.prevent="submit" class="av-tooltip tooltip-right-bottom">
           <b-row>
             <b-colxx xxs="12" md="8">
-              <b-card :title="$t('forms.basic')" class="mb-4">
+              <b-card :title="id ? $t('vendor.update') : $t('vendor.create')" class="mb-4">
                 <b-row>
 
                   <b-colxx xxs="12" md="12">
@@ -85,21 +85,21 @@
                   <b-colxx xxs="12" md="12" class="mb-2">
                     <div class="d-flex justify-content-between">
                       <div class="d-flex mt-2">
-                        <span>Verified</span>
+                        <span>{{ $t('verified') }}</span>
                         <b-form-group class="ml-2">
                           <switches v-model="form.verified" theme="custom" color="primary-inverse"
                                     class="vue-switcher-small"></switches>
                         </b-form-group>
                       </div>
                       <div class="d-flex mt-2">
-                        <span>Status</span>
+                        <span>{{ $t('status') }}</span>
                         <b-form-group class="ml-2">
                           <switches v-model="form.active" theme="custom" color="primary-inverse"
                                     class="vue-switcher-small"></switches>
                         </b-form-group>
                       </div>
                       <div class="d-flex mt-2">
-                        <span>Cola sponsor</span>
+                        <span>{{ $t('cola_sponsor') }}</span>
                         <b-form-group class="ml-2">
                           <switches v-model="form.cola_sponsor" theme="custom" color="primary-inverse"
                                     class="vue-switcher-small"></switches>
@@ -121,7 +121,7 @@
               <b-card :title="$t('location')" class="mb-4">
                 <yandex-map @click="clickMap" :coords="coords" :zoom="12" class="map-item" map-type="map"
                             :controls="['zoomControl']">
-                  <ymap-marker marker-id="123" :coords="coords" hint-content="Vendor point"></ymap-marker>
+                  <ymap-marker marker-id="123" :coords="coords" :hint-content="$t('vendor.point')"></ymap-marker>
                 </yandex-map>
               </b-card>
               <dropzone ref="dropzone" v-if="$route.params.id" :media="{ id: $route.params.id, type: 'image' }"/>

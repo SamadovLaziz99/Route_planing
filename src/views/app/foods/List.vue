@@ -21,73 +21,44 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.foods_collection`)">
-          <b-table
-            hover
-            :items="items"
-            :fields="fields"
-            :busy="load"
-          >
-            <template #table-busy>
-              <div class="text-center text-primary my-2">
-                <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
-              </div>
-            </template>
-            <template #cell(action)="row">
-              <div style="display: flex">
-                <div class="glyph-icon simple-icon-eye mr-2" @click="$router.push({ name: 'food_detail', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="$router.push({ name: 'food_update', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-              </div>
-            </template>
-            <template #cell(image)="row">
+        <b-card :title="$t(`menu.foods_list`)">
+<!--          <div class="all_table w-100">-->
+            <b-table
+              hover
+              :items="items"
+              :fields="fields"
+              :busy="load"
+              responsive
+            >
+              <template #table-busy>
+                <div class="text-center text-primary my-2">
+                  <b-spinner class="align-middle"></b-spinner>
+                  <strong>{{ $t('loading') }}...</strong>
+                </div>
+              </template>
+              <template #cell(action)="row">
+                <div style="display: flex">
+                  <div class="glyph-icon simple-icon-eye mr-2" @click="$router.push({ name: 'food_detail', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                  <div class="glyph-icon simple-icon-pencil mr-2" @click="$router.push({ name: 'food_update', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                  <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                </div>
+              </template>
+              <template #cell(image)="row">
                 <img class="food_img" :src="row.item.img" :alt="row.item.name">
-            </template>
-            <template #cell(category)="row">
-              <div>{{ row.item.category ? row.item.category.name[$lang] : '' }}</div>
-            </template>
-            <template #cell(unit)="row">
-              <div>{{ row.item.unit ? row.item.unit.name[$lang] : '' }}</div>
-            </template>
-            <template #cell(vendor)="row">
-              <div>{{ row.item.vendor ? row.item.vendor.user.first_name + ' ' + row.item.vendor.user.last_name : '' }}</div>
-            </template>
-<!--            <template #cell(status)="row">-->
-<!--              <b-badge pill variant="primary">Pending</b-badge>-->
-<!--            </template>-->
-<!--            <template #cell(created_at)="row">-->
-<!--              {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}-->
-<!--            </template>-->
-<!--            <template #cell(selection)="{ rowSelected }">-->
-<!--              <template v-if="rowSelected">-->
-<!--                <div class="glyph-icon simple-icon-check"></div>-->
-<!--              </template>-->
-<!--              <template v-else>-->
-<!--                &lt;!&ndash;          <div class="glyph-icon simple-icon-user"></div>&ndash;&gt;-->
-<!--              </template>-->
-<!--            </template>-->
-          </b-table>
-          <Pagination v-if="pagination.total > 15" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePage"/>
+              </template>
+              <template #cell(category)="row">
+                <div>{{ row.item.category ? row.item.category.name[$lang] : '' }}</div>
+              </template>
+              <template #cell(unit)="row">
+                <div>{{ row.item.unit ? row.item.unit.name[$lang] : '' }}</div>
+              </template>
+              <template #cell(vendor)="row">
+                <div>{{ row.item.vendor ? row.item.vendor.user.first_name + ' ' + row.item.vendor.user.last_name : '' }}</div>
+              </template>
+            </b-table>
+            <Pagination v-if="pagination.total > 15" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePage"/>
+<!--          </div>-->
         </b-card>
-<!--        <template v-if="!load">-->
-<!--          <list-page-listing-->
-<!--            ref="listPageListing"-->
-<!--            :displayMode="displayMode"-->
-<!--            :items="items"-->
-<!--            :selectedItems="selectedItems"-->
-<!--            :lastPage="Math.ceil(pagination.total / 15)"-->
-<!--            :perPage="15"-->
-<!--            :page="pagination.page"-->
-<!--            :changePage="changePage"-->
-<!--            :handleContextMenu="handleContextMenu"-->
-<!--            :onContextMenuAction="onContextMenuAction"-->
-<!--            @view="viewItem"-->
-<!--          ></list-page-listing>-->
-<!--        </template>-->
-<!--        <template v-else>-->
-<!--          <div class="loading"></div>-->
-<!--        </template>-->
       </b-colxx>
     </b-row>
     <error-page v-else :error="error"/>
@@ -135,51 +106,46 @@ export default {
       fields: [
         {
           key: 'image',
-          label: 'Image'
+          label: this.$t('image')
         },
         {
           key: 'name',
-          label: 'Name',
+          label: this.$t('name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'category',
-          label: 'Category',
+          label: this.$t('category'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'unit',
-          label: 'Unit',
+          label: this.$t('unit'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'vendor',
-          label: 'Vendor',
+          label: this.$t('vendor'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'price',
-          label: 'Price',
+          label: this.$t('price'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'sale_price',
-          label: 'Sale Price',
+          label: this.$t('sale_price'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'preparation_time',
-          label: 'Preparation Time',
-          // tdClass: 'firstColumn'
+          label: this.$t('preparation_time'),
+          tdClass: 'firstColumn'
         },
-        // {
-        //   key: 'created_at',
-        //   label: 'Registration date',
-        //   tdClass: 'text-muted'
-        // },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           // tdClass: 'thirdRow'
         }
       ],
@@ -199,22 +165,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          img: e.image ? imageProxy(e.image, '120x90') : undefined,
-          // routes: {
-          //   view: {
-          //     name: 'food_detail',
-          //     params: {
-          //       id: e.id
-          //     }
-          //   },
-          //   edit: {
-          //     name: 'food_update',
-          //     params: {
-          //       id: e.id
-          //     }
-          //   }
-          // },
-          // action: ['view', 'edit', 'delete']
+          img: e.image ? imageProxy(e.image, '120x90') : undefined
         }
       })
     }

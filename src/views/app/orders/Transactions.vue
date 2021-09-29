@@ -5,26 +5,28 @@
         <list-page-heading
           :title="$t('menu.transactions')"
           :displayMode="'list'"
-          :sortOptions="sortOptions"
-          :changeOrderBy="changeOrderBy"
-          :sort="sort"
           :searchChange="searchChange"
           :from="from"
           :to="to"
           :total="pagination.total"
           :perPage="15"
-        ></list-page-heading>
+        >
+          <div class="float-md-right pt-1">
+            <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} of {{ pagination.total }}</span>
+          </div>
+        </list-page-heading>
         <b-card :title="$t(`menu.transactions`)">
           <b-table
             hover
             :items="items"
             :fields="fields"
             :busy="load"
+            responsive
           >
             <template #table-busy>
-              <div class="text-center text-danger my-2">
+              <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="row">
@@ -75,55 +77,30 @@ export default {
       fields: [
         {
           key: 'external_id',
-          label: 'External Id',
+          label: this.$t('external_id'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'state',
-          label: 'State',
+          label: this.$t('state'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'pay_date',
-          label: 'Pay date',
-          // tdClass: 'firstColumn'
+          label: this.$t('pay_date'),
+          tdClass: 'w-25'
         },
         {
           key: 'create_date',
-          label: 'Create date',
-          // tdClass: 'firstColumn'
+          label: this.$t('create_date'),
+          tdClass: 'w-25'
         },
-        {
-          key: 'action',
-          label: 'Action',
-          // tdClass: 'thirdRow'
-        }
-      ],
-      sort: {},
-      sortOptions: [
-        {
-          column: "name",
-          label: "Name"
-        },
-        {
-          column: "position",
-          label: "Position"
-        }
       ],
       page: 1,
       search: "",
       from: 0,
       to: 0,
-      selectedItems: []
     };
-  },
-  watch: {
-    foods (e) {
-      console.log(e)
-    },
-    'form.active': function (val) {
-      console.log(val)
-    }
   },
   computed: {
     ...mapGetters(getters(_page)),
@@ -136,91 +113,9 @@ export default {
   },
   methods: {
     moment,
-    submit() {
-      this.$v.$touch();
-      this.isValidCustom = true
-      console.log(this.$v)
-      if (this.$v.$invalid) {
-        this.activeTab = 0
-      }
-      if (this.form.foods.length < 1) {
-        this.activeTab = 1
-      }
-      if (!this.$v.$invalid && this.form.foods.length > 0) {
-        const _form = { ...this.form }
-        delete _form.id
-        _form.category_id = this.form.category?.value
-        _form.position = parseInt(this.form.position)
-        _form.food_ids = this.form.foods
-        delete _form.foods
-        this.$store.dispatch(this.form.id ? put : post, {
-          id: this.form.id,
-          data: _form
-        }).then(res => {
-          this.$refs.crudModal.hideModal()
-          this.getData()
-        })
-      }
-    },
-    viewItem (id) {
-      console.log(id)
-    },
-    editItem (id) {
-      this.$bvModal.show('crudModal')
-      this.$store.dispatch(getById, id).then(res => {
-        const e = res.media[0]
-        setTimeout(() => {
-          this.$refs.dropzoneBanner.setDefaultImage({
-            size: e.size, name: e.path, type: e.mime_type, id: e.id
-          }, e.url)
-        }, 0)
-        this.form = {
-          id: res.id,
-          name: res.name,
-          foods: res.foods.map(e => e.id),
-          position: res.position,
-          active: res.active,
-          category: {
-            label: res.category.name[this.$lang],
-            value: res.category.id
-          }
-        }
-      })
-    },
-    removeItem (id) {
-      this.$store.dispatch(remove, id).then(res => {
-        this.$store.commit('DELETE_MODAL', {
-          isShow: false,
-          data: {}
-        })
-        this.getData()
-      })
-    },
-    clear() {
-      this.$v.$reset()
-      this.form = {
-        id: null,
-        name: {
-          uz: '',
-          ru: '',
-          oz: ''
-        },
-        foods: [],
-        position: null,
-        active: true,
-        category: null
-      }
-    },
-    closed(e) {
-      this.clear()
-      console.log(e)
-    },
     changePagination(e) {
       this.page = e
       this.getData()
-    },
-    changeOrderBy(sort) {
-      this.sort = sort;
     },
     searchChange(val) {
       this.search = val;
@@ -241,32 +136,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.foods {
-  width: 100% !important;
-  border-radius: 10px;
-  margin: 5px 0;
-  .custom-control-label {
-    width: 100%;
-    cursor: pointer;
-    border-radius: 0.75rem !important;
-  }
-  .custom-control-label:hover {
-    background: aliceblue;
-  }
-}
-.activeFoods {
-  width: 100% !important;
-  border-radius: 10px;
-  margin: 5px 0;
-  .custom-control-label {
-    width: 100%;
-    cursor: pointer;
-    border-radius: 0.75rem !important;
-    background: #fff8f0;
-  }
-  .custom-control-label:hover {
-    background: #fff8f0;
-  }
-}
-</style>

@@ -5,7 +5,7 @@
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
           <div slot="content">
             <b-tabs v-if="!loadOne" fill content-class="tab-content" v-model="activeTab" nav-class="separator-tabs">
-              <b-tab title="MAIN">
+              <b-tab :title="$t('collection.main')">
                 <div class="mt-4"></div>
                 <b-form class="av-tooltip tooltip-right-bottom">
                   <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
@@ -32,8 +32,9 @@
                   </b-form-group>
                 </b-form>
               </b-tab>
-              <b-tab title="FOODS">
+              <b-tab :title="$t('collection.foods')">
                 <div class="mt-4"></div>
+                <b-form-input type="text" @change="searchFood" class="mb-3" :placeholder="$t('search')"/>
                 <vue-perfect-scrollbar
                   class="scroll dashboard-list-with-thumbs"
                   style="height: 470px !important;"
@@ -58,7 +59,7 @@
                   </b-form-group>
                 </vue-perfect-scrollbar>
               </b-tab>
-              <b-tab title="BANNER" v-if="form.id">
+              <b-tab :title="$t('collection.banner')" v-if="form.id">
                 <div style="margin: 20px 0">
                   <h4>Banner</h4>
                 </div>
@@ -90,7 +91,6 @@
           :title="$t('menu.foods_collection')"
           :displayMode="displayMode"
           :sortOptions="sortOptions"
-          :changeOrderBy="changeOrderBy"
           :sort="sort"
           :searchChange="searchChange"
           :from="from"
@@ -113,6 +113,7 @@
             :items="items"
             :fields="fields"
             :busy="load"
+            responsive
           >
             <template #table-busy>
               <div class="text-center text-danger my-2">
@@ -161,6 +162,7 @@ import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import Pagination from "../../../components/TableComponents/Pagination";
 import moment from "moment";
+import debounce from "debounce";
 import { mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
@@ -192,6 +194,7 @@ export default {
   },
   mixins: [validationMixin],
   data() {
+    this.searchFood = debounce(this.searchFood, 800)
     return {
       activeTab: 0,
       fields: [
@@ -353,6 +356,9 @@ export default {
         this.getData()
       })
     },
+    searchFood (e) {
+      console.log(e)
+    },
     clear() {
       this.$v.$reset()
       this.form = {
@@ -375,9 +381,6 @@ export default {
     changePagination(e) {
       this.page = e
       this.getData()
-    },
-    changeOrderBy(sort) {
-      this.sort = sort;
     },
     searchChange(val) {
       this.search = val;

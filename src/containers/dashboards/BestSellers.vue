@@ -2,7 +2,7 @@
   <b-card :title="title">
     <vue-perfect-scrollbar
       class="scroll"
-      style="height: 500px"
+      style="height: 500px;"
       :settings="{ suppressScrollX: true, wheelPropagation: false }"
     >
       <vuetable

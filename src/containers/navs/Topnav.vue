@@ -222,8 +222,8 @@ export default {
       notifications,
       isDarkActive: false,
       currentUser: {
-        title: 'Oybek Mukhiddinov',
-        img: 'https://mukhiddinov.uz/img/image9.dab66668.jpg'
+        title: 'John Doe',
+        img: 'https://presaveio.s3.amazonaws.com/uploads/NoImage/no_img.png'
       }
     };
   },

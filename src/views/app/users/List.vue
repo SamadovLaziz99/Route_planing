@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row v-if="!error">
-      <b-colxx class="disable-text-selection" style="padding: 0">
+      <b-colxx class="disable-text-selection">
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'user.update' : 'user.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
@@ -74,9 +74,10 @@
             :items="data"
             :fields="fields"
             :busy="load"
+            responsive
           >
             <template #table-busy>
-              <div class="text-center text-danger my-2">
+              <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
                 <strong>Loading...</strong>
               </div>
@@ -175,22 +176,22 @@ export default {
       fields: [
         {
           key: 'first_name',
-          label: 'First Name',
+          label: this.$t('first.name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'last_name',
-          label: 'Last Name',
+          label: this.$t('last.name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'email',
-          label: 'Email',
+          label: this.$t('email'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'phone',
-          label: 'Phone',
+          label: this.$t('phone'),
           // tdClass: 'firstColumn'
         },
         // {
@@ -205,12 +206,12 @@ export default {
         // },
         {
           key: 'created_at',
-          label: 'Registration date',
+          label: this.$t('reg.date'),
           tdClass: 'text-muted'
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           // tdClass: 'thirdRow'
         }
       ],

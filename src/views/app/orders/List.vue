@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row v-if="!error">
-      <b-colxx class="disable-text-selection" style="padding: 0">
+      <b-colxx class="disable-text-selection">
         <list-page-heading
           :title="$t('menu.orders_list')"
           :rangepicker="true"
@@ -14,25 +14,31 @@
         >
           <b-row style="padding: 0 10px">
             <b-colxx xxs="12" md="2">
-                              <v-select v-if="$route.name === 'order_list'" v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
+              <v-select v-if="$route.name === 'order_list'" v-model="filters.vendor" @input="changeVendor"
+                        style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
             </b-colxx>
             <b-colxx xxs="12" md="2">
-                              <v-select v-if="$route.name === 'order_list'" v-model="filters.food" @input="changeFood" style="width: 100%" class="mb-2" :options="foods" :placeholder="$t('foods')"/>
+              <v-select v-if="$route.name === 'order_list'" v-model="filters.food" @input="changeFood"
+                        style="width: 100%" class="mb-2" :options="foods" :placeholder="$t('foods')"/>
             </b-colxx>
             <b-colxx xxs="12" md="2">
-                              <v-select v-if="$route.name === 'order_list'" v-model="filters.courier" @input="changeCouriers" style="width: 100%" class="mb-2" :options="couriers" :placeholder="$t('couriers')"/>
+              <v-select v-if="$route.name === 'order_list'" v-model="filters.courier" @input="changeCouriers"
+                        style="width: 100%" class="mb-2" :options="couriers" :placeholder="$t('couriers')"/>
             </b-colxx>
             <b-colxx xxs="12" md="2">
-                              <v-select v-if="$route.name === 'order_list'" v-model="filters.payment_type" @input="changePaymentType" style="width: 100%" class="mb-2" :options="payment_types" :placeholder="$t('payment_type')"/>
+              <v-select v-if="$route.name === 'order_list'" v-model="filters.payment_type" @input="changePaymentType"
+                        style="width: 100%" class="mb-2" :options="payment_types" :placeholder="$t('payment_type')"/>
             </b-colxx>
             <b-colxx xxs="12" md="3">
               <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                <b-input v-if="$route.name === 'order_list'" class="search_input" :placeholder="$t('menu.search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search" v-model="filters.search"  />
+                <b-input v-if="$route.name === 'order_list'" class="search_input"
+                         :placeholder="$t('search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search"
+                         v-model="filters.search"/>
               </div>
             </b-colxx>
             <b-colxx xxs="12" md="1">
               <div class="float-md-right pt-1">
-                <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ pagination.total }}</span>
+                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} of {{ pagination.total }}</span>
               </div>
             </b-colxx>
           </b-row>
@@ -54,6 +60,7 @@
             :fields="fields"
             :busy="load"
             show-empty
+            responsive
           >
             <template #empty>
               <EmptyBox style="margin-top: 50px"/>
@@ -61,7 +68,7 @@
             <template #table-busy>
               <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="{ item }">
@@ -70,7 +77,7 @@
               </div>
             </template>
             <template #cell(status)="{ item }">
-              <b-badge pill :variant="badgeType(item.status)">{{ $t(item.status) }}</b-badge>
+              <b-badge pill :variant="badgeType(item.status)">{{ $t(`order.${item.status}`) }}</b-badge>
             </template>
             <template #cell(time)="{ item }">
               {{ moment(item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -121,55 +128,55 @@ export default {
       fields: [
         {
           key: 'id',
-          label: 'Id',
+          label: this.$t('id'),
           tdClass: 'firstColumn'
         },
         {
           key: 'customer',
-          label: 'Customer',
+          label: this.$t('customer'),
           tdClass: 'firstColumn'
         },
         {
           key: 'vendor',
-          label: 'Vendor',
+          label: this.$t('vendor'),
           tdClass: 'text-muted'
         },
         {
           key: 'additional_phone',
-          label: 'Phone',
+          label: this.$t('phone'),
           tdClass: 'text-muted'
         },
         {
           key: 'payment_type',
-          label: 'Payment Type',
+          label: this.$t('payment_type'),
           tdClass: 'text-muted',
           class: 'text-center'
         },
         {
           key: 'order_price',
-          label: 'Order Price',
+          label: this.$t('order_price'),
           tdClass: 'text-muted',
           class: 'text-center'
         },
         {
           key: 'time',
-          label: 'Order Time',
+          label: this.$t('order_time'),
           tdClass: 'text-muted'
         },
         {
           key: 'delivery_time',
-          label: 'Delivery time',
+          label: this.$t('delivery_time'),
           tdClass: 'text-muted'
         },
         {
           key: 'status',
-          label: 'Status',
+          label: this.$t('status'),
           class: 'text-center'
           // tdClass: 'secondColumn'
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           class: 'text-center'
         }
       ],
@@ -178,11 +185,11 @@ export default {
       to: 0,
       payment_types: [
         {
-          label: 'Cash',
+          label: this.$t('cash'),
           value: 'cash'
         },
         {
-          label: 'Card',
+          label: this.$t('card'),
           value: 'card'
         }
       ],

@@ -4,7 +4,7 @@
       <b-colxx class="disable-text-selection">
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'unit.update' : 'unit.create'">
           <div slot="content">
-            <b-form class="av-tooltip tooltip-right-bottom">
+            <b-form v-if="!loadOne" class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
@@ -18,6 +18,10 @@
                 <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
               </b-form-group>
             </b-form>
+            <div v-else class="text-center text-primary my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
           </div>
           <div slot="action">
             <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
@@ -171,10 +175,11 @@ export default {
       console.log(id)
     },
     editItem (id) {
+      this.$bvModal.show('crudModal')
       this.$store.dispatch(getById, id).then(res => {
         this.form.id = res.id
         this.form.name = res.name
-        this.$bvModal.show('crudModal')
+        // this.$bvModal.show('crudModal')
       })
     },
     removeItem (id) {

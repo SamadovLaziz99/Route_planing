@@ -4,7 +4,7 @@
       <b-colxx class="disable-text-selection">
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'category.update' : 'category.create'">
           <div slot="content">
-            <b-form class="av-tooltip tooltip-right-bottom">
+            <b-form v-if="!loadOne" class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
@@ -21,6 +21,10 @@
 <!--                <b-form-input type="number" v-model="form.position"/>-->
 <!--              </b-form-group>-->
             </b-form>
+            <div v-else class="text-center text-primary my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
           </div>
           <div slot="action">
             <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
@@ -37,9 +41,6 @@
         <list-page-heading
           :title="$t('menu.foods_category')"
           :displayMode="displayMode"
-          :sortOptions="sortOptions"
-          :changeOrderBy="changeOrderBy"
-          :sort="sort"
           :searchChange="searchChange"
           :from="from"
           :to="to"
@@ -61,11 +62,12 @@
             :items="items"
             :fields="fields"
             :busy="load"
+            responsive
           >
             <template #table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="row">
@@ -76,9 +78,6 @@
             </template>
             <template #cell(name)="row">
               <div>{{ row.item.name[$lang] }}</div>
-            </template>
-            <template #cell(status)="row">
-              <b-badge pill variant="primary">Pending</b-badge>
             </template>
             <template #cell(created_at)="row">
               {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -164,17 +163,6 @@ export default {
         position: null
       },
       displayMode: "list",
-      sort: {},
-      sortOptions: [
-        {
-          column: "name",
-          label: "Name"
-        },
-        {
-          column: "position",
-          label: "Position"
-        }
-      ],
       page: 1,
       search: "",
       from: 0,
@@ -182,22 +170,22 @@ export default {
       fields: [
         {
           key: 'name',
-          label: 'Name',
+          label: this.$t('name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'position',
-          label: 'Position',
+          label: this.$t('position'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'created_at',
-          label: 'Registration date',
+          label: this.$t('reg.date'),
           tdClass: 'text-muted'
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           // tdClass: 'thirdRow'
         }
       ],
@@ -238,11 +226,11 @@ export default {
       console.log(id)
     },
     editItem (id) {
+      this.$bvModal.show('crudModal')
       this.$store.dispatch(getById, id).then(res => {
         this.form.id = res.id
         this.form.name = res.name
         this.form.position = res.position
-        this.$bvModal.show('crudModal')
       })
     },
     changePagination(e) {
@@ -300,17 +288,17 @@ export default {
       this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
-        res.forEach((e, i) => {
-          if (e.position !== (i + 1)) {
-            this.$store.dispatch(put, {
-              id: e.id,
-              data: {
-                name: e.name,
-                position: i + 1
-              }
-            })
-          }
-        })
+        // res.forEach((e, i) => {
+        //   if (e.position !== (i + 1)) {
+        //     this.$store.dispatch(put, {
+        //       id: e.id,
+        //       data: {
+        //         name: e.name,
+        //         position: i + 1
+        //       }
+        //     })
+        //   }
+        // })
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })

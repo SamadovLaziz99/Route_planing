@@ -3359,7 +3359,10 @@ body.default-transition main {
     height: auto;
   }
 }
-
+.all_table {
+  min-width: 800px !important;
+  overflow-x: scroll !important;
+}
 .dashboard-list-with-thumbs {
   height: 510px;
 }

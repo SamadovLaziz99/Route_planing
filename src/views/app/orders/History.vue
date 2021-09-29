@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row v-if="!error">
-      <b-colxx class="disable-text-selection" style="padding: 0">
+      <b-colxx class="disable-text-selection">
         <list-page-heading
           :title="$t('menu.orders_list')"
           :rangepicker="true"
@@ -54,6 +54,7 @@
             :fields="fields"
             :busy="load"
             show-empty
+            responsive
           >
             <template #empty>
               <EmptyBox style="margin-top: 50px"/>
@@ -61,7 +62,7 @@
             <template #table-busy>
               <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="{ item }">
@@ -70,7 +71,7 @@
               </div>
             </template>
             <template #cell(status)="{ item }">
-              <b-badge pill :variant="badgeType(item.status)">{{ $t(item.status) }}</b-badge>
+              <b-badge pill :variant="badgeType(item.status)">{{ $t(`order.${item.status}`) }}</b-badge>
             </template>
             <template #cell(time)="{ item }">
               {{ moment(item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -121,55 +122,55 @@ export default {
       fields: [
         {
           key: 'id',
-          label: 'Id',
+          label: this.$t('id'),
           tdClass: 'firstColumn'
         },
         {
           key: 'customer',
-          label: 'Customer',
+          label: this.$t('customer'),
           tdClass: 'firstColumn'
         },
         {
           key: 'vendor',
-          label: 'Vendor',
+          label: this.$t('vendor'),
           tdClass: 'text-muted'
         },
         {
           key: 'additional_phone',
-          label: 'Phone',
+          label: this.$t('phone'),
           tdClass: 'text-muted'
         },
         {
           key: 'payment_type',
-          label: 'Payment Type',
+          label: this.$t('payment_type'),
           tdClass: 'text-muted',
           class: 'text-center'
         },
         {
           key: 'order_price',
-          label: 'Order Price',
+          label: this.$t('order_price'),
           tdClass: 'text-muted',
           class: 'text-center'
         },
         {
           key: 'time',
-          label: 'Order Time',
+          label: this.$t('order_time'),
           tdClass: 'text-muted'
         },
         {
           key: 'delivery_time',
-          label: 'Delivery time',
+          label: this.$t('delivery_time'),
           tdClass: 'text-muted'
         },
         {
           key: 'status',
-          label: 'Status',
+          label: this.$t('status'),
           class: 'text-center'
           // tdClass: 'secondColumn'
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           class: 'text-center'
         }
       ],
@@ -178,11 +179,11 @@ export default {
       to: 0,
       payment_types: [
         {
-          label: 'Cash',
+          label: this.$t('cash'),
           value: 'cash'
         },
         {
-          label: 'Card',
+          label: this.$t('card'),
           value: 'card'
         }
       ],

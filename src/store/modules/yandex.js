@@ -21,7 +21,7 @@ export default {
           lang: 'ru_RU',
           rll: params,
           apikey: '1abe9aa1-66ec-4c7f-8b93-a4e0bc25319e',
-          token: '79297e65a8fb553d00f02986c19a434a',
+          token: 'e4a2320201ff959d608982f6e24e8831',
           rtm: 'atm',
           results: 1
         }

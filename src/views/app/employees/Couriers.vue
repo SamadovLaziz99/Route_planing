@@ -2,7 +2,7 @@
   <div>
     <b-row v-if="!error">
       <b-colxx class="disable-text-selection" style="padding: 0">
-        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'couriers.update' : 'couriers.create'">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'courier.update' : 'courier.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('name')" class="has-float-label mb-4">
@@ -40,7 +40,7 @@
               <b-form-group :label="$t('car_color')" class="has-float-label mb-4">
                 <v-select :options="colors" v-model="form.details.car_color"/>
               </b-form-group>
-              <b-form-group :label="$t('pages.status')">
+              <b-form-group :label="$t('status')">
                 <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.active" />
               </b-form-group>
             </b-form>
@@ -159,20 +159,20 @@ export default {
       isValidCustom: false,
       statuses: [
         {
-          text: "ACTIVE",
+          text: this.$t('active'),
           value: true
         },
         {
-          text: "INACTIVE",
+          text: this.$t('inactive'),
           value: false
         }
       ],
       colors: [
-        { label: 'White', value: 'white' },
-        { label: 'Black', value: 'Black' },
-        { label: 'Blue', value: 'blue' },
-        { label: 'Light Green', value: 'light-green' },
-        { label: 'Choco', value: 'choco' },
+        { label: this.$t('white'), value: 'white' },
+        { label: this.$t('black'), value: 'Black' },
+        { label: this.$t('blue'), value: 'blue' },
+        { label: this.$t('light.green'), value: 'light-green' },
+        { label: this.$t('choco'), value: 'choco' },
       ],
       form: {
         id: null,
@@ -192,42 +192,42 @@ export default {
       fields: [
         {
           key: 'name',
-          label: 'Name',
+          label: this.$t('name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'phone',
-          label: 'Phone',
+          label: this.$t('phone'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'details.car_model',
-          label: 'Car Model',
+          label: this.$t('car_model'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'details.car_number',
-          label: 'Car Number',
+          label: this.$t('car_number'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'details.car_color.label',
-          label: 'Car Color',
+          label: this.$t('car_color'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'created_at',
-          label: 'Registration date',
+          label: this.$t('reg.date'),
           tdClass: 'text-muted'
         },
         {
           key: 'active',
-          label: 'Status',
+          label: this.$t('status'),
           // tdClass: 'text-muted'
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           // tdClass: 'thirdRow'
         }
       ],

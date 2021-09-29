@@ -6,16 +6,19 @@
         <slot name="action"></slot>
       </div>
       <piaf-breadcrumb />
-      <div class="mb-2 mt-2">
-        <b-button
-          variant="empty"
-          class="pt-0 pl-0 d-inline-block d-md-none"
-          v-b-toggle.displayOptions
-        >
-          {{ $t('pages.display-options') }}
-          <i class="simple-icon-arrow-down align-middle" />
-        </b-button>
-        <b-collapse id="displayOptions" class="d-md-block">
+      <div class="mb-3 mt-3">
+        <div class="d-flex justify-content-between">
+          <div></div>
+          <b-button
+            variant="primary"
+            class="d-inline-block d-md-none mr-2"
+            v-b-toggle.displayOptions
+          >
+            {{ $t('filters') }}
+            <i class="simple-icon-arrow-down align-middle" />
+          </b-button>
+        </div>
+        <b-collapse id="displayOptions" class="d-md-block mt-3">
           <div class="d-md-inline-block pt-1 w-100">
             <b-row>
               <b-colxx xxs="12" md="3">
@@ -26,19 +29,19 @@
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input v-if="$route.name === 'food_list'" class="search_input" :placeholder="$t('menu.search')" @input="search" v-model="filters.search"  />
+                  <b-input v-if="$route.name === 'food_list'" class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="float-md-right pt-1">
-                  <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>
+                  <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} {{ $t('of') }} {{ total }}</span>
                 </div>
               </b-colxx>
             </b-row>
           </div>
         </b-collapse>
       </div>
-      <div class="mb-5" />
+<!--      <div class="mb-5" />-->
     </b-colxx>
   </b-row>
 </template>

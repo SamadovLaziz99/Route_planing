@@ -6,9 +6,6 @@
         <list-page-heading
           :title="$t('menu.vendors')"
           :displayMode="displayMode"
-          :sortOptions="sortOptions"
-          :changeOrderBy="changeOrderBy"
-          :sort="sort"
           :searchChange="searchChange"
           :from="from"
           :to="to"
@@ -111,17 +108,6 @@ export default {
       ],
       categories: [],
       displayMode: "thumb",
-      sort: {},
-      sortOptions: [
-        {
-          column: "name",
-          label: "Name"
-        },
-        {
-          column: "position",
-          label: "Position"
-        }
-      ],
       page: 1,
       search: "",
       from: 0,
