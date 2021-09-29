@@ -91,7 +91,7 @@
               </template>
             </template>
           </b-table>
-          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+          <Pagination :page="pagination.page" :per-page="15" :total="pagination.total" @changePagination="changePagination"/>
         </b-card>
 <!--        <template v-if="!load">-->
 <!--          <list-page-listing-->

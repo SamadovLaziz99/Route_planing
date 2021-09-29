@@ -7,4 +7,5 @@ Vue.prototype.$logo = logo
 Vue.prototype.$imgProxy = imageProxy
 Vue.prototype.$ccase = (str) => camelize(str)
 // Vue.prototype.$imgUploader = upload
-Vue.prototype.$lang = localStorage.getItem('currentLanguage')
+Vue.prototype.$lang = localStorage.getItem('currentLanguage') || 'ru'
+Vue.prototype.$perPage = 15

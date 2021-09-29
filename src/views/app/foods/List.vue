@@ -29,7 +29,17 @@
               :fields="fields"
               :busy="load"
               responsive
+              show-empty
             >
+              <template #empty>
+                <EmptyBox style="margin-top: 50px"/>
+              </template>
+              <template #table-busy>
+                <div class="text-center text-primary my-2">
+                  <b-spinner class="align-middle"></b-spinner>
+                  <strong>{{ $t('loading') }}...</strong>
+                </div>
+              </template>
               <template #table-busy>
                 <div class="text-center text-primary my-2">
                   <b-spinner class="align-middle"></b-spinner>
@@ -56,7 +66,7 @@
                 <div>{{ row.item.vendor ? row.item.vendor.user.first_name + ' ' + row.item.vendor.user.last_name : '' }}</div>
               </template>
             </b-table>
-            <Pagination v-if="pagination.total > 15" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePage"/>
+            <Pagination v-if="pagination.total > 15" :page="pagination.page" :per-page="15" :total="pagination.total" @changePagination="changePage"/>
 <!--          </div>-->
         </b-card>
       </b-colxx>
@@ -72,12 +82,14 @@ import FoodsCard from "./components/FoodsCard";
 import { mapGetters } from "vuex";
 import { actions, getters } from "../../../utils/store_schema";
 import Pagination from "../../../components/TableComponents/Pagination";
-import {imageProxy} from "../../../utils";
+import { imageProxy } from "../../../utils";
+import EmptyBox from "../../../components/EmptyBox";
 import moment from "moment";
 const _page = 'food'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
+    EmptyBox,
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
     'foods-card': FoodsCard,

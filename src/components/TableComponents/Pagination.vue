@@ -1,12 +1,12 @@
 <template>
-  <b-row v-if="(total / perPage) > 1">
+  <b-row v-if="(total / $perPage) > 1">
     <b-colxx xxs="12">
       <b-pagination-nav
-        :number-of-pages="(total / perPage)"
+        :number-of-pages="Math.ceil((total / $perPage))"
         :link-gen="linkGen"
         :value="page"
         @change="changePagination"
-        :per-page="perPage"
+        :per-page="$perPage"
         align="right"
       >
         <template v-slot:next-text>

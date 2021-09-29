@@ -9,7 +9,7 @@ export const apiUrl = 'https://api.coloredstrategies.com';
 export const subHiddenBreakpoint = 1440
 export const menuHiddenBreakpoint = 768
 
-export const defaultLocale = 'en'
+export const defaultLocale = 'ru'
 export const defaultDirection = 'ltr'
 export const localeOptions = [
   { id: 'en', name: 'English' },

@@ -34,7 +34,7 @@
               </b-tab>
               <b-tab :title="$t('collection.foods')">
                 <div class="mt-4"></div>
-                <b-form-input type="text" @change="searchFood" class="mb-3" :placeholder="$t('search')"/>
+                <b-form-input type="text" @input="searchFood" class="mb-3" :placeholder="$t('search')"/>
                 <vue-perfect-scrollbar
                   class="scroll dashboard-list-with-thumbs"
                   style="height: 470px !important;"
@@ -284,7 +284,7 @@ export default {
   },
   mounted() {
     this.getData()
-    this.$store.dispatch('getFood')
+    this.$store.dispatch('getFood', { no_page: true })
     this.$store.dispatch('getCategories').then(res => {
       this.categories = res.map(e => {
         return {
@@ -329,21 +329,23 @@ export default {
       this.$bvModal.show('crudModal')
       this.$store.dispatch(getById, id).then(res => {
         const e = res.media[0]
-        setTimeout(() => {
-          this.$refs.dropzoneBanner.setDefaultImage({
-            size: e.size, name: e.path, type: e.mime_type, id: e.id
-          }, e.url)
-        }, 0)
+        if (e) {
+          setTimeout(() => {
+            this.$refs.dropzoneBanner.setDefaultImage({
+              size: e.size, name: e.path, type: e.mime_type, id: e.id
+            }, e.url)
+          }, 0)
+        }
         this.form = {
           id: res.id,
           name: res.name,
           foods: res.foods.map(e => e.id),
           position: res.position,
           active: res.active,
-          category: {
+          category: res.category ? {
             label: res.category.name[this.$lang],
             value: res.category.id
-          }
+          } : null
         }
       })
     },
