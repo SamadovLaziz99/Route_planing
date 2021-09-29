@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row v-if="!error">
-      <b-colxx class="disable-text-selection" style="padding: 0">
+      <b-colxx class="disable-text-selection">
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'courier.update' : 'courier.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
@@ -82,6 +82,7 @@
             :items="data"
             :fields="fields"
             :busy="load"
+            responsive
           >
             <template #table-busy>
               <div class="text-center text-danger my-2">
