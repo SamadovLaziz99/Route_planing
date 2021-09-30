@@ -118,7 +118,8 @@
   "email": "Email",
   "password": "Password",
   "re.password": "Retry password",
-
+  "banner": "Banner",
+  "feature": "Feature",
   "general": {
     "copyright": "Piaf Vue © 2018 All Rights Reserved."
   },

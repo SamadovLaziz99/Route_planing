@@ -19,6 +19,14 @@ export default {
     SHOW_COURIER_LOCATIONS(state, payload) {
       state.locations = [...state.copy_locations]
       state.copy_locations = []
+    },
+    UPDATE_NEW_LOCATION(state, payload) {
+      let _ll = [ ...state.locations ]
+      state.locations = []
+      setTimeout(() => {
+        _ll[payload.index] = payload.data
+        state.locations = _ll
+      }, 50)
     }
   },
   actions: {

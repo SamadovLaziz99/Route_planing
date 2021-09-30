@@ -61,18 +61,18 @@
               </b-tab>
               <b-tab :title="$t('collection.banner')" v-if="form.id">
                 <div style="margin: 20px 0">
-                  <h4>Banner</h4>
+                  <h4>{{ $t('banner') }}</h4>
                 </div>
                 <dropzone ref="dropzoneBanner" v-if="form.id" url="collections" :media="{ id: form.id, type: 'banner' }" :destroy="true"/>
                 <div style="margin: 20px 0">
-                  <h4>Feature</h4>
+                  <h4>{{ $t('feature') }}</h4>
                 </div>
-                <dropzone ref="dropzone" v-if="form.id" url="collections" :media="{ id: form.id, type: 'image' }" :destroy="true"/>
+                <dropzone ref="dropzoneFeature" v-if="form.id" url="collections" :media="{ id: form.id, type: 'image' }" :destroy="true"/>
               </b-tab>
             </b-tabs>
             <div v-else class="text-center text-primary my-2">
               <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
+              <strong>{{ $t('loading') }}...</strong>
             </div>
           </div>
           <div slot="action">
@@ -328,13 +328,23 @@ export default {
     editItem (id) {
       this.$bvModal.show('crudModal')
       this.$store.dispatch(getById, id).then(res => {
-        const e = res.media[0]
-        if (e) {
-          setTimeout(() => {
-            this.$refs.dropzoneBanner.setDefaultImage({
-              size: e.size, name: e.path, type: e.mime_type, id: e.id
-            }, e.url)
-          }, 0)
+        const e = res.media
+        if (res.media && res.media.length) {
+          res.media.forEach((e, i) => {
+            if (e.type === 'banner') {
+              setTimeout(() => {
+                this.$refs.dropzoneBanner.setDefaultImage({
+                  size: e.size, name: e.path, type: e.mime_type, id: e.id
+                }, e.url)
+              }, (i + 1))
+            } else if (e.type === 'image') {
+              setTimeout(() => {
+                this.$refs.dropzoneFeature.setDefaultImage({
+                  size: e.size, name: e.path, type: e.mime_type, id: e.id
+                }, e.url)
+              }, (i + 1))
+            }
+          })
         }
         this.form = {
           id: res.id,

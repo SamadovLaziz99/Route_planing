@@ -374,8 +374,8 @@ export default {
   mounted() {
     const _query = this.$route.query
     this.$store.dispatch('getVendors', { no_page: true })
-    this.$store.dispatch('getFood')
-    this.$store.dispatch('getCouriers')
+    this.$store.dispatch('getFood', { no_page: true })
+    this.$store.dispatch('getCouriers', { no_page: true })
     this.$store.dispatch('getOrderStats')
     const _hash = this.$route.hash
     let _page;

@@ -14,6 +14,7 @@ ws.onmessage = function (e) {
   store.dispatch('info_alert', {
     title: 'New Message Received'
   })
+
   const data = JSON.parse(e.data)
 
   if (data.type === 'order') {
@@ -28,6 +29,31 @@ ws.onmessage = function (e) {
     delete _data.type
     store.dispatch('setOrderStats', data)
     store.dispatch('setOrderStatsHistory', data)
+  }
+  if (data.type === 'courier') {
+    const _data = { ...data }
+    const _courier = store.getters.courierLocations.filter(e => e.id === data.courier_id)[0]
+    const _index = store.getters.courierLocations.indexOf(_courier)
+    let a = { ..._courier }
+    a.location[0] = {
+      courier: _data.courier_id,
+      created_at: _data.created_at,
+      id: _data.id,
+      latitude: _data.latitude,
+      location: _data.location,
+      longitude: _data.longitude,
+      order: _data.order_id,
+      time: _data.time
+    }
+    console.log(a)
+    if (_index > -1) {
+      store.commit('UPDATE_NEW_LOCATION', {
+        index: _index,
+        data: a
+      })
+      console.log('Updated')
+      console.log(store.getters.courierLocations)
+    }
   }
 }
 
