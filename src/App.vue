@@ -15,7 +15,7 @@ export default {
     // "color-switcher": ColorSwitcher
   },
   mounted() {
-    console.log(process.env.VUE_APP_NAME)
+    // console.log(process.env.VUE_APP_NAME)
   },
   // beforeMount() {
   //   const direction = getDirection();

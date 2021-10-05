@@ -120,7 +120,7 @@ export default {
       const _query = this.$route.query
       if (_query.q) this.filters.search = _query.q
       this.$store.dispatch('getCategories', {
-        // no_page: true
+        no_page: true
       }).then(res => {
         if (_query.category_id) {
           // debugger
@@ -128,7 +128,7 @@ export default {
         }
       })
       this.$store.dispatch('getVendors', {
-        // no_page: true
+        no_page: true
       }).then(res => {
         if (_query.vendor_id) {
           this.filters.vendor = this.vendors.filter(e => e.value === parseInt(_query.vendor_id))[0]

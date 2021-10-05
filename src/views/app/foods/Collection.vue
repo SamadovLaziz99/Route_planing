@@ -285,7 +285,7 @@ export default {
   mounted() {
     this.getData()
     this.$store.dispatch('getFood', { no_page: true })
-    this.$store.dispatch('getCategories').then(res => {
+    this.$store.dispatch('getCategories', { no_page: true }).then(res => {
       this.categories = res.map(e => {
         return {
           label: e.name[this.$lang],

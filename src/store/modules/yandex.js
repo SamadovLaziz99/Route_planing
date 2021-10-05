@@ -1,5 +1,6 @@
 // import axios_init from "../../utils/axios_init";
 import axios from "axios";
+import axios_init from "../../utils/axios_init";
 // import { routeOptimized } from "../../utils";
 export default {
   state: {
@@ -36,6 +37,46 @@ export default {
       commit('SET_ONE_ROUTE', _result)
       return _result
       // console.log(routeOptimized(_data))
+    },
+    async getPointData ({}, value) {
+      let a = await axios({
+        method: 'get',
+        url: 'https://geocode-maps.yandex.ru/1.x/',
+        params: {
+          format: 'json',
+          apikey: '1abe9aa1-66ec-4c7f-8b93-a4e0bc25319e',
+          geocode: value,
+          sco: 'latlong',
+          lang: 'ru-RU',
+          results: 1,
+          ll: '69.241320,41.292906',
+          spn: '6.5,6.5',
+          rspn: 1
+        }
+      })
+        // .then(res => {
+        const members = a.data.response.GeoObjectCollection.featureMember
+        if (members.length > 0) {
+          const result = members.map(map => {
+            return {
+              name: map.GeoObject.name,
+              latlong: {
+                lat: map.GeoObject.Point.pos.split(' ')[1],
+                lon: map.GeoObject.Point.pos.split(' ')[0]
+              },
+              type: map.GeoObject.metaDataProperty.GeocoderMetaData.kind,
+              description: map.GeoObject.description
+            }
+          })
+          return result
+        }
+
+      //     resolve(result)
+      //   } else {
+      //     resolve([])
+      //   }
+      //   console.log(res)
+      // })
     }
   }
 }

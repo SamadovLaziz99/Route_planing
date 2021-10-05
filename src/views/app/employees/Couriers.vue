@@ -344,11 +344,11 @@ export default {
       this.page = parseInt(_page)
     }
     this.getData()
-    this.$store.dispatch('getUsers').then(res => {
+    this.$store.dispatch('getUsers', { no_page: true }).then(res => {
       console.log(res)
       this.users = res.map(e => {
         return {
-          label: e.first_name + ' ' + e.last_name,
+          label: e.first_name + ' ' + (e.last_name ? e.last_name : ''),
           value: e.id
         }
       })

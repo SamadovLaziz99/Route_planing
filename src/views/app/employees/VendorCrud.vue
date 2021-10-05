@@ -254,7 +254,7 @@ export default {
         }, 100)
       })
     }
-    this.getUsers()
+    this.getUsers({ no_page: true })
   },
   computed: {
     ...mapGetters(['dataUsers']),
@@ -273,6 +273,10 @@ export default {
     ...mapActions(['getUsers']),
     clickMap(e) {
       this.coords = e.get('coords')
+      this.$store.dispatch('getPointData', this.coords.toString()).then(res => {
+        console.log(res)
+        this.form.address = res[0].name
+      })
     },
     submit() {
       console.log(this.$v)
