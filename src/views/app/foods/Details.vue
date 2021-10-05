@@ -4,19 +4,19 @@
       <div v-if="oneLoadFood && !food" class="loading"></div>
       <b-colxx v-if="food" xxs="12">
         <h1>{{ food.name }}</h1>
-        <div class="top-right-button-container">
-          <b-dropdown
-            id="ddown5"
-            :text="$t('pages.actions')"
-            size="lg"
-            variant="outline-primary"
-            class="top-right-button top-right-button-single"
-            no-fade="true"
-          >
-            <b-dropdown-item>{{ $t('dashboards.last-week') }}</b-dropdown-item>
-            <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>
-          </b-dropdown>
-        </div>
+<!--        <div class="top-right-button-container">-->
+<!--          <b-dropdown-->
+<!--            id="ddown5"-->
+<!--            :text="$t('pages.actions')"-->
+<!--            size="lg"-->
+<!--            variant="outline-primary"-->
+<!--            class="top-right-button top-right-button-single"-->
+<!--            no-fade="true"-->
+<!--          >-->
+<!--            <b-dropdown-item>{{ $t('dashboards.last-week') }}</b-dropdown-item>-->
+<!--            <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>-->
+<!--          </b-dropdown>-->
+<!--        </div>-->
         <piaf-breadcrumb/>
         <b-tabs nav-class="separator-tabs ml-0 mb-5" content-class="tab-content">
           <b-tab :title="$t('pages.details')">
@@ -99,10 +99,10 @@
             <b-row>
               <b-colxx>
                 <order-item
-                  v-for="(order,index) in _oders"
+                  v-for="(order, index) in orders"
                   :key="index"
                   :data="order"
-                  detail-path="#"
+                  :detail-path="{ name: 'order_details', params: { id: order.id } }"
                 />
               </b-colxx>
             </b-row>
@@ -120,7 +120,7 @@ import RadialProgressCard from "../../../components/Cards/RadialProgressCard";
 import CommentItem from "../../../components/Listing/CommentItem";
 import OrderItem from "../../../components/Listing/OrderItem";
 import {comments} from "../../../data/comments";
-import orders from "../../../data/orders";
+// import orders from "../../../data/orders";
 import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
 import { getters } from "../../../utils/store_schema";
@@ -145,7 +145,8 @@ export default {
       food: null,
       defImage: '/assets/img/details/1.jpg',
       foodImage: null,
-      orders
+      // orders,
+      orders: []
     };
   },
   methods: {
@@ -153,19 +154,19 @@ export default {
   },
   computed: {
     ...mapGetters(['errorFood', 'oneLoadFood']),
-    _oders() {
-      return this.orders.map(e => {
-        return {
-          ...e,
-          id: '#1110222154',
-          phone: '+998909963313',
-          payment_type: 'cash',
-          price: '586 $',
-          time: '1 hour',
-          delivery: 'Half hour',
-        }
-      })
-    }
+    // _oders() {
+    //   return this.new_orders.map(e => {
+    //     return {
+    //       ...e,
+    //       id: '#1110222154',
+    //       phone: '+998909963313',
+    //       payment_type: 'cash',
+    //       price: '586 $',
+    //       time: '1 hour',
+    //       delivery: 'Half hour',
+    //     }
+    //   })
+    // }
   },
   mounted() {
     this.$store.dispatch('getOrders', {
@@ -181,7 +182,7 @@ export default {
     this.$store.dispatch('getOrders', {
       food_id: this.$route.params.id
     }).then(res => {
-      console.log(res)
+      this.orders = res
     })
   }
 };

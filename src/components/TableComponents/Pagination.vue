@@ -3,6 +3,7 @@
     <b-colxx xxs="12">
       <b-pagination-nav
         :number-of-pages="Math.ceil((total / $perPage))"
+        use-router
         :link-gen="linkGen"
         :value="page"
         @change="changePagination"
@@ -53,8 +54,24 @@ export default {
     changePagination (val) {
       this.$emit('changePagination', val)
     },
+    queryGenerator (obj) {
+      let _querys = []
+      let keys = Object.keys(obj)
+      let values = Object.values(obj)
+      _querys = keys.map((e, i) => {
+        return e + '=' + (values[i] ? values[i] : '')
+      })
+      return _querys.toString().replaceAll(',', '&')
+    },
     linkGen(pageNum) {
-      return "#page-" + pageNum;
+      return {
+        name: this.$route.name,
+        query: this.$route.query,
+        hash: "#page-" + pageNum
+      }
+      // return pageNum + ''
+      // return this.queryGenerator(this.$route.query)
+      // return { ...this.$route.query, page: pageNum } "#page-" + pageNum;
     },
   }
 }

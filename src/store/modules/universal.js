@@ -18,6 +18,12 @@ export default {
       })
       commit('SET_ORDER_FOODS', _result.results)
       return _result
+    },
+    async getFoodOrders ({ commit }, payload) {
+      const _result = await axios_init.get('/foodorder/', {
+        order_id: payload
+      })
+      return _result
     }
   }
 }

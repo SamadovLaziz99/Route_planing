@@ -4911,6 +4911,7 @@ input:-webkit-autofill {
   color: $theme-color-2;
   background-color: $foreground-color;
   border: 1px solid $theme-color-2;
+  box-shadow: $theme-color-2 0px 2px 4px, $theme-color-2 0px 4px 5px, $theme-color-2 0px 8px 10px;
   opacity: 1;
 
   .notification-message {
@@ -4943,6 +4944,7 @@ input:-webkit-autofill {
   color: $info-color;
   background-color: $foreground-color;
   border: 1px solid $info-color;
+  box-shadow: $info-color 0px 2px 4px, $info-color 0px 4px 5px, $info-color 0px 8px 10px;
   opacity: 1;
 
   .notification-message {
@@ -5008,6 +5010,7 @@ input:-webkit-autofill {
   color: $warning-color;
   background-color: $foreground-color;
   border: 1px solid $warning-color;
+  box-shadow: $warning-color 0px 2px 4px, $warning-color 0px 4px 5px, $warning-color 0px 8px 10px;
   opacity: 1;
 
   .notification-message {
@@ -5040,6 +5043,7 @@ input:-webkit-autofill {
   color: $error-color;
   background-color: $foreground-color;
   border: 10px solid $error-color;
+  box-shadow: $error-color 0px 2px 4px, $error-color 0px 4px 5px, $error-color 0px 8px 10px;
   opacity: 1;
 
   .notification-message {

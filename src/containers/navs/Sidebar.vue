@@ -44,7 +44,7 @@
       >
         <ul
           v-for="(item,itemIndex) in filteredMenuItems(menuItems)"
-          :class="{'list-unstyled':true, 'd-block' : (selectedParentMenu === item.id && viewingParentMenu === '') || viewingParentMenu === item.id }"
+          :class="{'list-unstyled': true, 'd-block' : (selectedParentMenu === item.id && viewingParentMenu === '') || viewingParentMenu === item.id }"
           :data-parent="item.id"
           :key="`sub_${item.id}`"
         >

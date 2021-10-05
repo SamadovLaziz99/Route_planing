@@ -18,7 +18,7 @@
         </b-modal>
         <b-row>
           <b-colxx xxs="12">
-            <h1>Order Detail</h1>
+            <h1>{{ $t('order.details') }} - #<strong>{{ $route.params.id }}</strong></h1>
             <piaf-breadcrumb/>
           </b-colxx>
         </b-row>
@@ -60,12 +60,12 @@
                     <ymap-marker
                       :coords="[parseFloat(order.user_address.latitude), parseFloat(order.user_address.longitude)]"
                       marker-id="123"
-                      hint-content="User"
+                      :hint-content="order.user.first_name + ' ' + order.user.last_name"
                     />
                     <ymap-marker
                       :coords="[parseFloat(order.vendor.latitude), parseFloat(order.vendor.longitude)]"
                       marker-id="321"
-                      hint-content="Vendor"
+                      :hint-content="order.vendor.user.first_name + ' ' + order.vendor.user.last_name"
                     />
                   </yandex-map>
                 </b-card>
@@ -109,19 +109,19 @@
 <!--                        <span style="color: #8f8f8f; font-weight: normal; line-height: 2; font-size: 14px;">02.02.2019</span>-->
 <!--                      </td>-->
 <!--                    </tr>-->
-                    <tr v-if="orderFoods" style="width: 100%">
+                    <tr v-if="foods.length" style="width: 100%">
                       <td colSpan="3" style="padding-top:10px; width: 100%">
                         <table style="width: 100%">
-                          <tr v-for="food in orderFoods" :key="food.id">
+                          <tr v-for="food in foods" :key="food.id">
                             <td style="padding-top:0px; padding-bottom: 20px; width:120px ">
-                              <img src="https://coloredstrategies.com/mailing/product-1.jpg" style="width: 100px; height: 75px; object-fit: cover; border-radius: 3px; " />
+                              <img :src="imageProxy(food.food.image, '320x320')" style="width: 100px; height: 75px; object-fit: cover; border-radius: 3px; " />
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px;">
-                              <h4 style="font-size: 15px;"><router-link :to="{ name: 'food_detail', params: { id: food.id } }" style="text-decoration: none; font-weight:500;">{{ food.name }}</router-link></h4>
-                              <p style="font-size: 12px;">{{ food.description }}</p>
+                              <h4 style="font-size: 15px;"><router-link :to="{ name: 'food_detail', params: { id: food.id } }" style="text-decoration: none; font-weight:500;">{{ food.food.name }}</router-link></h4>
+                              <p style="font-size: 12px;">{{ food.food.description }}</p>
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px; text-align: right;">
-                              <p style="font-size: 13px; line-height: 1; color:#f18024;  margin-top:5px; vertical-align:top; white-space:nowrap;">{{ food.price }} {{ $t('sum') }}</p>
+                              <p style="font-size: 13px; line-height: 1; color:#f18024;  margin-top:5px; vertical-align:top; white-space:nowrap;">{{ food.count > 1 ? (food.count + ' x ') : '' }}{{ food.food.price }} {{ $t('sum') }}</p>
                             </td>
                           </tr>
                         </table>
@@ -181,6 +181,7 @@ import { mapGetters } from 'vuex'
 import { getters } from "../../../utils/store_schema";
 import Tables from "../ui/components/Tables";
 import { blogCategories } from "../../../data/blog";
+import { imageProxy } from "../../../utils";
 
 export default {
   components: {
@@ -201,6 +202,7 @@ export default {
       blogCategories,
       status: 'pending',
       pendingStatus: false,
+      foods: [],
       statuses: [
         {
           text: this.$t('order.pending'),
@@ -234,6 +236,7 @@ export default {
     ...mapGetters(['orderFoods'])
   },
   methods: {
+    imageProxy,
     changeStatus () {
       this.pendingStatus = true
       this.$store.dispatch('changeStatusOrder', {
@@ -250,9 +253,14 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('getOrderFoods', this.$route.params.id).then(res => {
+    this.$store.dispatch('getFoodOrders', this.$route.params.id).then(res => {
       console.log(res)
+      this.foods = res.results
+      console.log(this.foods)
     })
+    // this.$store.dispatch('getOrderFoods', this.$route.params.id).then(res => {
+    //   console.log(res)
+    // })
     this.$store.dispatch('getByIdOrders', this.$route.params.id).then(res => {
       this.order = res
       this.status = res.status

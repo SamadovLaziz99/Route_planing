@@ -3,7 +3,7 @@
     <b-row v-if="!error">
       <b-colxx class="disable-text-selection">
         <list-page-heading
-          :title="$t('menu.orders_list')"
+          :title="$t('menu.orders_history')"
           :rangepicker="true"
           :changeOrderBy="changeOrderBy"
           :searchChange="searchChange"

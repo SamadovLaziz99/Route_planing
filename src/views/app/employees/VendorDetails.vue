@@ -4,12 +4,12 @@
       <div v-if="oneLoadVendors && !vendor" class="loading"></div>
       <b-colxx v-if="vendor" xxs="12">
         <h1>{{ vendor.user.first_name }} {{ vendor.user.last_name }}</h1>
-        <div class="top-right-button-container">
-          <b-dropdown id="ddown5" :text="$t('pages.actions')" size="lg" variant="outline-primary" class="top-right-button top-right-button-single" no-fade="true">
-            <b-dropdown-item>{{ $t('dashboards.last-week') }}</b-dropdown-item>
-            <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>
-          </b-dropdown>
-        </div>
+<!--        <div class="top-right-button-container">-->
+<!--          <b-dropdown id="ddown5" :text="$t('pages.actions')" size="lg" variant="outline-primary" class="top-right-button top-right-button-single" no-fade="true">-->
+<!--            <b-dropdown-item>{{ $t('dashboards.last-week') }}</b-dropdown-item>-->
+<!--            <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>-->
+<!--          </b-dropdown>-->
+<!--        </div>-->
         <piaf-breadcrumb />
         <b-tabs nav-class="separator-tabs ml-0 mb-5" content-class="tab-content" :no-fade="true">
           <b-tab :title="$t('pages.details')">
@@ -74,7 +74,7 @@
                     <b-card no-body>
                       <div class="position-relative">
                         <router-link to="#" class="w-40 w-sm-100">
-                          <b-card-img top :alt="product.name" :src="$imgProxy(product.media[0].url, '300x200')" />
+                          <b-card-img top :alt="product.name" :src="$imgProxy(product.image, '300x200')" />
                         </router-link>
                       </div>
                       <b-card-body>

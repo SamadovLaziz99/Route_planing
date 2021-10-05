@@ -248,7 +248,6 @@ export default {
       this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
-        console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })

@@ -134,8 +134,8 @@ const routes = [
         children: [
           {
             path: "vendors",
-            name: "vendors",
-            component: () => import("./views/app/employees/Vendors"),
+            name: "vendors_list",
+            component: () => import("./views/app/employees/ListVendors"),
             children: []
           },
           {

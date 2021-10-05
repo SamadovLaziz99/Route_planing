@@ -1,7 +1,7 @@
 <template>
 <div class="d-flex flex-row mb-3 pb-3 border-bottom">
     <router-link :to="detailPath">
-        <img :src="data.thumb || defImg" alt="" class="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall" />
+        <img :src="data.thumb || imgAvatar" alt="" class="img-thumbnail border-0 rounded-circle list-thumbnail align-self-center xsmall" />
     </router-link>
     <div class="pl-3 pr-2">
         <router-link :to="detailPath">
@@ -22,7 +22,8 @@ export default {
     props: ['data', 'detailPath'],
     data() {
       return {
-        defImg
+        defImg,
+        imgAvatar: 'https://presaveio.s3.amazonaws.com/uploads/NoImage/no_img.png'
       }
     },
     methods: {
