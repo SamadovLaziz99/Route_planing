@@ -15,12 +15,12 @@ firebase.initializeApp(firebaseConfig);
 Vue.config.productionTip = false
 
 
-if (process.env.VUE_APP_NAME === 'coozin_admin_production') {
-  console.log("%cThis project is production mode!!!", "color:green; font-size: 18px");
-  window.console.log = function () {  }
-} else {
-  console.log("%cThis project is development mode!!!", "color:red; font-size: 18px");
-}
+// if (process.env.VUE_APP_NAME === 'coozin_admin_production') {
+//   console.log("%cThis project is production mode!!!", "color:green; font-size: 18px");
+//   window.console.log = function () {  }
+// } else {
+//   console.log("%cThis project is development mode!!!", "color:red; font-size: 18px");
+// }
 
 export default new Vue({
   i18n,

@@ -141,7 +141,7 @@ export default {
   methods: {},
   mounted() {
     this.$store.dispatch('getByIdVendors', this.$route.params.id).then(res => {
-      console.log(res)
+      // console.log(res)
       this.vendor = res
       this.vendorImage = (res.media && res.media.length > 0) ? this.$imgProxy(res.media[0].url, '500x350') : this.defImage
     })

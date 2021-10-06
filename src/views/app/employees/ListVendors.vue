@@ -48,8 +48,8 @@
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <div class="glyph-icon simple-icon-eye mr-2" @click="$router.push({ name: 'food_detail', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="$router.push({ name: 'food_update', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div class="glyph-icon simple-icon-eye mr-2" @click="$router.push({ name: 'vendor-detail', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="$router.push({ name: 'vendor_update', params: { id: row.item.id } })" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>

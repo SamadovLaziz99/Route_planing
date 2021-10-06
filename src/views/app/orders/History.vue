@@ -233,14 +233,14 @@ export default {
     },
     routePusher () {
       let _query = { ...this.$route.query }
-      _query.food_id = this.filters.food?.value,
+        _query.food_id = this.filters.food?.value,
         _query.courier_id = this.filters.courier?.value,
         _query.vendor_id = this.filters.vendor?.value,
         _query.q = this.filters.search,
         _query.payment_type = this.filters.payment_type?.value
       this.$router.push({
         name: this.name,
-        query: _query
+        query: _query,
       }).catch(() => {})
     },
     changeActiveTab(e) {
@@ -355,11 +355,11 @@ export default {
     }
   },
   watch: {},
-  mounted() {
+  async mounted() {
     const _query = this.$route.query
     this.$store.dispatch('getVendors', { no_page: true })
-    this.$store.dispatch('getFood', { no_page: true })
-    this.$store.dispatch('getCouriers', { no_page: true })
+    await this.$store.dispatch('getFood', { no_page: true })
+    await this.$store.dispatch('getCouriers', { no_page: true })
     this.$store.dispatch('getOrderStats')
     const _hash = this.$route.hash
     let _page;
@@ -369,6 +369,9 @@ export default {
     }
     if (_query) {
       const { food_id, courier_id, vendor_id, q, type, payment_type } = _query
+      if (type && type === 'finished') {
+        this.activeTab = 0
+      } else this.activeTab = 1
       this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
       this.filters.vendor = this.vendors.filter(e => e.value === parseInt(vendor_id))[0]
       this.filters.courier = this.couriers.filter(e => e.value === parseInt(courier_id))[0]

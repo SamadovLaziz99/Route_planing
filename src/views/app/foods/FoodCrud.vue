@@ -94,10 +94,10 @@
                   </b-colxx>
                   <b-colxx xxs="12" md="4">
                     <b-form-group :label="$t('sale_price')" class="has-float-label mb-4">
-                      <b-form-input type="number" v-model.trim="$v.form.sale_price.$model"  :state="!$v.form.sale_price.$error"/>
-                      <b-form-invalid-feedback v-if="!$v.form.sale_price.required">
-                        {{ $t('please.enter') + $t('sale_price') }}
-                      </b-form-invalid-feedback>
+                      <b-form-input type="number" v-model="form.sale_price"/>
+<!--                      <b-form-invalid-feedback v-if="!$v.form.sale_price.required">-->
+<!--                        {{ $t('please.enter') + $t('sale_price') }}-->
+<!--                      </b-form-invalid-feedback>-->
                     </b-form-group>
                   </b-colxx>
                   <b-colxx xxs="12" md="4">
@@ -219,7 +219,7 @@ export default {
       price: {required},
       ingredients: {required},
       min_amount: {required},
-      sale_price: { required },
+      // sale_price: { required },
       category: {required},
       unit: {required}
     }
