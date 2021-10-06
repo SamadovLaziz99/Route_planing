@@ -28,8 +28,13 @@
                   </div>
                 </div>
                 <b-collapse :id="`faq_${index}`" accordion="faq-accordion" role="tabpanel">
-                  <div class="pl-4 pt-4">
-                    <TimeLine :items="[]"/>
+                  <div class="pl-2 pt-2">
+<!--                    <TimeLine :items="courier_orders"/>-->
+                    <TimeLine v-if="!loadOrders" :items="courier_orders" @selectedItem="selectedItem"/>
+                    <div v-else class="text-center text-primary my-2 mt-1">
+                      <b-spinner class="align-middle"></b-spinner>
+                      <strong>Loading...</strong>
+                    </div>
                   </div>
                 </b-collapse>
               </b-card>
@@ -55,7 +60,8 @@ export default {
   data() {
     return {
       active: -1,
-      tickets
+      tickets,
+      courier_orders: []
     };
   },
   computed: {
@@ -66,8 +72,8 @@ export default {
       this.$emit('selectedItem', e)
     },
     tabChange (e) {
-      console.log(e)
-      if (e === 0 && this.dataOrders && !this.dataOrders.length) {
+      // console.log(e)
+      if (e === 0) {
         this.$store.dispatch('getOrders', {
           status: 'map'
         })
@@ -75,9 +81,10 @@ export default {
     },
     clicked (id, item) {
       this.$store.dispatch('getOrders', {
-        courier_id: item.id
+        courier_id: item.id,
+        status: 'map'
       }).then(res => {
-        console.log(res)
+        this.courier_orders = res
       })
       console.log(id)
       console.log(item)

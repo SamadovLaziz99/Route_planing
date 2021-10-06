@@ -176,9 +176,7 @@ export default {
         email: '',
         password: null,
         re_password: null,
-        is_active: true,
-        groups: [],
-        user_permissions: []
+        is_active: true
       },
       sort: {
         column: "title",
@@ -247,9 +245,7 @@ export default {
         email: '',
         password: null,
         re_password: null,
-        is_active: true,
-        groups: [],
-        user_permissions: []
+        is_active: true
       }
     },
     edit (item) {
@@ -258,6 +254,8 @@ export default {
       delete _data.is_staff
       delete _data.is_superuser
       delete _data.last_login
+      delete _data.groups
+      delete _data.user_permissions
       _data.re_password = _data.password
       console.log(_data)
       this.form = _data

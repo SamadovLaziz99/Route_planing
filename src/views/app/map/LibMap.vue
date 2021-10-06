@@ -2,7 +2,7 @@
   <div style="position:relative;">
     <yandex-map  :coords="center" :zoom="15" class="yandexMap" map-type="map" :controls="['zoomControl', 'fullscreenControl', 'trafficControl']">
       <ymap-marker
-        v-for="cr in courierLocations"
+        v-for="cr in courierLocations.filter(e => (e.active && e.location[0].latitude))"
         :marker-id="'courier' + cr.location[0].id"
         :key="'courier' + cr.location[0].id"
         :coords="[parseFloat(cr.location[0].latitude), parseFloat(cr.location[0].longitude)]"
@@ -26,7 +26,7 @@
         :icon="iconGenerator(icons.client)"
       ></ymap-marker>
       <ymap-marker
-        v-for="vendor in dataVendors"
+        v-for="vendor in dataVendors.filter(e => (e.active && e.latitude))"
         :marker-id="'chef' + vendor.id"
         :key="'chef' + vendor.id"
         :coords="[parseFloat(vendor.latitude), parseFloat(vendor.longitude)]"

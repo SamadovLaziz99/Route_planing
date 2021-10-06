@@ -37,7 +37,7 @@ ws.onmessage = function (e) {
     let a = { ..._courier }
     a.location[0] = {
       courier: _data.courier_id,
-      created_at: _data.created_at,
+      // created_at: _data.created_at,
       id: _data.id,
       latitude: _data.latitude,
       location: _data.location,

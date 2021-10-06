@@ -16,12 +16,20 @@ import ymaps from 'ymaps'
 import { defaultMap } from "../../../constants/config";
 import RightBar from "./RightBar";
 import way from './way'
+import client from '@/assets/icons/client.png'
+import chef from '@/assets/icons/chef.png'
+import empty from '@/assets/icons/empty.png'
 export default {
   components: {
     'right-bar': RightBar
   },
   data () {
     return {
+      images: {
+        client,
+        chef,
+        empty
+      },
       rightBar: false,
       map: null,
       maps: null,
@@ -130,42 +138,61 @@ export default {
       })
     },
     courierPoint (el, name) {
-      const point = new this.maps.GeoObject({
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            parseFloat(el.location[0].latitude),
-            parseFloat(el.location[0].longitude)
-          ]
+      const point = new this.maps.GeoObject(
+        {
+          geometry: {
+            type: 'Point',
+            coordinates: [
+              parseFloat(el.location[0].latitude),
+              parseFloat(el.location[0].longitude)
+            ]
+          },
+          properties: {
+            hintContent: name,
+            balloonContentBody: `Coozin's ${name}`,
+            balloonContentFooter: "Coozin",
+          }
         },
-        properties: {
-          hintContent: name,
-          balloonContentBody: `Coozin's ${ name }`,
-          balloonContentFooter: "Coozin",
+        // {
+        //   preset: 'islands#greenAutoCircleIcon',
+        //   draggable: false,
+        // },
+        {
+          iconLayout: 'default#image',
+          iconImageHref: this.images.empty,
+          iconImageSize: [42, 42],
         }
-      }, {
-        preset: 'islands#greenAutoCircleIcon',
-        draggable: false,
-      })
+      )
       this.geoObjects.couriers.push(point)
       this.map.geoObjects.add(point)
     },
-    cookerPoint (coords, name) {
-      const point = new this.maps.GeoObject({
-        geometry: {
-          type: 'Point',
-          coordinates: coords
+    cookerPoint (el, name) {
+      const point = new this.maps.GeoObject(
+        {
+          geometry: {
+            type: 'Point',
+            coordinates: [
+              parseFloat(el.latitude),
+              parseFloat(el.longitude)
+            ]
+          },
+          properties: {
+            iconContent: 'Vendors',
+            hintContent: name,
+            balloonContentBody: `Coozin's ${name}`,
+            balloonContentFooter: "Coozin",
+          }
         },
-        properties: {
-          iconContent: 'Vendors',
-          hintContent: name,
-          balloonContentBody: `Coozin's ${ name }`,
-          balloonContentFooter: "Coozin",
+        {
+          iconLayout: 'default#image',
+          iconImageHref: this.images.chef,
+          iconImageSize: [42, 42],
         }
-      }, {
-        preset: 'islands#blueFoodCircleIcon',
-        draggable: false,
-      })
+        // {
+        //   preset: 'islands#blueFoodCircleIcon',
+        //   draggable: false,
+        // }
+      )
       this.geoObjects.cookers.push(point)
       this.map.geoObjects.add(point)
     },
@@ -220,14 +247,17 @@ export default {
     drawPointers () {
       // this.homePoint()
       // this.cookers.forEach((e, i) => {
-      //   this.cookerPoint(e, `Vendor ${ i + 1 }`)
+      //   this.cookerPoint(e, (e.user.first_name + e.user.last_name))
       // })
       // this.couriers.forEach((e, i) => {
       //   this.courierPoint(e, `Courier ${ i + 1 }`)
       // })
-      // this.$store.getters.courierLocations.forEach(e => {
-      //   this.courierPoint(e, e.name)
-      // })
+      this.$store.getters.dataVendors.forEach(e => {
+        this.cookerPoint(e, (e.user.first_name + e.user.last_name))
+      })
+      this.$store.getters.courierLocations.forEach(e => {
+        this.courierPoint(e, e.name)
+      })
       this.oneRouteCreator({
         coords: [
           [41.321352, 69.289203],
@@ -248,7 +278,9 @@ export default {
         this.map.events.add('click', (e) => this.clickedMap(e))
         this.map.container.fitToViewport();
         this.$store.dispatch('courierLocation').then(res => {
-          this.drawPointers()
+          this.$store.dispatch('getVendors', { no_page: true }).then(res => {
+            this.drawPointers()
+          })
         })
         // setInterval(() => {
         //   this.courierRealTime(this.courierWay[this.count])

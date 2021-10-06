@@ -12,7 +12,8 @@
               {{ $t(`order.${item.status}`) }}
             </div>
             <div style="width: 100%; margin-top: 25px">
-              <div class="item-title"><span class="iconsminds-doctor marker orange"></span>{{ item.user.first_name }} {{ item.user.last_name }}</div>
+                <div class="item-title"><span class="iconsminds-doctor marker orange"></span>{{ item.user.first_name }} {{ item.user.last_name }}</div>
+                <div class="item-title"><span class="iconsminds-chef-hat marker info"></span>{{ item.vendor.user.first_name }} {{ item.vendor.user.last_name }}</div>
                 <div class="item-title"><span class="iconsminds-map-marker-2 marker red"></span>{{ item.vendor.address }}</div>
                 <div class="item-title"><span class="iconsminds-map-marker-2 marker green"></span>{{ item.user_address.address_name }}</div>
             </div>
