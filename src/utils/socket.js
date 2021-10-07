@@ -10,12 +10,13 @@ ws.onopen = function (e) {
 }
 
 ws.onmessage = function (e) {
-  store.dispatch('info_alert', {
-    title: 'New Message Received'
-  })
 
   const data = JSON.parse(e.data)
-
+  if (data.type !== 'courier') {
+    store.dispatch('info_alert', {
+      title: 'New Message Received'
+    })
+  }
   if (data.type === 'order') {
     const _order = store.getters.dataOrders.filter(e => e.id === data.id)[0]
     const index = store.getters.dataOrders.indexOf(_order)
