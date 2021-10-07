@@ -27,4 +27,4 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: ${{ secrets.SSH_PORT }}
           SOURCE: "dist/"
-          TARGET: "/var/www/admin.coozin.uz/vue"
+          TARGET: "/var/www/admin.coozin.uz/vue/dist"
