@@ -1,9 +1,8 @@
 import store from '../store'
-import router from "../router";
+import { bridge } from "./bridge";
 const ws = new WebSocket(`${process.env.VUE_APP_SOCKET_URL}/notifications/`)
 
 ws.onopen = function (e) {
-  console.log('Open', e)
   store.dispatch('info_alert', {
     title: 'Socket Connected Successfuly !',
     message: 'Connected'
@@ -46,14 +45,15 @@ ws.onmessage = function (e) {
       time: _data.time
     }
     console.log(a)
-    if (_index > -1) {
-      store.commit('UPDATE_NEW_LOCATION', {
-        index: _index,
-        data: a
-      })
-      console.log('Updated')
-      console.log(store.getters.courierLocations)
-    }
+    bridge.$emit('realTimeCourier', a)
+    // if (_index > -1) {
+    //   store.commit('UPDATE_NEW_LOCATION', {
+    //     index: _index,
+    //     data: a
+    //   })
+    //   console.log('Updated')
+    //   console.log(store.getters.courierLocations)
+    // }
   }
 }
 

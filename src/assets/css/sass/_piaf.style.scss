@@ -722,7 +722,15 @@ p {
     }
   }
 }
-
+.loader_content {
+  width: 200px;
+  height: 50px;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  z-index: 10;
+  /*transform: translateX(-50%);*/
+}
 // ======= YANDEX MAP ===========
 
 
@@ -7949,7 +7957,7 @@ i.large-icon {
 .app_main {
   min-height: calc(100% - 150px);
   position: relative;
-  padding-bottom: 90px;
+  //padding-bottom: 90px;
 
   @include respond-below(xl) {
     min-height: calc(100% - 130px);

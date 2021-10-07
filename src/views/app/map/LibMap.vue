@@ -155,14 +155,14 @@ export default {
 
 <style>
 .marker_content {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  background: white;
-  padding: 5px;
-  border-radius: 4px;
-  width: 150px;
-  color: #000;
-  display: flex;
-  justify-content: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px !important;
+  background: white !important;
+  padding: 5px !important;
+  border-radius: 4px !important;
+  width: 150px !important;
+  color: #000 !important;
+  display: flex !important;
+  justify-content: center !important;
   /*font-weight: bold;*/
 }
 .ymaps-2-1-79-controls__toolbar_right {

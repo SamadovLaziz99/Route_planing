@@ -35,6 +35,9 @@ export default {
     setTimeout(() => {
       document.body.classList.add("default-transition");
     }, 100);
+    setTimeout(() => {
+      this.$root.$emit('lollipop', 'lol')
+    }, 3000)
   }
 };
 </script>

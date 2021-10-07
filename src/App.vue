@@ -1,5 +1,5 @@
 <template>
-  <div :class="`h-100 ${$route.name !== 'maps' ? 'app_main' : ''}`">
+  <div :class="`h-100 ${($route.name !== 'maps' || $route.name !== 'maps2') ? 'app_main' : ''}`">
     <router-view />
 <!--    <color-switcher />-->
   </div>
