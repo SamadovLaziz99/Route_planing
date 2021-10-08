@@ -17,8 +17,8 @@
                 <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
               </b-form-group>
-<!--              <b-form-group :label="$t('position')" class="has-float-label mb-4">-->
-<!--                <b-form-input type="number" v-model="form.position"/>-->
+<!--              <b-form-group v-if="form.id" :label="$t('position')" class="has-float-label mb-4">-->
+<!--                <v-select :options="categorys" v-model="position"/>-->
 <!--              </b-form-group>-->
             </b-form>
             <div v-else class="text-center text-primary my-2">
@@ -162,6 +162,7 @@ export default {
         },
         position: null
       },
+      position: null,
       displayMode: "list",
       page: 1,
       search: "",
@@ -200,9 +201,25 @@ export default {
           action: ['edit', 'delete']
         }
       })
+    },
+    categorys () {
+      return this.data.map(e => {
+        return {
+          label: e.name[this.$lang],
+          value: e.id
+        }
+      })
     }
   },
   mounted() {
+    const _hash = this.$route.hash
+    // const _query = this.$route.query
+    // this.filters = _query
+    let _page;
+    if (_hash) {
+      _page = this.$route.hash.slice(6)
+      this.page = parseInt(_page)
+    }
     this.getData()
   },
   methods: {
@@ -288,17 +305,17 @@ export default {
       this.$store.dispatch(get, {
         page: this.page
       }).then(res => {
-        // res.forEach((e, i) => {
-        //   if (e.position !== (i + 1)) {
-        //     this.$store.dispatch(put, {
-        //       id: e.id,
-        //       data: {
-        //         name: e.name,
-        //         position: i + 1
-        //       }
-        //     })
-        //   }
-        // })
+        res.forEach((e, i) => {
+          if (e.position !== ((this.page - 1) * 15 + i + 1)) {
+            this.$store.dispatch(put, {
+              id: e.id,
+              data: {
+                name: e.name,
+                position: (this.page - 1) * 15 + i + 1
+              }
+            })
+          }
+        })
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })

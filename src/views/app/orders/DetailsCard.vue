@@ -19,7 +19,7 @@
         :icon="item.payment_type === 'cash' ? 'iconsminds-dollar' : 'iconsminds-credit-card'"
         :value="$t(item.payment_type)"
       />
-      <icon-card :title="$t('created.time')" icon="iconsminds-clock" :value="moment(item.created_time).format('HH:mm')" />
+      <icon-card :title="$t('created.time')" icon="iconsminds-clock" :value="moment(item.created_at).format('HH:mm')" />
       <icon-card :title="$t('delivery.time')" icon="iconsminds-clock" :value="moment(item.delivery_time).format('HH:mm')" />
     </glide-component>
   </div>

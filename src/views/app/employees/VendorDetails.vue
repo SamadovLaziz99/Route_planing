@@ -91,7 +91,51 @@
               </b-colxx>
             </b-row>
           </b-tab>
-
+          <b-tab :title="$t('pages.orders')">
+            <b-card :title="$t('pages.orders')">
+              <b-table
+                hover
+                :items="orders"
+                :fields="fields"
+                show-empty
+                responsive
+              >
+                <template #empty>
+                  <EmptyBox style="margin-top: 50px"/>
+                </template>
+                <template #table-busy>
+                  <div class="text-center text-primary my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>{{ $t('loading') }}...</strong>
+                  </div>
+                </template>
+                <template #cell(action)="{ item }">
+                  <div style="display: flex">
+                    <div @click="$router.push({ name: 'order_details', params: { id: item.id } })" class="glyph-icon simple-icon-eye mr-2 w-100 text-center action_button" id="view_button" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                  </div>
+                </template>
+                <template #cell(status)="{ item }">
+                  <b-badge pill :variant="badgeType(item.status)">{{ $t(`order.${item.status}`) }}</b-badge>
+                </template>
+                <template #cell(time)="{ item }">
+                  {{ moment(item.created_at).format('YYYY-MM-DD HH:mm') }}
+                </template>
+                <template #cell(id)="{ item }">
+                  <div>#{{ item.id }}</div>
+                </template>
+                <template #cell(delivery_time)="{ item }">
+                  {{ moment(item.delivery_time).format('YYYY-MM-DD HH:mm') }}
+                </template>
+                <template #cell(vendor)="{ item }">
+                  {{ item.vendor.user.first_name + ' ' + item.vendor.user.last_name }}
+                </template>
+                <template #cell(customer)="{ item }">
+                  {{ item.user.first_name + ' ' + item.user.last_name }}
+                </template>
+              </b-table>
+<!--              <Pagination v-if="!load" :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>-->
+            </b-card>
+          </b-tab>
 <!--          <b-tab :title="$t('pages.followers')">-->
 <!--            <b-row>-->
 <!--              <b-colxx v-for="(follower,followerIndex) in followers" xxs="12" md="6" lg="4" :key="`follower_${followerIndex}`">-->
@@ -116,16 +160,75 @@ import { mapGetters } from "vuex";
 import produtcs from '../../../data/products'
 import recentPosts from "../../../data/recentPosts";
 import followers from "../../../data/follow";
+import EmptyBox from "../../../components/EmptyBox";
 import defImage from '@/assets/img/details/chef_placeholder.png'
+import moment from "moment";
 export default {
   components: {
     stars: Stars,
+    EmptyBox,
     'single-lightbox': SingleLightbox,
     'recent-post': RecentPost,
     'user-card-basic': UserCardBasic,
   },
   data() {
     return {
+      fields: [
+        {
+          key: 'id',
+          label: this.$t('id'),
+          tdClass: 'firstColumn'
+        },
+        {
+          key: 'customer',
+          label: this.$t('customer'),
+          tdClass: 'firstColumn'
+        },
+        {
+          key: 'vendor',
+          label: this.$t('vendor'),
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'additional_phone',
+          label: this.$t('phone'),
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'payment_type',
+          label: this.$t('payment_type'),
+          tdClass: 'text-muted',
+          class: 'text-center'
+        },
+        {
+          key: 'order_price',
+          label: this.$t('order_price'),
+          tdClass: 'text-muted',
+          class: 'text-center'
+        },
+        {
+          key: 'time',
+          label: this.$t('order_time'),
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'delivery_time',
+          label: this.$t('delivery_time'),
+          tdClass: 'text-muted'
+        },
+        {
+          key: 'status',
+          label: this.$t('status'),
+          class: 'text-center'
+          // tdClass: 'secondColumn'
+        },
+        {
+          key: 'action',
+          label: this.$t('action'),
+          class: 'text-center'
+        }
+      ],
+      orders: [],
       produtcs: produtcs.slice(0, 15),
       recentPosts,
       followers,
@@ -138,12 +241,35 @@ export default {
   computed: {
     ...mapGetters(['errorVendors', 'oneLoadVendors'])
   },
-  methods: {},
+  methods: {
+    moment,
+    badgeType(type) {
+      switch (type) {
+        case 'pending': return 'info'
+          break;
+        case 'accepted': return 'secondary'
+          break;
+        case 'in_process': return 'light'
+          break;
+        case 'shipping': return 'dark'
+          break;
+        case 'finished': return 'success'
+          break;
+        case 'cancelled': return 'danger'
+          break;
+        default: return 'primary'
+          break;
+      }
+    },
+  },
   mounted() {
     this.$store.dispatch('getByIdVendors', this.$route.params.id).then(res => {
       // console.log(res)
       this.vendor = res
       this.vendorImage = (res.media && res.media.length > 0) ? this.$imgProxy(res.media[0].url, '500x350') : this.defImage
+    })
+    this.$store.dispatch('getOrders', { vendor_id: this.$route.params.id, no_page: true }).then(res => {
+      this.orders = res
     })
     this.$store.dispatch('getFood', {
       vendor_id: this.$route.params.id

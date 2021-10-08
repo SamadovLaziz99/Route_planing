@@ -29,6 +29,7 @@ import OrderMapDetailCard from "../orders/OrderMapDetailCard";
 import client from '@/assets/icons/client.png'
 import chef from '@/assets/icons/chef.png'
 import empty from '@/assets/icons/empty.png'
+import busy from '@/assets/icons/active.png'
 export default {
   components: {
     'right-bar': RightBar,
@@ -39,7 +40,8 @@ export default {
       images: {
         client,
         chef,
-        empty
+        empty,
+        busy
       },
       rightBar: false,
       map: null,
@@ -200,7 +202,7 @@ export default {
         },
         {
           iconLayout: 'default#imageWithContent',
-          iconImageHref: this.images.empty,
+          iconImageHref: el.location[0].order ? this.images.busy : this.images.empty,
           iconImageSize: [42,42],
           iconImageOffset: [-21, -42],
         }
