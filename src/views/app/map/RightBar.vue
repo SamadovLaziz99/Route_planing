@@ -14,7 +14,7 @@
           </b-tab>
           <b-tab :title="$t('menu.couriers').toUpperCase()">
             <div class="mt-3">
-              <b-card no-body class="d-flex mb-2 shadow" v-for="( item, index) in dataCouriers" :key="`faq_${index}`">
+              <b-card no-body class="d-flex mb-2 shadow" v-for="( item, index) in dataCouriers.filter(e => e.active)" :key="`faq_${index}`">
                 <div :class="`pl-3 pr-3 ${ active === index ? 'collapse_top' : '' }`">
                   <div @click="clicked(index, item)">
                     <list-card
@@ -66,6 +66,9 @@ export default {
   },
   computed: {
     ...mapGetters(['dataCouriers', 'dataOrders', 'loadOrders'])
+  },
+  mounted() {
+    this.$store.dispatch('getCouriers')
   },
   methods: {
     selectedItem (e) {

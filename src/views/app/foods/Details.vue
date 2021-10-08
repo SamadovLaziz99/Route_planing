@@ -59,7 +59,7 @@
                               class="vue-switcher-small"></switches>
                   </b-card-body>
                 </b-card>
-                <b-card :title="$t('maps.yandex')" class="mb-4">
+                <b-card :title="$t('food.vendor.location')" class="mb-4">
                   <yandex-map :coords="[food.vendor.latitude, food.vendor.longitude]" :zoom="15" class="map-item" map-type="map" :controls="['zoomControl']">
                     <ymap-marker marker-id="123" :coords="[food.vendor.latitude, food.vendor.longitude]" :hint-content="food.vendor.user.first_name + ' ' + food.vendor.user.last_name" ></ymap-marker>
                   </yandex-map>

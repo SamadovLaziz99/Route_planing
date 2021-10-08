@@ -28,7 +28,7 @@
                 <b-form-input type="text" v-model="form.apelsin_account"/>
 <!--                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}</b-form-invalid-feedback>-->
               </b-form-group>
-              <b-form-group :label="$t('apelsin_account')" class="has-float-label mb-4">
+              <b-form-group :label="$t('apelsin_token')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model="form.apelsin_token"/>
               </b-form-group>
               <b-form-group :label="$t('car_model')" class="has-float-label mb-4">

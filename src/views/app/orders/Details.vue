@@ -97,6 +97,30 @@
                 <p class="mt-3">{{ order.vendor.about_me }}</p>
               </b-card-body>
             </b-card>
+            <b-card class="mb-4" v-if="order.courier" no-body>
+              <b-card-body>
+                <b-card-title>{{ $t('courier.details') }}</b-card-title>
+                <div class="d-flex flex-row align-items-center mb-1">
+                  <i :class="`initial-height text-primary simple-icon-user`" style="font-size: 18px"></i>
+                  <div class="pl-3 pt-2 pr-2">
+                    <p class="list-item-heading mb-1">{{ order.courier.name }}</p>
+                  </div>
+                </div>
+                <div class="d-flex flex-row align-items-center mb-1">
+                  <i :class="`initial-height text-primary simple-icon-phone`" style="font-size: 18px"></i>
+                  <div class="pl-3 pt-2 pr-2">
+                    <p class="list-item-heading mb-1">{{ order.courier.phone  }}</p>
+                  </div>
+                </div>
+                <div class="d-flex flex-row align-items-center mb-1">
+                  <i :class="`initial-height text-primary iconsminds-car`" style="font-size: 20px; margin-left: -5px"></i>
+                  <div class="pl-2 pt-2 pr-2">
+                    <p class="list-item-heading mb-1"> {{ order.courier.details.car_model }} - {{ order.courier.details.car_number }}</p>
+                  </div>
+                </div>
+<!--                <p class="mt-3">{{ order.vendor.about_me }}</p>-->
+              </b-card-body>
+            </b-card>
             <b-card class="mb-4" :title="$t('foods')">
               <div style="height:auto !important; position:relative;width:100% !important; font-family: Helvetica,Arial,sans-serif !important;">
                 <table style="width: 100%; margin:0;padding:25px;" heigth="auto">

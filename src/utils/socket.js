@@ -35,6 +35,7 @@ ws.onmessage = function (e) {
     const _courier = store.getters.courierLocations.filter(e => e.id === data.courier_id)[0]
     const _index = store.getters.courierLocations.indexOf(_courier)
     let a = { ..._courier }
+    // console.log(a)
     a.location[0] = {
       courier: _data.courier_id,
       // created_at: _data.created_at,
