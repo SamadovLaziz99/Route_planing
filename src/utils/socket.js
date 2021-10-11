@@ -30,7 +30,7 @@ ws.onmessage = function (e) {
     store.dispatch('setOrderStats', data)
     store.dispatch('setOrderStatsHistory', data)
   }
-  if (data.type === 'courier') {
+  if (data.type === 'courier' && store.getters.courierLocations.length > 0) {
     const _data = { ...data }
     const _courier = store.getters.courierLocations.filter(e => e.id === data.courier_id)[0]
     const _index = store.getters.courierLocations.indexOf(_courier)
@@ -38,7 +38,6 @@ ws.onmessage = function (e) {
     // console.log(a)
     a.location[0] = {
       courier: _data.courier_id,
-      // created_at: _data.created_at,
       id: _data.id,
       latitude: _data.latitude,
       location: _data.location,
@@ -46,16 +45,8 @@ ws.onmessage = function (e) {
       order: _data.order_id,
       time: _data.time
     }
-    console.log(a)
+    // console.log(a)
     bridge.$emit('realTimeCourier', a)
-    // if (_index > -1) {
-    //   store.commit('UPDATE_NEW_LOCATION', {
-    //     index: _index,
-    //     data: a
-    //   })
-    //   console.log('Updated')
-    //   console.log(store.getters.courierLocations)
-    // }
   }
 }
 

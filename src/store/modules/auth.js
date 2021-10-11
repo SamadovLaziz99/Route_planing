@@ -18,6 +18,9 @@ export default {
     FETCH_TOKEN (state, payload) {
       state.loading = payload
     },
+    REMOVE_TOKEN (state, payload) {
+      state.token = payload
+    },
     ERROR_AUTH (state, payload) {
       state.error = payload
     },
@@ -40,6 +43,7 @@ export default {
       })
     },
     async signOut ({commit}) {
+      commit('REMOVE_TOKEN', null)
       await localStorage.removeItem('token')
       return 'Token Deleted'
     }

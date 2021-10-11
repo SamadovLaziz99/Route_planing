@@ -53,7 +53,13 @@
             <b-colxx xxs="12" md="6">
               <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">
                 <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[
-                    $t('day.sun')
+                    $t('day.sun'),
+                    $t('day.mon'),
+                    $t('day.tue'),
+                    $t('day.wed'),
+                    $t('day.thu'),
+                    $t('day.fri'),
+                    $t('day.sat'),
                   ]"/>
               </b-form-group>
             </b-colxx>

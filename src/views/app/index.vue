@@ -17,11 +17,10 @@ export default {
 </script>
 <style>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .8s;
-  /*transform: translateY(0px);*/
+  transition: opacity .7s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  /*transform: translateY(-50px);*/
+.fade-enter, .fade-leave-to {
+  /*transform: translateX(-140px);*/
   opacity: 0;
 }
 </style>
