@@ -14,32 +14,58 @@
         >
           <b-row style="padding: 0 10px">
             <b-colxx xxs="12" md="2">
-              <v-select v-if="$route.name === 'order_list'" v-model="filters.vendor" @input="changeVendor"
-                        style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
+              <b-form-group :label="$t('vendors')" class="has-float-label mb-2">
+                <v-select v-if="$route.name === 'order_list'" v-model="filters.vendor" @input="changeVendor"
+                          style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>
+              </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="2">
+              <b-form-group :label="$t('foods')" class="has-float-label mb-2">
               <v-select v-if="$route.name === 'order_list'" v-model="filters.food" @input="changeFood"
                         style="width: 100%" class="mb-2" :options="foods" :placeholder="$t('foods')"/>
+              </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="2">
+              <b-form-group :label="$t('couriers')" class="has-float-label mb-2">
               <v-select v-if="$route.name === 'order_list'" v-model="filters.courier" @input="changeCouriers"
                         style="width: 100%" class="mb-2" :options="couriers" :placeholder="$t('couriers')"/>
+              </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="2">
-              <v-select v-if="$route.name === 'order_list'" v-model="filters.payment_type" @input="changePaymentType"
-                        style="width: 100%" class="mb-2" :options="payment_types" :placeholder="$t('payment_type')"/>
+              <b-form-group :label="$t('payment_type')" class="has-float-label mb-2">
+                <v-select v-if="$route.name === 'order_list'" v-model="filters.payment_type" @input="changePaymentType"
+                          style="width: 100%" class="mb-2" :options="payment_types" :placeholder="$t('payment_type')"/>
+              </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="3">
-              <div class="d-inline-block mb-2 float-md-left align-top w-100">
+
+              <b-form-group :label="$t('search')" class="has-float-label mb-2">
                 <b-input v-if="$route.name === 'order_list'" class="search_input"
                          :placeholder="$t('search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search"
                          v-model="filters.search"/>
-              </div>
+              </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="1">
               <div class="float-md-right pt-1">
                 <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} of {{ pagination.total }}</span>
               </div>
+            </b-colxx>
+            <b-colxx xxs="12" md="6">
+              <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">
+                <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[
+                    $t('day.sun')
+                  ]"/>
+              </b-form-group>
+            </b-colxx>
+            <b-colxx xxs="12" md="3">
+              <b-form-group :label="$t('price.from')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model="filters.order_price_from" @input="priceRangerChange"/>
+              </b-form-group>
+            </b-colxx>
+            <b-colxx xxs="12" md="3">
+              <b-form-group :label="$t('price.to')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>
+              </b-form-group>
             </b-colxx>
           </b-row>
         </list-page-heading>
@@ -110,6 +136,7 @@ import { actions, getters } from "../../../utils/store_schema";
 import EmptyBox from "../../../components/EmptyBox";
 import { mapGetters } from "vuex";
 import debounce from "debounce";
+import { DateRangePicker } from '@livelybone/vue-datepicker'
 import moment from "moment";
 const _page = 'orders'
 const { get, getById } = actions(_page)
@@ -118,11 +145,13 @@ export default {
   components: {
     "list-page-heading": ListPageHeading,
     Pagination,
-    EmptyBox
+    EmptyBox,
+    DateRangePicker
     // TableSimple
   },
   data() {
     this.search = debounce(this.search, 800)
+    this.priceRangerChange = debounce(this.priceRangerChange, 1500)
     return {
       activeTab: 0,
       fields: [
@@ -183,6 +212,7 @@ export default {
       page: 1,
       from: 0,
       to: 0,
+      date: [],
       payment_types: [
         {
           label: this.$t('cash'),
@@ -199,12 +229,38 @@ export default {
         vendor: null,
         food: null,
         courier: null,
-        payment_type: null
+        payment_type: null,
+        order_date_from: null,
+        order_date_to: null,
+        order_price_from: null,
+        order_price_to: null
       }
     };
   },
   methods: {
     moment,
+    priceRangerChange (e) {
+      this.routePusher()
+      this.getData()
+    },
+    // priceToRangerChange (e) {
+    //   if (e && e.length) {
+    //     this.filters.order_price_to = parseInt(e)
+    //     this.routePusher()
+    //     this.getData()
+    //   }
+    // },
+    changeDatePicker (e) {
+      if (e && e.length) {
+        this.filters.order_date_from = e[0]
+        this.filters.order_date_to = e[1]
+      } else {
+        this.filters.order_date_from = null
+        this.filters.order_date_to = null
+      }
+      this.routePusher()
+      this.getData()
+    },
     search (e) {
       this.page = 1
       this.routePusher()
@@ -244,6 +300,10 @@ export default {
       _query.vendor_id = this.filters.vendor?.value,
       _query.q = this.filters.search,
       _query.payment_type = this.filters.payment_type?.value
+      _query.date_from = this.filters.order_date_from
+      _query.date_to = this.filters.order_date_to
+      _query.price_from = this.filters.order_price_from
+      _query.price_to = this.filters.order_price_to
       this.$router.push({
         name: this.name,
         query: _query
@@ -332,7 +392,11 @@ export default {
         vendor_id: this.filters.vendor?.value,
         courier_id: this.filters.courier?.value,
         q: this.filters.search,
-        payment_type: this.filters.payment_type?.value
+        payment_type: this.filters.payment_type?.value,
+        order_date_to: this.filters.order_date_to || undefined,
+        order_date_from: this.filters.order_date_from || undefined,
+        order_price_to: this.filters.order_price_to ? parseInt(this.filters.order_price_to) : undefined,
+        order_price_from: this.filters.order_price_from ? parseInt(this.filters.order_price_from) : undefined
       }).then(res => {
         console.log(res)
         console.log(this.pagination)
@@ -384,13 +448,18 @@ export default {
       this.page = parseInt(_page)
     }
     if (_query) {
-      const { food_id, courier_id, vendor_id, q, type, payment_type } = _query
+      const { food_id, courier_id, vendor_id, q, type, payment_type, date_from, date_to, price_from, price_to } = _query
       this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
       this.filters.vendor = this.vendors.filter(e => e.value === parseInt(vendor_id))[0]
       this.filters.courier = this.couriers.filter(e => e.value === parseInt(courier_id))[0]
       this.filters.payment_type = this.payment_types.filter(e => e.value === parseInt(payment_type))[0]
       this.filters.search = q
       this.filters.type = type
+      this.date = [date_from, date_to]
+      this.filters.order_date_from = date_from
+      this.filters.order_date_to = date_to
+      this.filters.order_price_from = price_from
+      this.filters.order_price_to = price_to
       setTimeout(() => {
         this.findTabsWithType(type)
         this.getData()

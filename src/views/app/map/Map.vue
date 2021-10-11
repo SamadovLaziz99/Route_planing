@@ -48,6 +48,7 @@ export default {
       maps: null,
       order: null,
       loadMapData: false,
+      selectedOrder: null,
       route: {
         stop: true,
         coords: []
@@ -89,6 +90,9 @@ export default {
       console.log('Route:', e)
     },
     clientPoint (el) {
+      if (this.geoObjects.client) {
+        this.map.geoObjects.remove(this.geoObjects.client)
+      }
       const point = new this.maps.GeoObject(
         {
           geometry: {
@@ -141,10 +145,12 @@ export default {
         this.map.geoObjects.remove(e.point)
       })
       this.geoObjects.routedCouriers = []
+      this.selectedOrder = null
       this.order = null
       this.geoObjects.route = null
     },
     selectedItem (e) {
+      this.selectedOrder = e
       const _coords = `${e.user_address.longitude + ',' + e.user_address.latitude}~${e.vendor.longitude + ',' + e.vendor.latitude}`
       this.$store.dispatch('getOneRoute', _coords).then(res => {
         this.order = {
@@ -168,7 +174,11 @@ export default {
         // const _coord = [((parseFloat(e.vendor.latitude) + parseFloat(_client.latitude)) / 2 ), ((parseFloat(e.vendor.longitude) + parseFloat(_client.longitude)) / 2 )]
         // this.map.setCenter(_coord, 12)
         // this.map.panTo(_coord, { checkZoomRange: true })
-
+        if (this.geoObjects.routedCouriers && this.geoObjects.routedCouriers.length) {
+          this.geoObjects.routedCouriers.forEach(el => {
+            this.map.geoObjects.remove(el.point)
+          })
+        }
         this.geoObjects.couriers.forEach(el => {
           const _el = el.el
           const _user_coords = e.user_address.longitude + ',' + e.user_address.latitude
@@ -292,6 +302,9 @@ export default {
       this.map.geoObjects.add(point)
     },
     oneRouteCreator (state) {
+      if (this.geoObjects.route) {
+        this.map.geoObjects.remove(this.geoObjects.route);
+      }
       this.maps.route(state.coords, {
         multiRoute: true,
         mapStateAutoApply: state?.mapStateAutoApply,
@@ -325,12 +338,26 @@ export default {
     },
     realTimeCourier (el) {
       const _oldItem = this.geoObjects.couriers.filter(e => e.el.id === el.id)[0]
+      const _oldItemWithRouted = this.geoObjects.routedCouriers.filter(e => e.el.id === el.id)[0]
       const _index = this.geoObjects.couriers.indexOf(_oldItem)
+      const _indexWithRouted = this.geoObjects.routedCouriers.indexOf(_oldItemWithRouted)
       setTimeout(() => {
         this.map.geoObjects.remove(_oldItem.point)
         this.geoObjects.couriers.splice(_index, 1)
+
+        if (this.geoObjects.routedCouriers.length > 0) {
+          this.map.geoObjects.remove(_oldItemWithRouted.point)
+          this.geoObjects.routedCouriers.splice(_indexWithRouted, 1)
+        }
+
       }, 1)
       setTimeout(() => {
+          if (this.geoObjects.routedCouriers.length > 0) {
+            const _user_coords = this.selectedOrder.user_address.longitude + ',' + this.selectedOrder.user_address.latitude
+            this.$store.dispatch('getOneRoute', `${_user_coords}~${el.location[0].longitude + ',' + el.location[0].latitude}`).then(res => {
+              this.routedCouriersPoint(el, res)
+            })
+          }
         this.courierPoint(el)
         // this.map.geoObjects.remove(_oldItem.point)
       }, 2)

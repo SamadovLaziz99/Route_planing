@@ -12,8 +12,9 @@ export const menuHiddenBreakpoint = 768
 export const defaultLocale = 'ru'
 export const defaultDirection = 'ltr'
 export const localeOptions = [
-  { id: 'en', name: 'English' },
-  { id: 'ru', name: 'Русский' }
+  // { id: 'en', name: 'English' },
+  { id: 'ru', name: 'Русский' },
+  { id: 'uz', name: "O'zbekcha" },
 ]
 export const defaultMap = {
   api: 'https://api-maps.yandex.ru/2.1/?apikey=1abe9aa1-66ec-4c7f-8b93-a4e0bc25319e&lang=ru_RU',

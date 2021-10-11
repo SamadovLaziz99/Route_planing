@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import en from './en.json'
 import ru from './ru.json'
+import uz from './uz.json'
 import VueI18n from 'vue-i18n'
 import { getCurrentLanguage } from "../utils";
 
@@ -8,7 +9,8 @@ import { getCurrentLanguage } from "../utils";
 Vue.use(VueI18n);
 const messages = {
   en: en,
-  ru: ru
+  ru: ru,
+  uz: uz
 };
 const locale = getCurrentLanguage();
 

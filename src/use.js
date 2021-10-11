@@ -14,3 +14,4 @@ Vue.use(VueScrollTo);
 Vue.use(VueLineClamp, {
   importCss: true
 });
+

@@ -27,11 +27,11 @@
             </span>
           <span class="item_title">{{ order.vendor.user.first_name + ' ' + order.vendor.user.last_name }}</span>
         </div>
-        <div class="detail_row">
+        <div v-if="order.courier" class="detail_row">
             <span class="iconsminds-scooter icon">
               <span class="item_name">Courier</span>
             </span>
-          <span class="item_title">John Doe</span>
+          <span class="item_title">{{ order.courier.name }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-road-2 icon">

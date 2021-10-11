@@ -34,7 +34,7 @@
 <!--              <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />-->
 <!--            </div>-->
 <!--            <div v-if="!rangepicker" class="d-inline-block float-md-left mr-1 align-top">-->
-<!--              <DateRangePicker placeholder="Start Date" secondPlaceholder="End Date" @input="changeDatePicker" rangeSeparator="~" v-model="date" :dayStr="['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"/>-->
+
 <!--            </div>-->
 <!--          </div>-->
 <!--          <div class="float-md-right pt-1">-->
@@ -119,36 +119,4 @@ export default {
   // }
 };
 </script>
-<style>
-.input-wrapper.focus {
-  border-color: orange !important;
-}
-.datepicker .picker .picker-items .row-item .item.selected:before, .date-range-picker .picker .picker-items .row-item .item.selected:before, .timepicker .picker .picker-items .row-item .item.selected:before, .datetime-picker .picker .picker-items .row-item .item.selected:before {
-  background: #ffa500 !important;
-}
-.datepicker .picker .picker-items .row-item .item.is-in-range:before, .date-range-picker .picker .picker-items .row-item .item.is-in-range:before, .timepicker .picker .picker-items .row-item .item.is-in-range:before, .datetime-picker .picker .picker-items .row-item .item.is-in-range:before {
-  background: rgba(255, 165, 0, 0.2);
-}
-.datepicker .picker .picker-items .row-item .item:hover, .date-range-picker .picker .picker-items .row-item .item:hover, .timepicker .picker .picker-items .row-item .item:hover, .datetime-picker .picker .picker-items .row-item .item:hover {
-  color: orange;
-  border: none;
-}
-.datepicker .picker .picker-items .row-item .item:hover, .date-range-picker .picker .picker-items .row-item .item:hover, .timepicker .picker .picker-items .row-item .item:hover, .datetime-picker .picker .picker-items .row-item .item:hover {
-  color: white;
-  border: none;
-}
-.datepicker .picker .picker-items .row-item .item.is-now, .date-range-picker .picker .picker-items .row-item .item.is-now, .timepicker .picker .picker-items .row-item .item.is-now, .datetime-picker .picker .picker-items .row-item .item.is-now {
-  color: orange;
-}
-.datepicker .picker .picker-items .row-item .item.selected:before, .datepicker .picker .picker-items .row-item .item.is-now:before, .datepicker .picker .picker-items .row-item .item.is-in-range:before, .date-range-picker .picker .picker-items .row-item .item.selected:before, .date-range-picker .picker .picker-items .row-item .item.is-now:before, .date-range-picker .picker .picker-items .row-item .item.is-in-range:before, .timepicker .picker .picker-items .row-item .item.selected:before, .timepicker .picker .picker-items .row-item .item.is-now:before, .timepicker .picker .picker-items .row-item .item.is-in-range:before, .datetime-picker .picker .picker-items .row-item .item.selected:before, .datetime-picker .picker .picker-items .row-item .item.is-now:before, .datetime-picker .picker .picker-items .row-item .item.is-in-range:before {
-  border: none;
-}
-.datepicker .input-wrapper, .date-range-picker .input-wrapper, .timepicker .input-wrapper, .datetime-picker .input-wrapper {
-  padding: 1px;
-  border-radius: 10px;
-  border: 1px solid grey;
-}
-.vue-input {
-  background: transparent;
-}
-</style>
+
