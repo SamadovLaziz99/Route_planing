@@ -17,9 +17,9 @@
                 <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
               </b-form-group>
-<!--              <b-form-group v-if="form.id" :label="$t('position')" class="has-float-label mb-4">-->
-<!--                <v-select :options="categorys" v-model="position"/>-->
-<!--              </b-form-group>-->
+              <b-form-group v-if="form.id" :label="$t('position')" class="has-float-label mb-4">
+                <v-select :options="categorys" v-model="position"/>
+              </b-form-group>
             </b-form>
             <div v-else class="text-center text-primary my-2">
               <b-spinner class="align-middle"></b-spinner>
@@ -56,7 +56,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.foods_category`)">
+        <b-card :title="$t(`menu.foods_category`)" class="mb-4">
           <b-table
             hover
             :items="items"
@@ -192,6 +192,11 @@ export default {
       ],
     };
   },
+  watch: {
+    position (val) {
+      console.log(val)
+    }
+  },
   computed: {
     ...mapGetters(getters(_page)),
     items() {
@@ -205,6 +210,7 @@ export default {
     categorys () {
       return this.data.map(e => {
         return {
+          el: e,
           label: e.name[this.$lang],
           value: e.id
         }
@@ -227,11 +233,23 @@ export default {
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        if (this.position) {
+          this.$store.dispatch(put, {
+            id: this.position.el.id,
+            data: {
+              name: this.position.el.name,
+              position: this.form.position
+            }
+          }).then(res => {
+            // this.$refs.crudModal.hideModal()
+          })
+        }
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: {
             name: this.form.name,
-            position: this.form.position ? parseInt(this.form.position) : ((this.page - 1) * 15 + (this.items.length < 15 ? (this.items.length + 1) : 1))
+            position: this.position ? this.position.el.position : (this.form.position ? parseInt(this.form.position) : (this.data.length + 1))
+            // position: this.form.position ? parseInt(this.form.position) : ((this.page - 1) * 15 + (this.items.length < 15 ? (this.items.length + 1) : 1))
           }
         }).then(res => {
           this.$refs.crudModal.hideModal()
@@ -265,6 +283,7 @@ export default {
     },
     clear() {
       this.$v.$reset()
+      this.position = null
       this.form = {
         id: null,
         name: {
@@ -286,36 +305,26 @@ export default {
       this.search = val;
       this.page = 1;
     },
-    handleContextMenu(vnode) {
-      if (!this.selectedItems.includes(vnode.key)) {
-        this.selectedItems = [vnode.key];
-      }
-    },
-    onContextMenuAction(action) {
-      console.log(
-        "context menu item clicked - " + action + ": ",
-        this.selectedItems
-      );
-    },
     changePage(n) {
       this.page = n
       this.getData()
     },
     getData() {
       this.$store.dispatch(get, {
-        page: this.page
+        // page: this.page,
+        no_page: true
       }).then(res => {
-        res.forEach((e, i) => {
-          if (e.position !== ((this.page - 1) * 15 + i + 1)) {
-            this.$store.dispatch(put, {
-              id: e.id,
-              data: {
-                name: e.name,
-                position: (this.page - 1) * 15 + i + 1
-              }
-            })
-          }
-        })
+        // res.forEach((e, i) => {
+        //   if (e.position !== ((this.page - 1) * 15 + i + 1)) {
+        //     this.$store.dispatch(put, {
+        //       id: e.id,
+        //       data: {
+        //         name: e.name,
+        //         position: (this.page - 1) * 15 + i + 1
+        //       }
+        //     })
+        //   }
+        // })
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })
