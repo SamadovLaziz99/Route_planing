@@ -1,68 +1,83 @@
 <template>
   <div class="routeDetailsContent" v-if="order">
-    <b-card style="width: 100%; height: 100%" :title="$t('route.details')" class="mb-4">
+    <b-card style="width: 100%;" :title="$t('route.details')" class="mb-4">
       <b-close-button @click="closeRouteDetails"/>
       <div class="details">
         <div class="detail_row">
             <span class="iconsminds-shopping-cart icon">
-              <span class="item_name">Order</span>
+              <span class="item_name">{{ $t('order.order') }}</span>
             </span>
           <span class="item_title"># {{ order.id }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-male icon">
-              <span class="item_name">Customer</span>
+              <span class="item_name">{{ $t('customer') }}</span>
             </span>
           <span class="item_title">{{ order.user.first_name + ' ' + order.user.last_name }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-smartphone-4 icon">
-              <span class="item_name">Customer Phone</span>
+              <span class="item_name">{{ $t('customer.phone') }}</span>
             </span>
           <span class="item_title">{{ order.user.phone }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-chef-hat icon">
-              <span class="item_name">Vendor</span>
+              <span class="item_name">{{ $t('vendor') }}</span>
             </span>
           <span class="item_title">{{ order.vendor.user.first_name + ' ' + order.vendor.user.last_name }}</span>
         </div>
         <div v-if="order.courier" class="detail_row">
             <span class="iconsminds-scooter icon">
-              <span class="item_name">Courier</span>
+              <span class="item_name">{{ $t('courier') }}</span>
             </span>
           <span class="item_title">{{ order.courier.name }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-road-2 icon">
-              <span class="item_name">Distance</span>
+              <span class="item_name">{{ $t('distance') }}</span>
             </span>
-          <span class="item_title">{{ order.route.distance.text }}</span>
+          <span class="item_title">{{ distance }} {{ $t('km') }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-clock icon">
-              <span class="item_name">Duration</span>
+              <span class="item_name">{{ $t('duration') }}</span>
             </span>
-          <span class="item_title">{{ order.route.duration.text }}</span>
+          <span class="item_title">{{ (hr !== '' ? (hr + ' ' + this.$t('hr')) : '') + ' ' + (mn !== '' ? (mn + ' ' + this.$t('min')) : '') }}</span>
         </div>
-        <div class="detail_row">
-            <span class="iconsminds-traffic-light icon">
-              <span class="item_name">Duration Traffic Jump</span>
-            </span>
-          <span class="item_title">{{ order.route.durationTraffic.text }}</span>
-        </div>
+<!--        <div class="detail_row">-->
+<!--            <span class="iconsminds-traffic-light icon">-->
+<!--              <span class="item_name">Duration Traffic Jump</span>-->
+<!--            </span>-->
+<!--          <span class="item_title">{{ order.route.durationTraffic.text }}</span>-->
+<!--        </div>-->
       </div>
     </b-card>
   </div>
 </template>
 
 <script>
+import { timeFormat } from "../../../utils";
 export default {
   name: "OrderMapDetailCard",
   props: ['order'],
   methods: {
+    timeFormat,
     closeRouteDetails () {
       this.$emit('close')
+    }
+  },
+  computed: {
+    hr () {
+      return this.timeFormat(this.order.route.time).hr
+    },
+    mn () {
+      return this.timeFormat(this.order.route.time).mn
+    },
+    distance () {
+      const _dis = this.order.route.length.toString()
+      const distance = _dis.split('.')[1].length > 1 ? (_dis.split('.')[0] + '.' + _dis.split('.')[1].slice(0, 1)) : this.order.route.length
+      return distance
     }
   }
 }

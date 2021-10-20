@@ -47,12 +47,20 @@
             </b-colxx>
             <b-colxx xxs="12" md="1">
               <div class="float-md-right pt-1">
-                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} of {{ pagination.total }}</span>
+                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
               </div>
             </b-colxx>
             <b-colxx xxs="12" md="6">
               <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">
-                <DateRangePicker placeholder="Start Date" secondPlaceholder="End Date" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']"/>
+                <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[
+                    $t('day.sun'),
+                    $t('day.mon'),
+                    $t('day.tue'),
+                    $t('day.wed'),
+                    $t('day.thu'),
+                    $t('day.fri'),
+                    $t('day.sat'),
+                  ]"/>
               </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="3">

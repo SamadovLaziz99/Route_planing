@@ -21,7 +21,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.foods_list`)">
+        <b-card :title="$t(`menu.foods_list`)" class="mb-4">
 <!--          <div class="all_table w-100">-->
             <b-table
               hover

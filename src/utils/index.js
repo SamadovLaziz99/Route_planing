@@ -1,5 +1,5 @@
 import { defaultDirection, defaultColor, themeSelectedColorStorageKey, themeRadiusStorageKey, localeOptions, defaultLocale } from '../constants/config'
-
+// import { t } from "../locales/i18n";
 export const mapOrder = (array, order, key) => {
   array.sort(function (a, b) {
     var A = a[key]
@@ -182,4 +182,25 @@ export const routeOptimized = (data) =>  {
     routeOptimized(data)
   }
   else return data.properties
+}
+
+export const timeFormat = (value) =>  {
+  if (value !== 0) {
+    let h, m, s
+    s = value
+    // if (value >= 1000) s = Math.floor(Math.abs((value) / 1000))
+    // else s = 0
+    if (s > 0) {
+      m = Math.floor(s / 60)
+      s = s - m * 60
+    } else m = 0
+    if (m > 0) {
+      h = Math.floor(m / 60)
+      m = m - h * 60
+    } else h = 0
+    return {
+      hr: (h > 0 ? h : ''),
+      mn: (m > 0 ? m : '')
+    }
+  }
 }

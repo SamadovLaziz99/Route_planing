@@ -33,27 +33,27 @@ export default {
         fields: [
           {
             name: "vendor__user__first_name",
-            title: "First Name",
+            title: this.$t('first.name'),
             titleClass: "",
             dataClass: "list-item-heading"
           },
           {
             name: "vendor__user__last_name",
-            title: "Last Name",
+            title: this.$t('last.name'),
             titleClass: "",
             dataClass: "text-muted"
           },
           {
             name: "sales_count",
             // sortField: "stock",
-            title: "Sales",
+            title: this.$t('sales'),
             titleClass: "",
             dataClass: "text-muted"
           },
           {
             name: "total_sum",
             // sortField: "category",
-            title: "Total",
+            title: this.$t('dashboards.total'),
             titleClass: "",
             dataClass: "text-muted"
           },

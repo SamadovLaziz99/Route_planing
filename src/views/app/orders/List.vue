@@ -47,7 +47,7 @@
             </b-colxx>
             <b-colxx xxs="12" md="1">
               <div class="float-md-right pt-1">
-                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} of {{ pagination.total }}</span>
+                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
               </div>
             </b-colxx>
             <b-colxx xxs="12" md="6">

@@ -22,7 +22,7 @@ export default {
           lang: 'ru_RU',
           rll: params,
           apikey: '1abe9aa1-66ec-4c7f-8b93-a4e0bc25319e',
-          token: '3c062204400e4a4d8a471e7cdc510188',
+          token: '6d99bc747031277736796fd393734636',
           rtm: 'atm',
           results: 1
         }
@@ -77,6 +77,18 @@ export default {
       //   }
       //   console.log(res)
       // })
-    }
+    },
+    async getRouteValhalla ({}, value) {
+      const toOne = value.to[0]
+      const toTwo = value.to[1]
+      const fromOne = value.from[0]
+      const fromTwo = value.from[1]
+      let a = await axios({
+        method: 'get',
+        url: `http://139.162.175.6:8002/optimized_route?json={"locations":[{"lat":${toTwo},"lon":${toOne}},{"lat":${fromTwo},"lon":${fromOne}}],"costing":"auto","units":"kilometers","id":"my_work_route"}`
+      })
+      // console.log(a)
+      return a.data.trip.summary
+    },
   }
 }

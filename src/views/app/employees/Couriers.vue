@@ -28,9 +28,9 @@
                 <b-form-input type="text" v-model="form.apelsin_account"/>
 <!--                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}</b-form-invalid-feedback>-->
               </b-form-group>
-              <b-form-group :label="$t('apelsin_token')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model="form.apelsin_token"/>
-              </b-form-group>
+<!--              <b-form-group :label="$t('apelsin_token')" class="has-float-label mb-4">-->
+<!--                <b-form-input type="text" v-model="form.apelsin_token"/>-->
+<!--              </b-form-group>-->
               <b-form-group :label="$t('car_model')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model="form.details.car_model"/>
               </b-form-group>
@@ -259,12 +259,13 @@ export default {
         user: null,
         active: true,
         apelsin_account: '',
-        apelsin_token: ''
+        // apelsin_token: ''
       }
     },
     edit (item) {
       const _data = { ...item.item }
       delete _data.external_id
+      delete _data.apelsin_token
       delete _data.created_at
       delete _data.updated_at
       console.log(_data)

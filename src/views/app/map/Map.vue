@@ -24,6 +24,7 @@ import ymaps from 'ymaps'
 import { bridge } from "../../../utils/bridge";
 import { defaultMap } from "../../../constants/config";
 import RightBar from "./RightBar";
+import { timeFormat } from "../../../utils";
 import OrderMapDetailCard from "../orders/OrderMapDetailCard";
 // import way from './way'
 import client from '@/assets/icons/client.png'
@@ -152,12 +153,14 @@ export default {
     selectedItem (e) {
       this.selectedOrder = e
       const _coords = `${e.user_address.longitude + ',' + e.user_address.latitude}~${e.vendor.longitude + ',' + e.vendor.latitude}`
-      this.$store.dispatch('getOneRoute', _coords).then(res => {
+      this.$store.dispatch('getRouteValhalla', {
+        to: [ e.user_address.longitude, e.user_address.latitude],
+        from : [e.vendor.longitude, e.vendor.latitude]
+      }).then(res => {
         this.order = {
           ...e,
           route: res
         }
-        console.log(this.order)
         let _client = {
           id: e.id,
           longitude: e.user_address.longitude,
@@ -171,9 +174,9 @@ export default {
             [parseFloat(_client.latitude), parseFloat(_client.longitude)]
           ]
         })
-        // const _coord = [((parseFloat(e.vendor.latitude) + parseFloat(_client.latitude)) / 2 ), ((parseFloat(e.vendor.longitude) + parseFloat(_client.longitude)) / 2 )]
-        // this.map.setCenter(_coord, 12)
-        // this.map.panTo(_coord, { checkZoomRange: true })
+        const _coord = [((parseFloat(e.vendor.latitude) + parseFloat(_client.latitude)) / 2 ), ((parseFloat(e.vendor.longitude) + parseFloat(_client.longitude)) / 2 )]
+        this.map.setCenter(_coord, 14)
+        this.map.panTo(_coord, { checkZoomRange: true })
         if (this.geoObjects.routedCouriers && this.geoObjects.routedCouriers.length) {
           this.geoObjects.routedCouriers.forEach(el => {
             this.map.geoObjects.remove(el.point)
@@ -181,11 +184,18 @@ export default {
         }
         this.geoObjects.couriers.forEach(el => {
           const _el = el.el
-          const _user_coords = e.user_address.longitude + ',' + e.user_address.latitude
-
-          this.$store.dispatch('getOneRoute', `${_user_coords}~${_el.location[0].longitude + ',' + _el.location[0].latitude}`).then(res => {
+          // const _user_coords = e.user_address.longitude + ',' + e.user_address.latitude
+          this.$store.dispatch('getRouteValhalla', {
+            to: [ e.user_address.longitude, e.user_address.latitude],
+            from : [_el.location[0].longitude, _el.location[0].latitude]
+          }).then(res => {
+            // console.log(res)
+            // console.log(timeFormat(res.time))
             this.routedCouriersPoint(_el, res)
           })
+          // this.$store.dispatch('getOneRoute', `${_user_coords}~${_el.location[0].longitude + ',' + _el.location[0].latitude}`).then(res => {
+          //   this.routedCouriersPoint(_el, res)
+          // })
         })
         // this.geoObjects.couriers.forEach(e => {
         //   this.$store.dispatch('getOneRoute', _coords).then(res => {
@@ -224,6 +234,9 @@ export default {
         this.map.geoObjects.add(point)
     },
     routedCouriersPoint (el, route) {
+      const { hr, mn } = timeFormat(route.time)
+      const _dis = route.length.toString()
+      const distance = _dis.split('.')[1].length > 1 ? (_dis.split('.')[0] + '.' + _dis.split('.')[1].slice(0, 1)) : route.length
       const point = new this.maps.GeoObject(
         {
           geometry: {
@@ -251,13 +264,13 @@ export default {
                 background: white !important;
                 padding: 5px !important;
                 border-radius: 4px !important;
-                width: 150px !important;
+                width: 180px !important;
                 color: #000 !important;
                 display: flex !important;
                 justify-content: center !important;
             ">
-                    <div><span class="iconsminds-clock marker orange"></span>${route.duration.text}</div>
-                    <div class="ml-1"><span class="iconsminds-scooter marker blue" style="font-size: 18px"></span>${route.distance.text}</div>
+                    <div><span class="iconsminds-clock marker orange"></span>${hr !== '' ? (hr + ' ' + this.$t('hr')) : '' } ${mn !== '' ? (mn + ' ' + this.$t('min')) : '' }</div>
+                    <div class="ml-1"><span class="iconsminds-scooter marker blue" style="font-size: 18px"></span>${distance + ' ' + this.$t('km')}</div>
             </div>`
           )
         }
@@ -378,11 +391,12 @@ export default {
     },
     drawPointers () {
       this.$store.getters.dataVendors.filter(e => (e.active && e.latitude)).forEach(e => {
-        this.cookerPoint(e, (e.user.first_name + e.user.last_name))
+        this.cookerPoint(e, (e.user.first_name + ' ' + e.user.last_name))
       })
       this.$store.getters.courierLocations.filter(e => (e.active && e.location[0].latitude)).forEach(e => {
         this.courierPoint(e)
       })
+      // this.$store.dispatch('getRouteValhalla')
       // this.oneRouteCreator({
       //   coords: [
       //     [41.321352, 69.289203],
@@ -425,42 +439,6 @@ export default {
     this.initMap()
   }
 }
-// this.homePoint()
-// this.cookers.forEach((e, i) => {
-//   this.cookerPoint(e, (e.user.first_name + e.user.last_name))
-// })
-// this.couriers.forEach((e, i) => {
-//   this.courierPoint(e, `Courier ${ i + 1 }`)
-// })
-// pointSetter(oldPoint, newPoint) {
-//   const index = this.geoObjects.couriers.indexOf(oldPoint)
-//   this.geoObjects.couriers[index] = newPoint
-//   this.map.geoObjects.remove(oldPoint)
-//   this.map.geoObjects.add(newPoint)
-// },
-// courierRealTime (coords) {
-//   // this.map.panTo(coords, { checkZoomRange: true })
-//   const point = new this.maps.GeoObject({
-//     geometry: {
-//       type: 'Point',
-//       coordinates: coords
-//     },
-//     properties: {
-//       hintContent: 'Real Courier'
-//     }
-//   }, {
-//     preset: 'islands#greenAutoCircleIcon',
-//     draggable: false,
-//   })
-//   this.pointSetter(this.geoObjects.couriers[2], point)
-//   this.routeCreator({
-//     coords: [
-//       coords,
-//       defaultMap.home,
-//       this.route.coords[0]
-//     ]
-//   })
-// },
 </script>
 <style>
 

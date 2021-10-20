@@ -58,7 +58,7 @@
     </b-row>
     <div v-if="!statsFoods && !statsCategories && !statsMonth && !statsTop && !statsUsers && !statsWeek && !statsVendors" class="text-center text-primary my-2">
       <b-spinner class="align-middle"></b-spinner>
-      <strong>Loading...</strong>
+      <strong>{{ $t('loading') }}...</strong>
     </div>
 <!--    <b-row>-->
 <!--      <b-colxx sm="12" lg="4" class="mb-4">-->
