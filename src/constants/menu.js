@@ -111,6 +111,12 @@ const data = [
         // roles: [UserRole.Admin],
       },
       {
+        icon: "simple-icon-user-follow",
+        label: "menu.applicants",
+        to: `${adminRoot}/employees/applicants`,
+        // roles: [UserRole.Admin],
+      },
+      {
         icon: "iconsminds-scooter",
         label: "menu.couriers",
         to: `${adminRoot}/employees/couriers`,

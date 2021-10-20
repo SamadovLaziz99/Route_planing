@@ -167,6 +167,12 @@ const routes = [
             component: () => import("./views/app/employees/SystemUsers"),
             children: []
           },
+          {
+            path: "applicants",
+            name: 'applicants',
+            component: () => import("./views/app/employees/Applicants"),
+            children: []
+          },
           // {
           //   path: "maps",
           //   name: 'maps',

@@ -145,7 +145,7 @@
   "hr": "час",
   "min": "мин",
   "sec": "сек",
-
+  "direction": "Направление",
 
   "general": {
     "copyright": "Piaf Vue © 2018 Все права защищены."
@@ -204,6 +204,7 @@
     "transactions": "Транзакции",
     "food": "Еда",
     "foods": "Еда",
+    "applicants": "Претенденты",
     "foods_list": "Список продуктов",
     "foods_unit": "Еда для продуктов",
     "unit": "Unit",

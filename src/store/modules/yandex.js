@@ -85,7 +85,7 @@ export default {
       const fromTwo = value.from[1]
       let a = await axios({
         method: 'get',
-        url: `http://139.162.175.6:8002/optimized_route?json={"locations":[{"lat":${toTwo},"lon":${toOne}},{"lat":${fromTwo},"lon":${fromOne}}],"costing":"auto","units":"kilometers","id":"my_work_route"}`
+        url: `https://valhalla.coozin.uz/optimized_route?json={"locations":[{"lat":${toTwo},"lon":${toOne}},{"lat":${fromTwo},"lon":${fromOne}}],"costing":"auto","units":"kilometers","id":"my_work_route"}`
       })
       // console.log(a)
       return a.data.trip.summary
