@@ -42,7 +42,7 @@
                     <p class="mb-3">{{ new Intl.NumberFormat().format(food.price) }} sum</p>
                     <p class="text-muted text-small mb-2">{{ $t('category') }}</p>
                     <p class="mb-3">{{ food.category.name[$lang]}}</p>
-                    <p class="text-muted text-small mb-2">{{ $t('unit') }}</p>
+                    <p class="text-muted text-small mb-2">{{ $t('menu.unit') }}</p>
                     <p class="mb-3">{{ food.unit.name[$lang]}}</p>
                     <p class="text-muted text-small mb-2">{{ $t('preparation_time') }}</p>
                     <p class="mb-3">{{ food.preparation_time }} minutes</p>
@@ -96,7 +96,7 @@
             </b-row>
           </b-tab>
           <b-tab :title="$t('pages.orders')">
-            <b-row>
+            <b-row v-if="orders.length">
               <b-colxx>
                 <order-item
                   v-for="(order, index) in orders"
@@ -106,6 +106,7 @@
                 />
               </b-colxx>
             </b-row>
+            <EmptyBox v-else style="margin-top: 50px"/>
           </b-tab>
         </b-tabs>
       </b-colxx>
@@ -121,6 +122,7 @@ import CommentItem from "../../../components/Listing/CommentItem";
 import OrderItem from "../../../components/Listing/OrderItem";
 import {comments} from "../../../data/comments";
 // import orders from "../../../data/orders";
+import EmptyBox from "../../../components/EmptyBox";
 import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
 import { getters } from "../../../utils/store_schema";
@@ -131,6 +133,7 @@ import {mapGetters} from "vuex";
 export default {
   components: {
     stars: Stars,
+    EmptyBox,
     'switches': Switches,
     "radial-progress-card": RadialProgressCard,
     "comment-item": CommentItem,

@@ -5339,6 +5339,23 @@ input:-webkit-autofill {
 }
 
 /* 30.Modal */
+.tabs {
+  height: calc(100% - 20px) !important;
+  .tab-content {
+    height: calc(100% - 12px) !important;
+  }
+}
+.modal-dialog-scrollable {
+  height: 100vh !important;
+}
+@media (min-width: 576px) {
+  .modal-dialog-scrollable {
+    max-height: 100vh !important;
+  }
+}
+.modal-body {
+  height: calc(100% - 100px);
+}
 .modal {
   .modal-header,
   .modal-body,

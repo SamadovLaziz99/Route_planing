@@ -85,7 +85,7 @@
             </template>
           </b-tab>
         </b-tabs>
-        <b-card :title="$t(`order.${$route.query.type}`)">
+        <b-card :title="$t(`order.${$route.query.type}`)" class="mb-4">
           <b-table
             hover
             :items="data"

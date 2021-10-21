@@ -4,9 +4,10 @@
     ref="crudModal"
     :title="$t(name)"
     @hide="hide"
+    scrollable
     modal-class="modal-right"
   >
-    <slot name="content" style="overflow-y: scroll"></slot>
+    <slot name="content"></slot>
     <template slot="modal-footer">
       <b-button
         variant="outline-secondary"

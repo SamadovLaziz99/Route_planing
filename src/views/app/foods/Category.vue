@@ -5,17 +5,17 @@
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'category.update' : 'category.create'">
           <div slot="content">
             <b-form v-if="!loadOne" class="av-tooltip tooltip-right-bottom">
-              <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
+              <b-form-group :label="$t('name')  + ' ' + $t('uz')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + $t('uz') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.name.uz.required">{{ $t('please.enter') + $t('name') + ' ' +  $t('uz') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('name') + $t('ru')" class="has-float-label mb-4">
+              <b-form-group :label="$t('name') + ' ' +  $t('ru')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.ru.$model" :state="!$v.form.name.ru.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + $t('ru') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.name.ru.required">{{ $t('please.enter') + $t('name') + ' ' + $t('ru') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('name') + $t('oz')" class="has-float-label mb-4">
+              <b-form-group :label="$t('name') + ' ' +  $t('oz')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.oz.$model" :state="!$v.form.name.oz.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + $t('oz') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.name.oz.required">{{ $t('please.enter') + $t('name') + ' ' + $t('oz') }}</b-form-invalid-feedback>
               </b-form-group>
               <b-form-group v-if="form.id" :label="$t('position')" class="has-float-label mb-4">
                 <v-select :options="categorys" v-model="position"/>
@@ -23,7 +23,7 @@
             </b-form>
             <div v-else class="text-center text-primary my-2">
               <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
+              <strong>{{ $t('loading') }}...</strong>
             </div>
           </div>
           <div slot="action">

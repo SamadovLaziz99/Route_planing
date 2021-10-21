@@ -15,7 +15,7 @@
             <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
           </div>
         </list-page-heading>
-        <b-card :title="$t(`menu.transactions`)">
+        <b-card :title="$t(`menu.transactions`)" class="mb-4">
           <b-table
             hover
             :items="items"

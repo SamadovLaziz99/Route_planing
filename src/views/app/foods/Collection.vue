@@ -3,7 +3,7 @@
     <b-row v-if="!error">
       <b-colxx class="disable-text-selection">
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'collection.update' : 'collection.create'">
-          <div slot="content">
+          <div slot="content" style="height: 100%">
             <b-tabs v-if="!loadOne" fill content-class="tab-content" v-model="activeTab" nav-class="separator-tabs">
               <b-tab :title="$t('collection.main')">
                 <div class="mt-4"></div>
@@ -32,12 +32,12 @@
                   </b-form-group>
                 </b-form>
               </b-tab>
-              <b-tab :title="$t('collection.foods')">
+              <b-tab :title="$t('collection.foods')" style="height: 100% !important;">
                 <div class="mt-4"></div>
                 <b-form-input type="text" @input="searchFood" class="mb-3" :placeholder="$t('search')"/>
                 <vue-perfect-scrollbar
                   class="scroll dashboard-list-with-thumbs"
-                  style="height: 470px !important;"
+                  style="height: calc(100% - 100px) !important;"
                   :settings="{ suppressScrollX: true, wheelPropagation: false }"
                 >
                   <b-form-group>
@@ -200,22 +200,22 @@ export default {
       fields: [
         {
           key: 'name',
-          label: 'Name',
+          label: this.$t('name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'category',
-          label: 'Category',
+          label: this.$t('category'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'created_at',
-          label: 'Registration date',
+          label: this.$t('created_at'),
           tdClass: 'text-muted'
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           // tdClass: 'thirdRow'
         }
       ],
@@ -414,6 +414,12 @@ export default {
 };
 </script>
 <style lang="scss">
+//.modal-content {
+//  height: 100vh;
+//}
+//.modal-body {
+//  height: 100%;
+//}
 .foods {
   width: 100% !important;
   border-radius: 10px;

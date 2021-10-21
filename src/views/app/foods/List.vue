@@ -132,7 +132,7 @@ export default {
         },
         {
           key: 'unit',
-          label: this.$t('unit'),
+          label: this.$t('menu.unit'),
           // tdClass: 'firstColumn'
         },
         {

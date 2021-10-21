@@ -2,9 +2,9 @@
   "category.create": "Создать категорию",
   "category.update": "Обновить категорию",
   "position": "Должность",
-  "uz": "узбекский",
-  "ru": "русский",
-  "oz": "кириллица",
+  "uz": " узбекский",
+  "ru": " русский",
+  "oz": " кириллица",
   "name": "Имя",
   "dark_mode": "Темный режим",
   "submit": "Отправить",
@@ -27,6 +27,7 @@
   "vendor.and.user.map": "Баллы продавца и пользователя",
   "payment.type": "Тип платежа",
   "created.time": "Время создания",
+  "created_at": "Создано в",
   "delivery.time": "Срок доставки",
   "active_users": "Активные пользователи",
   "all_couriers": "Все курьеры",
@@ -120,9 +121,9 @@
   "light.green": "Светло-зеленый",
   "choco": "Choco",
   "collection": {
-    "main": "MAIN",
-    "food": "FOODS",
-    "banner": "БАННЕР"
+    "main": "Основной",
+    "foods": "Еда",
+    "banner": "Баннер"
   },
   "email": "Электронная почта",
   "password": "Пароль",
@@ -146,6 +147,8 @@
   "min": "мин",
   "sec": "сек",
   "direction": "Направление",
+  "preparation_time": "Время подготовки",
+  "food.vendor.location": "Расположение продавца еды",
 
   "general": {
     "copyright": "Piaf Vue © 2018 Все права защищены."
@@ -207,7 +210,7 @@
     "applicants": "Претенденты",
     "foods_list": "Список продуктов",
     "foods_unit": "Еда для продуктов",
-    "unit": "Unit",
+    "unit": "Ед. изм",
     "foods_category": "Категория продуктов",
     "collection": "Коллекция",
     "foods_collection": "Коллекция продуктов",
