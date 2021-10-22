@@ -4,7 +4,7 @@
       <b-card>
         <div class="text-center text-primary my-2 mt-1">
           <b-spinner class="align-middle"></b-spinner>
-          <strong>Loading...</strong>
+          <strong>{{ $t('loading') }}...</strong>
         </div>
       </b-card>
     </div>

@@ -5339,12 +5339,12 @@ input:-webkit-autofill {
 }
 
 /* 30.Modal */
-.tabs {
-  height: calc(100% - 20px) !important;
-  .tab-content {
-    height: calc(100% - 12px) !important;
-  }
-}
+//.tabs {
+//  height: calc(100% - 20px) !important;
+//  .tab-content {
+//    height: calc(100% - 12px) !important;
+//  }
+//}
 .modal-dialog-scrollable {
   height: 100vh !important;
 }
