@@ -1,15 +1,15 @@
 <template>
   <div class="history-tl-container">
 <!--    <div class="timeline">-->
-      <ul class="tl">
+      <ul class="tl" v-if="items">
         <li v-for="item in items" :key="item.id" class="tl-item" ng-repeat="item in retailer_history">
 <!--          <div :class="`title ${ (route && route.coords && route.coords === timeline.coords) ? 'title_active' : '' }`">-->
           <div :class="`title ${ parseInt($route.query.order_id) === item.id ? 'title_active' : '' }`" @click="viewItem(item)">
             <div class="order_number">
               #{{ item.id }}
             </div>
-            <div :class="`order_status badge-outline-${badgeType(item.status)}`">
-              {{ $t(`order.${item.status}`) }}
+            <div :class="`order_status badge-outline-${badgeType(item.delivery_status ? item.delivery_status : 'accepted')}`">
+              {{ $t(`order.${item.delivery_status ? item.delivery_status : 'accepted'}`) }}
             </div>
             <div style="width: 100%; margin-top: 25px">
                 <div class="item-title"><span class="iconsminds-doctor marker orange"></span>{{ item.user.first_name }} {{ item.user.last_name }}</div>
@@ -30,9 +30,13 @@
 
 <script>
 // import tickets from "../../../data/tickets";
+// import EmptyBox from "../../../components/EmptyBox";
 import {mapGetters} from "vuex";
 export default {
   name: "TimeLine",
+  components: {
+    // EmptyBox
+  },
   props: ['route', 'items'],
   data () {
     return {

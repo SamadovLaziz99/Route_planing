@@ -186,7 +186,7 @@ export default {
           const _el = el.el
           // const _user_coords = e.user_address.longitude + ',' + e.user_address.latitude
           this.$store.dispatch('getRouteValhalla', {
-            to: [ e.user_address.longitude, e.user_address.latitude],
+            to: [ e.vendor.longitude, e.vendor.latitude],
             from : [_el.location[0].longitude, _el.location[0].latitude]
           }).then(res => {
             // console.log(res)
@@ -234,6 +234,7 @@ export default {
         this.map.geoObjects.add(point)
     },
     routedCouriersPoint (el, route) {
+      console.log(el)
       const { hr, mn } = timeFormat(route.time)
       const _dis = route.length.toString()
       const distance = _dis.split('.')[1].length > 1 ? (_dis.split('.')[0] + '.' + _dis.split('.')[1].slice(0, 1)) : route.length
@@ -262,15 +263,17 @@ export default {
             `<div class="marker_content" style="
                 box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px !important;
                 background: white !important;
-                padding: 5px !important;
+                padding: 4px !important;
                 border-radius: 4px !important;
                 width: 180px !important;
                 color: #000 !important;
-                display: flex !important;
-                justify-content: center !important;
             ">
-                    <div><span class="iconsminds-clock marker orange"></span>${hr !== '' ? (hr + ' ' + this.$t('hr')) : '' } ${mn !== '' ? (mn + ' ' + this.$t('min')) : '' }</div>
-                    <div class="ml-1"><span class="iconsminds-scooter marker blue" style="font-size: 18px"></span>${distance + ' ' + this.$t('km')}</div>
+                        <div style="font-size: 10px; font-weight: 600">${el.name}</div>
+                    <div style="display: flex !important;
+                justify-content: center !important;">
+                        <div><span class="iconsminds-clock marker orange"></span>${hr !== '' ? (hr + ' ' + this.$t('hr')) : '' } ${mn !== '' ? (mn + ' ' + this.$t('min')) : '' }</div>
+                        <div class="ml-1"><span class="iconsminds-scooter marker blue" style="font-size: 18px"></span>${distance + ' ' + this.$t('km')}</div>
+                    </div>
             </div>`
           )
         }
@@ -366,10 +369,18 @@ export default {
       }, 1)
       setTimeout(() => {
           if (this.geoObjects.routedCouriers.length > 0) {
-            const _user_coords = this.selectedOrder.user_address.longitude + ',' + this.selectedOrder.user_address.latitude
-            this.$store.dispatch('getOneRoute', `${_user_coords}~${el.location[0].longitude + ',' + el.location[0].latitude}`).then(res => {
+            // const _user_coords = this.selectedOrder.user_address.longitude + ',' + this.selectedOrder.user_address.latitude
+            this.$store.dispatch('getRouteValhalla', {
+              to: [ el.vendor.longitude, el.vendor.latitude],
+              from : [el.location[0].longitude, el.location[0].latitude]
+            }).then(res => {
+              // console.log(res)
+              // console.log(timeFormat(res.time))
               this.routedCouriersPoint(el, res)
             })
+            // this.$store.dispatch('getRouteValhalla', `${_user_coords}~${el.location[0].longitude + ',' + el.location[0].latitude}`).then(res => {
+            //   this.routedCouriersPoint(el, res)
+            // })
           }
         this.courierPoint(el)
         // this.map.geoObjects.remove(_oldItem.point)

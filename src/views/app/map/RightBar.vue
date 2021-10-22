@@ -9,8 +9,9 @@
             <TimeLine v-if="!loadOrders" :items="dataOrders" @selectedItem="selectedItem"/>
             <div v-else class="text-center text-primary my-2 mt-5">
               <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
+              <strong>{{ $t('loading') }}...</strong>
             </div>
+            <EmptyBox v-if="!loadOrders && !dataOrders.length"/>
           </b-tab>
           <b-tab :title="$t('menu.couriers').toUpperCase()">
             <div class="mt-3">
@@ -31,9 +32,10 @@
                   <div class="pl-2 pt-2">
 <!--                    <TimeLine :items="courier_orders"/>-->
                     <TimeLine v-if="!loadOrders" :items="courier_orders" @selectedItem="selectedItem"/>
+                    <EmptyBox v-if="!loadOrders && !courier_orders.length"/>
                     <div v-else class="text-center text-primary my-2 mt-1">
                       <b-spinner class="align-middle"></b-spinner>
-                      <strong>Loading...</strong>
+                      <strong>{{ $t('loading') }}}...</strong>
                     </div>
                   </div>
                 </b-collapse>
@@ -50,12 +52,14 @@ import tickets from "../../../data/tickets";
 import ListCard from "./ListCard";
 import TimeLine from "./TimeLine";
 import { mapGetters } from "vuex";
+import EmptyBox from "../../../components/EmptyBox";
 
 export default {
   props: ['route'],
   components: {
     ListCard,
-    TimeLine
+    TimeLine,
+    EmptyBox
   },
   data() {
     return {

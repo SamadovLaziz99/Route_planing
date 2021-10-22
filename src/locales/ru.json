@@ -147,6 +147,8 @@
   "min": "мин",
   "sec": "сек",
   "direction": "Направление",
+  "total_price": "Итоговая цена",
+  "sum": "сум",
   "preparation_time": "Время подготовки",
   "food.vendor.location": "Расположение продавца еды",
 

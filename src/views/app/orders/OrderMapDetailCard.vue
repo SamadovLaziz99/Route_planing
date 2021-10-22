@@ -13,7 +13,7 @@
             <span class="iconsminds-male icon">
               <span class="item_name">{{ $t('customer') }}</span>
             </span>
-          <span class="item_title">{{ order.user.first_name + ' ' + order.user.last_name }}</span>
+          <span class="item_title">{{ order.user.first_name + ' ' + (order.user.last_name ? order.user.last_name : '') }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-smartphone-4 icon">
@@ -32,6 +32,36 @@
               <span class="item_name">{{ $t('courier') }}</span>
             </span>
           <span class="item_title">{{ order.courier.name }}</span>
+        </div>
+        <div class="detail_row">
+            <span class="simple-icon-energy icon">
+              <span class="item_name">{{ $t('status') }}</span>
+            </span>
+          <span class="item_title"><b-badge class="mb-1" pill :variant="badgeType(order.status)">{{ $t(`order.${ order.status }`) }}</b-badge></span>
+        </div>
+        <div class="detail_row">
+            <span class="iconsminds-dollar icon">
+              <span class="item_name">{{ $t('payment_type') }}</span>
+            </span>
+          <span class="item_title">{{ $t(order.payment_type) }}</span>
+        </div>
+        <div class="detail_row">
+            <span class="iconsminds-dollar-sign-2 icon">
+              <span class="item_name">{{ $t('total_price') }}</span>
+            </span>
+          <span class="item_title">{{ order.total_price }} {{ $t('sum') }}</span>
+        </div>
+        <div class="detail_row">
+            <span class="iconsminds-clock-forward icon">
+              <span class="item_name">{{ $t('created_at') }}</span>
+            </span>
+          <span class="item_title">{{ moment(order.created_at).format('HH:mm, DD-MM-YYYY') }}</span>
+        </div>
+        <div class="detail_row">
+            <span class="iconsminds-time-backup icon">
+              <span class="item_name">{{ $t('delivery_time') }}</span>
+            </span>
+          <span class="item_title">{{ moment(order.delivery_time).format('HH:mm, DD-MM-YYYY') }}</span>
         </div>
         <div class="detail_row">
             <span class="iconsminds-road-2 icon">
@@ -58,13 +88,33 @@
 
 <script>
 import { timeFormat } from "../../../utils";
+import moment from "moment";
 export default {
   name: "OrderMapDetailCard",
   props: ['order'],
   methods: {
+    moment,
     timeFormat,
     closeRouteDetails () {
       this.$emit('close')
+    },
+    badgeType(type) {
+      switch (type) {
+        case 'pending': return 'info'
+          break;
+        case 'accepted': return 'secondary'
+          break;
+        case 'in_process': return 'primary'
+          break;
+        case 'shipping': return 'dark'
+          break;
+        case 'finished': return 'success'
+          break;
+        case 'cancelled': return 'danger'
+          break;
+        default: return 'primary'
+          break;
+      }
     }
   },
   computed: {

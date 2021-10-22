@@ -33,13 +33,31 @@
                 </b-form>
               </b-tab>
               <b-tab :title="$t('collection.foods')" style="height: 100% !important;">
-                <div class="mt-4"></div>
-                <b-form-input type="text" @input="searchFood" class="mb-3" :placeholder="$t('search')"/>
-                <vue-perfect-scrollbar
-                  class="scroll dashboard-list-with-thumbs"
-                  style="height: calc(100% - 100px) !important;"
-                  :settings="{ suppressScrollX: true, wheelPropagation: false }"
+                <div class="mt-2"></div>
+                <b-button @click="isOpenFilter = !isOpenFilter" variant="primary" class="mb-3 w-100">
+                  <span :class="`iconsminds-arrow-${isOpenFilter ? 'up' : 'down'}-2 mr-2`"></span>
+                  {{ $t('filter') }}
+                  <span :class="`iconsminds-arrow-${isOpenFilter ? 'up' : 'down'}-2 mr-2`"></span>
+                </b-button>
+                <transition name="slide">
+                  <div v-if="isOpenFilter">
+                    <b-form-group :label="$t('search')" class="has-float-label mb-2">
+                      <b-form-input type="text" @input="searchFood" v-model="foodFilters.search" :placeholder="$t('search')"/>
+                    </b-form-group>
+                    <b-form-group :label="$t('categories')" class="has-float-label mb-2">
+                      <v-select :options="categories" @input="seachCategory"/>
+                    </b-form-group>
+                    <b-form-group :label="$t('vendors')" class="has-float-label mb-4">
+                      <v-select :options="vendors" @input="seachVendors"/>
+                    </b-form-group>
+                  </div>
+                </transition>
+                <div
+                  v-if="!loadFood"
+                  class="dashboard-list-with-thumbs"
+                  style="height: 600px !important; overflow-y: auto"
                 >
+                  <EmptyBox v-if="!loadFood && !dataFood.length"/>
                   <b-form-group>
                     <b-form-checkbox-group
                       id="checkbox-group-2"
@@ -57,7 +75,11 @@
                       </b-form-checkbox>
                     </b-form-checkbox-group>
                   </b-form-group>
-                </vue-perfect-scrollbar>
+                </div>
+                <div v-else class="text-center text-primary my-2 mt-5">
+                  <b-spinner class="align-middle"></b-spinner>
+                  <strong>{{ $t('loading') }}...</strong>
+                </div>
               </b-tab>
               <b-tab :title="$t('collection.banner')" v-if="form.id">
                 <div style="margin: 20px 0">
@@ -161,6 +183,7 @@ import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import Pagination from "../../../components/TableComponents/Pagination";
+import EmptyBox from "../../../components/EmptyBox";
 import moment from "moment";
 import debounce from "debounce";
 import { mapGetters } from "vuex";
@@ -174,7 +197,8 @@ export default {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
     'foods-card': FoodsCard,
-    Pagination
+    Pagination,
+    EmptyBox
   },
   validations: {
     form: {
@@ -197,6 +221,7 @@ export default {
     this.searchFood = debounce(this.searchFood, 800)
     return {
       activeTab: 0,
+      isOpenFilter: false,
       fields: [
         {
           key: 'name',
@@ -219,6 +244,12 @@ export default {
           // tdClass: 'thirdRow'
         }
       ],
+      foodFilters: {
+        search: '',
+        no_page: true,
+        vendor_id: null,
+        category_id: null
+      },
       isValidCustom: false,
       form: {
         id: null,
@@ -272,7 +303,7 @@ export default {
   },
   computed: {
     ...mapGetters(getters(_page)),
-    ...mapGetters(['dataFood']),
+    ...mapGetters(['dataFood', 'loadFood', 'dataVendors']),
     items() {
       return this.data.map(e => {
         return {
@@ -280,11 +311,21 @@ export default {
           action: ['edit', 'delete']
         }
       })
-    }
+    },
+    vendors () {
+      return this.dataVendors.map(e => {
+        const { first_name, last_name } = e.user
+        return {
+          label: first_name + ' ' + last_name,
+          value: e.id
+        }
+      })
+    },
   },
   mounted() {
     this.getData()
-    this.$store.dispatch('getFood', { no_page: true })
+    this.getFood()
+    // this.$store.dispatch('getFood', { no_page: true })
     this.$store.dispatch('getCategories', { no_page: true }).then(res => {
       this.categories = res.map(e => {
         return {
@@ -293,9 +334,13 @@ export default {
         }
       })
     })
+    this.$store.dispatch('getVendors', { no_page: true })
   },
   methods: {
     moment,
+    getFood () {
+      this.$store.dispatch('getFood', this.foodFilters)
+    },
     submit() {
       this.$v.$touch();
       this.isValidCustom = true
@@ -369,7 +414,15 @@ export default {
       })
     },
     searchFood (e) {
-      console.log(e)
+      this.getFood()
+    },
+    seachCategory (e) {
+      this.foodFilters.category_id = e ? e.value : e
+      this.getFood()
+    },
+    seachVendors (e) {
+      this.foodFilters.vendor_id = e ? e.value : e
+      this.getFood()
     },
     clear() {
       this.$v.$reset()
@@ -414,6 +467,34 @@ export default {
 };
 </script>
 <style lang="scss">
+.slide-enter-active {
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -moz-transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  -o-transition-timing-function: ease-in;
+  transition-timing-function: ease-in;
+}
+.slide-leave-active {
+  -moz-transition-duration: 0.3s;
+  -webkit-transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+.slide-enter-to, .slide-leave {
+  max-height: 300px;
+  overflow: hidden;
+}
+.slide-enter, .slide-leave-to {
+  overflow: hidden;
+  max-height: 0;
+}
 //.modal-content {
 //  height: 100vh;
 //}
