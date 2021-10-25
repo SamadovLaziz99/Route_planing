@@ -24,6 +24,10 @@ export default {
         order_id: payload
       })
       return _result
-    }
+    },
+    async changeStatusApplicants ({ commit }, payload) {
+      const _result = await axios_init.put(`/applications/${ payload.id }/`, payload.data)
+      return _result
+    },
   }
 }

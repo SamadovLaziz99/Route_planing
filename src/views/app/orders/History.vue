@@ -120,6 +120,11 @@
             <template #cell(delivery_time)="{ item }">
               {{ moment(item.delivery_time).format('YYYY-MM-DD HH:mm') }}
             </template>
+            <template #cell(payment_type)="{ item }">
+              <div v-if="item.payment_type === 'cash'" style="font-size: 28px" class="iconsminds-dollar text-primary"></div>
+              <div v-if="item.payment_type === 'balance'" style="font-size: 28px" class="iconsminds-wallet text-primary"></div>
+              <div v-if="item.payment_type === 'card'" style="font-size: 28px" class="simple-icon-credit-card text-primary"></div>
+            </template>
             <template #cell(vendor)="{ item }">
               {{ item.vendor.user.first_name + ' ' + item.vendor.user.last_name }}
             </template>
@@ -223,6 +228,10 @@ export default {
         {
           label: this.$t('cash'),
           value: 'cash'
+        },
+        {
+          label: this.$t('wallet'),
+          value: 'balance'
         },
         {
           label: this.$t('card'),
@@ -440,7 +449,7 @@ export default {
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
     if (_query) {

@@ -1,19 +1,19 @@
 <template>
   <b-card>
     <div class="error">
-      <h1 v-if="status === 500">Internal Server Error</h1>
-      <h1 v-if="status === 404">Not Found</h1>
-      <h1 v-if="status === 401">Unauthorized</h1>
-      <h1 v-if="status === 'timeout'">Time Out. Check your Internet</h1>
-      <h1 v-if="status === 'network'">Network Error. Check your Internet</h1>
+      <h1 v-if="status === 500">{{ $t('errors.internal_server_error') }}</h1>
+      <h1 v-if="status === 404">{{ $t('errors.not_found') }}</h1>
+      <h1 v-if="status === 401">{{ $t('errors.unauthorized') }}</h1>
+      <h1 v-if="status === 'timeout'">{{ $t('errors.timeout') }}</h1>
+      <h1 v-if="status === 'network'">{{ $t('errors.network') }}</h1>
       <img v-if="status === 404" :src="images.not" alt="">
       <img v-if="status === 401" :src="images.unauth" alt="">
       <img v-if="status === 500" :src="images.internal" alt="">
       <img v-if="status === 'timeout'" :src="images.slow" alt="">
       <img v-if="status === 'network'" :src="images.net" alt="">
       <div class="actions">
-        <b-button @click="$router.go(-1)" variant="outline-primary" class="mr-2 ml-2">Back</b-button>
-        <b-button @click="reload" variant="primary">Reload</b-button>
+        <b-button @click="$router.go(-1)" variant="outline-primary" class="mr-2 ml-2">{{ $t('back') }}</b-button>
+        <b-button @click="reload" variant="primary">{{ $t('reload') }}</b-button>
       </div>
     </div>
   </b-card>

@@ -50,29 +50,29 @@
                 <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
               </div>
             </b-colxx>
-            <b-colxx xxs="12" md="6">
-              <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">
-                <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[
-                    $t('day.sun'),
-                    $t('day.mon'),
-                    $t('day.tue'),
-                    $t('day.wed'),
-                    $t('day.thu'),
-                    $t('day.fri'),
-                    $t('day.sat'),
-                  ]"/>
-              </b-form-group>
-            </b-colxx>
-            <b-colxx xxs="12" md="3">
-              <b-form-group :label="$t('price.from')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model="filters.order_price_from" @input="priceRangerChange"/>
-              </b-form-group>
-            </b-colxx>
-            <b-colxx xxs="12" md="3">
-              <b-form-group :label="$t('price.to')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>
-              </b-form-group>
-            </b-colxx>
+<!--            <b-colxx xxs="12" md="6">-->
+<!--              <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">-->
+<!--                <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[-->
+<!--                    $t('day.sun'),-->
+<!--                    $t('day.mon'),-->
+<!--                    $t('day.tue'),-->
+<!--                    $t('day.wed'),-->
+<!--                    $t('day.thu'),-->
+<!--                    $t('day.fri'),-->
+<!--                    $t('day.sat'),-->
+<!--                  ]"/>-->
+<!--              </b-form-group>-->
+<!--            </b-colxx>-->
+<!--            <b-colxx xxs="12" md="3">-->
+<!--              <b-form-group :label="$t('price.from')" class="has-float-label mb-4">-->
+<!--                <b-form-input type="number" v-model="filters.order_price_from" @input="priceRangerChange"/>-->
+<!--              </b-form-group>-->
+<!--            </b-colxx>-->
+<!--            <b-colxx xxs="12" md="3">-->
+<!--              <b-form-group :label="$t('price.to')" class="has-float-label mb-4">-->
+<!--                <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>-->
+<!--              </b-form-group>-->
+<!--            </b-colxx>-->
           </b-row>
         </list-page-heading>
         <b-tabs card v-model="activeTab" @input="changeTabs">
@@ -110,6 +110,11 @@
             </template>
             <template #cell(status)="{ item }">
               <b-badge pill :variant="badgeType(item.status)">{{ $t(`order.${item.status}`) }}</b-badge>
+            </template>
+            <template #cell(payment_type)="{ item }">
+              <div v-if="item.payment_type === 'cash'" style="font-size: 28px" class="iconsminds-dollar text-primary"></div>
+              <div v-if="item.payment_type === 'balance'" style="font-size: 28px" class="iconsminds-wallet text-primary"></div>
+              <div v-if="item.payment_type === 'card'" style="font-size: 28px" class="simple-icon-credit-card text-primary"></div>
             </template>
             <template #cell(time)="{ item }">
               {{ moment(item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -450,7 +455,7 @@ export default {
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
     if (_query) {

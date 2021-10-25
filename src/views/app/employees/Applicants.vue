@@ -98,7 +98,10 @@
               </div>
             </template>
             <template #cell(active)="row">
-              <b-badge pill variant="outline-primary">{{ row.item.status }}</b-badge>
+              <b-dropdown variant="secondary" size="xs" :text="$t(`statuses.${row.item.status}`)">
+                <b-dropdown-item v-for="stat in statuses" :key="stat" @click="changeStatus(stat, row)">{{ $t(`statuses.${stat}`) }}</b-dropdown-item>
+              </b-dropdown>
+<!--              <b-badge pill variant="outline-primary">{{ row.item.status }}</b-badge>-->
 <!--              <b-badge v-else pill variant="outline-light">In/active</b-badge>-->
             </template>
             <template #cell(created_at)="row">
@@ -159,14 +162,12 @@ export default {
     return {
       isValidCustom: false,
       statuses: [
-        {
-          text: this.$t('active'),
-          value: true
-        },
-        {
-          text: this.$t('inactive'),
-          value: false
-        }
+        'pending',
+        'interview',
+        'training',
+        'teste',
+        'in_process',
+        'vendor'
       ],
       colors: [
         { label: this.$t('white'), value: 'white' },
@@ -242,6 +243,7 @@ export default {
           // tdClass: 'thirdRow'
         }
       ],
+
       page: 1,
       from: 0,
       to: 0,
@@ -250,6 +252,20 @@ export default {
   },
   methods: {
     moment,
+    changeStatus (val, item) {
+      console.log(val, item)
+      const _id = item.item.id
+      if (val !== item.item.status) {
+        this.$store.dispatch('changeStatusApplicants', {
+          id: _id,
+          data: {
+            status: val
+          }
+        }).then(res => {
+          this.getData()
+        })
+      }
+    },
     validPh (value) {
       console.log(value)
       return /^[+][9][9][8]\d{9}$/.test(value)
@@ -351,7 +367,8 @@ export default {
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      console.log(_hash)
+      _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
     this.getData()

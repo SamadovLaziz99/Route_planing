@@ -174,12 +174,12 @@
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
           </template>
-          <b-dropdown-item @click="$store.dispatch('success_alert', { title: 'Hello World!', message: 'Salom aleykum' })">Account</b-dropdown-item>
-          <b-dropdown-item>Features</b-dropdown-item>
-          <b-dropdown-item>History</b-dropdown-item>
-          <b-dropdown-item>Support</b-dropdown-item>
+          <b-dropdown-item @click="$store.dispatch('success_alert', { title: 'Hello World!', message: 'Salom aleykum' })">{{ $t('menu.settings') }}</b-dropdown-item>
+<!--          <b-dropdown-item>Features</b-dropdown-item>-->
+<!--          <b-dropdown-item>History</b-dropdown-item>-->
+<!--          <b-dropdown-item>Support</b-dropdown-item>-->
           <b-dropdown-divider />
-          <b-dropdown-item @click="logout">Sign out</b-dropdown-item>
+          <b-dropdown-item @click="logout">{{ $t('sign.out') }}</b-dropdown-item>
         </b-dropdown>
       </div>
     </div>

@@ -5,7 +5,7 @@ import router from "../router";
 const token = localStorage.getItem('token')
 
 function unauthorized(msg) {
-  errorNotification(i18n.t('unauthorized.title'), msg)
+  errorNotification(i18n.t('unauthorized.title'), '')
   store.dispatch('signOut').then(res => {
     router.push({ name: 'login' })
   })
@@ -20,28 +20,28 @@ function errorNotification (title, msg) {
 
 function ErrorHandler(error) {
   if (error.message.startsWith('timeout')) {
-    errorNotification(i18n.t('timeout'))
+    errorNotification(i18n.t('errors.timeout'))
   }
   if (error.response) {
     const _error = error.response.data
     switch (error.response.status) {
       case 400:
-        errorNotification(i18n.t('bad_request'), _error)
+        errorNotification(i18n.t('errors.bad_request'), _error)
         break
       case 401:
         unauthorized(_error)
         break
       case 403:
-        errorNotification(i18n.t('forbidden'), _error.message)
+        errorNotification(i18n.t('errors.forbidden'), _error.message)
         break
       case 404:
-        errorNotification(i18n.t('not_found'), _error.message)
+        errorNotification(i18n.t('errors.not_found'), _error.message)
         break
       case 422:
-        errorNotification(i18n.t('unprocessable_entity'), _error.message)
+        errorNotification(i18n.t('errors.unprocessable_entity'), _error.message)
         break
       case 500:
-        errorNotification(i18n.t('internal_server_error'), _error.message)
+        errorNotification(i18n.t('errors.internal_server_error'), _error.message)
         break
       default:
         break

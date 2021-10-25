@@ -1,10 +1,12 @@
 import store from '../store'
 import { bridge } from "./bridge";
+import i18n from "../locales/i18n";
 const ws = new WebSocket(`${process.env.VUE_APP_SOCKET_URL}/notifications/`)
 
 ws.onopen = function (e) {
   store.dispatch('info_alert', {
-    title: 'Socket Connected Successfuly !',
+    title: i18n.t('socket.connected'),
+    // title: 'Socket Connected Successfuly !',
     message: 'Connected'
   })
 }
@@ -14,7 +16,7 @@ ws.onmessage = function (e) {
   const data = JSON.parse(e.data)
   if (data.type !== 'courier') {
     store.dispatch('info_alert', {
-      title: 'New Message Received'
+      title: i18n.t('socket.message')
     })
   }
   if (data.type === 'order') {
@@ -52,7 +54,7 @@ ws.onmessage = function (e) {
 
 ws.onerror = function (e) {
   store.dispatch('error_alert', {
-    title: 'Socket connection failed !',
+    title: i18n.t('socket.failed'),
     message: 'socket_error',
     duration: 60 * 60 * 1000
   })
