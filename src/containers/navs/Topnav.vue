@@ -169,9 +169,9 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1">{{currentUser.title}}</span>
-            <span>
-              <img :alt="currentUser.title" :src="currentUser.img" />
+            <span class="name mr-1"> {{user.first_name}} {{ user.last_name }} </span>
+            <span style="width: 40px; height: 40px">
+              <img :alt=" user.first_name + ' ' + user.last_name " :src="currentUser.img" />
             </span>
           </template>
           <b-dropdown-item @click="$store.dispatch('success_alert', { title: 'Hello World!', message: 'Salom aleykum' })">{{ $t('menu.settings') }}</b-dropdown-item>
@@ -305,6 +305,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['user']),
     ...mapGetters({
       // currentUser: "currentUser",
       menuType: "getMenuType",

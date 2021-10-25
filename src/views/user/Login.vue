@@ -103,7 +103,7 @@ export default {
         ...mapGetters(["currentUser", "fetchToken", "authError"])
     },
     methods: {
-        ...mapActions(["getToken"]),
+        ...mapActions(["getToken", "getUserDetail"]),
         formSubmit() {
             // this.$v.$touch();
             // this.form.email = "piaf-vue@coloredstrategies.com";
@@ -111,7 +111,9 @@ export default {
             this.$v.form.$touch();
           if (!this.$v.$invalid) {
             this.getToken(this.form).then(res => {
-              this.$router.push(adminRoot);
+              this.getUserDetail().then(res => {
+                this.$router.push(adminRoot);
+              })
             })
           }
            // if (!this.$v.form.$anyError) {

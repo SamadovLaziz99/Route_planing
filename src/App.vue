@@ -15,6 +15,11 @@ export default {
     // "color-switcher": ColorSwitcher
   },
   mounted() {
+    const token = localStorage.getItem('token')
+    if (token) {
+      // debugger
+      this.$store.dispatch('getUserDetail')
+    }
     // console.log(process.env.VUE_APP_NAME)
   },
   // beforeMount() {

@@ -2406,9 +2406,9 @@ button {
     }
 
     @include respond-below(sm) {
-      img {
-        width: 30px;
-      }
+      //img {
+      //  width: 30px;
+      //}
 
       margin-left: initial;
 
