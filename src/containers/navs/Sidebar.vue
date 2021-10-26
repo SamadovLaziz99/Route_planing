@@ -307,7 +307,7 @@ export default {
       return menuItems
         ? menuItems.filter(
             (x) =>
-              !x.roles || (x.roles && x.roles.includes(this.currentUser.role))
+              !x.roles || (x.roles && x.roles.includes(this.$store.getters.user.roles[0].role.role))
           )
         : [];
     },

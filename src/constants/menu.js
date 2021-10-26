@@ -1,13 +1,20 @@
 import { adminRoot } from "./config";
-// import { UserRole } from "../utils/auth.roles";
-
+const roles = {
+  admin: 'admin',
+  super_admin: 'superadmin',
+  operator: 'operator',
+  courier_operator: 'courier_operator',
+  marketolog: 'marketolog'
+}
+// // import { UserRole } from "../utils/auth.roles";
+// const { admin, super_admin, operator, courier_operator, marketolog } = roles
 const data = [
   {
     id: "dashboards",
     icon: "simple-icon-chart",
     label: "menu.dashboards",
     to: `${adminRoot}/dashboards`,
-    // roles: [UserRole.Admin, UserRole.Editor],
+    roles: [roles.super_admin],
     subs: []
   },
   {
@@ -15,31 +22,17 @@ const data = [
     icon: "iconsminds-shopping-cart",
     label: "menu.orders",
     to: `${adminRoot}/orders`,
-    // roles: [UserRole.Admin, UserRole.Editor],
+    roles: [roles.super_admin],
     subs: [
       {
         icon: "iconsminds-shop-4",
         label: "menu.orders_list",
-        // to: {
-        //   name: 'order_list',
-        //   query: {
-        //     type: 'pending'
-        //   }
-        // },
         to: `${adminRoot}/orders/list?type=pending`,
-        // roles: [UserRole.Admin],
       },
       {
         icon: "iconsminds-cash-register-2",
         label: "menu.orders_history",
-        // to: {
-        //   name: 'order_history',
-        //   query: {
-        //     type: 'finished'
-        //   }
-        // }
         to: `${adminRoot}/orders/history?type=finished`,
-        // roles: [UserRole.Admin],
       },
       {
         icon: "iconsminds-receipt-4",
@@ -54,7 +47,7 @@ const data = [
     icon: "iconsminds-hamburger",
     label: "menu.foods",
     to: `${adminRoot}/foods`,
-    // roles: [UserRole.Admin, UserRole.Editor],
+    roles: [roles.super_admin],
     subs: [
       {
         icon: "iconsminds-hamburger",
@@ -87,7 +80,8 @@ const data = [
     icon: "simple-icon-user",
     label: "menu.users",
     to: `${adminRoot}/users`,
-    // roles: [UserRole.Admin, UserRole.Editor],
+    roles: [roles.super_admin],
+    subs: []
     // subs: [
     //   {
     //     icon: "simple-icon-people",
@@ -102,6 +96,7 @@ const data = [
     icon: "iconsminds-business-man",
     label: "menu.employees",
     to: `${adminRoot}/employees`,
+    roles: [roles.super_admin],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
       {
@@ -141,6 +136,7 @@ const data = [
     icon: "simple-icon-map",
     label: "menu.maps",
     to: `${adminRoot}/maps`,
+    roles: [roles.super_admin],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: []
   },

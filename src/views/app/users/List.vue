@@ -175,6 +175,11 @@ export default {
       search: "",
       fields: [
         {
+          key: 'id',
+          label: this.$t('id'),
+          // tdClass: 'firstColumn'
+        },
+        {
           key: 'first_name',
           label: this.$t('first.name'),
           // tdClass: 'firstColumn'
