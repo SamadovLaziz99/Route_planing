@@ -25,6 +25,37 @@
         <b-row>
           <b-colxx xl="6" lg="12">
             <icon-cards-carousel :item="order"></icon-cards-carousel>
+            <b-card class="mb-4" :title="orderEvents()">
+                <b-form @submit.prevent="changeOrderStatus('confirm')">
+                  <b-row v-if="isConfirm">
+                    <b-colxx xl="8" lg="12">
+                      <b-form-input v-model.trim="$v.code.$model"  :state="!$v.code.$error" class="mb-4"></b-form-input>
+                      <b-form-invalid-feedback v-if="!$v.code.required">Required</b-form-invalid-feedback>
+                      <b-form-invalid-feedback v-if="!$v.code.minLength">Min length is 5 characters</b-form-invalid-feedback>
+                    </b-colxx>
+                    <b-colxx xl="4" lg="12">
+                      <div class="w-100" style="display: flex">
+                        <b-button class="w-100 mb-2"  type="submit">Send</b-button>
+                        <b-button :class="`mb-2 ml-2 ${!timer.show ? 'simple-icon-refresh' : ''}`" @click="changeOrderStatus('resend')">{{ timer.show ? timer.count : '' }}</b-button>
+                      </div>
+                    </b-colxx>
+                  </b-row>
+                </b-form>
+              <b-button v-if="isAccepted" @click="changeOrderStatus('accept')" class="w-100 mb-2">Accepted</b-button>
+              <b-button v-if="isInProccess" @click="changeOrderStatus('process')" class="w-100 mb-2">In Proccess</b-button>
+              <b-button v-if="isRequestDelivery" @click="changeOrderStatus('reqdelivery')" class="w-100 mb-2">Request Delivery</b-button>
+              <b-row v-if="isCourierAssign">
+                <b-colxx xl="8" lg="12">
+                  <v-select :options="couriers" v-model="courier" class="mb-4"/>
+                </b-colxx>
+                <b-colxx xl="4" lg="12">
+                  <b-button class="w-100 mb-2" @click="changeOrderStatus('assign')">Assign</b-button>
+                </b-colxx>
+              </b-row>
+              <b-button v-if="isShipping" @click="changeOrderStatus('shipping')" class="w-100 mb-2">Shipping</b-button>
+              <b-button v-if="isFinished" @click="changeOrderStatus('finish')" class="w-100 mb-2">Finished Order</b-button>
+              <b-button v-if="isCancel" @click="changeOrderStatus('cancel')" class="w-100 mb-2">Cancel Order</b-button>
+            </b-card>
             <b-card class="mb-4" no-body>
               <b-card-body>
                 <b-card-title>{{ $t('user.details') }}</b-card-title>
@@ -145,7 +176,7 @@
                               <p style="font-size: 12px;">{{ food.food.description }}</p>
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px; text-align: right;">
-                              <p style="font-size: 13px; line-height: 1; color:#f18024;  margin-top:5px; vertical-align:top; white-space:nowrap;">{{ food.count > 1 ? (food.count + ' x ') : '' }}{{ food.food.price }} {{ $t('sum') }}</p>
+                              <p style="font-size: 13px; line-height: 1; color:#f18024;  margin-top:5px; vertical-align:top; white-space:nowrap;">{{ food.count > 1 ? (food.count + ' x ') : '' }}{{ food.food.sale_price || food.food.price }} {{ $t('sum') }}</p>
                             </td>
                           </tr>
                         </table>
@@ -206,7 +237,9 @@ import { getters } from "../../../utils/store_schema";
 import Tables from "../ui/components/Tables";
 import { blogCategories } from "../../../data/blog";
 import { imageProxy } from "../../../utils";
-
+import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
+import {validationMixin} from "vuelidate";
+import store from "../../../store";
 export default {
   components: {
     Tables,
@@ -219,10 +252,24 @@ export default {
     "gradient-with-radial-progress-card": GradientWithRadialProgressCard,
     "website-visit-chart-card": WebsiteVisitsChartCard
   },
+  validations: {
+    code: {
+      required,
+      minLength: minLength(5)
+    }
+  },
+  mixins: [validationMixin],
   data() {
     return {
       coords: [41.324174, 69.290130],
       order: null,
+      courier: null,
+      code: null,
+      timer: {
+        show: false,
+        decrementer: null,
+        count: 59
+      },
       blogCategories,
       status: 'pending',
       pendingStatus: false,
@@ -255,12 +302,226 @@ export default {
       ],
     }
   },
+  watch: {
+    'timer.count': function (val) {
+      if (val < 1) {
+        this.timer.show = false
+        clearInterval(this.timer.decrementer)
+      }
+    }
+  },
   computed: {
     ...mapGetters(getters('orders')),
-    ...mapGetters(['orderFoods'])
+    ...mapGetters(['orderFoods', 'dataCouriers']),
+    isConfirm () {
+      const _ = this.order
+      return _ && (_.status === 'pending') && (_.payment_type === 'balance') && (_.transactions.length && (_.transactions[0].state === 0))
+    },
+    isAccepted () {
+      const _ = this.order
+      return _ &&
+        (_.status === 'pending') &&
+        ((_.payment_type === 'cash') || (_.transactions.length && (_.transactions[0].state === 5)))
+    },
+    isInProccess () {
+      const _ = this.order
+      return _ && _.status === 'accepted'
+    },
+    isRequestDelivery () {
+      const _ = this.order
+      return _ && (_.status === 'in_process') && (_.delivery_status === null)
+    },
+    isCourierAssign () {
+      const _ = this.order
+      return _ && (_.status === 'in_process') && (_.delivery_status === 'pending')
+    },
+    isCancel () {
+      const _ = this.order
+      return _ && _.status !== 'finished' && _.status !== 'cancelled'
+    },
+    isShipping () {
+      const _ = this.order
+      return _ && (_.status === 'in_process') && (_.delivery_status === 'in_process' || _.delivery_status === 'accepted')
+    },
+    isFinished () {
+      const _ = this.order
+      return _ && (_.status === 'shipping') && (_.delivery_status === 'in_process') && (_.transactions.length && (_.transactions[0].state === 5))
+    },
+    couriers () {
+      return this.dataCouriers.map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    }
   },
   methods: {
     imageProxy,
+    orderEvents () {
+      if (this.isConfirm) return 'Confirm Order'
+      if (this.isAccepted) return 'Accepted Order'
+      if (this.isInProccess) return 'In Proccess Order'
+      if (this.isShipping) return 'Shipping Order'
+      if (this.isRequestDelivery) return 'Request Delivery'
+      if (this.isCourierAssign) return 'Courier Assign'
+      if (this.isFinished) return 'Finished Order'
+      else return 'No Actions'
+    },
+    changeOrderStatus (status) {
+      if (status === 'confirm') {
+        this.$v.$touch();
+        if (!this.$v.$invalid) {
+          this.$store.dispatch('confirmTransaction', {
+            id: this.order.id,
+            data: { code: this.code }
+          }).then(res => {
+            this.$store.dispatch('success_alert', {
+              title: 'Transaction Confirmed',
+              message: ''
+            })
+            setTimeout(() => {
+              document.location.reload()
+            }, 500)
+          }).catch(err => {
+            console.log(err)
+            const _message = err.response.data.message
+            this.$store.dispatch('error_alert', {
+              title: 'Error Confirmation',
+              message: _message
+            })
+          })
+        }
+      }
+      if (status === 'resend') {
+        this.$store.dispatch('resendCode', this.order.id).then(res => {
+          console.log(res)
+          this.startTimer()
+        })
+      }
+      if (status === 'accept') {
+        this.$store.dispatch('acceptOrder', this.order.id).then(res => {
+          this.$store.dispatch('success_alert', {
+            title: 'Order Accepted',
+            message: ''
+          })
+          setTimeout(() => {
+            document.location.reload()
+          }, 500)
+        }).catch(err => {
+          console.log(err)
+          const _message = err.response.data.message
+          this.$store.dispatch('error_alert', {
+            title: 'Error',
+            message: _message
+          })
+        })
+      }
+      if (status === 'process') {
+        this.$store.dispatch('processOrder', this.order.id).then(res => {
+          this.$store.dispatch('success_alert', {
+            title: 'Order In Processed',
+            message: ''
+          })
+          setTimeout(() => {
+            document.location.reload()
+          }, 500)
+        }).catch(err => {
+          console.log(err)
+          const _message = err.response.data.message
+          this.$store.dispatch('error_alert', {
+            title: 'Error',
+            message: _message
+          })
+        })
+      }
+      if (status === 'reqdelivery') {
+        this.$store.dispatch('requestDelivery', this.order.id).then(res => {
+          this.$store.dispatch('success_alert', {
+            title: 'Request Delivery',
+            message: ''
+          })
+          setTimeout(() => {
+            document.location.reload()
+          }, 500)
+        }).catch(err => {
+          console.log(err)
+          const _message = err.response.data.message
+          this.$store.dispatch('error_alert', {
+            title: 'Error',
+            message: _message
+          })
+        })
+      }
+      if (status === 'shipping') {
+        this.$store.dispatch('shippingOrder', this.order.id).then(res => {
+          this.$store.dispatch('success_alert', {
+            title: 'Order Shipping',
+            message: ''
+          })
+          setTimeout(() => {
+            document.location.reload()
+          }, 500)
+        }).catch(err => {
+          console.log(err)
+          const _message = err.response.data.message
+          this.$store.dispatch('error_alert', {
+            title: 'Error',
+            message: _message
+          })
+        })
+      }
+      if (status === 'assign') {
+        if (this.courier) {
+          this.$store.dispatch('assignCourier', {
+            order_id: this.order.id,
+            courier_id: this.courier.value
+          }).then(res => {
+            this.$store.dispatch('success_alert', {
+              title: 'Courier Accepted',
+              message: ''
+            })
+            setTimeout(() => {
+              document.location.reload()
+            }, 500)
+          }).catch(err => {
+            console.log(err)
+            const _message = err.response.data.message
+            this.$store.dispatch('error_alert', {
+              title: 'Error',
+              message: _message
+            })
+          })
+        }
+      }
+      if (status === 'cancel') {
+        this.$store.dispatch('cancelOrder', this.order.id).then(res => {
+          this.$store.dispatch('success_alert', {
+            title: 'Order Cancelled',
+            message: ''
+          })
+          setTimeout(() => {
+            document.location.reload()
+          }, 500)
+        }).catch(err => {
+          console.log(err)
+          const _message = err.response.data.message
+          this.$store.dispatch('error_alert', {
+            title: 'Error',
+            message: _message
+          })
+        })
+      }
+      if (status === 'finish') {
+        this.$store.dispatch('finishOrder', this.order.id)
+      }
+    },
+    startTimer () {
+      this.timer.show = true
+      this.timer.decrementer = setInterval(() => {
+        this.timer.count --
+      }, 1000)
+    },
     changeStatus () {
       this.pendingStatus = true
       this.$store.dispatch('changeStatusOrder', {
@@ -278,17 +539,13 @@ export default {
   },
   mounted() {
     this.$store.dispatch('getFoodOrders', this.$route.params.id).then(res => {
-      console.log(res)
       this.foods = res.results
-      console.log(this.foods)
     })
-    // this.$store.dispatch('getOrderFoods', this.$route.params.id).then(res => {
-    //   console.log(res)
-    // })
     this.$store.dispatch('getByIdOrders', this.$route.params.id).then(res => {
+      if (!this.isCourierAssign) this.$store.dispatch('getCouriers')
       this.order = res
       this.status = res.status
-      console.log(res)
+      console.log(this.order)
     })
   }
 };

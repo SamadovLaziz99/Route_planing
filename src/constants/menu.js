@@ -1,9 +1,8 @@
 import { adminRoot } from "./config";
 const roles = {
-  admin: 'admin',
   super_admin: 'superadmin',
   operator: 'operator',
-  courier_operator: 'courier_operator',
+  courier_operator: 'courier_bro',
   marketolog: 'marketolog'
 }
 // // import { UserRole } from "../utils/auth.roles";

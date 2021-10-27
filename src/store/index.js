@@ -18,6 +18,7 @@ import location from "./modules/location";
 import universal from "./modules/universal";
 import yandex from "./modules/yandex";
 import statistics from "./modules/statistics";
+import order_services from "./modules/order_services";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -49,6 +50,7 @@ export default new Vuex.Store({
     location,
     yandex,
     statistics,
+    order_services,
     categories: crud('categories'),
     foods: crud('food'),
     units: crud('units'),
