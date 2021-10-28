@@ -3,16 +3,17 @@
     <div v-if="!error">
       <div v-if="loadOne && !order" class="loading"></div>
       <div v-if="order">
-        <b-modal id="changeStatusModal" ref="changeStatusModal" :title="$t('change.status')">
-          <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="status" />
+        <b-modal id="changeStatusModal" @hide="hide" v-model="confirm.show" ref="changeStatusModal" :title="$t('do.you.want')">
+          <h2>{{ confirm.cause }}</h2>
           <template slot="modal-footer">
-            <b-button @click="changeStatus" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pendingStatus }" variant="primary">
-              <span class="spinner d-inline-block">
+            <b-button variant="outline-primary" @click="hide">{{ $t('cancel') }}</b-button>
+            <b-button variant="primary">
+              <span :class="{ 'spinner': confirm.load, 'd-inline-block': true }">
                   <span class="bounce1"></span>
                   <span class="bounce2"></span>
                   <span class="bounce3"></span>
               </span>
-              <span class="label">Change</span>
+              <span class="label" @click="changeOrderStatus(confirm.type)">OK</span>
             </b-button>
           </template>
         </b-modal>
@@ -26,35 +27,35 @@
           <b-colxx xl="6" lg="12">
             <icon-cards-carousel :item="order"></icon-cards-carousel>
             <b-card class="mb-4" :title="orderEvents()">
-                <b-form @submit.prevent="changeOrderStatus('confirm')">
+                <b-form @submit.prevent="openConfirmModal('confirm')">
                   <b-row v-if="isConfirm">
                     <b-colxx xl="8" lg="12">
                       <b-form-input v-model.trim="$v.code.$model"  :state="!$v.code.$error" class="mb-4"></b-form-input>
-                      <b-form-invalid-feedback v-if="!$v.code.required">Required</b-form-invalid-feedback>
-                      <b-form-invalid-feedback v-if="!$v.code.minLength">Min length is 5 characters</b-form-invalid-feedback>
+                      <b-form-invalid-feedback v-if="!$v.code.required">Oбязательный</b-form-invalid-feedback>
+                      <b-form-invalid-feedback v-if="!$v.code.minLength">Минимальная длина - 5 символов.</b-form-invalid-feedback>
                     </b-colxx>
                     <b-colxx xl="4" lg="12">
                       <div class="w-100" style="display: flex">
-                        <b-button class="w-100 mb-2"  type="submit">Send</b-button>
+                        <b-button class="w-100 mb-2"  type="submit">Oтправить</b-button>
                         <b-button :class="`mb-2 ml-2 ${!timer.show ? 'simple-icon-refresh' : ''}`" @click="changeOrderStatus('resend')">{{ timer.show ? timer.count : '' }}</b-button>
                       </div>
                     </b-colxx>
                   </b-row>
                 </b-form>
-              <b-button v-if="isAccepted" @click="changeOrderStatus('accept')" class="w-100 mb-2">Accepted</b-button>
-              <b-button v-if="isInProccess" @click="changeOrderStatus('process')" class="w-100 mb-2">In Proccess</b-button>
-              <b-button v-if="isRequestDelivery" @click="changeOrderStatus('reqdelivery')" class="w-100 mb-2">Request Delivery</b-button>
+              <b-button v-if="isAccepted" @click="openConfirmModal('accept')" class="w-100 mb-2">Принято</b-button>
+              <b-button v-if="isInProccess" @click="openConfirmModal('process')" class="w-100 mb-2">В процессе</b-button>
+              <b-button v-if="isRequestDelivery" @click="openConfirmModal('reqdelivery')" class="w-100 mb-2">Запросить доставку</b-button>
               <b-row v-if="isCourierAssign">
                 <b-colxx xl="8" lg="12">
                   <v-select :options="couriers" v-model="courier" class="mb-4"/>
                 </b-colxx>
                 <b-colxx xl="4" lg="12">
-                  <b-button class="w-100 mb-2" @click="changeOrderStatus('assign')">Assign</b-button>
+                  <b-button class="w-100 mb-2" @click="openConfirmModal('assign')">Назначать</b-button>
                 </b-colxx>
               </b-row>
-              <b-button v-if="isShipping" @click="changeOrderStatus('shipping')" class="w-100 mb-2">Shipping</b-button>
-              <b-button v-if="isFinished" @click="changeOrderStatus('finish')" class="w-100 mb-2">Finished Order</b-button>
-              <b-button v-if="isCancel" @click="changeOrderStatus('cancel')" class="w-100 mb-2">Cancel Order</b-button>
+              <b-button v-if="isShipping" @click="openConfirmModal('shipping')" class="w-100 mb-2">В пути</b-button>
+              <b-button v-if="isFinished" @click="openConfirmModal('finish')" class="w-100 mb-2">Завершить заказ</b-button>
+              <b-button v-if="isCancel" @click="openConfirmModal('cancel')" class="w-100 mb-2">Отменить заказ</b-button>
             </b-card>
             <b-card class="mb-4" no-body>
               <b-card-body>
@@ -224,33 +225,17 @@
 </template>
 
 <script>
-// import BestSellers from "../../../containers/dashboards/BestSellers";
-import Cakes from "../../../containers/dashboards/Cakes";
-import ConversionRatesChartCard from "../../../containers/dashboards/ConversionRatesChartCard";
 import IconCardsCarousel from "./DetailsCard";
-import NewComments from "../../../containers/dashboards/NewComments";
-import QuickPost from "../../../containers/dashboards/QuickPost";
-import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
-import GradientWithRadialProgressCard from "../../../components/Cards/GradientWithRadialProgressCard";
 import { mapGetters } from 'vuex'
 import { getters } from "../../../utils/store_schema";
 import Tables from "../ui/components/Tables";
-import { blogCategories } from "../../../data/blog";
 import { imageProxy } from "../../../utils";
-import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
+import {required, minLength} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
-import store from "../../../store";
 export default {
   components: {
     Tables,
-    // "best-sellers": BestSellers,
-    cakes: Cakes,
-    "converconversion-rates-chart-card": ConversionRatesChartCard,
-    "icon-cards-carousel": IconCardsCarousel,
-    "new-comments": NewComments,
-    "quick-post": QuickPost,
-    "gradient-with-radial-progress-card": GradientWithRadialProgressCard,
-    "website-visit-chart-card": WebsiteVisitsChartCard
+    "icon-cards-carousel": IconCardsCarousel
   },
   validations: {
     code: {
@@ -262,6 +247,12 @@ export default {
   data() {
     return {
       coords: [41.324174, 69.290130],
+      confirm: {
+        show: false,
+        cause: '',
+        type: null,
+        load: true
+      },
       order: null,
       courier: null,
       code: null,
@@ -270,7 +261,6 @@ export default {
         decrementer: null,
         count: 59
       },
-      blogCategories,
       status: 'pending',
       pendingStatus: false,
       foods: [],
@@ -358,162 +348,102 @@ export default {
   },
   methods: {
     imageProxy,
+    hide () {
+      this.confirm = {
+        show: false,
+        cause: '',
+        type: null,
+        load: true
+      }
+    },
+    error (err) {
+      const _message = err.response.data.message
+      this.$store.dispatch('error_alert', {
+        title: 'Ошибка',
+        message: _message
+      })
+    },
+    success (res) {
+      this.$store.dispatch('success_alert', {
+        title: 'Успех',
+        message: 'Действие успешно выполнено'
+      })
+      this.hide()
+      setTimeout(() => {
+        document.location.reload()
+      }, 500)
+    },
     orderEvents () {
-      if (this.isConfirm) return 'Confirm Order'
-      if (this.isAccepted) return 'Accepted Order'
-      if (this.isInProccess) return 'In Proccess Order'
-      if (this.isShipping) return 'Shipping Order'
-      if (this.isRequestDelivery) return 'Request Delivery'
-      if (this.isCourierAssign) return 'Courier Assign'
-      if (this.isFinished) return 'Finished Order'
-      else return 'No Actions'
+      if (this.isConfirm) return 'Подтвердите заказ'
+      if (this.isAccepted) return 'Принятый заказ'
+      if (this.isInProccess) return 'Заказ в обработке'
+      if (this.isShipping) return 'Доставка заказа'
+      if (this.isRequestDelivery) return 'Запросить доставку'
+      if (this.isCourierAssign) return 'Курьер Назначить'
+      if (this.isFinished) return 'Готовый заказ'
+      else return 'Никаких действий'
+    },
+    openConfirmModal (type) {
+      if (type === 'confirm') { this.confirm = { show: true, load: false, cause: 'Подтвердить транзакцию !', type: 'confirm' }}
+      if (type === 'accept') { this.confirm = { show: true, load: false, cause: 'Статус заказа изменен на Принято !', type: 'accept' }}
+      if (type === 'process') { this.confirm = { show: true, load: false, cause: 'Статус заказа изменен на В процессе !', type: 'process' }}
+      if (type === 'reqdelivery') { this.confirm = { show: true, load: false, cause: 'Запросить доставку !', type: 'reqdelivery' }}
+      if (type === 'shipping') { this.confirm = { show: true, load: false, cause: 'Статус заказа изменен на Доставка !', type: 'shipping' }}
+      if (type === 'assign') { this.confirm = { show: true, load: false, cause: 'Подтвердить назначение курьера !', type: 'assign' }}
+      if (type === 'cancel') { this.confirm = { show: true, load: false, cause: 'Статус заказа изменен на Отменен !', type: 'cancel' }}
+      if (type === 'finish') { this.confirm = { show: true, load: false, cause: 'Статус заказа изменен на Завершено !', type: 'finish' }}
     },
     changeOrderStatus (status) {
       if (status === 'confirm') {
         this.$v.$touch();
         if (!this.$v.$invalid) {
+          this.confirm.load = true
           this.$store.dispatch('confirmTransaction', {
             id: this.order.id,
             data: { code: this.code }
-          }).then(res => {
-            this.$store.dispatch('success_alert', {
-              title: 'Transaction Confirmed',
-              message: ''
-            })
-            setTimeout(() => {
-              document.location.reload()
-            }, 500)
-          }).catch(err => {
-            console.log(err)
-            const _message = err.response.data.message
-            this.$store.dispatch('error_alert', {
-              title: 'Error Confirmation',
-              message: _message
-            })
-          })
+          }).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
         }
-      }
+      } //
       if (status === 'resend') {
-        this.$store.dispatch('resendCode', this.order.id).then(res => {
-          console.log(res)
-          this.startTimer()
-        })
-      }
+        if (!this.timer.show) {
+          this.$store.dispatch('resendCode', this.order.id).then(res => {
+            console.log(res)
+            this.startTimer()
+          }).catch(this.error)
+        }
+      } // ----
       if (status === 'accept') {
-        this.$store.dispatch('acceptOrder', this.order.id).then(res => {
-          this.$store.dispatch('success_alert', {
-            title: 'Order Accepted',
-            message: ''
-          })
-          setTimeout(() => {
-            document.location.reload()
-          }, 500)
-        }).catch(err => {
-          console.log(err)
-          const _message = err.response.data.message
-          this.$store.dispatch('error_alert', {
-            title: 'Error',
-            message: _message
-          })
-        })
-      }
+        this.confirm.load = true
+        this.$store.dispatch('acceptOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+      } //
       if (status === 'process') {
-        this.$store.dispatch('processOrder', this.order.id).then(res => {
-          this.$store.dispatch('success_alert', {
-            title: 'Order In Processed',
-            message: ''
-          })
-          setTimeout(() => {
-            document.location.reload()
-          }, 500)
-        }).catch(err => {
-          console.log(err)
-          const _message = err.response.data.message
-          this.$store.dispatch('error_alert', {
-            title: 'Error',
-            message: _message
-          })
-        })
-      }
+        this.confirm.load = true
+        this.$store.dispatch('processOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+      } //
       if (status === 'reqdelivery') {
-        this.$store.dispatch('requestDelivery', this.order.id).then(res => {
-          this.$store.dispatch('success_alert', {
-            title: 'Request Delivery',
-            message: ''
-          })
-          setTimeout(() => {
-            document.location.reload()
-          }, 500)
-        }).catch(err => {
-          console.log(err)
-          const _message = err.response.data.message
-          this.$store.dispatch('error_alert', {
-            title: 'Error',
-            message: _message
-          })
-        })
+        this.confirm.load = true
+        this.$store.dispatch('requestDelivery', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
       }
       if (status === 'shipping') {
-        this.$store.dispatch('shippingOrder', this.order.id).then(res => {
-          this.$store.dispatch('success_alert', {
-            title: 'Order Shipping',
-            message: ''
-          })
-          setTimeout(() => {
-            document.location.reload()
-          }, 500)
-        }).catch(err => {
-          console.log(err)
-          const _message = err.response.data.message
-          this.$store.dispatch('error_alert', {
-            title: 'Error',
-            message: _message
-          })
-        })
+        this.confirm.load = true
+        this.$store.dispatch('shippingOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
       }
       if (status === 'assign') {
         if (this.courier) {
+          this.confirm.load = true
           this.$store.dispatch('assignCourier', {
             order_id: this.order.id,
             courier_id: this.courier.value
-          }).then(res => {
-            this.$store.dispatch('success_alert', {
-              title: 'Courier Accepted',
-              message: ''
-            })
-            setTimeout(() => {
-              document.location.reload()
-            }, 500)
-          }).catch(err => {
-            console.log(err)
-            const _message = err.response.data.message
-            this.$store.dispatch('error_alert', {
-              title: 'Error',
-              message: _message
-            })
-          })
+          }).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
         }
       }
       if (status === 'cancel') {
-        this.$store.dispatch('cancelOrder', this.order.id).then(res => {
-          this.$store.dispatch('success_alert', {
-            title: 'Order Cancelled',
-            message: ''
-          })
-          setTimeout(() => {
-            document.location.reload()
-          }, 500)
-        }).catch(err => {
-          console.log(err)
-          const _message = err.response.data.message
-          this.$store.dispatch('error_alert', {
-            title: 'Error',
-            message: _message
-          })
-        })
+        this.confirm.load = true
+        // this.$store.dispatch('cancelOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
       }
       if (status === 'finish') {
-        this.$store.dispatch('finishOrder', this.order.id)
+        this.confirm.load = true
+        this.$store.dispatch('finishOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
       }
     },
     startTimer () {

@@ -6,7 +6,6 @@
         :title="$t('status')"
         icon="simple-icon-pin"
         :value="$t(`order.${item.status}`)"
-        v-b-modal.changeStatusModal
       />
       <icon-card
         v-else
