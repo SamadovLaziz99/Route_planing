@@ -36,25 +36,25 @@
                     </b-colxx>
                     <b-colxx xl="4" lg="12">
                       <div class="w-100" style="display: flex">
-                        <b-button class="w-100 mb-2"  type="submit">Oтправить</b-button>
+                        <b-button class="w-100 mb-2"  type="submit" variant="outline-primary">Oтправить</b-button>
                         <b-button :class="`mb-2 ml-2 ${!timer.show ? 'simple-icon-refresh' : ''}`" @click="changeOrderStatus('resend')">{{ timer.show ? timer.count : '' }}</b-button>
                       </div>
                     </b-colxx>
                   </b-row>
                 </b-form>
-              <b-button v-if="isAccepted" @click="openConfirmModal('accept')" class="w-100 mb-2">Принято</b-button>
-              <b-button v-if="isInProccess" @click="openConfirmModal('process')" class="w-100 mb-2">В процессе</b-button>
-              <b-button v-if="isRequestDelivery" @click="openConfirmModal('reqdelivery')" class="w-100 mb-2">Запросить доставку</b-button>
+              <b-button variant="outline-primary" v-if="isAccepted" @click="openConfirmModal('accept')" class="w-100 mb-2">Принято</b-button>
+              <b-button variant="outline-primary" v-if="isInProccess" @click="openConfirmModal('process')" class="w-100 mb-2">В процессе</b-button>
+              <b-button variant="outline-primary" v-if="isRequestDelivery" @click="openConfirmModal('reqdelivery')" class="w-100 mb-2">Запросить доставку</b-button>
               <b-row v-if="isCourierAssign">
                 <b-colxx xl="8" lg="12">
                   <v-select :options="couriers" v-model="courier" class="mb-4"/>
                 </b-colxx>
                 <b-colxx xl="4" lg="12">
-                  <b-button class="w-100 mb-2" @click="openConfirmModal('assign')">Назначать</b-button>
+                  <b-button variant="outline-primary" class="w-100 mb-2" @click="openConfirmModal('assign')">Назначать</b-button>
                 </b-colxx>
               </b-row>
-              <b-button v-if="isShipping" @click="openConfirmModal('shipping')" class="w-100 mb-2">В пути</b-button>
-              <b-button v-if="isFinished" @click="openConfirmModal('finish')" class="w-100 mb-2">Завершить заказ</b-button>
+              <b-button variant="outline-primary" v-if="isShipping" @click="openConfirmModal('shipping')" class="w-100 mb-2">В пути</b-button>
+              <b-button variant="outline-primary" v-if="isFinished" @click="openConfirmModal('finish')" class="w-100 mb-2">Завершить заказ</b-button>
               <b-button v-if="isCancel" @click="openConfirmModal('cancel')" class="w-100 mb-2">Отменить заказ</b-button>
             </b-card>
             <b-card class="mb-4" no-body>
