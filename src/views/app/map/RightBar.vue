@@ -6,7 +6,7 @@
       >
         <b-tabs fill content-class="tab-content" nav-class="separator-tabs" @input="tabChange">
           <b-tab :title="$t('order.all').toUpperCase()">
-            <TimeLine v-if="!loadOrders" :items="dataOrders" @selectedItem="selectedItem"/>
+            <TimeLine v-if="!loadOrders" :items="dataOrders" @selectedItem="selectedItem" @reload="reloadData"/>
             <div v-else class="text-center text-primary my-2 mt-5">
               <b-spinner class="align-middle"></b-spinner>
               <strong>{{ $t('loading') }}...</strong>
@@ -48,7 +48,6 @@
 <!--  </b-tabs>-->
 </template>
 <script>
-import tickets from "../../../data/tickets";
 import ListCard from "./ListCard";
 import TimeLine from "./TimeLine";
 import { mapGetters } from "vuex";
@@ -64,7 +63,6 @@ export default {
   data() {
     return {
       active: -1,
-      tickets,
       courier_orders: []
     };
   },
@@ -77,6 +75,11 @@ export default {
   methods: {
     selectedItem (e) {
       this.$emit('selectedItem', e)
+    },
+    reloadData () {
+      this.$store.dispatch('getOrders', {
+        status: 'map'
+      })
     },
     tabChange (e) {
       // console.log(e)
@@ -93,8 +96,6 @@ export default {
       }).then(res => {
         this.courier_orders = res
       })
-      console.log(id)
-      console.log(item)
       this.active = id
     }
   }

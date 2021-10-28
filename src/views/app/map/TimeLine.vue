@@ -1,5 +1,19 @@
 <template>
   <div class="history-tl-container">
+    <b-modal id="changeStatusModal" @hide="hide" v-model="assign.show" ref="changeStatusModal" :title="$t('do.you.want')">
+      <h2>Назначить на: <strong>{{ assign.courier ? assign.courier.label : '' }}</strong></h2>
+      <template slot="modal-footer">
+        <b-button variant="outline-primary" @click="hide">{{ $t('cancel') }}</b-button>
+        <b-button variant="primary">
+              <span :class="{ 'spinner': assign.load, 'd-inline-block': true }">
+                  <span class="bounce1"></span>
+                  <span class="bounce2"></span>
+                  <span class="bounce3"></span>
+              </span>
+          <span class="label" @click="assignCourier">OK</span>
+        </b-button>
+      </template>
+    </b-modal>
 <!--    <div class="timeline">-->
       <ul class="tl" v-if="items">
         <li v-for="item in items" :key="item.id" class="tl-item" ng-repeat="item in retailer_history">
@@ -17,10 +31,11 @@
                 <div class="item-title"><span class="iconsminds-map-marker-2 marker red"></span>{{ item.vendor.address }}</div>
                 <div class="item-title"><span class="iconsminds-map-marker-2 marker green"></span>{{ item.user_address.address_name }}</div>
             </div>
-<!--            <div class="d-flex justify-content-between align-items-center pt-2">-->
-<!--              <span>Courier: </span>-->
-<!--              <v-select style="min-width: 180px;" :options="tickets" label="title" index="detail"/>-->
-<!--            </div>-->
+            <hr v-if="isCourierAssign(item)">
+            <div v-if="isCourierAssign(item)" class="d-flex justify-content-between align-items-center">
+              <span>Назначить курьер: </span>
+              <v-select style="min-width: 200px;" v-model="courier" :options="couriers" @input="changeCourier($event, item)"/>
+            </div>
           </div>
         </li>
       </ul>
@@ -29,31 +44,103 @@
 </template>
 
 <script>
-// import tickets from "../../../data/tickets";
-// import EmptyBox from "../../../components/EmptyBox";
 import {mapGetters} from "vuex";
 export default {
   name: "TimeLine",
-  components: {
-    // EmptyBox
-  },
+  components: {},
   props: ['route', 'items'],
   data () {
     return {
+      courier: null,
+      assign: {
+        show: false,
+        courier: null,
+        load: false,
+        order: null
+      }
     }
   },
   computed: {
-    ...mapGetters(['dataOrders'])
-  },
-  methods: {
-    viewItem (item) {
-      this.$router.push({
-        name: this.$route.name,
-        query: {
-          order_id: item.id
+    ...mapGetters(['dataOrders', 'dataCouriers']),
+    couriers () {
+      return this.dataCouriers.map(e => {
+        return {
+          label: e.name,
+          value: e.id
         }
       })
-      this.$emit('selectedItem', item)
+    },
+  },
+  methods: {
+    isCourierAssign (order) {
+      const _ = order
+      return _ && (_.status === 'in_process') && (_.delivery_status === 'pending')
+    },
+    changeCourier (v, item) {
+      if (this.courier) {
+        this.assign = {
+          show: true,
+          courier: v,
+          load: false,
+          order: item
+        }
+      }
+    },
+    hide () {
+      this.courier = null
+      this.assign = {
+        show: false,
+        courier: null,
+        load: false,
+        order: null
+      }
+    },
+    assignCourier () {
+      console.log('assign')
+      console.log(this.assign)
+      this.assign.load = true
+      this.$store.dispatch('assignCourier', {
+        order_id: this.assign.order.id,
+        courier_id: this.assign.courier.value
+      }).then(res => {
+        this.$store.dispatch('success_alert', {
+          title: 'Успех',
+          message: 'Действие успешно выполнено'
+        })
+        this.$emit('reload', 'success')
+        this.hide()
+      }).catch(err => {
+        const _message = err.response.data.message
+        this.$store.dispatch('error_alert', {
+          title: 'Ошибка',
+          message: _message
+        })
+      }).finally(() => {
+        this.assign.load = false
+      })
+    },
+    viewItem (item) {
+      console.log(this.$route.query.order_id)
+      console.log(item.id)
+      if (this.$route.query.order_id) {
+        if (this.$route.query.order_id != item.id) {
+          this.$router.push({
+            name: this.$route.name,
+            query: {
+              order_id: item.id
+            }
+          })
+          this.$emit('selectedItem', item)
+        }
+      } else {
+        this.$router.push({
+          name: this.$route.name,
+          query: {
+            order_id: item.id
+          }
+        })
+        this.$emit('selectedItem', item)
+      }
     },
     badgeType(type) {
       switch (type) {

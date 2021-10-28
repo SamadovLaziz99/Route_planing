@@ -197,11 +197,6 @@ export default {
           //   this.routedCouriersPoint(_el, res)
           // })
         })
-        // this.geoObjects.couriers.forEach(e => {
-        //   this.$store.dispatch('getOneRoute', _coords).then(res => {
-        //
-        //   })
-        // })
       })
     },
     courierPoint (el) {
@@ -444,7 +439,11 @@ export default {
   },
   mounted() {
     bridge.$on('realTimeCourier', this.realTimeCourier)
-    // this.$router.push({ name: this.$route.name })
+    if (this.$route.query.order_id) {
+      this.$store.dispatch('getByIdOrders', this.$route.query.order_id).then(res => {
+        this.selectedItem(res)
+      })
+    }
   },
   created () {
     this.initMap()
