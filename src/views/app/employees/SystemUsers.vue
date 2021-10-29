@@ -32,6 +32,9 @@
                 <b-form-input type="text" v-model.trim="$v.form.re_password.$model" :state="!$v.form.re_password.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{ $t('re.password.error') }}</b-form-invalid-feedback>
               </b-form-group>
+              <b-form-group v-if="form.id" :label="$t('role')" class="has-float-label mb-4">
+                <v-select v-model="role" :options="$store.getters.userRoles"></v-select>
+              </b-form-group>
               <b-form-group :label="$t('pages.status')">
                 <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />
               </b-form-group>
@@ -160,11 +163,11 @@ export default {
     return {
       statuses: [
         {
-          text: "ACTIVE",
+          text: this.$t('active'),
           value: true
         },
         {
-          text: "INACTIVE",
+          text: this.$t('inactive'),
           value: false
         }
       ],
@@ -183,24 +186,25 @@ export default {
         label: "Product Name"
       },
       search: "",
+      role: null,
       fields: [
         {
           key: 'first_name',
-          label: 'First Name',
+          label: this.$t('first.name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'last_name',
-          label: 'Last Name',
+          label: this.$t('last.name'),
           // tdClass: 'firstColumn'
         },
         {
           key: 'username',
-          label: 'Username',
+          label: this.$t('username'),
           // tdClass: 'firstColumn'
         },{
           key: 'email',
-          label: 'Email',
+          label: this.$t('email'),
           // tdClass: 'firstColumn'
         },
         // {
@@ -220,7 +224,7 @@ export default {
         },
         {
           key: 'action',
-          label: 'Action',
+          label: this.$t('action'),
           // tdClass: 'thirdRow'
         }
       ],
@@ -237,6 +241,7 @@ export default {
     },
     clear() {
       this.$v.$reset()
+      this.role = null
       this.form = {
         id: null,
         first_name: '',
@@ -268,11 +273,20 @@ export default {
         const _form = { ...this.form }
         delete _form.id
         delete _form.re_password
-        // if (this.form.id) delete _form.password
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: _form
         }).then(res => {
+          if (this.role) {
+            this.$store.dispatch('userRoleAssign', {
+              role_id: this.role.value,
+              user: this.form.id
+            }).then(res => {
+              this.$store.dispatch('success_alert', {
+                title: "User Role updated!"
+              })
+            })
+          }
           this.$refs.crudModal.hideModal()
           this.getData()
         })
@@ -329,6 +343,7 @@ export default {
   },
   mounted() {
     console.log(this.$route.hash)
+    this.$store.dispatch('getRoles')
     this.getData()
   }
 };

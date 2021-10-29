@@ -13,7 +13,7 @@ const data = [
     icon: "simple-icon-chart",
     label: "menu.dashboards",
     to: `${adminRoot}/dashboards`,
-    roles: [roles.super_admin],
+    roles: [roles.super_admin, roles.operator, roles.courier_operator, roles.marketolog],
     subs: []
   },
   {
@@ -21,22 +21,25 @@ const data = [
     icon: "iconsminds-shopping-cart",
     label: "menu.orders",
     to: `${adminRoot}/orders`,
-    roles: [roles.super_admin],
+    roles: [roles.super_admin, roles.operator, roles.courier_operator],
     subs: [
       {
         icon: "iconsminds-shop-4",
         label: "menu.orders_list",
         to: `${adminRoot}/orders/list?type=pending`,
+        roles: [roles.super_admin, roles.operator, roles.courier_operator],
       },
       {
         icon: "iconsminds-cash-register-2",
         label: "menu.orders_history",
         to: `${adminRoot}/orders/history?type=finished`,
+        roles: [roles.super_admin, roles.operator],
       },
       {
         icon: "iconsminds-receipt-4",
         label: "menu.transactions",
         to: `${adminRoot}/orders/transactions`,
+        roles: [roles.super_admin],
         // roles: [UserRole.Admin],
       },
     ]
@@ -46,30 +49,34 @@ const data = [
     icon: "iconsminds-hamburger",
     label: "menu.foods",
     to: `${adminRoot}/foods`,
-    roles: [roles.super_admin],
+    roles: [roles.super_admin, roles.operator],
     subs: [
       {
         icon: "iconsminds-hamburger",
         label: "menu.foods_list",
         to: `${adminRoot}/foods/list`,
+        roles: [roles.super_admin, roles.operator],
         // roles: [UserRole.Admin],
       },
       {
         icon: "iconsminds-box-with-folders",
         label: "menu.foods_category",
         to: `${adminRoot}/foods/categories`,
+        roles: [roles.super_admin, roles.operator],
         // roles: [UserRole.Admin],
       },
       {
         icon: "iconsminds-pantone",
         label: "menu.foods_unit",
         to: `${adminRoot}/foods/unit`,
+        roles: [roles.super_admin, roles.operator],
         // roles: [UserRole.Admin],
       },
       {
         icon: "simple-icon-grid",
         label: "menu.foods_collection",
         to: `${adminRoot}/foods/collection`,
+        roles: [roles.super_admin, roles.operator],
         // roles: [UserRole.Admin],
       },
     ]
@@ -79,7 +86,7 @@ const data = [
     icon: "simple-icon-user",
     label: "menu.users",
     to: `${adminRoot}/users`,
-    roles: [roles.super_admin],
+    roles: [roles.super_admin, roles.operator],
     subs: []
     // subs: [
     //   {
@@ -95,25 +102,28 @@ const data = [
     icon: "iconsminds-business-man",
     label: "menu.employees",
     to: `${adminRoot}/employees`,
-    roles: [roles.super_admin],
+    roles: [roles.super_admin, roles.operator],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
       {
         icon: "iconsminds-chef-hat",
         label: "menu.vendors",
         to: `${adminRoot}/employees/vendors`,
+        roles: [roles.super_admin, roles.operator],
         // roles: [UserRole.Admin],
       },
       {
         icon: "simple-icon-user-follow",
         label: "menu.applicants",
         to: `${adminRoot}/employees/applicants`,
+        roles: [roles.super_admin, roles.operator],
         // roles: [UserRole.Admin],
       },
       {
         icon: "iconsminds-scooter",
         label: "menu.couriers",
         to: `${adminRoot}/employees/couriers`,
+        roles: [roles.super_admin],
         // roles: [UserRole.Admin],
       },
       // {
@@ -126,6 +136,7 @@ const data = [
         icon: "iconsminds-conference",
         label: "menu.system_users",
         to: `${adminRoot}/employees/system_users`,
+        roles: [roles.super_admin],
         // roles: [UserRole.Admin],
       }
     ]
@@ -135,7 +146,7 @@ const data = [
     icon: "simple-icon-map",
     label: "menu.maps",
     to: `${adminRoot}/maps`,
-    roles: [roles.super_admin],
+    roles: [roles.super_admin, roles.courier_operator],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: []
   },
