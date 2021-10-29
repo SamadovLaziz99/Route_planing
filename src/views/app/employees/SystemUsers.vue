@@ -280,7 +280,7 @@ export default {
           if (this.role) {
             this.$store.dispatch('userRoleAssign', {
               role_id: this.role.value,
-              user: this.form.id
+              user_id: this.form.id
             }).then(res => {
               this.$store.dispatch('success_alert', {
                 title: "User Role updated!"
