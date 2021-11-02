@@ -25,7 +25,8 @@
                     </b-form-group>
 
                     <b-form-group :label="$t('user.password')" class="has-float-label mb-4">
-                        <b-form-input type="password" v-model="$v.form.password.$model" :state="!$v.form.password.$error" />
+                      <span class="simple-icon-eye showpass" @click="changePassType"></span>
+                      <b-form-input :type="type" v-model="$v.form.password.$model" :state="!$v.form.password.$error"></b-form-input>
                         <b-form-invalid-feedback v-if="!$v.form.password.required">Please enter your password</b-form-invalid-feedback>
                         <b-form-invalid-feedback v-else-if="!$v.form.password.minLength || !$v.form.password.maxLength">Your password must be between 4 and 16 characters</b-form-invalid-feedback>
                     </b-form-group>
@@ -79,6 +80,7 @@ export default {
     },
     data() {
         return {
+            type: 'password',
             form: {
                 username: "",
                 password: ""
@@ -104,6 +106,10 @@ export default {
     },
     methods: {
         ...mapActions(["getToken", "getUserDetail"]),
+        changePassType () {
+          if (this.type === 'password') this.type = 'text'
+          else this.type = 'password'
+        },
         formSubmit() {
             // this.$v.$touch();
             // this.form.email = "piaf-vue@coloredstrategies.com";
@@ -112,7 +118,14 @@ export default {
           if (!this.$v.$invalid) {
             this.getToken(this.form).then(res => {
               this.getUserDetail().then(res => {
-                this.$router.push(adminRoot);
+                if (res.roles && res.roles.length) {
+                  this.$router.push(adminRoot);
+                } else {
+                  this.$store.dispatch('warning_alert', {
+                    title: "Роль этого пользователя не найдена!"
+                  })
+                  this.$store.dispatch('signOut')
+                }
               })
             })
           }
@@ -125,13 +138,13 @@ export default {
         }
     },
     watch: {
-        currentUser(val) {
-            if (val && val.uid && val.uid.length > 0) {
-                setTimeout(() => {
-                    this.$router.push(adminRoot);
-                }, 200);
-            }
-        },
+        // currentUser(val) {
+        //     if (val && val.uid && val.uid.length > 0) {
+        //         setTimeout(() => {
+        //             this.$router.push(adminRoot);
+        //         }, 200);
+        //     }
+        // },
         loginError(val) {
             if (val != null) {
                 this.$notify("error", "Login Error", val, {

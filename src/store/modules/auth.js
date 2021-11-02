@@ -2,7 +2,7 @@ import axios_init from "../../utils/axios_init";
 export default {
   state: {
     token: null,
-    user: {},
+    user: null,
     loading: false,
     error: null
   },
@@ -55,7 +55,7 @@ export default {
     },
     async signOut ({commit}) {
       commit('REMOVE_TOKEN', null)
-      commit('SET_USER', {})
+      commit('SET_USER', null)
       await localStorage.removeItem('token')
       return 'Token Deleted'
     }

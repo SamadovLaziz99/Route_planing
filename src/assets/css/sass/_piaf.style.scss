@@ -888,6 +888,15 @@ $line-color: $theme-color-1;
 
 // ======= TIME LINE ============
 
+.showpass {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 8px 10px 0 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
 
 
 .text-theme-2 {
