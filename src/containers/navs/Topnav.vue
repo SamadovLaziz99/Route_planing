@@ -168,7 +168,7 @@
           menu-class="mt-3"
           no-caret
         >
-          <template slot="button-content">
+          <template v-if="user" slot="button-content">
             <span class="name mr-1"> {{user.first_name}} {{ user.last_name }} </span>
             <span style="width: 40px; height: 40px">
               <img :alt=" user.first_name + ' ' + user.last_name " :src="currentUser.img" />

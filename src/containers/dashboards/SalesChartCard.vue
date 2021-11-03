@@ -30,7 +30,7 @@ export default {
           {
             label: '',
             data: this.chartData.map(e => {
-              console.log(e.amount)
+              // console.log(e.amount)
               return e.amount
             }),
             borderColor: colors.themeColor1,
@@ -54,7 +54,7 @@ export default {
       this.$emit('changeStatus', e)
     },
     refreshButtonClick() {
-      console.log("refreshButtonClick");
+      // console.log("refreshButtonClick");
     }
   }
 };

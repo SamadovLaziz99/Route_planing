@@ -14,7 +14,6 @@ export default {
   },
   mutations: {
     SET_TOKEN (state, payload) {
-      localStorage.setItem('token', payload)
       state.token = payload
     },
     SET_USER (state, payload) {
@@ -35,9 +34,11 @@ export default {
       commit('FETCH_TOKEN', true)
       return new Promise((resolve, reject) => {
         axios_init.post('/token/', payload).then(res => {
+          localStorage.setItem('token', res.access)
           commit('SET_TOKEN', res.access)
-          resolve()
-          console.log(res)
+          setTimeout(() => {
+            resolve()
+          }, 1)
         }).catch(err => {
           reject()
           console.log(err)
@@ -54,9 +55,10 @@ export default {
       return res
     },
     async signOut ({commit}) {
+      localStorage.removeItem('token')
       commit('REMOVE_TOKEN', null)
       commit('SET_USER', null)
-      await localStorage.removeItem('token')
+      console.log(localStorage.getItem('token'))
       return 'Token Deleted'
     }
   }

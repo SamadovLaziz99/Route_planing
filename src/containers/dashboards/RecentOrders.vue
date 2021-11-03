@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     refreshButtonClick() {
-      console.log("refreshButtonClick");
+      // console.log("refreshButtonClick");
     }
   }
 };

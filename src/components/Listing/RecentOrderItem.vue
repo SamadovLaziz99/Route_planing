@@ -29,7 +29,7 @@ export default {
     methods: {
       imageProxy,
       noloadImg (e) {
-        console.log(e)
+        // console.log(e)
         this.img = imageProxy('https://trator-laravel-images.s3.eu-central-1.amazonaws.com/coozin/uploads/original/foods/63hL3dMMHTktBejUlvBScMFjXdk6hwToebTHaOx0.jpeg', '120x90')
       }
     },
