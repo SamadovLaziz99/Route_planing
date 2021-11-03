@@ -150,6 +150,15 @@ const data = [
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: []
   },
+  {
+    id: "vouchers",
+    icon: "simple-icon-tag",
+    label: "menu.vouchers",
+    to: `${adminRoot}/vouchers`,
+    roles: [roles.super_admin, roles.courier_operator],
+    // roles: [UserRole.Admin, UserRole.Editor],
+    subs: []
+  },
   // {
   //   id: "maps2",
   //   icon: "simple-icon-map",

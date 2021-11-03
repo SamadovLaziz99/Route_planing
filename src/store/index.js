@@ -62,6 +62,7 @@ export default new Vuex.Store({
     couriers: crud('couriers'),
     orders: crud('orders'),
     transactions: crud('transactions'),
-    applications: crud('applications')
+    applications: crud('applications'),
+    vouchers: crud('vouchers')
   }
 })

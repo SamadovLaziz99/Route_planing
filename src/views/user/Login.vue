@@ -118,7 +118,7 @@ export default {
           if (!this.$v.$invalid) {
             this.getToken(this.form).then(res => {
               this.getUserDetail().then(res => {
-                if (res.roles && res.roles.length) {
+                if (res.role) {
                   this.$router.push(adminRoot);
                 } else {
                   this.$store.dispatch('warning_alert', {
