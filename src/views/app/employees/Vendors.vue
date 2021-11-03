@@ -16,7 +16,6 @@
             slot="action"
             variant="primary"
             size="lg"
-            @click="$router.push({ name: 'vendor_create' })"
             :class="{ 'top-right-button': true }"
           >{{ $t('pages.add-new') }}
           </b-button>

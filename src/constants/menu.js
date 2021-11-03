@@ -13,7 +13,7 @@ const data = [
     icon: "simple-icon-chart",
     label: "menu.dashboards",
     to: `${adminRoot}/dashboards`,
-    roles: [roles.super_admin, roles.operator, roles.courier_operator, roles.marketolog],
+    roles: [roles.super_admin, roles.operator, roles.marketolog],
     subs: []
   },
   {

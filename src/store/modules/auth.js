@@ -50,12 +50,14 @@ export default {
     },
     async getUserDetail ({commit}) {
       let res = await axios_init.get(`/user/detail/`)
+      localStorage.setItem('detail', JSON.stringify(res))
       commit('SET_USER', res)
       console.log(res)
       return res
     },
     async signOut ({commit}) {
       localStorage.removeItem('token')
+      localStorage.removeItem('detail')
       commit('REMOVE_TOKEN', null)
       commit('SET_USER', null)
       console.log(localStorage.getItem('token'))
