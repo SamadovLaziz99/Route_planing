@@ -50,10 +50,18 @@ export default {
     },
     async getUserDetail ({commit}) {
       let res = await axios_init.get(`/user/detail/`)
-      localStorage.setItem('detail', JSON.stringify(res))
-      commit('SET_USER', res)
-      console.log(res)
-      return res
+      // setTimeout(() => {
+      // await localStorage.removeItem('detail')
+      // }, 1)
+      // setTimeout(() => {
+      await localStorage.setItem('detail', JSON.stringify(res))
+      // }, 2)
+      // setTimeout(() => {
+      await commit('SET_USER', res)
+      // }, 3)
+      // setTimeout(() => {
+        return res
+      // }, 4)
     },
     async changeUserDetails ({}, payload) {
       let res = await axios_init.put(`/user/${payload.id}/`, payload.data)

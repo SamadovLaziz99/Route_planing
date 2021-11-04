@@ -15,8 +15,7 @@ export default {
     // "color-switcher": ColorSwitcher
   },
   mounted() {
-    const token = localStorage.getItem('token')
-    if (token) {
+    if (localStorage.getItem('token')) {
       // debugger
       this.$store.dispatch('getUserDetail')
     }

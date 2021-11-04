@@ -119,7 +119,9 @@ export default {
             this.getToken(this.form).then(res => {
               this.getUserDetail().then(res => {
                 if (res.role) {
-                  this.$router.push(adminRoot);
+                  if (res.role.role !== 'courier_bro') {
+                    this.$router.push(adminRoot);
+                  } else this.$router.push({ name: 'order_list' })
                 } else {
                   this.$store.dispatch('warning_alert', {
                     title: "Роль этого пользователя не найдена!"
