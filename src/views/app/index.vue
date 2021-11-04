@@ -1,8 +1,8 @@
 <template>
   <app-layout>
-    <transition name="fade">
+<!--    <transition name="fade">-->
       <router-view />
-    </transition>
+<!--    </transition>-->
   </app-layout>
 </template>
 
@@ -17,11 +17,12 @@ export default {
 </script>
 <style>
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .7s;
+  transition: all .7s;
 }
 .fade-enter, .fade-leave-to {
   /*transform: translateX(-140px);*/
   opacity: 0;
+  /*display: none;*/
 }
 </style>
 

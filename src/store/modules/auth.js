@@ -55,6 +55,10 @@ export default {
       console.log(res)
       return res
     },
+    async changeUserDetails ({}, payload) {
+      let res = await axios_init.put(`/user/${payload.id}/`, payload.data)
+      return res
+    },
     async signOut ({commit}) {
       localStorage.removeItem('token')
       localStorage.removeItem('detail')

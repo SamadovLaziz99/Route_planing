@@ -2,39 +2,43 @@
   <div>
     <b-row v-if="!error">
       <b-colxx class="disable-text-selection">
-        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'voucher.update' : 'user.create'">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'voucher.update' : 'voucher.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
-              <b-form-group :label="$t('code')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.first_name.$model" :state="!$v.form.first_name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.first_name.required">{{ $t('please.enter') + $t('first.name') }}</b-form-invalid-feedback>
+              <b-form-group :label="$t('count')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model.trim="$v.form.count.$model" :state="!$v.form.count.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.count.required">{{ $t('please.enter') + $t('count') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('last.name')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{ $t('please.enter') + $t('last.name') }}</b-form-invalid-feedback>
+              <b-form-group :label="$t('amount')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model.trim="$v.form.amount.$model" :state="!$v.form.amount.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.amount.required">{{ $t('please.enter') + $t('amount') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('phone')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.phone.$model" :state="!$v.form.phone.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{ $t('please.enter') + $t('phone') }}</b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX XX XX</b-form-invalid-feedback>
+              <b-form-group :label="$t('active_date_from')" class="has-float-label mb-4">
+                <datepicker
+                    :bootstrap-styling="true"
+                    :format="(val) => moment(val).format('YYYY-MM-DD')"
+                    :language="ru"
+                    :placeholder="$t('form-components.date')"
+                    v-model="$v.form.active_date_from.$model"
+                    :state="!$v.form.active_date_from.$error"
+                ></datepicker>
+                <b-form-invalid-feedback v-if="!$v.form.active_date_from.required">{{ $t('please.enter') + $t('active_date_from') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('email')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.email.$model" :state="!$v.form.email.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.email.required">{{ $t('please.enter') + $t('email') }}</b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.email.email">{{ $t('error.email') }}</b-form-invalid-feedback>
+              <b-form-group :label="$t('active_date_to')" class="has-float-label mb-4">
+                <datepicker
+                    :bootstrap-styling="true"
+                    :format="(val) => moment(val).format('YYYY-MM-DD')"
+                    :language="ru"
+                    :placeholder="$t('form-components.date')"
+                    v-model="$v.form.active_date_to.$model"
+                    :state="!$v.form.active_date_to.$error"
+                ></datepicker>
+                <b-form-invalid-feedback v-if="!$v.form.active_date_to.required">{{ $t('please.enter') + $t('active_date_to') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group v-if="!form.id" :label="$t('password')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.password.$model" :state="!$v.form.password.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.password.required">{{ $t('please.enter') + $t('password') }}</b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6 characters</b-form-invalid-feedback>
+              <b-form-group :label="$t('tag')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.tag.$model" :state="!$v.form.tag.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.tag.required">{{ $t('please.enter') + $t('tag') }}</b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.re_password.$model" :state="!$v.form.re_password.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{ $t('re.password.error') }}</b-form-invalid-feedback>
-              </b-form-group>
-              <!--            <b-form-group :label="$t('pages.status')">-->
-              <!--              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />-->
-              <!--            </b-form-group>-->
             </b-form>
           </div>
           <div slot="action">
@@ -83,14 +87,14 @@
               </div>
             </template>
             <template #cell(action)="row">
-              <div style="display: flex">
+              <div style="display: flex; justify-content: center">
                 <!--              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+<!--                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>-->
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>
             <template #cell(used)="{ item }">
-              <b-badge pill variant="primary">{{ item.used ? 'Used' : 'Unused' }}</b-badge>
+              <b-badge pill :variant="item.used ? 'primary' : 'dark'">{{ item.used ? $t('used') : $t('unused') }}</b-badge>
             </template>
             <template #cell(created_at)="row">
               {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -119,37 +123,25 @@ import {mapGetters} from "vuex";
 import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
 import { actions, getters } from "../../../utils/store_schema";
+import Datepicker from "vuejs-datepicker";
+import {ru} from 'vuejs-datepicker/dist/locale'
 import moment from 'moment'
 const _page = 'vouchers'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
-    Pagination
+    Pagination,
+    datepicker: Datepicker
     // TableSimple
   },
   validations: {
     form: {
-      first_name: {
-        required
-      },
-      last_name: {
-        required
-      },
-      email: {
-        required, email
-      },
-      phone: {
-        required,
-        valid: (e) => /^[+][9][9][8]\d{9}$/.test(e)
-      },
-      password: {
-        required,
-        minLength: minLength(6)
-      },
-      re_password: {
-        sameAsPassword: sameAs('password')
-      }
+      count: { required },
+      active_date_from: { required },
+      active_date_to: { required },
+      amount: { required },
+      tag: { required }
     }
   },
   mixins: [validationMixin],
@@ -158,11 +150,11 @@ export default {
   },
   data() {
     return {
+      ru: ru,
       form: {
         id: null,
-        code: null,
+        count: null,
         amount: null,
-        used: true,
         active_date_from: null,
         active_date_to: null,
         tag: null
@@ -202,6 +194,7 @@ export default {
           key: 'action',
           label: this.$t('action'),
           // tdClass: 'thirdRow'
+          class: 'text-center'
         }
       ],
       page: 1,
@@ -211,10 +204,6 @@ export default {
   },
   methods: {
     moment,
-    validPh (value) {
-      console.log(value)
-      return /^[+][9][9][8]\d{9}$/.test(value)
-    },
     closed (e) {
       console.log(e)
       this.clear()
@@ -223,13 +212,11 @@ export default {
       this.$v.$reset()
       this.form = {
         id: null,
-        first_name: '',
-        last_name: '',
-        phone: '',
-        email: '',
-        password: null,
-        re_password: null,
-        balance: 0
+        count: null,
+        amount: null,
+        active_date_from: null,
+        active_date_to: null,
+        tag: null
       }
     },
     edit (item) {
@@ -244,14 +231,18 @@ export default {
       this.$bvModal.show('crudModal')
     },
     submit() {
+      if (this.form.active_date_from) this.form.active_date_from = moment(this.form.active_date_from).format('YYYY-MM-DD')
+      if (this.form.active_date_to) this.form.active_date_to = moment(this.form.active_date_to).format('YYYY-MM-DD')
       this.$v.$touch();
       console.log(this.$v)
+      console.log(this.form)
       if (!this.$v.$invalid) {
         const _form = { ...this.form }
         delete _form.id
-        delete _form.re_password
+        _form.amount = parseInt(this.form.amount)
+        _form.count = parseInt(this.form.count)
         // if (this.form.id) delete _form.password
-        this.$store.dispatch(this.form.id ? put : post, {
+        this.$store.dispatch(this.form.id ? put : 'batchVoucher', {
           id: this.form.id,
           data: _form
         }).then(res => {

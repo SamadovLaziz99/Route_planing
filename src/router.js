@@ -217,15 +217,13 @@ const routes = [
         path: "vouchers",
         component: () => import("./views/app/map"),
         redirect: `${ adminRoot }/vouchers/v`,
-        roles: [roles.super_admin, roles.courier_operator],
-        // meta: { roles: [UserRole.Admin, UserRole.Editor] },
+        meta: { roles: [roles.super_admin, roles.courier_operator] },
         children: [
           {
             path: "v",
             name: "vouchers",
             component: () => import("./views/app/settings/Vouchers"),
-            roles: [roles.super_admin, roles.courier_operator],
-            // meta: { roles: [UserRole.Admin] },
+            meta: { roles: [roles.super_admin, roles.courier_operator] },
           }
         ]
       },
@@ -275,6 +273,13 @@ const routes = [
             children: []
           },
         ]
+      },
+      {
+        path: "account",
+        name: 'account',
+        component: () => import("./views/app/account/Account"),
+        meta: { roles: [roles.super_admin, roles.operator, roles.courier_operator, roles.marketolog] },
+        children: []
       },
     ]
   },
