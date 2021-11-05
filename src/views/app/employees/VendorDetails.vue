@@ -23,7 +23,7 @@
                   </div>
                   <single-lightbox :thumb="vendorImage" :large="vendorImage" class-name="card-img-top" />
                   <b-card-body>
-                    <p class="text-muted text-small mb-2">{{$t('menu.about')}}</p>
+                    <p class="text-muted text-small mb-2">{{$t('about_me')}}</p>
                     <p class="mb-3">{{ vendor.about_me }}</p>
                     <p class="text-muted text-small mb-2">{{$t('pages.location')}}</p>
                     <p class="mb-3">{{vendor.address}}</p>
@@ -98,10 +98,17 @@
                 :items="orders"
                 :fields="fields"
                 show-empty
+                :busy="loadOrders"
                 responsive
               >
                 <template #empty>
                   <EmptyBox style="margin-top: 50px"/>
+                </template>
+                <template #table-busy>
+                  <div class="text-center text-primary my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>{{ $t('loading') }}...</strong>
+                  </div>
                 </template>
                 <template #table-busy>
                   <div class="text-center text-primary my-2">
@@ -122,6 +129,11 @@
                 </template>
                 <template #cell(id)="{ item }">
                   <div>#{{ item.id }}</div>
+                </template>
+                <template #cell(payment_type)="{ item }">
+                  <div v-if="item.payment_type === 'cash'" style="font-size: 28px" class="iconsminds-dollar text-primary"></div>
+                  <div v-if="item.payment_type === 'balance'" style="font-size: 28px" class="iconsminds-wallet text-primary"></div>
+                  <div v-if="item.payment_type === 'card'" style="font-size: 28px" class="simple-icon-credit-card text-primary"></div>
                 </template>
                 <template #cell(delivery_time)="{ item }">
                   {{ moment(item.delivery_time).format('YYYY-MM-DD HH:mm') }}
@@ -239,7 +251,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['errorVendors', 'oneLoadVendors'])
+    ...mapGetters(['errorVendors', 'oneLoadVendors', 'loadOrders'])
   },
   methods: {
     moment,

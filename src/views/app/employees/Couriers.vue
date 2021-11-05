@@ -76,7 +76,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.couriers`)">
+        <b-card :title="$t(`menu.couriers`)" class="mb-4">
           <b-table
             hover
             :items="data"
@@ -87,7 +87,7 @@
             <template #table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="row">
@@ -98,8 +98,8 @@
               </div>
             </template>
             <template #cell(active)="row">
-              <b-badge v-if="row.item.active" pill variant="outline-primary">Active</b-badge>
-              <b-badge v-else pill variant="outline-light">Inactive</b-badge>
+              <b-badge v-if="row.item.active" pill variant="outline-primary">{{ $t('active') }}</b-badge>
+              <b-badge v-else pill variant="outline-light">{{ $t('inactive') }}</b-badge>
             </template>
             <template #cell(created_at)="row">
               {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -341,7 +341,7 @@ export default {
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
     this.getData()

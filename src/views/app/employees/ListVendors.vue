@@ -194,7 +194,7 @@ export default {
     this.filters = _query
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(6)
+      _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
     this.getData()

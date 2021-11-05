@@ -129,7 +129,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.foods_collection`)">
+        <b-card :title="$t(`menu.foods_collection`)" class="mb-4">
           <b-table
             hover
             :items="items"

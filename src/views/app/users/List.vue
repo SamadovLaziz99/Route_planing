@@ -68,7 +68,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.users`)">
+        <b-card :title="$t(`menu.users`)" class="mb-4">
           <b-table
             hover
             :items="data"
@@ -79,12 +79,12 @@
             <template #table-busy>
               <div class="text-center text-primary my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <!--              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
+                <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer" @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>
                 <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
@@ -190,8 +190,9 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
-          key: 'email',
-          label: this.$t('email'),
+          key: 'count',
+          label: this.$t('order.count'),
+          class: 'text-center'
           // tdClass: 'firstColumn'
         },
         {
@@ -331,7 +332,7 @@ export default {
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
-      _page = this.$route.hash.slice(this.$route.hash.length - 1)
+      _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
     this.getData()

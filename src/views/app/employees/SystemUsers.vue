@@ -53,7 +53,7 @@
         </crud-modal>
         <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
         <list-page-heading
-          :title="$t('menu.users')"
+          :title="$t('menu.system_users')"
           :changeOrderBy="changeOrderBy"
           :sort="sort"
           :searchChange="searchChange"
@@ -71,7 +71,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.users`)">
+        <b-card :title="$t(`menu.system_users`)">
           <b-table
             hover
             :items="data"
@@ -82,7 +82,7 @@
             <template #table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle"></b-spinner>
-                <strong>Loading...</strong>
+                <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
             <template #cell(action)="row">

@@ -142,6 +142,14 @@ const routes = [
         children: []
       },
       {
+        path: "users/:id",
+        name: 'user_details',
+        component: () => import("./views/app/users/Details"),
+        meta: { roles: [roles.super_admin, roles.operator] },
+        // redirect: `${adminRoot}/users/list`,
+        children: []
+      },
+      {
         path: "employees",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/employees/vendors`,
@@ -239,6 +247,39 @@ const routes = [
             component: () => import("./views/app/map/Map"),
             // meta: { roles: [UserRole.Admin] },
           }
+        ]
+      },
+      {
+        path: "settings",
+        component: () => import("./views/app/pages"),
+        redirect: `${adminRoot}/settings/list`,
+        children: [
+          {
+            path: "roles",
+            component: () => import("./views/app/pages/product/DataList"),
+            children: []
+          },
+          {
+            path: "main_settings",
+            component: () => import("./views/app/pages/product/ThumbList"),
+            children: []
+          },
+          {
+            path: "banner",
+            component: () => import("./views/app/pages/product/Details"),
+            children: []
+          },
+          {
+            path: "video_tutorial",
+            name: 'videos',
+            component: () => import("./views/app/settings/Videos"),
+            children: []
+          },
+          {
+            path: "pages",
+            component: () => import("./views/Defaults"),
+            children: []
+          },
         ]
       },
       {

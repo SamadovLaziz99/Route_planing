@@ -109,6 +109,12 @@ export default {
     }
   },
   mounted() {
+    const _hash = this.$route.hash
+    let _page;
+    if (_hash) {
+      _page = this.$route.hash.split('-')[1]
+      this.page = parseInt(_page)
+    }
     this.getData()
   },
   methods: {
