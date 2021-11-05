@@ -181,6 +181,11 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
+          key: 'tag',
+          label: this.$t('tag'),
+          // tdClass: 'firstColumn'
+        },
+        {
           key: 'used',
           label: this.$t('used'),
           // tdClass: 'firstColumn'

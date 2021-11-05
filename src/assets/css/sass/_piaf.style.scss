@@ -635,27 +635,27 @@ p {
 .yandexMap {
   height: calc(100vh - 100px);
   margin-top: $navbar-height;
-  width: calc(100vw - 120px);
-  margin-left: 120px;
+  width: 100vw;
+  //margin-left: 120px;
   @include respond-below(xl) {
     height: calc(100vh - 90px);
     margin-top: $navbar-height-lg;
-    width: calc(100% - 110px);
-    margin-left: $main-menu-width-lg;
+    width: 100%;
+    //margin-left: $main-menu-width-lg;
   }
 
   @include respond-below(lg) {
     height: calc(100vh - 80px);
     margin-top: $navbar-height-md;
-    width: calc(100% - 100px);
-    margin-left: $main-menu-width-md;
+    width: 100%;
+    //margin-left: $main-menu-width-md;
   }
 
   @include respond-below(sm) {
     height: calc(100vh - 70px);
     margin-top: $navbar-height-xs;
-    width: calc(100% - 90px);
-    margin-left: $main-menu-width-xs;
+    width: 100%;
+    //margin-left: $main-menu-width-xs;
   }
 }
 .yandexRightBar {
