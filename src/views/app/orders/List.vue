@@ -50,29 +50,6 @@
                 <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
               </div>
             </b-colxx>
-<!--            <b-colxx xxs="12" md="6">-->
-<!--              <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">-->
-<!--                <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[-->
-<!--                    $t('day.sun'),-->
-<!--                    $t('day.mon'),-->
-<!--                    $t('day.tue'),-->
-<!--                    $t('day.wed'),-->
-<!--                    $t('day.thu'),-->
-<!--                    $t('day.fri'),-->
-<!--                    $t('day.sat'),-->
-<!--                  ]"/>-->
-<!--              </b-form-group>-->
-<!--            </b-colxx>-->
-<!--            <b-colxx xxs="12" md="3">-->
-<!--              <b-form-group :label="$t('price.from')" class="has-float-label mb-4">-->
-<!--                <b-form-input type="number" v-model="filters.order_price_from" @input="priceRangerChange"/>-->
-<!--              </b-form-group>-->
-<!--            </b-colxx>-->
-<!--            <b-colxx xxs="12" md="3">-->
-<!--              <b-form-group :label="$t('price.to')" class="has-float-label mb-4">-->
-<!--                <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>-->
-<!--              </b-form-group>-->
-<!--            </b-colxx>-->
           </b-row>
         </list-page-heading>
         <b-tabs card v-model="activeTab" @input="changeTabs">

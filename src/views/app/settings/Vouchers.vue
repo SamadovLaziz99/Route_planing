@@ -126,6 +126,7 @@ import { actions, getters } from "../../../utils/store_schema";
 import Datepicker from "vuejs-datepicker";
 import {ru} from 'vuejs-datepicker/dist/locale'
 import moment from 'moment'
+import debounce from "debounce";
 const _page = 'vouchers'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
@@ -149,6 +150,7 @@ export default {
     ...mapGetters(getters(_page)),
   },
   data() {
+    this.searchChange = debounce(this.searchChange, 800)
     return {
       ru: ru,
       form: {
@@ -258,7 +260,8 @@ export default {
     },
     getData() {
       this.$store.dispatch(get, {
-        page: this.page
+        page: this.page,
+        tag: this.search
       }).then(res => {
         console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
@@ -278,8 +281,10 @@ export default {
       this.sort = sort;
     },
     searchChange(val) {
+      console.log(val)
       this.search = val;
       this.page = 1;
+      this.getData()
     },
     handleContextMenu(vnode) {
       if (!this.selectedItems.includes(vnode.key)) {

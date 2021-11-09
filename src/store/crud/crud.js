@@ -52,6 +52,7 @@ export default function (param) {
           axios_init.get(`${param}/`, params).then(res => {
             const _res = res.results || res
             const _total = res.count
+            commit(_mutations.error, null)
             commit(_mutations.data, _res)
             commit(_mutations.pagination, {
               page: params?.page,
@@ -72,6 +73,7 @@ export default function (param) {
         commit(_mutations.oneLoad, true)
         return new Promise((resolve, reject) => {
           axios_init.get(`${param}/${payload}/`, ).then(res => {
+            commit(_mutations.error, null)
             resolve(res)
           }).catch(error => {
             commit(_mutations.error, error)

@@ -37,18 +37,15 @@
                           style="width: 100%" class="mb-2" :options="payment_types" :placeholder="$t('payment_type')"/>
               </b-form-group>
             </b-colxx>
-            <b-colxx xxs="12" md="3">
-
-              <b-form-group :label="$t('search')" class="has-float-label mb-2">
-                <b-input v-if="$route.name === 'order_history'" class="search_input"
-                         :placeholder="$t('search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search"
-                         v-model="filters.search"/>
+            <b-colxx xxs="12" md="2">
+              <b-form-group :label="$t('price.from')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model="filters.order_price_from" @input="priceRangerChange"/>
               </b-form-group>
             </b-colxx>
-            <b-colxx xxs="12" md="1">
-              <div class="float-md-right pt-1">
-                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
-              </div>
+            <b-colxx xxs="12" md="2">
+              <b-form-group :label="$t('price.to')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>
+              </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="6">
               <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">
@@ -64,14 +61,22 @@
               </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="3">
-              <b-form-group :label="$t('price.from')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model="filters.order_price_from" @input="priceRangerChange"/>
+              <b-form-group :label="$t('category')" class="has-float-label mb-2">
+                <v-select v-if="$route.name === 'order_history'" v-model="filters.category" @input="changeFood"
+                          style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('category')"/>
               </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="3">
-              <b-form-group :label="$t('price.to')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>
+              <b-form-group :label="$t('search')" class="has-float-label mb-2">
+                <b-input v-if="$route.name === 'order_history'" class="search_input"
+                         :placeholder="$t('search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search"
+                         v-model="filters.search"/>
               </b-form-group>
+            </b-colxx>
+            <b-colxx xxs="12" md="1">
+              <div class="float-md-right pt-1">
+                <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
+              </div>
             </b-colxx>
           </b-row>
         </list-page-heading>
@@ -243,6 +248,7 @@ export default {
         search: null,
         vendor: null,
         food: null,
+        category: null,
         courier: null,
         payment_type: null,
         order_date_from: null,
@@ -313,6 +319,7 @@ export default {
       _query.food_id = this.filters.food?.value,
         _query.courier_id = this.filters.courier?.value,
         _query.vendor_id = this.filters.vendor?.value,
+        _query.category_id = this.filters.category?.value,
         _query.q = this.filters.search,
         _query.payment_type = this.filters.payment_type?.value
       _query.date_from = this.filters.order_date_from
@@ -396,6 +403,7 @@ export default {
         food_id: this.filters.food?.value,
         vendor_id: this.filters.vendor?.value,
         courier_id: this.filters.courier?.value,
+        category_id: this.filters.category?.value,
         q: this.filters.search,
         payment_type: this.filters.payment_type?.value,
         order_date_to: this.filters.order_date_to || undefined,
@@ -412,7 +420,7 @@ export default {
   },
   computed: {
     ...mapGetters(getters(_page)),
-    ...mapGetters(['orderStatsHistory', 'dataVendors', 'dataFood', 'dataCouriers']),
+    ...mapGetters(['orderStatsHistory', 'dataVendors', 'dataFood', 'dataCouriers', 'dataCategories']),
     vendors () {
       return this.dataVendors.map(e => {
         const { first_name, last_name } = e.user
@@ -437,14 +445,24 @@ export default {
           value: e.id
         }
       })
+    },
+    categorys () {
+      return this.dataCategories.map(e => {
+        return {
+          label: e.name[this.$lang],
+          value: e.id
+        }
+      })
     }
   },
   watch: {},
   mounted() {
+    this.$store.commit('LOAD_ORDERS', true)
     const _query = this.$route.query
-    this.$store.dispatch('getVendors', { no_page: true })
-    this.$store.dispatch('getFood', { no_page: true })
-    this.$store.dispatch('getCouriers', { no_page: true })
+     this.$store.dispatch('getVendors', { no_page: true })
+     this.$store.dispatch('getFood', { no_page: true })
+     this.$store.dispatch('getCouriers', { no_page: true })
+     this.$store.dispatch('getCategories', { no_page: true })
     this.$store.dispatch('getOrderStats')
     const _hash = this.$route.hash
     let _page;
@@ -453,10 +471,11 @@ export default {
       this.page = parseInt(_page)
     }
     if (_query) {
-      const { food_id, courier_id, vendor_id, q, type, payment_type, date_from, date_to, price_from, price_to } = _query
+      const { food_id, courier_id, vendor_id, q, type, category_id, payment_type, date_from, date_to, price_from, price_to } = _query
       this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
       this.filters.vendor = this.vendors.filter(e => e.value === parseInt(vendor_id))[0]
       this.filters.courier = this.couriers.filter(e => e.value === parseInt(courier_id))[0]
+      this.filters.category = this.categorys.filter(e => e.value === parseInt(category_id))[0]
       this.filters.payment_type = this.payment_types.filter(e => e.value === parseInt(payment_type))[0]
       this.filters.search = q
       this.filters.type = type

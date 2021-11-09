@@ -28,11 +28,14 @@
                 <v-select v-if="$route.name === 'food_list'" v-model="filters.category" @input="changeCategory" style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('categories')"/>
               </b-colxx>
               <b-colxx xxs="12" md="3">
+                <v-select v-if="$route.name === 'food_list'" v-model="filters.unit" @input="changeCategory" style="width: 100%" class="mb-2" :options="units" :placeholder="$t('units')"/>
+              </b-colxx>
+              <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
                   <b-input v-if="$route.name === 'food_list'" class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />
                 </div>
               </b-colxx>
-              <b-colxx xxs="12" md="3">
+              <b-colxx xxs="12" md="12">
                 <div class="float-md-right pt-1">
                   <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} {{ $t('of') }} {{ total }}</span>
                 </div>
@@ -86,6 +89,7 @@ export default {
       filters: {
         vendor: null,
         category: null,
+        unit: null,
         search: null
       }
     };
@@ -134,10 +138,17 @@ export default {
           this.filters.vendor = this.vendors.filter(e => e.value === parseInt(_query.vendor_id))[0]
         }
       })
+      this.$store.dispatch('getUnits', {
+        no_page: true
+      }).then(res => {
+        if (_query.unit_id) {
+          this.filters.unit = this.units.filter(e => e.value === parseInt(_query.unit_id))[0]
+        }
+      })
     }
   },
   computed: {
-    ...mapGetters(['dataCategories', 'dataVendors']),
+    ...mapGetters(['dataCategories', 'dataVendors', 'dataUnits']),
     categorys () {
       return this.dataCategories.map(e => {
         return {
@@ -154,6 +165,15 @@ export default {
           value: e.id
         }
       })
+    },
+    units () {
+      return this.dataUnits.map(e => {
+        // const { first_name, last_name } = e.user
+        return {
+          label: e.name[this.$lang],
+          value: e.id
+        }
+      })
     }
   },
   methods: {
@@ -161,6 +181,7 @@ export default {
       return {
         vendor_id: this.filters.vendor?.value,
         category_id: this.filters.category?.value,
+        unit_id: this.filters.unit?.value,
         q: this.filters.search
       }
     },

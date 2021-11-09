@@ -122,6 +122,7 @@
   "balance": "Баланс",
   "working_hours": "Рабочие часы",
   "foods": "Еда",
+  "units": "Единицы",
   "collection": {
     "main": "Основная информация",
     "food": "Блюда",
@@ -244,7 +245,7 @@
     "food": "Блюда",
     "food_list": "Список блюд",
     "food_unit": "Единица измерения",
-    "unit": "Unit",
+    "unit": "Ед. изм",
     "food_category": "Категория блюд",
     "collection": "Коллекция",
     "food_collection": "Коллекция блюд",
@@ -360,7 +361,7 @@
     "foods": "Еда",
     "applicants": "Претенденты",
     "foods_list": "Список продуктов",
-    "foods_unit": "Еда для продуктов",
+    "foods_unit": "Единицы продуктов",
     "foods_category": "Категория продуктов",
     "foods_collection": "Коллекция продуктов",
     "courier": "Курьер"
