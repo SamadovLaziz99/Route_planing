@@ -95,7 +95,7 @@
             </template>
             <template #cell(code)="{ item }">
               <div class="code" v-clipboard:copy="item.code" v-clipboard:success="onCopy">
-                $ {{item.code}}
+                {{item.code}}
               </div>
             </template>
             <template #cell(used)="{ item }">
