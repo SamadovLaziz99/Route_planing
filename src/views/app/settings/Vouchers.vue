@@ -93,6 +93,11 @@
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>
+            <template #cell(code)="{ item }">
+              <div class="code" v-clipboard:copy="item.code" v-clipboard:success="onCopy">
+                $ {{item.code}}
+              </div>
+            </template>
             <template #cell(used)="{ item }">
               <b-badge pill :variant="item.used ? 'primary' : 'dark'">{{ item.used ? $t('used') : $t('unused') }}</b-badge>
             </template>
@@ -153,6 +158,7 @@ export default {
     this.searchChange = debounce(this.searchChange, 800)
     return {
       ru: ru,
+      code: '',
       form: {
         id: null,
         count: null,
@@ -211,6 +217,13 @@ export default {
   },
   methods: {
     moment,
+    onCopy (e) {
+      this.$store.dispatch('success_alert', {
+        title: 'Copied',
+        message: e.text
+      })
+      console.log('Copied:', e.text)
+    },
     closed (e) {
       console.log(e)
       this.clear()
@@ -324,4 +337,14 @@ export default {
 };
 </script>
 <style>
+.code {
+  cursor: pointer;
+  text-align: center;
+  padding: 2px 4px;
+  border-radius: 5px;
+  transition: all, .3s;
+}
+.code:hover {
+  background: #cbcbcb;
+}
 </style>

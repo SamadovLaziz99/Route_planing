@@ -73,14 +73,14 @@
                          v-model="filters.search"/>
               </b-form-group>
             </b-colxx>
-            <b-colxx xxs="12" md="1">
+            <b-colxx xxs="12" md="12">
               <div class="float-md-right pt-1">
                 <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
               </div>
             </b-colxx>
           </b-row>
         </list-page-heading>
-        <b-tabs card v-model="activeTab" @input="changeTabs">
+        <b-tabs class="m-0" v-model="activeTab" @input="changeTabs">
           <b-tab style="padding: 0.6rem" v-for="tab in orderStatsHistory" :key="tab.name">
             <template #title>
               <div style="display: flex">
