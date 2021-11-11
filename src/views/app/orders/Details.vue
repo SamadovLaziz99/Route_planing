@@ -439,7 +439,7 @@ export default {
       }
       if (status === 'cancel') {
         this.confirm.load = true
-        // this.$store.dispatch('cancelOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('cancelOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
       }
       if (status === 'finish') {
         this.confirm.load = true

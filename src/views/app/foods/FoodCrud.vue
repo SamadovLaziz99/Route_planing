@@ -150,17 +150,21 @@
                 </b-row>
               </b-card>
             </b-colxx>
-            <b-colxx xxs="12" md="4">
-              <b-card :title="$t('ingredients')" class="mb-4">
-                <b-form-group :label="$t('ingredients')" class="has-float-label mb-4">
-                  <input-tag v-model.trim="$v.form.ingredients.$model"  :state="!$v.form.ingredients.$error"></input-tag>
-                  <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.ingredients.required) ? 'block' : 'none'}`">
-                    {{ $t('please.enter') + $t('unit') }}
-                  </b-form-invalid-feedback>
-                </b-form-group>
-              </b-card>
-              <dropzone ref="dropzone" v-if="$route.params.id" url="food" :media="{ id: $route.params.id, type: 'image' }"/>
-            </b-colxx>
+<!--            <b-colxx xxs="12" md="4">-->
+<!--              <b-card :title="$t('ingredients')" class="mb-4">-->
+<!--                <b-form-group :label="$t('ingredients')" class="has-float-label mb-4">-->
+<!--                  <input-tag v-model.trim="$v.form.ingredients.$model"  :state="!$v.form.ingredients.$error"></input-tag>-->
+<!--                  <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.ingredients.required) ? 'block' : 'none'}`">-->
+<!--                    {{ $t('please.enter') + $t('unit') }}-->
+<!--                  </b-form-invalid-feedback>-->
+<!--                </b-form-group>-->
+<!--              </b-card>-->
+<!--              <b-card>-->
+<!--                <ImageEditor ref="imageEditor"/>-->
+<!--                <b-button @click="$refs.imageEditor.open()">Open Image Editor</b-button>-->
+<!--              </b-card>-->
+<!--              <dropzone ref="dropzone" v-if="$route.params.id" url="food" :media="{ id: $route.params.id, type: 'image' }"/>-->
+<!--            </b-colxx>-->
             <!--      ACTION CONTENT-->
             <b-colxx xxs="12" md="12">
               <b-card class="mb-4 d-flex align-items-end">
@@ -199,6 +203,7 @@
 
 <script>
 import Switches from "vue-switches";
+import ImageEditor from "../../../components/ImageEditor";
 import { required } from "vuelidate/lib/validators";
 import { validationMixin } from "vuelidate";
 import { mapGetters, mapActions } from "vuex";
@@ -207,7 +212,8 @@ import { actions, getters } from "@/utils/store_schema";
 const { getById, put, post } = actions(_page)
 export default {
   components: {
-    'switches': Switches
+    'switches': Switches,
+    ImageEditor
   },
   mixins: [validationMixin],
   name: "FoodCrud",
