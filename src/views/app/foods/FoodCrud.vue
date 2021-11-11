@@ -159,8 +159,9 @@
                   </b-form-invalid-feedback>
                 </b-form-group>
               </b-card>
-              <b-card title="Food Images">
+              <b-card title="Food Images" class="mb-4">
                 <ImageEditor ref="imageEditor"/>
+                <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
                 <b-row>
                   <b-colxx xxs="12" md="6" v-for="img in images" :key="img.url" >
                     <div class="foods">
@@ -168,10 +169,13 @@
                       <div class="image_action">
                         <div style="display: flex">
                           <span @click="$refs.imageEditor.open(img.url)" class="simple-icon-pencil m-2 icon"></span>
-                          <span class="simple-icon-trash m-2 icon"></span>
+                          <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: img})" class="simple-icon-trash m-2 icon"></span>
                         </div>
                       </div>
                     </div>
+                  </b-colxx>
+                  <b-colxx xxs="12" md="12">
+                    <b-button variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('food', 'image', $route.params.id)">{{ $t('upload') }}</b-button>
                   </b-colxx>
                 </b-row>
               </b-card>
@@ -345,6 +349,9 @@ export default {
     clickMap(e) {
       this.coords = e.get('coords')
     },
+    removeItem (e) {
+      this.$store.dispatch('deleteMedia', e)
+    },
     submit () {
       console.log(this.$v)
       this.isValidCustom = true
@@ -376,58 +383,5 @@ export default {
 </script>
 
 <style lang="scss">
-.foods {
-  height: 110px;
-  position: relative;
-  margin: 5px 0;
-  border-radius: 10px;
-  overflow: hidden;
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    object-fit: contain;
-    opacity: 1;
-    display: block;
-  }
-  .image_action {
-    width: 100%;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 5;
-    top: 0%;
-    left: 0%;
-    transition: all;
-    transition-duration: .4s;
-    transition-timing-function: cubic-bezier(.05,1.06,.62,1.23);
-    transform: translateY(100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .icon {
-      font-size: 20px;
-      font-weight: 500;
-      color: white;
-      cursor: pointer;
-    }
-    //-ms-transform: translate(-50%, -50%);
-  }
-}
-.foods:hover {
-  .image_action {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  img {
-    object-fit: cover;
-  }
-}
-.customTab {
-  .nav-tabs {
-    border: none;
-  }
-}
+
 </style>

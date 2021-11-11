@@ -21,12 +21,12 @@
         :src="img"
         :auto-zoom="true"
         :stencil-size="{
-        width: 1024,
-        height: 1024
+        width: 1920,
+        height: 1080
       }"
         image-restriction="stencil"
         :stencil-props="{
-        aspectRatio: 1
+        aspectRatio: 4/3
       }"
         @change="change"
       />
@@ -58,37 +58,51 @@ export default {
     return {
       image: image,
       img: null,
+      media_id: null,
+      media_type: null,
+      type: null,
       isOpen: false
     }
   },
   methods: {
-    getBase64(img, callback) {
-      const reader = new FileReader()
-      reader.addEventListener('load', (e) => callback(e, reader.result))
-      reader.readAsDataURL(img)
-    },
-    open (e) {
-      if (e) {
-        this.img = e
-        // const notCrossURL = e.slice(5)
-        // this.img = 'http' + notCrossURL
-        // // this.getBase64(e, image => {
-        // //   console.log(image)
-        // // })
-      }
+    open (media_type, type, id, url) {
+      this.media_type = media_type
+      this.type = type
+      this.media_id = id
+      // if (url) {
+      //   this.loadImageURL(url)
+      // }
       this.isOpen = true
+    },
+    clear () {
+      this.img = null,
+      this.media_id = null,
+      this.media_type = null,
+      this.type = null
     },
     hide () {
       this.isOpen = false
-      this.img = null
+      this.clear()
+    },
+    uploaderType (data) {
+      if (this.media_type === 'food') {
+        this.$store.dispatch('uploadMedia', {
+          type: this.media_type,
+          data: data
+        }).then(res => {
+          this.hide()
+        })
+      }
     },
     uploadImage() {
       const { canvas } = this.$refs.cropper.getResult();
       if (canvas) {
         const form = new FormData();
         canvas.toBlob(blob => {
+          form.append('type', this.type)
+          form.append('mediable_id', this.media_id)
           form.append('file', blob);
-          console.log(form)
+          this.uploaderType(form)
         }, 'image/jpeg');
       }
     },

@@ -631,6 +631,73 @@ p {
 
 // Date Picker
 
+// Food Image Containers ==============
+
+.foods {
+  height: 110px;
+  position: relative;
+  margin: 5px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  @include respond-below(xl) {
+    height: 110px;
+  }
+  @include respond-below(sm) {
+    height: 200px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    opacity: 1;
+    display: block;
+  }
+  .image_action {
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 5;
+    top: 0%;
+    left: 0%;
+    transition: all;
+    transition-duration: .4s;
+    transition-timing-function: cubic-bezier(.05,1.06,.62,1.23);
+    transform: translateY(100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .icon {
+      font-size: 20px;
+      font-weight: 500;
+      color: white;
+      cursor: pointer;
+    }
+    //-ms-transform: translate(-50%, -50%);
+  }
+}
+.foods:hover {
+  .image_action {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  img {
+    object-fit: cover;
+  }
+}
+.customTab {
+  .nav-tabs {
+    border: none;
+  }
+}
+
+
+// Food Image Containers ==============
+
+
 // ======= YANDEX MAP ===========
 .yandexMap {
   height: calc(100vh - 100px);

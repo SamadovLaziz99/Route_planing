@@ -11,6 +11,17 @@ export default {
       let res = await axios_init.post(`/${payload.path}/media/`, payload.data)
       console.log(res)
     },
+    async uploadMedia ({ commit, dispatch }, payload) {
+      try {
+        let res = await axios_init.post(`/${payload.type}/media/`, payload.data)
+        dispatch('success_alert', {
+          title: 'Media Uploaded Successfully'
+        })
+        return res
+      } catch (e) {
+        console.log(e)
+      }
+    },
     async deleteMedia ({ commit, dispatch }, payload) {
       try {
         let res = await axios_init.remove(`/media/${payload}/`)
