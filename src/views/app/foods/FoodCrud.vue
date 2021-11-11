@@ -150,21 +150,37 @@
                 </b-row>
               </b-card>
             </b-colxx>
-<!--            <b-colxx xxs="12" md="4">-->
-<!--              <b-card :title="$t('ingredients')" class="mb-4">-->
-<!--                <b-form-group :label="$t('ingredients')" class="has-float-label mb-4">-->
-<!--                  <input-tag v-model.trim="$v.form.ingredients.$model"  :state="!$v.form.ingredients.$error"></input-tag>-->
-<!--                  <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.ingredients.required) ? 'block' : 'none'}`">-->
-<!--                    {{ $t('please.enter') + $t('unit') }}-->
-<!--                  </b-form-invalid-feedback>-->
-<!--                </b-form-group>-->
-<!--              </b-card>-->
+            <b-colxx xxs="12" md="4">
+              <b-card :title="$t('ingredients')" class="mb-4">
+                <b-form-group :label="$t('ingredients')" class="has-float-label mb-4">
+                  <input-tag v-model.trim="$v.form.ingredients.$model"  :state="!$v.form.ingredients.$error"></input-tag>
+                  <b-form-invalid-feedback :style="`display: ${(isValidCustom && !$v.form.ingredients.required) ? 'block' : 'none'}`">
+                    {{ $t('please.enter') + $t('unit') }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </b-card>
+              <b-card title="Food Images">
+                <ImageEditor ref="imageEditor"/>
+                <b-row>
+                  <b-colxx xxs="12" md="6" v-for="img in images" :key="img.url" >
+                    <div class="foods">
+                      <img :src="img.url">
+                      <div class="image_action">
+                        <div style="display: flex">
+                          <span @click="$refs.imageEditor.open(img.url)" class="simple-icon-pencil m-2 icon"></span>
+                          <span class="simple-icon-trash m-2 icon"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </b-colxx>
+                </b-row>
+              </b-card>
 <!--              <b-card>-->
-<!--                <ImageEditor ref="imageEditor"/>-->
+
 <!--                <b-button @click="$refs.imageEditor.open()">Open Image Editor</b-button>-->
 <!--              </b-card>-->
 <!--              <dropzone ref="dropzone" v-if="$route.params.id" url="food" :media="{ id: $route.params.id, type: 'image' }"/>-->
-<!--            </b-colxx>-->
+            </b-colxx>
             <!--      ACTION CONTENT-->
             <b-colxx xxs="12" md="12">
               <b-card class="mb-4 d-flex align-items-end">
@@ -234,6 +250,7 @@ export default {
     return {
       id: this.$route.params.id,
       isValidCustom: false,
+      images: [],
       form: {
         name: '',
         description: '',
@@ -254,6 +271,7 @@ export default {
   mounted() {
     if (this.id) {
       this.$store.dispatch(getById, this.id).then(res => {
+        console.log(res)
         const _form = this.form
         _form.name = res.name
         _form.active = res.active
@@ -278,17 +296,15 @@ export default {
           label: first_name + ' ' + last_name,
           value: res.vendor.id
         }
-        console.log(res)
-        setTimeout(() => {
-          if (res.media && res.media.length > 0) {
-            res.media.forEach(e => {
-              // if (!e.small_size_url)
-              this.$refs.dropzone.setDefaultImage({
-                size: e.size, name: e.path, type: e.mime_type, id: e.id
-              }, e.url)
-            })
-          }
-        }, 200)
+        if (res.media && res.media.length > 0) {
+          this.images = res.media.map(e => {
+            return {
+              url: e.url,
+              id: e.id,
+              path: e.path
+            }
+          })
+        }
       })
     }
     this.getCategories()
@@ -360,6 +376,55 @@ export default {
 </script>
 
 <style lang="scss">
+.foods {
+  height: 110px;
+  position: relative;
+  margin: 5px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: contain;
+    opacity: 1;
+    display: block;
+  }
+  .image_action {
+    width: 100%;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 5;
+    top: 0%;
+    left: 0%;
+    transition: all;
+    transition-duration: .4s;
+    transition-timing-function: cubic-bezier(.05,1.06,.62,1.23);
+    transform: translateY(100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .icon {
+      font-size: 20px;
+      font-weight: 500;
+      color: white;
+      cursor: pointer;
+    }
+    //-ms-transform: translate(-50%, -50%);
+  }
+}
+.foods:hover {
+  .image_action {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  img {
+    object-fit: cover;
+  }
+}
 .customTab {
   .nav-tabs {
     border: none;
