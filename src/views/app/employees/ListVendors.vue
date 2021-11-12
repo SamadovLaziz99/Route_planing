@@ -183,7 +183,7 @@ export default {
       return this.data.map(e => {
         return {
           ...e,
-          img: e.image ? imageProxy(e.image, '120x90') : undefined
+          img: e.image ? imageProxy(e.image, '120x120') : undefined
         }
       })
     }

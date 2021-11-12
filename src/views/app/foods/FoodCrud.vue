@@ -160,7 +160,7 @@
                 </b-form-group>
               </b-card>
               <b-card title="Food Images" class="mb-4">
-                <ImageEditor ref="imageEditor"/>
+                <ImageEditor ref="imageEditor" @loaded="loadedImage"/>
                 <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
                 <b-row>
                   <b-colxx xxs="12" md="6" v-for="img in images" :key="img.url" >
@@ -274,42 +274,7 @@ export default {
   },
   mounted() {
     if (this.id) {
-      this.$store.dispatch(getById, this.id).then(res => {
-        console.log(res)
-        const _form = this.form
-        _form.name = res.name
-        _form.active = res.active
-        _form.cola_combo = res.cola_combo
-        _form.price = res.price
-        _form.sale_price = res.sale_price
-        _form.min_amount = res.min_amount
-        _form.video_url = res.video_url
-        _form.preparation_time = res.preparation_time
-        _form.description = res.description
-        _form.ingredients = res.ingredients
-        _form.category = {
-          label: res.category.name[this.$lang],
-          value: res.category.id
-        }
-        _form.unit = {
-          label: res.unit.name[this.$lang],
-          value: res.unit.id
-        }
-        const { first_name, last_name } = res.vendor.user
-        _form.vendor = {
-          label: first_name + ' ' + last_name,
-          value: res.vendor.id
-        }
-        if (res.media && res.media.length > 0) {
-          this.images = res.media.map(e => {
-            return {
-              url: e.url,
-              id: e.id,
-              path: e.path
-            }
-          })
-        }
-      })
+      this.getDataById()
     }
     this.getCategories()
     this.getUnits()
@@ -349,8 +314,17 @@ export default {
     clickMap(e) {
       this.coords = e.get('coords')
     },
+    loadedImage (e) {
+      this.getDataById()
+    },
     removeItem (e) {
-      this.$store.dispatch('deleteMedia', e)
+      this.$store.dispatch('deleteMedia', e).then(res => {
+        this.$store.commit('DELETE_MODAL', {
+          isShow: false,
+          data: {}
+        })
+        this.getDataById()
+      })
     },
     submit () {
       console.log(this.$v)
@@ -377,6 +351,43 @@ export default {
             this.$router.go(-1)
           })
         }
+    },
+    getDataById () {
+      this.$store.dispatch(getById, this.id).then(res => {
+        const _form = this.form
+        _form.name = res.name
+        _form.active = res.active
+        _form.cola_combo = res.cola_combo
+        _form.price = res.price
+        _form.sale_price = res.sale_price
+        _form.min_amount = res.min_amount
+        _form.video_url = res.video_url
+        _form.preparation_time = res.preparation_time
+        _form.description = res.description
+        _form.ingredients = res.ingredients
+        _form.category = {
+          label: res.category.name[this.$lang],
+          value: res.category.id
+        }
+        _form.unit = {
+          label: res.unit.name[this.$lang],
+          value: res.unit.id
+        }
+        const { first_name, last_name } = res.vendor.user
+        _form.vendor = {
+          label: first_name + ' ' + last_name,
+          value: res.vendor.id
+        }
+        if (res.media && res.media.length > 0) {
+          this.images = res.media.map(e => {
+            return {
+              url: e.url,
+              id: e.id,
+              path: e.path
+            }
+          })
+        }
+      })
     }
   }
 }

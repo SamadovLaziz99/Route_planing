@@ -56,7 +56,11 @@ const init = {
       url: url,
       method: method,
       onUploadProgress: function (e) {
-        Math.round((e.loaded * 100) / e.total)
+        let percent = Math.round((e.loaded * 100) / e.total)
+        store.dispatch('uploadingAction', {
+          show: true,
+          percent: percent
+        })
       },
     }
     if (localStorage.getItem('token')) {

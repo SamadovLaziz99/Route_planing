@@ -2,10 +2,15 @@ import axios_init from "../../utils/axios_init";
 export default {
   state: {
     foods: null,
-    roles: []
+    roles: [],
+    uploading: {
+      show: false,
+      percent: 0
+    }
   },
   getters: {
     orderFoods: state => state.foods,
+    uploading: state => state.uploading,
     userRoles: state => state.roles.map(e => {
       return {
         label: e.name,
@@ -19,6 +24,9 @@ export default {
     },
     SET_USER_ROLES(state, payload) {
       state.roles = payload
+    },
+    SET_UPLOADING (state, payload) {
+      state.uploading = payload
     }
   },
   actions: {
@@ -52,6 +60,9 @@ export default {
       let res = await axios_init.get('/ratings/', params)
       // commit('SET_USER_ROLES', res.results)
       return res.results
-    }
+    },
+    async uploadingAction ({ commit }, payload) {
+      commit('SET_UPLOADING', payload)
+    },
   }
 }

@@ -13,7 +13,6 @@
             <b-colxx xxs="12" md="8">
               <b-card :title="id ? $t('vendor.update') : $t('vendor.create')" class="mb-4">
                 <b-row>
-
                   <b-colxx xxs="12" md="12">
                     <b-form-group :label="$t('users')" class="has-float-label mb-4">
                       <v-select :options="users" v-model.trim="$v.form.user.$model" :state="!$v.form.user.$error"/>
@@ -29,35 +28,8 @@
                       </b-form-invalid-feedback>
                     </b-form-group>
                   </b-colxx>
-
-                  <!--                  <b-colxx xxs="12" md="4">-->
-                  <!--                    <b-form-group :label="$t('price')" class="has-float-label mb-4">-->
-                  <!--                      <b-form-input type="number" v-model.trim="$v.form.price.$model"  :state="!$v.form.price.$error"/>-->
-                  <!--                      <b-form-invalid-feedback v-if="!$v.form.price.required">-->
-                  <!--                        {{ $t('please.enter') + $t('price') }}-->
-                  <!--                      </b-form-invalid-feedback>-->
-                  <!--                    </b-form-group>-->
-                  <!--                  </b-colxx>-->
-                  <!--                  <b-colxx xxs="12" md="4">-->
-                  <!--                    <b-form-group :label="$t('sale_price')" class="has-float-label mb-4">-->
-                  <!--                      <b-form-input type="number" v-model.trim="$v.form.sale_price.$model"  :state="!$v.form.sale_price.$error"/>-->
-                  <!--                      <b-form-invalid-feedback v-if="!$v.form.sale_price.required">-->
-                  <!--                        {{ $t('please.enter') + $t('sale_price') }}-->
-                  <!--                      </b-form-invalid-feedback>-->
-                  <!--                    </b-form-group>-->
-                  <!--                  </b-colxx>-->
-                  <!--                  <b-colxx xxs="12" md="4">-->
-                  <!--                    <b-form-group :label="$t('min_amount')" class="has-float-label mb-4">-->
-                  <!--                      <b-form-input type="number" v-model.trim="$v.form.min_amount.$model"  :state="!$v.form.min_amount.$error"/>-->
-                  <!--                      <b-form-invalid-feedback v-if="!$v.form.min_amount.required">-->
-                  <!--                        {{ $t('please.enter') + $t('min_amount') }}-->
-                  <!--                      </b-form-invalid-feedback>-->
-                  <!--                    </b-form-group>-->
-                  <!--                  </b-colxx>-->
-
                   <b-colxx xxs="12" md="4" class="has-float-label mb-2">
                     <b-form-group :label="$t('from_field')">
-<!--                      <b-form-input v-model="form.from_field" type="text"/>-->
                       <timepicker auto-scroll v-model="form.from_field"/>
                     </b-form-group>
                   </b-colxx>
@@ -70,16 +42,6 @@
                   <b-colxx xxs="12" md="4" class="has-float-label mb-2">
                     <b-form-group :label="$t('cola_food')">
                       <b-form-input v-model="form.cola_food" type="number"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx xxs="12" md="6" class="has-float-label mb-2">
-                    <b-form-group :label="$t('apelsin_account')">
-                      <b-form-input v-model="form.apelsin_account" type="text"/>
-                    </b-form-group>
-                  </b-colxx>
-                  <b-colxx xxs="12" md="6" class="has-float-label mb-2">
-                    <b-form-group :label="$t('apelsin_token')">
-                      <b-form-input v-model="form.apelsin_token" type="text"/>
                     </b-form-group>
                   </b-colxx>
                   <b-colxx xxs="12" md="12" class="mb-2">
@@ -116,15 +78,52 @@
                   </b-colxx>
                 </b-row>
               </b-card>
-            </b-colxx>
-            <b-colxx xxs="12" md="4">
               <b-card :title="$t('location')" class="mb-4">
-                <yandex-map @click="clickMap" :coords="coords" :zoom="12" class="map-item" map-type="map"
-                            :controls="['zoomControl']">
+                <yandex-map @click="clickMap" :coords="coords" :zoom="12" class="map-item" map-type="map" :controls="['zoomControl']">
                   <ymap-marker marker-id="123" :coords="coords" :hint-content="$t('vendor.point')"></ymap-marker>
                 </yandex-map>
               </b-card>
-              <dropzone ref="dropzone" v-if="$route.params.id" :media="{ id: $route.params.id, type: 'image' }"/>
+            </b-colxx>
+            <b-colxx xxs="12" md="4">
+<!--              <dropzone ref="dropzone" v-if="$route.params.id" :media="{ id: $route.params.id, type: 'image' }"/>-->
+              <ImageEditor ref="imageEditor" @loaded="loadedImage"/>
+              <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+              <b-card title="Avatar" class="mb-4">
+                <div class="vendors" v-if="images.avatar">
+                  <img :src="images.avatar.url">
+                  <div class="image_action">
+                    <div style="display: flex">
+                      <span @click="$refs.imageEditor.open(images.avatar.url)" class="simple-icon-pencil m-2 icon"></span>
+                      <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.avatar})" class="simple-icon-trash m-2 icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <b-button v-else variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('vendors', 'avatar', $route.params.id)">{{ $t('upload') }}</b-button>
+              </b-card>
+              <b-card title="Passport" class="mb-4">
+                <div class="vendors" v-if="images.passport">
+                  <img :src="images.passport.url">
+                  <div class="image_action">
+                    <div style="display: flex">
+                      <span @click="$refs.imageEditor.open(images.passport.url)" class="simple-icon-pencil m-2 icon"></span>
+                      <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.passport })" class="simple-icon-trash m-2 icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <b-button v-else variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('vendors', 'passport', $route.params.id)">{{ $t('upload') }}</b-button>
+              </b-card>
+              <b-card title="Patent" class="mb-4">
+                <div class="vendors" v-if="images.patent">
+                  <img :src="images.patent.url">
+                  <div class="image_action">
+                    <div style="display: flex">
+                      <span @click="$refs.imageEditor.open(images.patent.url)" class="simple-icon-pencil m-2 icon"></span>
+                      <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.patent })" class="simple-icon-trash m-2 icon"></span>
+                    </div>
+                  </div>
+                </div>
+                <b-button v-else variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('vendors', 'patent', $route.params.id)">{{ $t('upload') }}</b-button>
+              </b-card>
             </b-colxx>
             <!--      ACTION CONTENT-->
             <b-colxx xxs="12" md="12">
@@ -165,17 +164,18 @@
 
 <script>
 import Switches from "vue-switches";
+import ImageEditor from "../../../components/ImageEditor";
 import {required} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
 import {mapGetters, mapActions} from "vuex";
-
 const _page = 'vendors'
 import {actions, getters} from "@/utils/store_schema";
 
 const {getById, put, post} = actions(_page)
 export default {
   components: {
-    'switches': Switches
+    'switches': Switches,
+    ImageEditor
   },
   mixins: [validationMixin],
   validations: {
@@ -194,6 +194,11 @@ export default {
       id: this.$route.params.id,
       isValidCustom: false,
       times: null,
+      images: {
+        avatar: null,
+        patent: null,
+        passport: null
+      },
       coords: [41.312947, 69.280204],
       form: {
         address: '',
@@ -203,8 +208,6 @@ export default {
         verified: true,
         from_field: '',
         to: '',
-        apelsin_account: '',
-        apelsin_token: '',
         cola_sponsor: false,
         cola_food: 0
       }
@@ -212,6 +215,26 @@ export default {
   },
   mounted() {
     if (this.id) {
+      this.getDataId()
+    }
+    this.getUsers({ no_page: true })
+  },
+  computed: {
+    ...mapGetters(['dataUsers']),
+    ...mapGetters(getters(_page)),
+    users() {
+      return this.dataUsers.map(e => {
+        const {first_name, last_name} = e
+        return {
+          label: first_name + ' ' + last_name,
+          value: e.id
+        }
+      })
+    }
+  },
+  methods: {
+    ...mapActions(['getUsers']),
+    getDataId() {
       this.$store.dispatch(getById, this.id).then(res => {
         console.log(res)
         const _form = this.form
@@ -242,40 +265,40 @@ export default {
           value: res.user.id
         }
         // console.log(res)
-        setTimeout(() => {
-          if (res.media && res.media.length) {
-            res.media.forEach(e => {
-              if (!e.small_size_url)
-                this.$refs.dropzone.setDefaultImage({
-                  size: e.size, name: e.path, type: e.mime_type, id: e.id
-                }, e.url)
-            })
+        if (res.media && res.media.length > 0) {
+          const avatar = res.media.filter(e => e.type === 'avatar')[0]
+          const passport = res.media.filter(e => e.type === 'passport')[0]
+          const patent = res.media.filter(e => e.type === 'patent')[0]
+          this.images = {
+            avatar: avatar,
+            patent: patent,
+            passport: passport
           }
-        }, 100)
-      })
-    }
-    this.getUsers({ no_page: true })
-  },
-  computed: {
-    ...mapGetters(['dataUsers']),
-    ...mapGetters(getters(_page)),
-    users() {
-      return this.dataUsers.map(e => {
-        const {first_name, last_name} = e
-        return {
-          label: first_name + ' ' + last_name,
-          value: e.id
         }
       })
-    }
-  },
-  methods: {
-    ...mapActions(['getUsers']),
+    },
+    loadedImage (e) {
+      this.getDataId()
+    },
     clickMap(e) {
       this.coords = e.get('coords')
       this.$store.dispatch('getPointData', this.coords.toString()).then(res => {
         console.log(res)
         this.form.address = res[0].name
+      })
+    },
+    removeItem (e) {
+      this.$store.dispatch('deleteMedia', e).then(res => {
+        this.$store.commit('DELETE_MODAL', {
+          isShow: false,
+          data: {}
+        })
+        this.images = {
+          avatar: null,
+          patent: null,
+          passport: null
+        }
+        this.getDataId()
       })
     },
     submit() {

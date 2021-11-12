@@ -82,14 +82,42 @@
                 </div>
               </b-tab>
               <b-tab :title="$t('collection.banner')" v-if="form.id">
-                <div style="margin: 20px 0">
-                  <h4>{{ $t('banner') }}</h4>
-                </div>
-                <dropzone ref="dropzoneBanner" v-if="form.id" url="collections" :media="{ id: form.id, type: 'banner' }" :destroy="true"/>
-                <div style="margin: 20px 0">
-                  <h4>{{ $t('feature') }}</h4>
-                </div>
-                <dropzone ref="dropzoneFeature" v-if="form.id" url="collections" :media="{ id: form.id, type: 'image' }" :destroy="true"/>
+                <ImageEditor ref="imageEditor" @loaded="loadedImage"/>
+                <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
+<!--                <b-card title="Banner" class="mb-4">-->
+                  <h4 class="m-4">{{ $t('banner') }}</h4>
+                  <div class="vendors" v-if="images.banner">
+                    <img :src="images.banner.url">
+                    <div class="image_action">
+                      <div style="display: flex">
+                        <span @click="$refs.imageEditor.open(images.banner.url)" class="simple-icon-pencil m-2 icon"></span>
+                        <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.banner})" class="simple-icon-trash m-2 icon"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <b-button v-else variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('collections', 'banner', form.id)">{{ $t('upload') }}</b-button>
+<!--                </b-card>-->
+<!--                <b-card title="Collection" class="mb-4">-->
+                <h4 class="m-4">{{ $t('feature') }}</h4>
+                  <div class="vendors" v-if="images.image">
+                    <img :src="images.image.url">
+                    <div class="image_action">
+                      <div style="display: flex">
+                        <span @click="$refs.imageEditor.open(images.image.url)" class="simple-icon-pencil m-2 icon"></span>
+                        <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.image })" class="simple-icon-trash m-2 icon"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <b-button v-else variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('collections', 'image', form.id)">{{ $t('upload') }}</b-button>
+<!--                </b-card>-->
+<!--                <div style="margin: 20px 0">-->
+<!--                  <h4>{{ // $t('banner') }}</h4>-->
+<!--                </div>-->
+<!--                <dropzone ref="dropzoneBanner" v-if="form.id" url="collections" :media="{ id: form.id, type: 'banner' }" :destroy="true"/>-->
+<!--                <div style="margin: 20px 0">-->
+<!--                  <h4>{{ $t('feature') }}</h4>-->
+<!--                </div>-->
+<!--                <dropzone ref="dropzoneFeature" v-if="form.id" url="collections" :media="{ id: form.id, type: 'image' }" :destroy="true"/>-->
               </b-tab>
             </b-tabs>
             <div v-else class="text-center text-primary my-2">
@@ -112,7 +140,6 @@
         <list-page-heading
           :title="$t('menu.foods_collection')"
           :displayMode="displayMode"
-          :sortOptions="sortOptions"
           :sort="sort"
           :searchChange="searchChange"
           :from="from"
@@ -184,6 +211,7 @@ import ListPageListing from "./ListListing";
 import FoodsCard from "./components/FoodsCard";
 import Pagination from "../../../components/TableComponents/Pagination";
 import EmptyBox from "../../../components/EmptyBox";
+import ImageEditor from "../../../components/ImageEditor";
 import moment from "moment";
 import debounce from "debounce";
 import { mapGetters } from "vuex";
@@ -197,6 +225,7 @@ export default {
     "list-page-heading": ListPageHeading,
     "list-page-listing": ListPageListing,
     'foods-card': FoodsCard,
+    ImageEditor,
     Pagination,
     EmptyBox
   },
@@ -221,6 +250,10 @@ export default {
     this.searchFood = debounce(this.searchFood, 800)
     return {
       activeTab: 0,
+      images: {
+        banner: null,
+        image: null
+      },
       isOpenFilter: false,
       fields: [
         {
@@ -265,27 +298,17 @@ export default {
       },
       statuses: [
         {
-          text: "ACTIVE",
+          text: this.$t('active'),
           value: true
         },
         {
-          text: "INACTIVE",
+          text: this.$t('inactive'),
           value: false
         }
       ],
       categories: [],
       displayMode: "list",
       sort: {},
-      sortOptions: [
-        {
-          column: "name",
-          label: "Name"
-        },
-        {
-          column: "position",
-          label: "Position"
-        }
-      ],
       page: 1,
       search: "",
       from: 0,
@@ -338,6 +361,9 @@ export default {
   },
   methods: {
     moment,
+    loadedImage (e) {
+      this.getMediaById()
+    },
     getFood () {
       this.$store.dispatch('getFood', this.foodFilters)
     },
@@ -370,24 +396,28 @@ export default {
     viewItem (id) {
       console.log(id)
     },
-    editItem (id) {
-      this.$bvModal.show('crudModal')
-      this.$store.dispatch(getById, id).then(res => {
-        const e = res.media
+    getMediaById () {
+      this.$store.dispatch(getById, this.form.id).then(res => {
         if (res.media && res.media.length) {
           res.media.forEach((e, i) => {
             if (e.type === 'banner') {
-              setTimeout(() => {
-                this.$refs.dropzoneBanner.setDefaultImage({
-                  size: e.size, name: e.path, type: e.mime_type, id: e.id
-                }, e.url)
-              }, (i + 1))
+              this.images.banner = e
             } else if (e.type === 'image') {
-              setTimeout(() => {
-                this.$refs.dropzoneFeature.setDefaultImage({
-                  size: e.size, name: e.path, type: e.mime_type, id: e.id
-                }, e.url)
-              }, (i + 1))
+              this.images.image = e
+            }
+          })
+        }
+      })
+    },
+    editItem (id) {
+      this.$bvModal.show('crudModal')
+      this.$store.dispatch(getById, id).then(res => {
+        if (res.media && res.media.length) {
+          res.media.forEach((e, i) => {
+            if (e.type === 'banner') {
+              this.images.banner = e
+            } else if (e.type === 'image') {
+              this.images.image = e
             }
           })
         }

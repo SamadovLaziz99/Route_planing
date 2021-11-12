@@ -1,6 +1,9 @@
 <template>
   <b-modal no-close-on-backdrop id="imageCroppperModal" @hide="hide" v-model="isOpen" title="Image Cropper" size="lg" class="croppModal">
     <div style="position: relative">
+      <div class="image_progress">
+        <b-progress v-if="uploading.show" :value="uploading.percent" :max="100" show-progress animated></b-progress>
+      </div>
       <div class="toolbar" v-if="img">
         <span class="simple-icon-magnifier-add icon font-weight-medium" @click="$refs.cropper.zoom(2)"></span>
         <span class="simple-icon-magnifier-remove icon font-weight-medium" @click="$refs.cropper.zoom(0.5)"></span>
@@ -20,14 +23,9 @@
         ref="cropper"
         :src="img"
         :auto-zoom="true"
-        :stencil-size="{
-        width: 1920,
-        height: 1080
-      }"
+        :stencil-size="settings.stencil.size"
         image-restriction="stencil"
-        :stencil-props="{
-        aspectRatio: 4/3
-      }"
+        :stencil-props="settings.stencil.props"
         @change="change"
       />
     </div>
@@ -46,13 +44,15 @@
 </template>
 
 <script>
-import { Cropper } from 'vue-advanced-cropper'
+import { Cropper, CircleStencil } from 'vue-advanced-cropper'
 import image from '../assets/svg/image.svg'
+import { mapGetters } from "vuex";
 import 'vue-advanced-cropper/dist/style.css';
+import store from "../store";
 export default {
   name: "ImageEditor",
   components: {
-    Cropper
+    Cropper, CircleStencil
   },
   data () {
     return {
@@ -61,23 +61,81 @@ export default {
       media_id: null,
       media_type: null,
       type: null,
-      isOpen: false
+      isOpen: false,
+      settings: {
+        stencil: {
+          size: {
+            width: 1920,
+            height: 1080
+          },
+          props: {
+            aspectRatio: 4/3,
+            movable: false
+          }
+        },
+        restriction: 'stencil'
+      },
     }
+  },
+  computed: {
+    ...mapGetters(['uploading'])
   },
   methods: {
     open (media_type, type, id, url) {
       this.media_type = media_type
       this.type = type
       this.media_id = id
-      // if (url) {
-      //   this.loadImageURL(url)
-      // }
+      if (type === 'avatar') {
+        this.settings.stencil.size = {
+          width: 1080,
+          height: 1080
+        }
+        this.settings.stencil.props = {
+          aspectRatio: 1
+        }
+      }
+      if (type === 'patent')  {
+        this.settings.stencil.size = {
+          width: 1080,
+          height: 1500
+        }
+        this.settings.stencil.props = {
+          aspectRatio: 18/25
+        }
+      }
+      if (type === 'passport') {
+        this.settings.stencil.size = {
+          width: 840,
+          height: 1080
+        }
+        this.settings.stencil.props.aspectRatio = 7/10
+        // this.settings.stencil.props = {
+        //   aspectRatio: 7/10
+        // }
+      }
+      if (type === 'banner') {
+        this.settings.stencil.size = {
+          width: 1920,
+          height: 460
+        }
+        this.settings.stencil.props.aspectRatio = 81/23
+        // this.settings.stencil.props = {
+        //   aspectRatio: 81/23
+        // }
+      }
+      if (type === 'image') {
+        this.settings.stencil.size = {
+          width: 1920,
+          height: 1080
+        }
+        this.settings.stencil.props.aspectRatio = 16/9
+      }
       this.isOpen = true
     },
     clear () {
-      this.img = null,
-      this.media_id = null,
-      this.media_type = null,
+      this.img = null
+      this.media_id = null
+      this.media_type = null
       this.type = null
     },
     hide () {
@@ -85,14 +143,17 @@ export default {
       this.clear()
     },
     uploaderType (data) {
-      if (this.media_type === 'food') {
-        this.$store.dispatch('uploadMedia', {
-          type: this.media_type,
-          data: data
-        }).then(res => {
-          this.hide()
+      this.$store.dispatch('uploadMedia', {
+        type: this.media_type,
+        data: data
+      }).then(res => {
+        this.hide()
+        this.$store.dispatch('uploadingAction', {
+          show: false,
+          percent: 0
         })
-      }
+        this.$emit('loaded', res)
+      })
     },
     uploadImage() {
       const { canvas } = this.$refs.cropper.getResult();
@@ -144,9 +205,23 @@ export default {
 
 <style lang="scss">
 @import '~vue-advanced-cropper/dist/theme.classic.scss';
+.preview {
+  border: dashed 1px rgba(255,255,255, 0.25);
+}
 #imageCroppperModal {
   .modal-body {
     padding: 0 !important;
+  }
+}
+.image_progress {
+  .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    background-color: rgba(243, 243, 243, 0.1);
+    height: 15px;
   }
 }
 .toolbar {

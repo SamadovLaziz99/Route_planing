@@ -25,10 +25,10 @@ export default {
     async deleteMedia ({ commit, dispatch }, payload) {
       try {
         let res = await axios_init.remove(`/media/${payload}/`)
-        console.log(res)
         dispatch('success_alert', {
           title: 'Media Deleted Successfully'
         })
+        return 'deleted'
       } catch (e) {
         console.log(e)
       }
