@@ -23,7 +23,10 @@
   "status": "Статус",
   "user.details": "Сведения о клиенте",
   "vendor.details": "Сведения о поваре",
-
+  "courier.details": "Сведения о курьера",
+  "subtotal": "Промежуточный итог",
+  "shipping": "Перевозки",
+  "total.summ": "Общая сумма",
   "ingredients": "Ингредиенты",
   "loading": "Загрузить",
   "image": "Изображение",
@@ -135,6 +138,9 @@
   "re.password": "Повторить пароль",
   "banner": "Баннер",
   "feature": "Карточки",
+  "filters": "Фильтры",
+  "comment": "Комментарий",
+  "not.comment": "Не комментировать, иметь рейтинг",
   "general": {
     "copyright": "Piaf Vue © 2018 Все права защищены."
   },

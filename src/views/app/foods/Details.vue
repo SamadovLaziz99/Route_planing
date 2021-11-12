@@ -86,7 +86,7 @@
                 </b-card>
                 <b-card class="mb-4" :title="$t('pages.comments')">
                   <comment-item
-                    v-for="(comment,index) in comments"
+                    v-for="(comment,index) in ratings"
                     :key="index"
                     :data="comment"
                     detail-path="#"
@@ -121,7 +121,6 @@ import RadialProgressCard from "../../../components/Cards/RadialProgressCard";
 import CommentItem from "../../../components/Listing/CommentItem";
 import OrderItem from "../../../components/Listing/OrderItem";
 import {comments} from "../../../data/comments";
-// import orders from "../../../data/orders";
 import EmptyBox from "../../../components/EmptyBox";
 import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
@@ -148,7 +147,7 @@ export default {
       food: null,
       defImage: '/assets/img/details/1.jpg',
       foodImage: null,
-      // orders,
+      ratings: [],
       orders: []
     };
   },
@@ -157,21 +156,14 @@ export default {
   },
   computed: {
     ...mapGetters(['errorFood', 'oneLoadFood']),
-    // _oders() {
-    //   return this.new_orders.map(e => {
-    //     return {
-    //       ...e,
-    //       id: '#1110222154',
-    //       phone: '+998909963313',
-    //       payment_type: 'cash',
-    //       price: '586 $',
-    //       time: '1 hour',
-    //       delivery: 'Half hour',
-    //     }
-    //   })
-    // }
   },
   mounted() {
+    this.$store.dispatch('getRatings', {
+      food_id: this.$route.params.id
+    }).then(res => {
+      console.log('Ratings', res)
+      this.ratings = res
+    })
     this.$store.dispatch('getOrders', {
       food_id: this.$route.params.id
     }).then(res => {

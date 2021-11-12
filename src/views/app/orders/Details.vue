@@ -80,6 +80,9 @@
                 </div>
               </b-card-body>
             </b-card>
+            <b-card class="mb-4" :title="$t('comment')" v-if="order && order.comment">
+              <p>{{ order.comment }}</p>
+            </b-card>
             <b-row>
               <b-colxx md="12">
                 <b-card v-if="order.user_address && order.vendor" class="mb-4" :title="$t('vendor.and.user.map')">
@@ -173,7 +176,11 @@
                               <img :src="imageProxy(food.food.image, '320x320')" style="width: 100px; height: 75px; object-fit: cover; border-radius: 3px; " />
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px;">
-                              <h4 style="font-size: 15px;"><router-link :to="{ name: 'food_detail', params: { id: food.id } }" style="text-decoration: none; font-weight:500;">{{ food.food.name }}</router-link></h4>
+                              <h4 style="font-size: 15px;"><router-link :to="{ name: 'food_detail', params: { id: food.food.id } }" style="text-decoration: none; font-weight:500;">{{ food.food.name }}</router-link></h4>
+                              <div class="rating" v-if="isHaveRating(food.food.id)">
+                                <span>{{ isHaveRating(food.food.id).comment || $t('not.comment') }}</span>
+                                <stars :value="isHaveRating(food.food.id).star" :disabled=true />
+                              </div>
                               <p style="font-size: 12px;">{{ food.food.description }}</p>
                             </td>
                             <td style="padding-top:0px; padding-bottom:20px; text-align: right;">
@@ -190,7 +197,7 @@
                   <tbody>
                   <tr>
                     <td colSpan="2" style="padding-top:0px; padding-bottom:5px; text-align: right; color:#909090;">
-                      <p style="font-size: 12px; line-height: 1; margin-top:5px; vertical-align:top;  margin-bottom: 0;">Subtotal:&nbsp;</p>
+                      <p style="font-size: 12px; line-height: 1; margin-top:5px; vertical-align:top;  margin-bottom: 0;">{{ $t('subtotal') }}:&nbsp;</p>
                     </td>
                     <td style="padding-top:0px; padding-bottom:5px; text-align: right; padding-left: 15px;">
                       <p style="font-size: 13px; line-height: 1; margin-top:5px; vertical-align:top; color:#f18024; white-space:nowrap; margin-bottom: 0;">{{ order.order_price }} {{ $t('sum') }}</p>
@@ -198,7 +205,8 @@
                   </tr>
                   <tr>
                     <td colSpan="2" style="padding-top:0px; padding-bottom:5px; text-align: right; color:#909090;">
-                      <p style="font-size: 12px; line-height: 1; margin-top:5px; vertical-align:top; margin-bottom: 0;">Shipping:&nbsp;</p>
+                      <p style="font-size: 12px; line-height: 1; margin-top:5px; vertical-align:top; margin-bottom: 0;">
+                        {{ $t('shipping') }}:&nbsp;</p>
                     </td>
                     <td style="padding-top:0px; padding-bottom:5px; text-align: right; padding-left: 15px;">
                       <p style="font-size: 13px; line-height: 1; margin-top:5px; vertical-align:top; color:#f18024; white-space:nowrap; margin-bottom: 0;">{{ order.delivery_price }} {{ $t('sum') }}</p>
@@ -206,7 +214,7 @@
                   </tr>
                   <tr>
                     <td colSpan="2" style="padding-top:0px; padding-bottom:5px; text-align: right; color:#909090;">
-                      <p style="font-size: 12px; line-height: 1; margin-top:5px; vertical-align:top; margin-bottom: 0;"><strong>Total:&nbsp;</strong></p>
+                      <p style="font-size: 12px; line-height: 1; margin-top:5px; vertical-align:top; margin-bottom: 0;"><strong>{{ $t('total.summ') }}:&nbsp;</strong></p>
                     </td>
                     <td style="padding-top:0px; padding-bottom:5px; text-align: right; padding-left: 15px;">
                       <p style="font-size: 13px; line-height: 1; margin-top:5px; vertical-align:top; color:#f18024; white-space:nowrap; margin-bottom: 0;"><strong>{{ order.total_price }} {{ $t('sum') }}</strong></p>
@@ -226,6 +234,7 @@
 
 <script>
 import IconCardsCarousel from "./DetailsCard";
+import Stars from "../../../components/Common/Stars";
 import { mapGetters } from 'vuex'
 import { getters } from "../../../utils/store_schema";
 import Tables from "../ui/components/Tables";
@@ -235,6 +244,7 @@ import {validationMixin} from "vuelidate";
 export default {
   components: {
     Tables,
+    'stars': Stars,
     "icon-cards-carousel": IconCardsCarousel
   },
   validations: {
@@ -290,6 +300,7 @@ export default {
           value: 'cancelled'
         }
       ],
+      ratings: []
     }
   },
   watch: {
@@ -356,7 +367,7 @@ export default {
         load: true
       }
     },
-    error (err) {
+    errorReq (err) {
       const _message = err.response.data.message
       this.$store.dispatch('error_alert', {
         title: 'Ошибка',
@@ -401,7 +412,7 @@ export default {
           this.$store.dispatch('confirmTransaction', {
             id: this.order.id,
             data: { code: this.code }
-          }).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+          }).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
         }
       } //
       if (status === 'resend') {
@@ -409,24 +420,24 @@ export default {
           this.$store.dispatch('resendCode', this.order.id).then(res => {
             console.log(res)
             this.startTimer()
-          }).catch(this.error)
+          }).catch(this.errorReq)
         }
       } // ----
       if (status === 'accept') {
         this.confirm.load = true
-        this.$store.dispatch('acceptOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('acceptOrder', this.order.id).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
       } //
       if (status === 'process') {
         this.confirm.load = true
-        this.$store.dispatch('processOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('processOrder', this.order.id).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
       } //
       if (status === 'reqdelivery') {
         this.confirm.load = true
-        this.$store.dispatch('requestDelivery', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('requestDelivery', this.order.id).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
       }
       if (status === 'shipping') {
         this.confirm.load = true
-        this.$store.dispatch('shippingOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('shippingOrder', this.order.id).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
       }
       if (status === 'assign') {
         if (this.courier) {
@@ -434,16 +445,16 @@ export default {
           this.$store.dispatch('assignCourier', {
             order_id: this.order.id,
             courier_id: this.courier.value
-          }).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+          }).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
         }
       }
       if (status === 'cancel') {
         this.confirm.load = true
-        this.$store.dispatch('cancelOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('cancelOrder', this.order.id).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
       }
       if (status === 'finish') {
         this.confirm.load = true
-        this.$store.dispatch('finishOrder', this.order.id).then(this.success).catch(this.error).finally(() => { this.confirm.load = false })
+        this.$store.dispatch('finishOrder', this.order.id).then(this.success).catch(this.errorReq).finally(() => { this.confirm.load = false })
       }
     },
     startTimer () {
@@ -465,11 +476,22 @@ export default {
       }).finally(() => {
         this.pendingStatus = false
       })
+    },
+    isHaveRating (id) {
+      let res = this.ratings.filter(e => e.ratingable_id === id)[0]
+      return res
     }
   },
   mounted() {
+    this.$store.dispatch('getRatings', {
+      order_id: this.$route.params.id
+    }).then(res => {
+      console.log('Ratings', res)
+      this.ratings = res
+    })
     this.$store.dispatch('getFoodOrders', this.$route.params.id).then(res => {
       this.foods = res.results
+      console.log(this.foods)
     })
     this.$store.dispatch('getByIdOrders', this.$route.params.id).then(res => {
       if (!this.isCourierAssign) this.$store.dispatch('getCouriers')

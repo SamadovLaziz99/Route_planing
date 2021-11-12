@@ -47,6 +47,11 @@ export default {
       let res = await axios_init.post('/user/role/create/', data)
       // commit('SET_USER_ROLES', res.results)
       return res
+    },
+    async getRatings ({ commit }, params) {
+      let res = await axios_init.get('/ratings/', params)
+      // commit('SET_USER_ROLES', res.results)
+      return res.results
     }
   }
 }
