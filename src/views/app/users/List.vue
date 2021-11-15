@@ -53,7 +53,7 @@
           :title="$t('menu.users')"
           :changeOrderBy="changeOrderBy"
           :sort="sort"
-          :searchChange="searchChange"
+          @search="searchName"
           :from="from"
           :to="to"
           :total="pagination.total"
@@ -200,16 +200,6 @@ export default {
           label: this.$t('phone'),
           // tdClass: 'firstColumn'
         },
-        // {
-        //   key: 'phone',
-        //   label: 'Phone Number',
-        //   // tdClass: 'firstColumn'
-        // },
-        // {
-        //   key: 'order',
-        //   label: 'Orders Count',
-        //   tdClass: 'text-muted'
-        // },
         {
           key: 'created_at',
           label: this.$t('reg.date'),
@@ -279,7 +269,8 @@ export default {
     },
     getData() {
       this.$store.dispatch(get, {
-        page: this.page
+        page: this.page,
+        search: this.search
       }).then(res => {
         console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
@@ -298,9 +289,11 @@ export default {
     changeOrderBy(sort) {
       this.sort = sort;
     },
-    searchChange(val) {
-      this.search = val;
-      this.page = 1;
+    searchName(val) {
+      console.log(val)
+      this.search = val
+      this.page = 1
+      this.getData()
     },
     handleContextMenu(vnode) {
       if (!this.selectedItems.includes(vnode.key)) {
@@ -323,11 +316,11 @@ export default {
       })
     }
   },
-  watch: {
-    search() {
-      this.page = 1;
-    },
-  },
+  // watch: {
+  //   search() {
+  //     this.page = 1;
+  //   },
+  // },
   mounted() {
     const _hash = this.$route.hash
     let _page;
