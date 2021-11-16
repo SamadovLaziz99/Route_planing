@@ -168,7 +168,7 @@
                       <img :src="img.url">
                       <div class="image_action">
                         <div style="display: flex">
-                          <span @click="$refs.imageEditor.open(img.url)" class="simple-icon-pencil m-2 icon"></span>
+                          <span @click="$refs.imageEditor.open('food', 'image', $route.params.id, img.url)" class="simple-icon-pencil m-2 icon"></span>
                           <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: img})" class="simple-icon-trash m-2 icon"></span>
                         </div>
                       </div>

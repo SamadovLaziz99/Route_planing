@@ -1,6 +1,7 @@
 <template>
-  <b-modal no-close-on-backdrop id="imageCroppperModal" @hide="hide" v-model="isOpen" title="Image Cropper" size="lg" class="croppModal">
+  <b-modal no-close-on-backdrop id="imageCroppperModal" @hide="hide" v-model="isOpen" :title="$t('image.cropper')" size="lg" class="croppModal">
     <div style="position: relative">
+      <img ref="imageRef" id="imageRef" class="d-none" src="https://trator-laravel-images.s3.eu-central-1.amazonaws.com/coozin/uploads/original/foods/l79v5C8Xap7gDQIHzouxARSabJdPnPEeSTIe8oSB.jpeg" width="1920px" height="1080px">
       <div class="image_progress">
         <b-progress v-if="uploading.show" :value="uploading.percent" :max="100" show-progress animated></b-progress>
       </div>
@@ -34,8 +35,8 @@
         <b-button variant="outline-primary" @click="$refs.file.click()"><span class="iconsminds-upload mr-2"></span>{{ $t('upload') }}</b-button>
         <div style="display: flex">
           <b-button class="mr-2" variant="danger default" @click="hide">{{ $t('cancel') }}</b-button>
-          <b-button class="mr-2" variant="danger default" @click="img = null">{{ $t('clear') }}</b-button>
-          <b-button variant="secondary default" @click="uploadImage">{{ $t('save') }}</b-button>
+          <b-button class="mr-2" v-if="img" variant="danger default" @click="img = null">{{ $t('clear') }}</b-button>
+          <b-button variant="secondary default" v-if="img" @click="uploadImage">{{ $t('save') }}</b-button>
         </div>
       </div>
     </template>
@@ -58,6 +59,7 @@ export default {
     return {
       image: image,
       img: null,
+      loadedImage: null,
       media_id: null,
       media_type: null,
       type: null,
@@ -80,8 +82,12 @@ export default {
   computed: {
     ...mapGetters(['uploading'])
   },
+  mounted() {
+  },
   methods: {
     open (media_type, type, id, url) {
+      console.log(url)
+      this.loadedImage = url
       this.media_type = media_type
       this.type = type
       this.media_id = id
@@ -131,7 +137,23 @@ export default {
         this.settings.stencil.props.aspectRatio = 16/9
       }
       this.isOpen = true
+      // setTimeout(() => {
+      //   this.imageGet()
+      // }, 100)
     },
+    // imageGet () {
+    //   let _img = document.getElementById('imageRef')
+    //   // var _img = this.$refs.imageRef
+    //   console.log(_img)
+    //   let canvas = document.createElement("canvas")
+    //   canvas.width = _img.width
+    //   canvas.height = _img.height
+    //   let ctx = canvas.getContext("2d")
+    //   ctx.drawImage(_img, 0, 0)
+    //   let dataURL = canvas.toDataURL("image/jpg", 1.0)
+    //   let baseee = dataURL.replace(/^data:image\/(png|jpg);base64,/, "")
+    //   console.log(baseee)
+    // },
     clear () {
       this.img = null
       this.media_id = null

@@ -32,7 +32,7 @@
                   </b-form-group>
                 </b-form>
               </b-tab>
-              <b-tab :title="$t('collection.foods')" style="height: 100% !important;">
+              <b-tab :title="$t('collection.food')" style="height: 100% !important;">
                 <div class="mt-2"></div>
                 <b-button @click="isOpenFilter = !isOpenFilter" variant="primary" class="mb-3 w-100">
                   <span :class="`iconsminds-arrow-${isOpenFilter ? 'up' : 'down'}-2 mr-2`"></span>
@@ -90,7 +90,7 @@
                     <img :src="images.banner.url">
                     <div class="image_action">
                       <div style="display: flex">
-                        <span @click="$refs.imageEditor.open(images.banner.url)" class="simple-icon-pencil m-2 icon"></span>
+                        <span @click="$refs.imageEditor.open('collections', 'banner', form.id, images.banner.url)" class="simple-icon-pencil m-2 icon"></span>
                         <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.banner})" class="simple-icon-trash m-2 icon"></span>
                       </div>
                     </div>
@@ -103,7 +103,7 @@
                     <img :src="images.image.url">
                     <div class="image_action">
                       <div style="display: flex">
-                        <span @click="$refs.imageEditor.open(images.image.url)" class="simple-icon-pencil m-2 icon"></span>
+                        <span @click="$refs.imageEditor.open('collections', 'image', form.id, images.image.url)" class="simple-icon-pencil m-2 icon"></span>
                         <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.image })" class="simple-icon-trash m-2 icon"></span>
                       </div>
                     </div>
@@ -467,6 +467,10 @@ export default {
           position: null,
           active: true,
           category: null
+      }
+      this.images = {
+        banner: null,
+        image: null
       }
     },
     closed(e) {

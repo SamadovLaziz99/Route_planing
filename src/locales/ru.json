@@ -127,9 +127,9 @@
   "foods": "Еда",
   "units": "Единицы",
   "collection": {
-    "main": "Основная информация",
+    "main": "Основная инф.",
     "food": "Блюда",
-    "banner": "БАННЕР"
+    "banner": "Баннер"
   },
   "upload": "Загрузить",
   "clear": "Очистить",
@@ -144,6 +144,7 @@
   "general": {
     "copyright": "Piaf Vue © 2018 Все права защищены."
   },
+  "image.cropper": "Обрезка изображения",
   "date.picker": "Выбор даты",
   "price.from": "Цена от",
   "price.to": "Цена до",
