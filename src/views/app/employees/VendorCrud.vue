@@ -44,6 +44,16 @@
                       <b-form-input v-model="form.cola_food" type="number"/>
                     </b-form-group>
                   </b-colxx>
+                  <b-colxx xxs="12" md="6" class="has-float-label mb-2">
+                    <b-form-group :label="$t('apelsin_account')">
+                      <b-form-input v-model="form.apelsin_account" type="text"/>
+                    </b-form-group>
+                  </b-colxx>
+<!--                  <b-colxx xxs="12" md="6" class="has-float-label mb-2">-->
+<!--                    <b-form-group :label="$t('apelsin_token')">-->
+<!--                      <b-form-input v-model="form.apelsin_token" type="text"/>-->
+<!--                    </b-form-group>-->
+<!--                  </b-colxx>-->
                   <b-colxx xxs="12" md="12" class="mb-2">
                     <div class="d-flex justify-content-between">
                       <div class="d-flex mt-2">
@@ -207,6 +217,7 @@ export default {
         active: true,
         verified: true,
         from_field: '',
+        apelsin_account: '',
         to: '',
         cola_sponsor: false,
         cola_food: 0

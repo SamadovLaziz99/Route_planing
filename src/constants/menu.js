@@ -167,44 +167,56 @@ const data = [
   //   // roles: [UserRole.Admin, UserRole.Editor],
   //   subs: []
   // },
-  // {
-  //   id: "settings",
-  //   icon: "simple-icon-settings",
-  //   label: "menu.settings",
-  //   to: `${adminRoot}/settings`,
-  //   // roles: [UserRole.Admin, UserRole.Editor],
-  //   subs: [
-  //     {
-  //       icon: "iconsminds-key",
-  //       label: "menu.roles",
-  //       to: `${adminRoot}/settings/roles`,
-  //       // roles: [UserRole.Admin],
-  //     },
-  //     {
-  //       icon: "iconsminds-gear",
-  //       label: "menu.main_settings",
-  //       to: `${adminRoot}/settings/main_settings`,
-  //       // roles: [UserRole.Admin],
-  //     },
-  //     {
-  //       icon: "iconsminds-digital-drawing",
-  //       label: "menu.banner",
-  //       to: `${adminRoot}/settings/banner`,
-  //       // roles: [UserRole.Admin],
-  //     },
-  //     {
-  //       icon: "iconsminds-video",
-  //       label: "menu.video_tutorial",
-  //       to: `${adminRoot}/settings/video_tutorial`,
-  //       // roles: [UserRole.Admin],
-  //     },
-  //     {
-  //       icon: "iconsminds-digital-drawing",
-  //       label: "menu.pages",
-  //       to: `${adminRoot}/settings/pages`,
-  //       // roles: [UserRole.Admin],
-  //     }
-  //   ]
-  // },
+  {
+    id: "settings",
+    icon: "simple-icon-settings",
+    label: "menu.settings",
+    to: `${adminRoot}/settings`,
+    roles: [roles.super_admin, roles.operator, roles.courier_operator],
+    subs: [
+      // {
+      //   icon: "iconsminds-key",
+      //   label: "menu.roles",
+      //   to: `${adminRoot}/settings/roles`,
+      //   // roles: [UserRole.Admin],
+      // },
+      // {
+      //   icon: "iconsminds-gear",
+      //   label: "menu.main_settings",
+      //   to: `${adminRoot}/settings/main_settings`,
+      //   // roles: [UserRole.Admin],
+      // },
+      // {
+      //   icon: "iconsminds-digital-drawing",
+      //   label: "menu.banner",
+      //   to: `${adminRoot}/settings/banner`,
+      //   // roles: [UserRole.Admin],
+      // },
+      // {
+      //   icon: "iconsminds-video",
+      //   label: "menu.video_tutorial",
+      //   to: `${adminRoot}/settings/video_tutorial`,
+      //   roles: [roles.super_admin, roles.operator, roles.courier_operator],
+      // },
+      {
+        icon: "iconsminds-cupcake",
+        label: "menu.inventory",
+        to: `${adminRoot}/settings/inventory`,
+        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+      },
+      {
+        icon: "iconsminds-cupcake",
+        label: "menu.vendor_inventory",
+        to: `${adminRoot}/settings/vendor_inventory`,
+        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+      },
+      // {
+      //   icon: "iconsminds-digital-drawing",
+      //   label: "menu.pages",
+      //   to: `${adminRoot}/settings/pages`,
+      //   // roles: [UserRole.Admin],
+      // }
+    ]
+  },
 ]
 export default data;

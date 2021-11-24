@@ -126,6 +126,8 @@
   "working_hours": "Рабочие часы",
   "foods": "Еда",
   "units": "Единицы",
+  "inventory.update": "Редактирование инвентаря",
+  "inventory.create": "Создание инвентаря",
   "collection": {
     "main": "Основная инф.",
     "food": "Блюда",
@@ -168,6 +170,7 @@
   "food.vendor.location": "Расположение продавца еды",
   "wallet": "Кошелек",
   "reload": "Перезагрузить",
+  "vendor_inventory": "Vendor inventory",
   "back": "Назад",
   "sign.out": "Выход",
   "statuses": {
@@ -238,6 +241,7 @@
     "order": "Заказ"
   },
   "menu": {
+    "inventory": "Инвентарь",
     "system_users": "Сотрудники",
     "home": "Главная",
     "list": "Список",

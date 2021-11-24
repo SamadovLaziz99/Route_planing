@@ -253,6 +253,7 @@ const routes = [
         path: "settings",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/settings/list`,
+        meta: { roles: [roles.super_admin, roles.operator, roles.marketolog, roles.courier_operator] },
         children: [
           {
             path: "roles",
@@ -273,6 +274,21 @@ const routes = [
             path: "video_tutorial",
             name: 'videos',
             component: () => import("./views/app/settings/Videos"),
+            meta: { roles: [roles.super_admin, roles.operator, roles.marketolog, roles.courier_operator] },
+            children: []
+          },
+          {
+            path: "inventory",
+            name: 'inventory',
+            component: () => import("./views/app/inventory/Inventory"),
+            meta: { roles: [roles.super_admin, roles.operator, roles.marketolog, roles.courier_operator] },
+            children: []
+          },
+          {
+            path: "vendor_inventory",
+            name: 'vendor_inventory',
+            component: () => import("./views/app/inventory/VendorInventors"),
+            meta: { roles: [roles.super_admin, roles.operator, roles.marketolog, roles.courier_operator] },
             children: []
           },
           {
