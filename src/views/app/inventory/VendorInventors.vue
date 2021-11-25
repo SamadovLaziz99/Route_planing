@@ -5,9 +5,25 @@
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'inventory.update' : 'inventory.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
-              <b-form-group :label="$t('name')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}</b-form-invalid-feedback>
+              <b-form-group :label="$t('menu.inventory')" class="has-float-label mb-4">
+                <v-select :options="inventorys" v-model.trim="$v.form.type.$model"  :state="!$v.form.type.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('inventory') }}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
+                <v-select :options="vendors" v-model.trim="$v.form.vendor.$model"  :state="!$v.form.vendor.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor') }}</b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('count')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model.trim="$v.form.count.$model"  :state="!$v.form.count.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.count.required">
+                  {{ $t('please.enter') + $t('count') }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+              <b-form-group :label="$t('used')" class="has-float-label mb-4">
+                <b-form-input type="number" v-model.trim="$v.form.used.$model"  :state="!$v.form.used.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.used.required">
+                  {{ $t('please.enter') + $t('used') }}
+                </b-form-invalid-feedback>
               </b-form-group>
             </b-form>
           </div>
@@ -24,7 +40,7 @@
         </crud-modal>
         <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
         <list-page-heading
-          :title="$t('menu.inventory')"
+          :title="$t('menu.vendor_inventory')"
           :changeOrderBy="changeOrderBy"
           :sort="sort"
           @search="searchName"
@@ -42,7 +58,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.inventory`)" class="mb-4">
+        <b-card :title="$t(`menu.vendor_inventory`)" class="mb-4">
           <b-table
             hover
             :items="data"
@@ -55,6 +71,9 @@
                 <b-spinner class="align-middle"></b-spinner>
                 <strong>{{ $t('loading') }}...</strong>
               </div>
+            </template>
+            <template #cell(vendor)="{ item }">
+              {{ vendors.filter(e => e.value === item.vendor)[0].label }}
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
@@ -80,7 +99,7 @@ import {required} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
 import { actions, getters } from "../../../utils/store_schema";
 import moment from 'moment'
-const _page = 'inventory'
+const _page = 'vendorinv'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
@@ -90,19 +109,20 @@ export default {
   },
   validations: {
     form: {
-      name: {
-        required
-      }
+      vendor: { required },
+      type: { required },
+      used: { required },
+      count: { required },
     }
   },
   mixins: [validationMixin],
-  computed: {
-    ...mapGetters(getters(_page)),
-  },
   data() {
     return {
       form: {
-        name: ''
+        vendor: null,
+        count: null,
+        used: null,
+        type: null
       },
       sort: {
         column: "title",
@@ -116,20 +136,56 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
-          key: 'name',
+          key: 'type.name',
           label: this.$t('name'),
-          tdClass: 'w-100'
+          tdClass: 'w-30'
+        },
+        {
+          key: 'vendor',
+          label: this.$t('vendor'),
+          // tdClass: 'w-100'
+        },
+        {
+          key: 'count',
+          label: this.$t('count'),
+          // tdClass: 'w-100'
+        },
+        {
+          key: 'used',
+          label: this.$t('used'),
+          // tdClass: 'w-100'
         },
         {
           key: 'action',
           label: this.$t('action'),
-          tdClass: 'w-30 right'
+          // tdClass: 'w-30'
         }
       ],
       page: 1,
       from: 0,
       to: 0
     };
+  },
+  computed: {
+    ...mapGetters(getters(_page)),
+    ...mapGetters(['dataInventory', 'dataVendors']),
+    inventorys () {
+      return this.dataInventory.map(e => {
+        return {
+          label: e.name,
+          value: e.id
+        }
+      })
+    },
+    vendors () {
+      return this.dataVendors.map(e => {
+        const { first_name, last_name } = e.user
+        return {
+          label: first_name + ' ' + last_name,
+          value: e.id
+        }
+      })
+    }
   },
   methods: {
     moment,
@@ -141,12 +197,18 @@ export default {
       this.$v.$reset()
       this.form = {
         id: null,
-        name: ''
+        vendor: null,
+        count: null,
+        used: null,
+        type: null
       }
     },
     edit (item) {
+      console.log(item)
       const _data = { ...item.item }
       this.form = _data
+      this.form.vendor = this.vendors.filter(e => e.value === _data.vendor)[0]
+      this.form.type = this.inventorys.filter(e => e.value === _data.type.id)[0]
       this.$bvModal.show('crudModal')
     },
     submit() {
@@ -155,6 +217,8 @@ export default {
       if (!this.$v.$invalid) {
         const _form = { ...this.form }
         delete _form.id
+        _form.type_id = this.form.type.value
+        _form.vendor = this.form.vendor.value
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: _form
@@ -209,6 +273,10 @@ export default {
       _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
+    this.$store.dispatch('getInventory')
+    this.$store.dispatch('getVendors', {
+      no_page: true
+    })
     this.getData()
   }
 };

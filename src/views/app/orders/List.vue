@@ -213,6 +213,8 @@ export default {
       ],
       filters: {
         type: 'pending',
+        transaction_status: 0,
+        delivery_status: 'pending',
         search: null,
         vendor: null,
         food: null,
@@ -300,11 +302,15 @@ export default {
     changeActiveTab(e) {
       this.activeTab = e
     },
-    changeRoutetypeWithKey(type) {
+    changeRoutetypeWithKey(type, transaction, delivery) {
       let _query = { ...this.$route.query }
       _query.type = type
+      _query.transaction_status = transaction
+      _query.delivery_status = delivery
       this.page = 1
       this.filters.type = type
+      this.filters.transaction_status = transaction
+      this.filters.delivery_status = delivery
       this.$router.push({
         name: this.name,
         query:_query
@@ -315,13 +321,17 @@ export default {
       switch (key) {
         // case 0: this.changeRoutetypeWithKey('all')
         //   break;
-        case 0: this.changeRoutetypeWithKey('pending')
+        case 0: this.changeRoutetypeWithKey('pending', 0)
           break;
-        case 1: this.changeRoutetypeWithKey('accepted')
+        case 1: this.changeRoutetypeWithKey('pending', 5)
           break;
-        case 2: this.changeRoutetypeWithKey('in_process')
+        case 2: this.changeRoutetypeWithKey('accepted')
           break;
-        case 3: this.changeRoutetypeWithKey('shipping')
+        case 3: this.changeRoutetypeWithKey('in_process')
+          break;
+        case 4: this.changeRoutetypeWithKey('in_process', null, 'pending')
+          break;
+        case 5: this.changeRoutetypeWithKey('shipping')
           break;
         // case 5: this.changeRoutetypeWithKey('finished')
         //   break;
@@ -348,15 +358,30 @@ export default {
           break;
       }
     },
-    findTabsWithType (type) {
+    findTabsWithType (type, transaction, delivery) {
+      console.log('Statuses---', type, transaction, delivery)
+      if (transaction) {
+        switch (transaction) {
+          case '0':
+            this.changeActiveTab(0)
+            break;
+          case '5':
+            this.changeActiveTab(1)
+            break;
+          default: break;
+        }
+        return
+      }
+      if (delivery) {
+        this.changeActiveTab(4)
+        return
+      }
       switch (type) {
-        case 'pending': this.changeActiveTab(0)
+        case 'accepted': this.changeActiveTab(2)
           break;
-        case 'accepted': this.changeActiveTab(1)
+        case 'in_process': this.changeActiveTab(3)
           break;
-        case 'in_process': this.changeActiveTab(2)
-          break;
-        case 'shipping': this.changeActiveTab(3)
+        case 'shipping': this.changeActiveTab(5)
           break;
         // case 'finished': this.changeActiveTab(4)
         //   break;
@@ -376,6 +401,8 @@ export default {
       this.$store.dispatch(get, {
         page: this.page,
         status: this.$route.query.type,
+        delivery_status: this.$route.query.delivery_status,
+        transaction_status: this.$route.query.transaction_status,
         food_id: this.filters.food?.value,
         vendor_id: this.filters.vendor?.value,
         courier_id: this.filters.courier?.value,
@@ -386,8 +413,8 @@ export default {
         order_price_to: this.filters.order_price_to ? parseInt(this.filters.order_price_to) : undefined,
         order_price_from: this.filters.order_price_from ? parseInt(this.filters.order_price_from) : undefined
       }).then(res => {
-        console.log(res)
-        console.log(this.pagination)
+        // console.log(res)
+        // console.log(this.pagination)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })
@@ -436,20 +463,22 @@ export default {
       this.page = parseInt(_page)
     }
     if (_query) {
-      const { food_id, courier_id, vendor_id, q, type, payment_type, date_from, date_to, price_from, price_to } = _query
+      const { food_id, courier_id, vendor_id, delivery_status, transaction_status, q, type, payment_type, date_from, date_to, price_from, price_to } = _query
       this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
       this.filters.vendor = this.vendors.filter(e => e.value === parseInt(vendor_id))[0]
       this.filters.courier = this.couriers.filter(e => e.value === parseInt(courier_id))[0]
       this.filters.payment_type = this.payment_types.filter(e => e.value === parseInt(payment_type))[0]
       this.filters.search = q
       this.filters.type = type
+      this.filters.delivery_status = delivery_status
+      this.filters.transaction_status = transaction_status
       this.date = [date_from, date_to]
       this.filters.order_date_from = date_from
       this.filters.order_date_to = date_to
       this.filters.order_price_from = price_from
       this.filters.order_price_to = price_to
       setTimeout(() => {
-        this.findTabsWithType(type)
+        this.findTabsWithType(type, transaction_status, delivery_status)
         this.getData()
       }, 100)
     }

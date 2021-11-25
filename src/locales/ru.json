@@ -170,7 +170,6 @@
   "food.vendor.location": "Расположение продавца еды",
   "wallet": "Кошелек",
   "reload": "Перезагрузить",
-  "vendor_inventory": "Vendor inventory",
   "back": "Назад",
   "sign.out": "Выход",
   "statuses": {
@@ -232,16 +231,19 @@
   },
   "order": {
     "all": "Все заказы",
-    "pending": "В ожидании",
-    "accepted": "Принято",
-    "in_process": "В процессе",
-    "shipping": "Доставка",
+    "pending": "В ожидании подтверждения",
+    "hold": "Заказ не принят поваром",
+    "accepted": "Заказ принят поваром",
+    "in_process": "Заказ в пути",
+    "finish": "Заказ готов",
+    "shipping": "Доставка - Заказ в пути",
     "finished": "Готово",
     "cancelled": "Отменено",
     "order": "Заказ"
   },
   "menu": {
     "inventory": "Инвентарь",
+    "vendor_inventory": "Инвентарь продавца",
     "system_users": "Сотрудники",
     "home": "Главная",
     "list": "Список",

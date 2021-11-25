@@ -2,6 +2,7 @@ import axios_init from "@/utils/axios_init";
 import { camelize } from '@/utils'
 export default function (param) {
   const toUpper = param.toUpperCase()
+  const _param = param.split('/').length > 1 ? param.split('/').slice(-1)[0] : param
   const _mutations = {
     error: `ERROR_${toUpper}`,
     load: `LOAD_${toUpper}`,
@@ -26,13 +27,13 @@ export default function (param) {
       }
     },
     getters: {
-      [camelize(`load ${param}`)]: function (state) { return state.loading },
-      [camelize(`one load ${param}`)]: function (state) { return state.oneLoading },
-      [camelize(`pending ${param}`)]: function (state) { return state.pending },
-      [camelize(`deleting ${param}`)]: function (state) { return state.deleting },
-      [camelize(`data ${param}`)]: function (state) { return state.data },
-      [camelize(`error ${param}`)]: function (state) { return state.error },
-      [camelize(`pagination ${param}`)]: function (state) { return state.pagination }
+      [camelize(`load ${_param}`)]: function (state) { return state.loading },
+      [camelize(`one load ${_param}`)]: function (state) { return state.oneLoading },
+      [camelize(`pending ${_param}`)]: function (state) { return state.pending },
+      [camelize(`deleting ${_param}`)]: function (state) { return state.deleting },
+      [camelize(`data ${_param}`)]: function (state) { return state.data },
+      [camelize(`error ${_param}`)]: function (state) { return state.error },
+      [camelize(`pagination ${_param}`)]: function (state) { return state.pagination }
     },
     mutations: {
       [_mutations.error]: function (state, payload) { state.error = payload },
@@ -46,7 +47,7 @@ export default function (param) {
     },
     actions: {
       // get    getSomething
-      [camelize(`get ${param}`)]: function ({ commit }, params) {
+      [camelize(`get ${_param}`)]: function ({ commit }, params) {
         commit(_mutations.load, true)
         return new Promise((resolve, reject) => {
           axios_init.get(`${param}/`, params).then(res => {
@@ -69,7 +70,7 @@ export default function (param) {
       },
 
       // get id   getByIdSomething
-      [camelize(`get by id ${param}`)]: function ({ commit }, payload) {
+      [camelize(`get by id ${_param}`)]: function ({ commit }, payload) {
         commit(_mutations.oneLoad, true)
         return new Promise((resolve, reject) => {
           axios_init.get(`${param}/${payload}/`, ).then(res => {
@@ -85,12 +86,12 @@ export default function (param) {
       },
 
       //post   postSomething
-      [camelize(`post ${param}`)]: function ({ commit, dispatch }, payload) {
+      [camelize(`post ${_param}`)]: function ({ commit, dispatch }, payload) {
         commit(_mutations.pending, true)
         return new Promise((resolve, reject) => {
           axios_init.post(`${param}/`, payload.data).then(res => {
             dispatch('success_alert', {
-              title: `${param.slice(0, 1).toUpperCase() + param.slice(1)} created successfully`
+              title: `${_param.slice(0, 1).toUpperCase() + _param.slice(1)} created successfully`
             })
             resolve(res)
           }).catch(error => {
@@ -103,7 +104,7 @@ export default function (param) {
       },
 
       //update  putSomething
-      [camelize(`put ${param}`)]: function ({ commit, dispatch }, payload) {
+      [camelize(`put ${_param}`)]: function ({ commit, dispatch }, payload) {
         commit(_mutations.pending, true)
         return new Promise((resolve, reject) => {
           axios_init.put(`${param}/${ payload.id }/`, payload.data).then(res => {
@@ -121,12 +122,12 @@ export default function (param) {
       },
 
       //delete   deleteSomething
-      [camelize(`delete ${param}`)]: function ({ commit, dispatch }, payload) {
+      [camelize(`delete ${_param}`)]: function ({ commit, dispatch }, payload) {
         commit(_mutations.deleting, true)
         return new Promise((resolve, reject) => {
           axios_init.remove(`${param}/${ payload }`).then(res => {
             dispatch('success_alert', {
-              title: `${param.slice(0, 1).toUpperCase() + param.slice(1)} deleted successfully`
+              title: `${_param.slice(0, 1).toUpperCase() + _param.slice(1)} deleted successfully`
             })
             resolve(res)
           }).catch(error => {

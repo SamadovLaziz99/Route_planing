@@ -26,7 +26,7 @@ const data = [
       {
         icon: "iconsminds-shop-4",
         label: "menu.orders_list",
-        to: `${adminRoot}/orders/list?type=pending`,
+        to: `${adminRoot}/orders/list?type=pending&transaction_status=0`,
         roles: [roles.super_admin, roles.operator, roles.courier_operator],
       },
       {
