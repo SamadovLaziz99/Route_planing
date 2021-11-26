@@ -121,10 +121,10 @@ export default {
       }
       if (type === 'banner') {
         this.settings.stencil.size = {
-          width: 1920,
-          height: 460
+          width: 1232,
+          height: 296
         }
-        this.settings.stencil.props.aspectRatio = 81/23
+        this.settings.stencil.props.aspectRatio = 154/37
         // this.settings.stencil.props = {
         //   aspectRatio: 81/23
         // }

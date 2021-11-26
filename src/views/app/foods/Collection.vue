@@ -434,14 +434,24 @@ export default {
         }
       })
     },
-    removeItem (id) {
-      this.$store.dispatch(remove, id).then(res => {
-        this.$store.commit('DELETE_MODAL', {
-          isShow: false,
-          data: {}
+    removeItem (id, data) {
+      if (data.mediable_type) {
+        this.$store.dispatch('deleteMedia', id).then(res => {
+          this.$store.commit('DELETE_MODAL', {
+            isShow: false,
+            data: {}
+          })
+          this.getMediaById()
         })
-        this.getData()
-      })
+      } else {
+        this.$store.dispatch(remove, id).then(res => {
+          this.$store.commit('DELETE_MODAL', {
+            isShow: false,
+            data: {}
+          })
+          this.getData()
+        })
+      }
     },
     searchFood (e) {
       this.getFood()

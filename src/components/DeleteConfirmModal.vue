@@ -27,7 +27,7 @@ export default {
   name: "DeleteConfirmModal",
   methods: {
     remove () {
-      this.$emit('removing', this.$store.getters.deleteModal.data.id)
+      this.$emit('removing', this.$store.getters.deleteModal.data.id, this.$store.getters.deleteModal.data)
     },
     hide (e) {
       this.$store.commit('DELETE_MODAL', {
