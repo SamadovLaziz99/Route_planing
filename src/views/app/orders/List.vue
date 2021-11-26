@@ -62,7 +62,7 @@
             </template>
           </b-tab>
         </b-tabs>
-        <b-card :title="$t(`order.${$route.query.type}`)" class="mb-4">
+        <b-card :title="$t(orderStatus[activeTab])" class="mb-4">
           <b-table
             hover
             :items="data"
@@ -224,7 +224,15 @@ export default {
         order_date_to: null,
         order_price_from: null,
         order_price_to: null
-      }
+      },
+      orderStatus: [
+        'order.pending',
+        'order.hold',
+        'order.accepted',
+        'order.in_process',
+        'order.finish',
+        'order.shipping',
+      ]
     };
   },
   methods: {
