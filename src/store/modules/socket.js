@@ -36,11 +36,18 @@ export default {
     async getOrderStats ({ commit }, payload) {
       const res = await axios_init.get(`/orders/stats/`)
       commit('SET_ORDER_STATS', [
+      // accepted: 0
+      // finish: 1
+      // finished: 2017
+      // hold: 0
+      // in_process: 1
+      // pending: 0
+      // shipping: 0
         { name: 'order.pending', count: res.pending },
-        { name: 'order.hold', count: 0 },
+        { name: 'order.hold', count: res.hold },
         { name: 'order.accepted', count: res.accepted },
         { name: 'order.in_process', count: res.in_process },
-        { name: 'order.finish', count: 0 },
+        { name: 'order.finish', count: res.finish },
         { name: 'order.shipping', count: res.shipping },
       ])
       commit('SET_ORDER_HISTORY_STATS', [
@@ -50,13 +57,13 @@ export default {
       console.log(res)
       return res
     },
-    setOrderStats ({ commit }, payload) {
+    setOrderStats ({ state, commit }, payload) {
       commit('SET_ORDER_STATS', [
         { name: 'order.pending', count: payload.pending },
-        { name: 'order.hold', count: 0 },
+        { name: 'order.hold', count: state.stats[1].count },
         { name: 'order.accepted', count: payload.accepted },
         { name: 'order.in_process', count: payload.in_process },
-        { name: 'order.finish', count: 0 },
+        { name: 'order.finish', count: state.stats[4].count },
         { name: 'order.shipping', count: payload.shipping },
       ])
     },
