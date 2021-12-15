@@ -29,7 +29,7 @@
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input v-if="$route.name === 'food_list'" class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />
+                  <b-input v-if="$route.name === 'vendors_list'" class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="3">

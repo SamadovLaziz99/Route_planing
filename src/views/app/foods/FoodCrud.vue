@@ -276,7 +276,7 @@ export default {
     if (this.id) {
       this.getDataById()
     }
-    this.getCategories()
+    this.getCategories({ no_page: true })
     this.getUnits()
     this.getVendors()
   },
