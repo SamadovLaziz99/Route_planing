@@ -22,6 +22,17 @@ export default {
         console.log(e)
       }
     },
+    async updateMedia ({ commit, dispatch }, payload) {
+      try {
+        let res = await axios_init.put(`/media/${payload.id}/`, payload.data)
+        dispatch('success_alert', {
+          title: 'Media Updated Successfully'
+        })
+        return res
+      } catch (e) {
+        console.log(e)
+      }
+    },
     async deleteMedia ({ commit, dispatch }, payload) {
       try {
         let res = await axios_init.remove(`/media/${payload}/`)

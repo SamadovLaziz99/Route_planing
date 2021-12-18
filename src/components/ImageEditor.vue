@@ -59,6 +59,7 @@ export default {
     return {
       image: image,
       img: null,
+      media: null,
       loadedImage: null,
       media_id: null,
       media_type: null,
@@ -85,12 +86,12 @@ export default {
   mounted() {
   },
   methods: {
-    open (media_type, type, id, url) {
-      console.log(url)
-      this.loadedImage = url
+    open (media_type, type, id, media) {
+      // this.loadedImage = url
       this.media_type = media_type
       this.type = type
       this.media_id = id
+      this.media = media
       if (type === 'avatar') {
         this.settings.stencil.size = {
           width: 1080,
@@ -155,6 +156,7 @@ export default {
     //   console.log(baseee)
     // },
     clear () {
+      this.media = null
       this.img = null
       this.media_id = null
       this.media_type = null
@@ -165,17 +167,34 @@ export default {
       this.clear()
     },
     uploaderType (data) {
-      this.$store.dispatch('uploadMedia', {
-        type: this.media_type,
-        data: data
-      }).then(res => {
-        this.hide()
-        this.$store.dispatch('uploadingAction', {
-          show: false,
-          percent: 0
+      if (this.media) {
+        this.$store.dispatch('updateMedia', {
+          id: this.media.id,
+          data: {
+            model: this.media_type,
+            ...data
+          }
+        }).then(res => {
+          this.hide()
+          this.$store.dispatch('uploadingAction', {
+            show: false,
+            percent: 0
+          })
+          this.$emit('loaded', res)
         })
-        this.$emit('loaded', res)
-      })
+      } else {
+        this.$store.dispatch('uploadMedia', {
+          type: this.media_type,
+          data: data
+        }).then(res => {
+          this.hide()
+          this.$store.dispatch('uploadingAction', {
+            show: false,
+            percent: 0
+          })
+          this.$emit('loaded', res)
+        })
+      }
     },
     uploadImage() {
       const { canvas } = this.$refs.cropper.getResult();
