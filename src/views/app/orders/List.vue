@@ -335,7 +335,7 @@ export default {
           break;
         case 2: this.changeRoutetypeWithKey('accepted')
           break;
-        case 3: this.changeRoutetypeWithKey('in_process')
+        case 3: this.changeRoutetypeWithKey('in_process', null, 'none')
           break;
         case 4: this.changeRoutetypeWithKey('in_process', null, 'pending')
           break;
