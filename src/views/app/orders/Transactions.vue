@@ -31,8 +31,8 @@
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="editItem(row.item.id)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div class="glyph-icon simple-icon-eye mr-2" @click="showItem(row.item)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+<!--                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>-->
               </div>
             </template>
             <template #cell(create_date)="row">
@@ -51,6 +51,33 @@
             </template>
           </b-table>
           <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+          <b-modal v-model="info.show" title="Информация о транзакциях">
+            <dvi v-if="info.data">
+              <p>ID: #{{ info.data.id }}</p>
+              <p>Количество продукта: {{ info.data.detail.productAmount }}</p>
+              <p>Сумма доставки: {{ info.data.detail.deliveryAmount }}</p>
+              <p>Статус транзакция: {{ info.data.state }}</p>
+<!--              <h3><strong>Receipts: </strong></h3>-->
+              <div style="display: flex; justify-content: space-between">
+                <div>
+                  <h3><strong>Повар: </strong></h3>
+                  <hr>
+                  <p>Количество: {{ info.data.receipts[0].amount }}</p>
+                  <p>Комиссия: {{ info.data.receipts[0].commission }}</p>
+                  <p>Статус: {{ info.data.receipts[0].state }}</p>
+                  <p>Дата: {{ moment(info.data.receipts[0].createDate).format('YYYY-MM-DD HH:mm') }}</p>
+                </div>
+                <div>
+                  <h3><strong>Курьер: </strong></h3>
+                  <hr>
+                  <p>Количество: {{ info.data.receipts[1].amount }}</p>
+                  <p>Комиссия: {{ info.data.receipts[1].commission }}</p>
+                  <p>Статус: {{ info.data.receipts[1].state }}</p>
+                  <p>Дата: {{ moment(info.data.receipts[1].createDate).format('YYYY-MM-DD HH:mm') }}</p>
+                </div>
+              </div>
+            </dvi>
+          </b-modal>
         </b-card>
       </b-colxx>
     </b-row>
@@ -76,8 +103,28 @@ export default {
       activeTab: 0,
       fields: [
         {
+          key: 'id',
+          label: this.$t('id'),
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'amount',
+          label: this.$t('all_price'),
+          // tdClass: 'firstColumn'
+        },
+        {
           key: 'external_id',
           label: this.$t('external_id'),
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'receipts[0].state',
+          label: this.$t('stats.tr.vendor'),
+          // tdClass: 'firstColumn'
+        },
+        {
+          key: 'receipts[1].state',
+          label: this.$t('stats.tr.courier'),
           // tdClass: 'firstColumn'
         },
         {
@@ -88,14 +135,27 @@ export default {
         {
           key: 'pay_date',
           label: this.$t('pay_date'),
-          tdClass: 'w-25'
+          // tdClass: 'w-25'
         },
         {
           key: 'create_date',
           label: this.$t('create_date'),
-          tdClass: 'w-25'
+          class: 'text-center',
+          tdClass: 'text-muted',
+          // tdClass: 'w-25'
+        },
+        {
+          key: 'action',
+          label: this.$t('action'),
+          class: 'text-center',
+          tdClass: 'text-muted',
+          // tdClass: 'w-25'
         },
       ],
+      info: {
+        show: false,
+        data: null
+      },
       page: 1,
       search: "",
       from: 0,
@@ -119,6 +179,11 @@ export default {
   },
   methods: {
     moment,
+    showItem (e) {
+      this.info.show = true
+      this.info.data = e
+      // console.log(e)
+    },
     changePagination(e) {
       this.page = e
       this.getData()

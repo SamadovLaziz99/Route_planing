@@ -205,7 +205,9 @@ export default {
       this.filters = val
       this.page = 1
       this.$router.push({ name: this.$route.name, query: this.filters })
-      this.getData()
+      this.getData({
+        name: val.q
+      })
     },
     submit() {
       this.$v.$touch();
@@ -260,9 +262,10 @@ export default {
       this.page = n
       this.getData()
     },
-    getData() {
+    getData(params) {
       this.$store.dispatch(get, {
         page: this.page,
+        ...params
         // ...this.filters
       }).then(res => {
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15

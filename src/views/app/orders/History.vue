@@ -204,6 +204,12 @@ export default {
           class: 'text-center'
         },
         {
+          key: 'delivery_price',
+          label: this.$t('delivery_price'),
+          tdClass: 'text-muted',
+          class: 'text-center'
+        },
+        {
           key: 'time',
           label: this.$t('order_time'),
           tdClass: 'text-muted'

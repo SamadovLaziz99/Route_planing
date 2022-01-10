@@ -73,12 +73,12 @@
                   <b-colxx v-for="(product, productIndex) in foods" xxs="12" lg="6" xl="4" class="mb-4" :key="`product_${productIndex}`">
                     <b-card no-body>
                       <div class="position-relative">
-                        <router-link to="#" class="w-40 w-sm-100">
+                        <router-link :to="{ name: 'food_detail', params: { id: product.id } }" class="w-40 w-sm-100">
                           <b-card-img top :alt="product.name" :src="$imgProxy(product.image, '300x200')" />
                         </router-link>
                       </div>
                       <b-card-body>
-                        <router-link to="#" class="w-40 w-sm-100">
+                        <router-link :to="{ name: 'food_detail', params: { id: product.id } }" class="w-40 w-sm-100">
                           <b-card-sub-title>{{product.name}}</b-card-sub-title>
                         </router-link>
                         <b-card-text class="text-muted text-small mb-0 font-weight-light">

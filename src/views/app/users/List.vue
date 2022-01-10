@@ -190,6 +190,12 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
+          key: 'balance',
+          label: this.$t('coozin.balance'),
+          class: 'text-center'
+          // tdClass: 'firstColumn'
+        },
+        {
           key: 'count',
           label: this.$t('order.count'),
           class: 'text-center'
