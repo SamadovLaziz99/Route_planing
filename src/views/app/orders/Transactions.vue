@@ -41,6 +41,15 @@
             <template #cell(pay_date)="row">
               {{ moment(row.item.pay_date).format('YYYY-MM-DD HH:mm') }}
             </template>
+            <template #cell(receipts_first_state)="{ item }">
+              <div v-if="item.receipts">{{ getStateType(item.receipts[0].state) }}</div>
+            </template>
+            <template #cell(receipts_second_state)="{ item }">
+              <div v-if="item.receipts">{{ getStateType(item.receipts[1].state) }}</div>
+            </template>
+            <template #cell(state)="{ item }">
+              <div v-if="item.state">{{ getStateType(item.state) }}</div>
+            </template>
             <template #cell(selection)="{ rowSelected }">
               <template v-if="rowSelected">
                 <div class="glyph-icon simple-icon-check"></div>
@@ -56,15 +65,15 @@
               <p>ID: #{{ info.data.id }}</p>
               <p>Количество продукта: {{ info.data.detail.productAmount }}</p>
               <p>Сумма доставки: {{ info.data.detail.deliveryAmount }}</p>
-              <p>Статус транзакция: {{ info.data.state }}</p>
+              <p>Статус транзакция: {{ getStateType(info.data.state) }}</p>
 <!--              <h3><strong>Receipts: </strong></h3>-->
-              <div style="display: flex; justify-content: space-between">
+              <div v-if="info.data.receipts" style="display: flex; justify-content: space-between">
                 <div>
                   <h3><strong>Повар: </strong></h3>
                   <hr>
                   <p>Количество: {{ info.data.receipts[0].amount }}</p>
                   <p>Комиссия: {{ info.data.receipts[0].commission }}</p>
-                  <p>Статус: {{ info.data.receipts[0].state }}</p>
+                  <p>Статус: {{ getStateType(info.data.receipts[0].state) }}</p>
                   <p>Дата: {{ moment(info.data.receipts[0].createDate).format('YYYY-MM-DD HH:mm') }}</p>
                 </div>
                 <div>
@@ -72,7 +81,7 @@
                   <hr>
                   <p>Количество: {{ info.data.receipts[1].amount }}</p>
                   <p>Комиссия: {{ info.data.receipts[1].commission }}</p>
-                  <p>Статус: {{ info.data.receipts[1].state }}</p>
+                  <p>Статус: {{ getStateType(info.data.receipts[1].state) }}</p>
                   <p>Дата: {{ moment(info.data.receipts[1].createDate).format('YYYY-MM-DD HH:mm') }}</p>
                 </div>
               </div>
@@ -118,12 +127,12 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
-          key: 'receipts[0].state',
+          key: 'receipts_first_state',
           label: this.$t('stats.tr.vendor'),
           // tdClass: 'firstColumn'
         },
         {
-          key: 'receipts[1].state',
+          key: 'receipts_second_state',
           label: this.$t('stats.tr.courier'),
           // tdClass: 'firstColumn'
         },
@@ -183,6 +192,31 @@ export default {
       this.info.show = true
       this.info.data = e
       // console.log(e)
+    },
+    getStateType (key) {
+      let val;
+      switch (key) {
+        case 0: val = this.$t('trans.CREATED')
+          break;
+        case 5: val = this.$t('trans.HOLD')
+          break;
+        case 4: val = this.$t('trans.SUCCESS')
+          break;
+        case 50: val = this.$t('trans.REVERSED')
+          break;
+        case 51: val = this.$t('trans.CANCELLED')
+          break;
+        case 52: val = this.$t('trans.FAILED')
+          break;
+        case 28: val = this.$t('trans.WAIT_HOLD_CONFIRMATION')
+          break;
+        case 29: val = this.$t('trans.CONFIRM_AND_WAIT_SEND_ABS')
+          break;
+        case 30: val = this.$t('trans.WAITING')
+          break;
+        default: break;
+      }
+      return val
     },
     changePagination(e) {
       this.page = e

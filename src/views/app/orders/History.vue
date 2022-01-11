@@ -417,6 +417,18 @@ export default {
         order_price_to: this.filters.order_price_to ? parseInt(this.filters.order_price_to) : undefined,
         order_price_from: this.filters.order_price_from ? parseInt(this.filters.order_price_from) : undefined
       }).then(res => {
+        // if (this.$route.query.type === 'finished') {
+        //   this.$store.commit('SET_ORDER_HISTORY_STATS', {
+        //     finished: this.pagination.total,
+        //     cancelled: this.$store.getters.orderStatsHistory[1]
+        //   })
+        // }
+        // if (this.$route.query.type === 'cancelled') {
+        //   this.$store.commit('SET_ORDER_HISTORY_STATS', {
+        //     finished: this.$store.getters.orderStatsHistory[0],
+        //     cancelled: this.pagination.total
+        //   })
+        // }
         console.log(res)
         console.log(this.pagination)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15

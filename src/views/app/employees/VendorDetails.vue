@@ -4,12 +4,6 @@
       <div v-if="oneLoadVendors && !vendor" class="loading"></div>
       <b-colxx v-if="vendor" xxs="12">
         <h1>{{ vendor.user.first_name }} {{ vendor.user.last_name }}</h1>
-<!--        <div class="top-right-button-container">-->
-<!--          <b-dropdown id="ddown5" :text="$t('pages.actions')" size="lg" variant="outline-primary" class="top-right-button top-right-button-single" no-fade="true">-->
-<!--            <b-dropdown-item>{{ $t('dashboards.last-week') }}</b-dropdown-item>-->
-<!--            <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>-->
-<!--          </b-dropdown>-->
-<!--        </div>-->
         <piaf-breadcrumb />
         <b-tabs nav-class="separator-tabs ml-0 mb-5" content-class="tab-content" :no-fade="true">
           <b-tab :title="$t('pages.details')">
@@ -58,14 +52,6 @@
                     <ymap-marker marker-id="123" :coords="[parseFloat(vendor.latitude), parseFloat(vendor.longitude)]" :hint-content="vendor.user.first_name + ' ' + vendor.user.last_name" ></ymap-marker>
                   </yandex-map>
                 </b-card>
-<!--                <b-card no-body class="mb-4">-->
-<!--                  <b-card-body>-->
-<!--                    <b-card-title>{{$t('pages.recent-posts')}}</b-card-title>-->
-<!--                    <div class="remove-last-border remove-last-margin remove-last-padding">-->
-<!--                      <recent-post v-for="(post,postIndex) in recentPosts" :data="post" :key="`recent_post_${postIndex}`" />-->
-<!--                    </div>-->
-<!--                  </b-card-body>-->
-<!--                </b-card>-->
               </b-colxx>
 
               <b-colxx xxs="12" lg="8" class="mb-4 col-right">

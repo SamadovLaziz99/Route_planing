@@ -204,7 +204,17 @@
   "account.settings": "Настройки аккаунта",
   "tag": "Тег",
   "re.password.error": "Ошибка повторного ввода пароля",
-
+  "trans": {
+    "CREATED": "СОЗДАННЫЙ",
+    "HOLD": "ДЕРЖАТЬ",
+    "SUCCESS": "УСПЕХ",
+    "REVERSED": "ОБРАТНЫЙ",
+    "CANCELLED": "ОТМЕНЕНО",
+    "FAILED": "НЕ УДАЛОСЬ",
+    "WAIT_HOLD_CONFIRMATION": "ПОДОЖДИТЕ ПОДТВЕРЖДЕНИЕ",
+    "CONFIRM_AND_WAIT_SEND_ABS": "ПОДТВЕРДИТЬ И ПОДОЖДИТЕ ОТПРАВИТЬ ABS",
+    "WAITING": "ОЖИДАЮЩИЙ"
+  },
   "errors": {
     "unprocessable_entity": "Необработанная сущность",
     "not_found": "Не найдено",
@@ -255,7 +265,7 @@
     "app": "",
     "create": "Создать",
     "update": "Обновить",
-    "dashboards": "дэшборды",
+    "dashboards": "Дэшборды",
     "orders": "Заказы",
     "orders_list": "Список заказов",
     "orders_history": "История заказов",
