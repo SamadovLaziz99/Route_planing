@@ -329,7 +329,7 @@ export default {
       switch (key) {
         // case 0: this.changeRoutetypeWithKey('all')
         //   break;
-        case 0: this.changeRoutetypeWithKey('pending', 0)
+        case 0: this.changeRoutetypeWithKey('pending', null)
           break;
         case 1: this.changeRoutetypeWithKey('pending', 5)
           break;
