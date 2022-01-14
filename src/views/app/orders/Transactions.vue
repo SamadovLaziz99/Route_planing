@@ -117,6 +117,11 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
+          key: 'order',
+          label: this.$t('order.id'),
+          // tdClass: 'firstColumn'
+        },
+        {
           key: 'amount',
           label: this.$t('all_price'),
           // tdClass: 'firstColumn'

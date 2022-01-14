@@ -39,6 +39,7 @@
   "filter": "Фильтр",
   "payment_type": "Тип платежа",
   "id": "ID",
+  "order.id": "ID заказа",
   "customer": "Клиент",
   "order_price": "Сумма заказа",
   "all_price": "Общая сумма",
@@ -205,6 +206,7 @@
   "tag": "Тег",
   "re.password.error": "Ошибка повторного ввода пароля",
   "trans": {
+    "CREATED": "СОЗДАННЫЙ",
     "CREATED": "СОЗДАННЫЙ",
     "HOLD": "ДЕРЖАТЬ",
     "SUCCESS": "УСПЕХ",
