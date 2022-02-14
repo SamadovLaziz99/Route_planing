@@ -118,6 +118,10 @@ export default {
       filters: null,
       fields: [
         {
+          key: 'id',
+          label: this.$t('id')
+        },
+        {
           key: 'image',
           label: this.$t('image')
         },
@@ -197,7 +201,7 @@ export default {
       _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
-    this.getData()
+    this.getData(_query)
   },
   methods: {
     moment,
@@ -206,7 +210,10 @@ export default {
       this.page = 1
       this.$router.push({ name: this.$route.name, query: this.filters })
       this.getData({
-        name: val.q
+        name: val.name,
+        id: val.id,
+        registration_from: val.registration_from,
+        registration_to: val.registration_to
       })
     },
     submit() {

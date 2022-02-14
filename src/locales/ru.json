@@ -134,6 +134,9 @@
   "units": "Единицы",
   "inventory.update": "Редактирование инвентаря",
   "inventory.create": "Создание инвентаря",
+  "start.date": "Дата начала",
+  "end.date": "Дата окончания",
+  "analytics": "Аналитика",
   "collection": {
     "main": "Основная инф.",
     "food": "Блюда",

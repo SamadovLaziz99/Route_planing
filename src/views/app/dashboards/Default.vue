@@ -2,7 +2,31 @@
   <div>
     <b-row>
       <b-colxx xxs="12">
-        <piaf-breadcrumb :heading="$t('menu.default')" />
+        <b-row>
+          <b-colxx xxs="12" md="6">
+            <piaf-breadcrumb :heading="$t('analytics')" />
+          </b-colxx>
+          <b-colxx xxs="12" md="3">
+            <datepicker
+              clear-button
+              clear-button-icon="simple-icon-close"
+              format="yyyy-MM-dd"
+              v-model="filter.startDate"
+              :bootstrap-styling="true"
+              :placeholder="$t('start.date')"
+            ></datepicker>
+          </b-colxx>
+          <b-colxx xxs="12" md="3">
+            <datepicker
+              clear-button
+              format="yyyy-MM-dd"
+              v-model="filter.endDate"
+              clear-button-icon="simple-icon-close"
+              :bootstrap-styling="true"
+              :placeholder="$t('end.date')"
+            ></datepicker>
+          </b-colxx>
+        </b-row>
         <div class="separator mb-5"></div>
       </b-colxx>
     </b-row>
@@ -147,7 +171,7 @@ import SortableStaticticsRow from "../../../containers/dashboards/SortableStatic
 import TopRatedItems from "../../../containers/dashboards/TopRatedItems";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
 import { mapGetters } from "vuex";
-
+import moment from "moment";
 export default {
   components: {
     "advanced-search": AdvancedSearch,
@@ -172,13 +196,26 @@ export default {
   data () {
     return {
       orderStatsWeek: true,
-      chartOff: true
+      chartOff: true,
+      filter: {
+        startDate: null,
+        endDate: null
+      }
     }
   },
   computed: {
     ...mapGetters(['statsCategories', 'statsFoods', 'statsMonth', 'statsTop', 'statsUsers', 'statsVendors', 'statsWeek'])
   },
+  watch: {
+    'filter.startDate': function (val) {
+      console.log(val)
+    },
+    'filter.endDate': function (val) {
+      console.log(val)
+    }
+  },
   methods: {
+    moment,
     changeOrderStatus (e) {
       console.log(e)
       this.chartOff = false

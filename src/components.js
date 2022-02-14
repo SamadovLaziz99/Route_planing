@@ -13,9 +13,11 @@ import ErrorPage from "./views/app/statuses/ErrorPage";
 import Dropzone from "./containers/forms/DropzoneExample";
 import CloseButton from './components/Common/CloseButton'
 import VueTimepicker from 'vue2-timepicker'
+import Datepicker from "vuejs-datepicker";
 // CSS
 import 'vue2-timepicker/dist/VueTimepicker.css'
 Vue.component('v-select', vSelect)
+Vue.component('datepicker', Datepicker)
 Vue.component('timepicker', VueTimepicker)
 Vue.component('dropzone', Dropzone)
 Vue.component('error-page', ErrorPage)

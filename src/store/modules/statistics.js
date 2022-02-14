@@ -28,32 +28,32 @@ export default {
     USERS_STATS (state, payload) { state.users = payload },
   },
   actions: {
-    async statsCategories ({ commit }) {
-      let _res = await axios_init.get('/statistics/categories/')
+    async statsCategories ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/categories/', params)
       commit('CATEGORIES_STATS', _res)
     },
-    async statsFoods ({ commit }) {
-      let _res = await axios_init.get('/statistics/foods/')
+    async statsFoods ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/foods/', params)
       commit('FOODS_STATS', _res)
     },
-    async statsMonth ({ commit }) {
-      let _res = await axios_init.get('/statistics/month/')
+    async statsMonth ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/month/', params)
       commit('ORDER_MONTH_STATS', _res)
     },
-    async statsTop ({ commit }) {
-      let _res = await axios_init.get('/statistics/top/')
+    async statsTop ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/top/', params)
       commit('TOP_STATS', _res)
     },
-    async statsUsers ({ commit }) {
-      let _res = await axios_init.get('/statistics/users/')
+    async statsUsers ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/users/', params)
       commit('USERS_STATS', _res)
     },
-    async statsVendors ({ commit }) {
-      let _res = await axios_init.get('/statistics/vendors/')
+    async statsVendors ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/vendors/', params)
       commit('VENDORS_STATS', _res)
     },
-    async statsWeek ({ commit }) {
-      let _res = await axios_init.get('/statistics/week/')
+    async statsWeek ({ commit }, params) {
+      let _res = await axios_init.get('/statistics/week/', params)
       commit('ORDER_WEEK_STATS', _res)
     },
   }

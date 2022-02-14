@@ -32,11 +32,11 @@ const routes = [
       {
         path: "dashboards",
         component: () => import("./views/app/dashboards"),
-        redirect: (JSON.parse(localStorage.getItem('detail')) && (JSON.parse(localStorage.getItem('detail')).role.role === roles.courier_operator)) ?`${adminRoot}/orders` : `${adminRoot}/dashboards/default`,
+        redirect: (JSON.parse(localStorage.getItem('detail')) && (JSON.parse(localStorage.getItem('detail')).role.role === roles.courier_operator)) ?`${adminRoot}/orders` : `${adminRoot}/dashboards/analytics`,
         meta: { roles: [roles.super_admin, roles.operator, roles.marketolog] },
         children: [
           {
-            path: "default",
+            path: "analytics",
             component: () => import("./views/app/dashboards/Default"),
             meta: { roles: [roles.super_admin, roles.operator, roles.marketolog] },
             // meta: { roles: [UserRole.Admin] },
