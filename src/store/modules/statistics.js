@@ -49,7 +49,7 @@ export default {
       commit('USERS_STATS', _res)
     },
     async statsVendors ({ commit }, params) {
-      let _res = await axios_init.get('/statistics/vendors/', params)
+      let _res = await axios_init.get('/analytics/vendors/top', params)
       commit('VENDORS_STATS', _res)
     },
     async statsWeek ({ commit }, params) {

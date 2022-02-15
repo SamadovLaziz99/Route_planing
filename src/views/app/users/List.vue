@@ -53,7 +53,7 @@
           :title="$t('menu.users')"
           :changeOrderBy="changeOrderBy"
           :sort="sort"
-          @search="searchName"
+          @filters="filtered"
           :from="from"
           :to="to"
           :total="pagination.total"
@@ -173,6 +173,7 @@ export default {
         label: "Product Name"
       },
       search: "",
+      filters: null,
       fields: [
         {
           key: 'id',
@@ -273,10 +274,10 @@ export default {
         })
       }
     },
-    getData() {
+    getData(params) {
       this.$store.dispatch(get, {
         page: this.page,
-        search: this.search
+        ...params
       }).then(res => {
         console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
@@ -312,6 +313,12 @@ export default {
         this.selectedItems
       );
     },
+    filtered (val) {
+      this.filters = val
+      this.page = 1
+      this.$router.push({ name: this.$route.name, query: this.filters })
+      this.getData(val)
+    },
     removeItem(e) {
       this.$store.dispatch(remove, e).then(res => {
         this.$store.commit('DELETE_MODAL', {
@@ -322,19 +329,16 @@ export default {
       })
     }
   },
-  // watch: {
-  //   search() {
-  //     this.page = 1;
-  //   },
-  // },
   mounted() {
     const _hash = this.$route.hash
+    const _query = this.$route.query
+    this.filters = _query
     let _page;
     if (_hash) {
       _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
-    this.getData()
+    this.getData(_query)
   }
 };
 </script>

@@ -34,6 +34,7 @@
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <datepicker
+                  v-if="$route.name === 'vendors_list'"
                   clear-button
                   clear-button-icon="simple-icon-close"
                   format="yyyy-MM-dd"
@@ -47,6 +48,7 @@
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <datepicker
+                  v-if="$route.name === 'vendors_list'"
                   clear-button
                   format="yyyy-MM-dd"
                   @cleared="clearedEndDate"
@@ -113,8 +115,6 @@ export default {
     this.searchById = debounce(this.searchById, 1000)
     return {
       filters: {
-        vendor: null,
-        category: null,
         search: null,
         id: null,
         startDate: null,
@@ -130,36 +130,12 @@ export default {
         this.filters.startDate = _query.registration_from
         this.filters.endDate = _query.registration_to
       }
-      // this.$emit('filters', this.filterState())
-      // this.filterState()
-    }
-  },
-  computed: {
-    ...mapGetters(['dataCategories', 'dataVendors']),
-    categorys () {
-      return this.dataCategories.map(e => {
-        return {
-          label: e.name[this.$lang],
-          value: e.id
-        }
-      })
-    },
-    vendors () {
-      return this.dataVendors.map(e => {
-        const { first_name, last_name } = e.user
-        return {
-          label: first_name + ' ' + last_name,
-          value: e.id
-        }
-      })
     }
   },
   methods: {
     moment,
     filterState() {
       return {
-        // vendor_id: this.filters.vendor?.value,
-        // category_id: this.filters.category?.value,
         name: this.filters.search,
         id: this.filters.id,
         registration_from: this.filters.startDate ? moment(this.filters.startDate).format('YYYY-MM-DD') : null,
@@ -185,12 +161,6 @@ export default {
       if (this.filters.startDate) {
         this.$emit('filters', this.filterState())
       }
-    },
-    changeVendor (e) {
-      this.$emit('filters', this.filterState())
-    },
-    changeCategory(e) {
-      this.$emit('filters', this.filterState())
     },
     search (e) {
       this.$emit('filters', this.filterState())
