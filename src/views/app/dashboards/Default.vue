@@ -43,9 +43,14 @@
           </b-colxx>
         </b-row>
       </b-colxx>
-      <b-colxx lg="12" xl="6" class="mb-4">
+      <b-colxx lg="12" xl="3" class="mb-4">
         <transition name="fade">
-          <recent-orders v-if="statsFoods" :items="statsFoods" name="top_foods"></recent-orders>
+          <recent-orders v-if="statsFoods && statsFoods.length" :items="statsFoods" name="top_foods"></recent-orders>
+        </transition>
+      </b-colxx>
+      <b-colxx lg="12" xl="3" class="mb-4">
+        <transition name="fade">
+          <recent-orders v-if="statsNotSoldFoods && statsNotSoldFoods.length" :items="statsNotSoldFoods" name="not_sold_foods"></recent-orders>
         </transition>
       </b-colxx>
     </b-row>
@@ -75,12 +80,17 @@
       </b-colxx>
       <b-colxx xl="6" lg="12" class="mb-4">
         <transition name="fade">
-          <calendar v-if="statsVendors"></calendar>
-<!--          <best-sellers v-if="statsVendors" :title="$t('top_vendors')" :items="statsVendors"></best-sellers>-->
+          <best-couriers v-if="statsCouriers && statsCouriers.length" :title="$t('top_couriers')" :items="statsCouriers"></best-couriers>
         </transition>
       </b-colxx>
+<!--      <b-colxx xl="6" lg="12" class="mb-4">-->
+<!--        <transition name="fade">-->
+<!--          <calendar v-if="statsVendors"></calendar>-->
+<!--&lt;!&ndash;          <best-sellers v-if="statsVendors" :title="$t('top_vendors')" :items="statsVendors"></best-sellers>&ndash;&gt;-->
+<!--        </transition>-->
+<!--      </b-colxx>-->
     </b-row>
-    <div v-if="!statsFoods && !statsCategories && !statsMonth && !statsTop && !statsUsers && !statsWeek && !statsVendors" class="text-center text-primary my-2">
+    <div v-if="!statsFoods && !statsCategories && !statsMonth && !statsTop && !statsUsers && !statsWeek && !statsVendors && !statsCouriers && !statsNotSoldFoods" class="text-center text-primary my-2">
       <b-spinner class="align-middle"></b-spinner>
       <strong>{{ $t('loading') }}...</strong>
     </div>
@@ -170,12 +180,14 @@ import SmallLineCharts from "../../../containers/dashboards/SmallLineCharts";
 import SortableStaticticsRow from "../../../containers/dashboards/SortableStaticticsRow";
 import TopRatedItems from "../../../containers/dashboards/TopRatedItems";
 import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisitsChartCard";
+import BestCouriers from "../../../containers/dashboards/BestCouriers";
 import { mapGetters } from "vuex";
 import moment from "moment";
 export default {
   components: {
     "advanced-search": AdvancedSearch,
     "best-sellers": BestSellers,
+    "best-couriers": BestCouriers,
     cakes: Cakes,
     calendar: Calendar,
     "converconversion-rates-chart-card": ConversionRatesChartCard,
@@ -204,7 +216,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['statsCategories', 'statsFoods', 'statsMonth', 'statsTop', 'statsUsers', 'statsVendors', 'statsWeek'])
+    ...mapGetters(['statsCategories', 'statsFoods', 'statsNotSoldFoods', 'statsMonth', 'statsTop', 'statsUsers', 'statsVendors', 'statsWeek', 'statsCouriers'])
   },
   watch: {
     'filter.startDate': function (val) {
@@ -228,11 +240,13 @@ export default {
   async mounted() {
     await this.$store.dispatch('statsTop')
     await this.$store.dispatch('statsFoods')
+    await this.$store.dispatch('statsNotSoldFoods')
     await this.$store.dispatch('statsWeek')
     await this.$store.dispatch('statsMonth')
     await this.$store.dispatch('statsCategories')
     await this.$store.dispatch('statsUsers')
     await this.$store.dispatch('statsVendors')
+    await this.$store.dispatch('statsCouriers')
 
   }
 };

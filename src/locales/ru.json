@@ -94,6 +94,7 @@
   "delivery.time": "Время доставки",
   "active_users": "Активные клиенты",
   "all_couriers": "Все курьеры",
+  "all_orders_count": "Все заказы количество",
   "all_users": "Все клиенты",
   "all_vendors": "Все повара",
   "sales": "Продажи",
@@ -107,6 +108,7 @@
   "reg.date": "Дата регистрации",
   "top_vendors": "Топ повара",
   "top_foods": "Топ блюда",
+  "top_couriers": "Топ курьеры",
   "food": "Блюда",
   "form.creation": "Создание блюда",
   "form.edition": "Редактирование блюда",
@@ -137,6 +139,7 @@
   "start.date": "Дата начала",
   "end.date": "Дата окончания",
   "analytics": "Аналитика",
+  "not_sold_foods": "Не проданные продукты",
   "collection": {
     "main": "Основная инф.",
     "food": "Блюда",

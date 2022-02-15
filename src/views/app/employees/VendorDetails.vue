@@ -25,6 +25,8 @@
                     <stars class="mb-2" :value="vendor.ratings_avg" :disabled="true"></stars>
                     <p class="text-muted text-small mb-2">{{$t('balance')}}</p>
                     <p class="mb-3">{{vendor.balance}}</p>
+                    <p v-if="orderCount" class="text-muted text-small mb-2">{{$t('all_orders_count')}}</p>
+                    <p v-if="orderCount" class="mb-3">{{ orderCount }}</p>
                     <p class="text-muted text-small mb-2">{{$t('working_hours')}}</p>
                     <p>
                       <b-badge class="mb-1" pill variant="outline-primary"><span class="simple-icon-clock"></span> {{ vendor.from_field }}</b-badge>
@@ -233,6 +235,7 @@ export default {
       vendor: null,
       defImage: defImage,
       vendorImage: null,
+      orderCount: null,
       foods: []
     }
   },
@@ -261,6 +264,9 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch('statsOrderByVendor', { vendor_id: this.$route.params.id }).then(res => {
+      this.orderCount = res
+    })
     this.$store.dispatch('getByIdVendors', this.$route.params.id).then(res => {
       // console.log(res)
       this.vendor = res
