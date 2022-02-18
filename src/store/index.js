@@ -20,6 +20,7 @@ import yandex from "./modules/yandex";
 import statistics from "./modules/statistics";
 import order_services from "./modules/order_services";
 import voucher from "./modules/voucher";
+import reports from "./modules/reports";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -53,6 +54,7 @@ export default new Vuex.Store({
     statistics,
     order_services,
     voucher,
+    reports,
     categories: crud('categories'),
     foods: crud('food'),
     units: crud('units'),

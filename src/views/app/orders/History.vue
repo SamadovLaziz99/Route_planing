@@ -47,7 +47,7 @@
                 <b-form-input type="number" v-model="filters.order_price_to" @input="priceRangerChange"/>
               </b-form-group>
             </b-colxx>
-            <b-colxx xxs="12" md="6">
+            <b-colxx xxs="12" md="4">
               <b-form-group :label="$t('date.picker')" class="has-float-label mb-4">
                 <DateRangePicker :placeholder="$t('forms.date')" @input="changeDatePicker" rangeSeparator=">" v-model="date" :dayStr="[
                     $t('day.sun'),
@@ -71,6 +71,13 @@
                 <b-input v-if="$route.name === 'order_history'" class="search_input"
                          :placeholder="$t('search') + ', ' + $t('menu.users') + ', ' + $t('phone')" @input="search"
                          v-model="filters.search"/>
+              </b-form-group>
+            </b-colxx>
+            <b-colxx xxs="12" md="2">
+              <b-form-group :label="$t('id')" class="has-float-label mb-2">
+                <b-input v-if="$route.name === 'order_history'" type="number"
+                         :placeholder="$t('id')" @input="search"
+                         v-model="filters.order_id"/>
               </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="12">
@@ -251,6 +258,7 @@ export default {
       ],
       filters: {
         type: 'pending',
+        order_id: null,
         search: null,
         vendor: null,
         food: null,
@@ -323,11 +331,12 @@ export default {
     routePusher () {
       let _query = { ...this.$route.query }
       _query.food_id = this.filters.food?.value,
-        _query.courier_id = this.filters.courier?.value,
-        _query.vendor_id = this.filters.vendor?.value,
-        _query.category_id = this.filters.category?.value,
-        _query.q = this.filters.search,
-        _query.payment_type = this.filters.payment_type?.value
+      _query.courier_id = this.filters.courier?.value,
+      _query.vendor_id = this.filters.vendor?.value,
+      _query.category_id = this.filters.category?.value,
+      _query.q = this.filters.search,
+      _query.id = this.filters.order_id,
+      _query.payment_type = this.filters.payment_type?.value
       _query.date_from = this.filters.order_date_from
       _query.date_to = this.filters.order_date_to
       _query.price_from = this.filters.order_price_from
@@ -411,6 +420,7 @@ export default {
         courier_id: this.filters.courier?.value,
         category_id: this.filters.category?.value,
         q: this.filters.search,
+        order_id: this.filters.order_id || undefined,
         payment_type: this.filters.payment_type?.value,
         order_date_to: this.filters.order_date_to || undefined,
         order_date_from: this.filters.order_date_from || undefined,
@@ -489,13 +499,14 @@ export default {
       this.page = parseInt(_page)
     }
     if (_query) {
-      const { food_id, courier_id, vendor_id, q, type, category_id, payment_type, date_from, date_to, price_from, price_to } = _query
+      const { food_id, courier_id, vendor_id, id, q, type, category_id, payment_type, date_from, date_to, price_from, price_to } = _query
       this.filters.food = this.foods.filter(e => e.value === parseInt(food_id))[0]
       this.filters.vendor = this.vendors.filter(e => e.value === parseInt(vendor_id))[0]
       this.filters.courier = this.couriers.filter(e => e.value === parseInt(courier_id))[0]
       this.filters.category = this.categorys.filter(e => e.value === parseInt(category_id))[0]
       this.filters.payment_type = this.payment_types.filter(e => e.value === parseInt(payment_type))[0]
       this.filters.search = q
+      this.filters.order_id = id
       this.filters.type = type
       this.date = [date_from, date_to]
       this.filters.order_date_from = date_from

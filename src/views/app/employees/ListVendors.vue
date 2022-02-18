@@ -193,6 +193,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('getExcelVendors')
     const _hash = this.$route.hash
     const _query = this.$route.query
     this.filters = _query
