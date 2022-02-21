@@ -67,6 +67,15 @@
             :class="{ 'top-right-button': true }"
           >{{ $t('pages.add-new') }}
           </b-button>
+          <b-button
+            slot="action"
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+            class="ml-2"
+            @click="excelReport"
+          ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
+          </b-button>
         </list-page-heading>
         <b-card :title="$t(`menu.users`)" class="mb-4">
           <b-table
@@ -302,16 +311,14 @@ export default {
       this.page = 1
       this.getData()
     },
-    handleContextMenu(vnode) {
-      if (!this.selectedItems.includes(vnode.key)) {
-        this.selectedItems = [vnode.key];
-      }
-    },
-    onContextMenuAction(action) {
-      console.log(
-        "context menu item clicked - " + action + ": ",
-        this.selectedItems
-      );
+    excelReport () {
+      const { user_id, search, phone } = this.filters
+      const link = document.createElement('a')
+      link.href = process.env.VUE_APP_BASE_URL + `/users/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
+      console.log(link.href)
+      link.setAttribute('download', 'Report')
+      document.body.appendChild(link)
+      link.click()
     },
     filtered (val) {
       this.filters = val
