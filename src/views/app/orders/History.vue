@@ -12,6 +12,15 @@
           :total="pagination.total"
           :perPage="15"
         >
+          <b-button
+            slot="action"
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+            class="ml-2"
+            @click="excelReport"
+          ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
+          </b-button>
           <b-row style="padding: 0 10px">
             <b-colxx xxs="12" md="2">
               <b-form-group :label="$t('vendors')" class="has-float-label mb-2">
@@ -80,7 +89,13 @@
                          v-model="filters.order_id"/>
               </b-form-group>
             </b-colxx>
-            <b-colxx xxs="12" md="12">
+            <b-colxx xxs="12" md="4">
+              <p v-if="allStats">Total Order Price: <strong>{{new Intl.NumberFormat('en-US', {style: 'decimal'}).format(allStats.total_order_prices)  }}</strong></p>
+            </b-colxx>
+            <b-colxx xxs="12" md="4">
+              <p v-if="allStats">Total Delivery Price: <strong>{{ new Intl.NumberFormat('en-US', {style: 'decimal'}).format(allStats.total_delivery_prices) }}</strong></p>
+            </b-colxx>
+            <b-colxx xxs="12" md="4">
               <div class="float-md-right pt-1">
                 <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ pagination.total }}</span>
               </div>
@@ -278,6 +293,30 @@ export default {
       this.routePusher()
       this.getData()
     },
+    excelReport () {
+      const {
+        search,
+        vendor,
+        food,
+        courier,
+        payment_type,
+        type,
+        category,
+        order_id,
+        order_date_to,
+        order_date_from,
+        order_price_to,
+        order_price_from,
+        transaction_status
+      } = this.filters
+      const link = document.createElement('a')
+      link.href = process.env.VUE_APP_BASE_URL + `/orders/download/?q=${search ? '&q=' + search : ''}&status=${type || ''}${transaction_status ? '&transaction_status=' + transaction_status : ''}${vendor?.value ? '&vendor_id=' + vendor.value : ''}${food?.value ? '&food_id=' + food.value : ''}${payment_type?.value ? '&payment_type=' + payment_type.value : ''}${courier?.value ? '&courier_id=' + courier.value : ''}${category?.value ? '&courier_id=' + category.value : ''}${order_id ? '&order_id=' + order_id : ''}${order_date_to ? '&order_date_to=' + order_date_to : ''}${order_date_from ? '&order_date_from=' + order_date_from : ''}${order_price_to ? '&order_price_to=' + order_price_to : ''}${order_price_from ? '&order_price_from=' + order_price_from : ''}`
+      // link.href = process.env.VUE_APP_BASE_URL + `/orders/download/?q=${search || ''}&status=${type || ''}&delivery_status=${delivery_status || ''}&transaction_status=${transaction_status || 0}&vendor_id=${vendor?.value || 0}&food_id=${food?.value || 0}&payment_type=${payment_type?.value || 0}${courier?.value ? '&courier_id=' + courier.value : ''}`
+      console.log(link.href)
+      link.setAttribute('download', 'Report')
+      document.body.appendChild(link)
+      link.click()
+    },
     // priceToRangerChange (e) {
     //   if (e && e.length) {
     //     this.filters.order_price_to = parseInt(e)
@@ -412,7 +451,7 @@ export default {
       this.page = 1;
     },
     getData () {
-      this.$store.dispatch(get, {
+      const _ = {
         page: this.page,
         status: this.$route.query.type,
         food_id: this.filters.food?.value,
@@ -426,21 +465,13 @@ export default {
         order_date_from: this.filters.order_date_from || undefined,
         order_price_to: this.filters.order_price_to ? parseInt(this.filters.order_price_to) : undefined,
         order_price_from: this.filters.order_price_from ? parseInt(this.filters.order_price_from) : undefined
-      }).then(res => {
-        // if (this.$route.query.type === 'finished') {
-        //   this.$store.commit('SET_ORDER_HISTORY_STATS', {
-        //     finished: this.pagination.total,
-        //     cancelled: this.$store.getters.orderStatsHistory[1]
-        //   })
-        // }
-        // if (this.$route.query.type === 'cancelled') {
-        //   this.$store.commit('SET_ORDER_HISTORY_STATS', {
-        //     finished: this.$store.getters.orderStatsHistory[0],
-        //     cancelled: this.pagination.total
-        //   })
-        // }
-        console.log(res)
-        console.log(this.pagination)
+      }
+      const __ = { ..._ }
+      delete __.page
+      delete __.status
+      this.$store.dispatch('getOrderStats', __)
+      this.$store.dispatch(get, _).then(res => {
+
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })
@@ -448,7 +479,7 @@ export default {
   },
   computed: {
     ...mapGetters(getters(_page)),
-    ...mapGetters(['orderStatsHistory', 'dataVendors', 'dataFood', 'dataCouriers', 'dataCategories']),
+    ...mapGetters(['orderStatsHistory', 'dataVendors', 'allStats', 'dataFood', 'dataCouriers', 'dataCategories']),
     vendors () {
       return this.dataVendors.map(e => {
         const { first_name, last_name } = e.user
@@ -491,7 +522,6 @@ export default {
      this.$store.dispatch('getFood', { no_page: true })
      this.$store.dispatch('getCouriers', { no_page: true })
      this.$store.dispatch('getCategories', { no_page: true })
-    this.$store.dispatch('getOrderStats')
     const _hash = this.$route.hash
     let _page;
     if (_hash) {

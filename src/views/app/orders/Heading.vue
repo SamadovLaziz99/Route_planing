@@ -2,6 +2,9 @@
   <b-row>
     <b-colxx xxs="12">
       <h1 class="ml-xs-2">{{ title }}</h1>
+      <div class="top-right-button-container">
+        <slot name="action"></slot>
+      </div>
       <piaf-breadcrumb />
       <div class="mb-2 mt-2">
         <div class="d-flex justify-content-between">
@@ -15,53 +18,12 @@
             <i class="simple-icon-arrow-down align-middle" />
           </b-button>
         </div>
-<!--        <b-collapse id="displayOptions" class="d-md-block">-->
-<!--          <div class="d-block d-md-inline-block pt-1">-->
-<!--            <b-dropdown-->
-<!--              id="ddown1"-->
-<!--              :text="`${$t('pages.orderby')} ${sort.label}`"-->
-<!--              variant="outline-dark"-->
-<!--              class="mr-1 float-md-left btn-group"-->
-<!--              size="xs"-->
-<!--            >-->
-<!--              <b-dropdown-item-->
-<!--                v-for="(order,index) in sortOptions"-->
-<!--                :key="index"-->
-<!--                @click="changeOrderBy(order)"-->
-<!--              >{{ order.label }}</b-dropdown-item>-->
-<!--            </b-dropdown>-->
-<!--            <div class="search-sm d-inline-block float-md-left mr-1 align-top">-->
-<!--              <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />-->
-<!--            </div>-->
-<!--            <div v-if="!rangepicker" class="d-inline-block float-md-left mr-1 align-top">-->
-
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="float-md-right pt-1">-->
-<!--            <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>-->
-<!--&lt;!&ndash;            <b-dropdown&ndash;&gt;-->
-<!--&lt;!&ndash;              id="ddown2"&ndash;&gt;-->
-<!--&lt;!&ndash;              right&ndash;&gt;-->
-<!--&lt;!&ndash;              :text="`${perPage}`"&ndash;&gt;-->
-<!--&lt;!&ndash;              variant="outline-dark"&ndash;&gt;-->
-<!--&lt;!&ndash;              class="d-inline-block"&ndash;&gt;-->
-<!--&lt;!&ndash;              size="xs"&ndash;&gt;-->
-<!--&lt;!&ndash;            >&ndash;&gt;-->
-<!--&lt;!&ndash;              <b-dropdown-item&ndash;&gt;-->
-<!--&lt;!&ndash;                v-for="(size,index) in pageSizes"&ndash;&gt;-->
-<!--&lt;!&ndash;                :key="index"&ndash;&gt;-->
-<!--&lt;!&ndash;                @click="changePageSize(size)"&ndash;&gt;-->
-<!--&lt;!&ndash;              >{{ size }}</b-dropdown-item>&ndash;&gt;-->
-<!--&lt;!&ndash;            </b-dropdown>&ndash;&gt;-->
-<!--          </div>-->
-<!--        </b-collapse>-->
         <b-collapse id="displayOptions" class="d-md-block mt-2">
           <div class="d-md-inline-block pt-1 w-100">
             <slot></slot>
           </div>
         </b-collapse>
       </div>
-      <div class="mb-5" />
     </b-colxx>
   </b-row>
 </template>

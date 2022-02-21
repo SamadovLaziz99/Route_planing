@@ -30,7 +30,7 @@
           ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
           </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.vendors`)">
+        <b-card :title="$t(`menu.vendors`)" class="mb-4">
           <!--          <div class="all_table w-100">-->
           <b-table
             hover
@@ -243,10 +243,10 @@ export default {
       }
     },
     excelReport () {
-      // const { user_id, search, phone } = this.filters
+      const { name, registration_from, registration_to, id } = this.filters
       const link = document.createElement('a')
-      // link.href = process.env.VUE_APP_BASE_URL + `/vendors/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
-      link.href = process.env.VUE_APP_BASE_URL + `/vendors/download/`
+      link.href = process.env.VUE_APP_BASE_URL + `/vendors/download/?id=${id || ''}&name=${name || ''}&registration_from=${registration_from || ''}&registration_to=${registration_to || ''}`
+      // link.href = process.env.VUE_APP_BASE_URL + `/vendors/download/name=id=registration_from=registration_to`
       console.log(link.href)
       link.setAttribute('download', 'Report')
       document.body.appendChild(link)

@@ -12,7 +12,16 @@
           :total="pagination.total"
           :perPage="15"
         >
-          <b-row style="padding: 0 10px">
+            <b-button
+              slot="action"
+              variant="primary"
+              size="lg"
+              :class="{ 'top-right-button': true }"
+              class="ml-2"
+              @click="excelReport"
+            ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
+            </b-button>
+            <b-row>
             <b-colxx xxs="12" md="2">
               <b-form-group :label="$t('vendors')" class="has-float-label mb-2">
                 <v-select v-if="$route.name === 'order_list'" v-model="filters.vendor" @input="changeVendor"
@@ -21,14 +30,14 @@
             </b-colxx>
             <b-colxx xxs="12" md="2">
               <b-form-group :label="$t('foods')" class="has-float-label mb-2">
-              <v-select v-if="$route.name === 'order_list'" v-model="filters.food" @input="changeFood"
-                        style="width: 100%" class="mb-2" :options="foods" :placeholder="$t('foods')"/>
+                <v-select v-if="$route.name === 'order_list'" v-model="filters.food" @input="changeFood"
+                          style="width: 100%" class="mb-2" :options="foods" :placeholder="$t('foods')"/>
               </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="2">
               <b-form-group :label="$t('couriers')" class="has-float-label mb-2">
-              <v-select v-if="$route.name === 'order_list'" v-model="filters.courier" @input="changeCouriers"
-                        style="width: 100%" class="mb-2" :options="couriers" :placeholder="$t('couriers')"/>
+                <v-select v-if="$route.name === 'order_list'" v-model="filters.courier" @input="changeCouriers"
+                          style="width: 100%" class="mb-2" :options="couriers" :placeholder="$t('couriers')"/>
               </b-form-group>
             </b-colxx>
             <b-colxx xxs="12" md="2">
@@ -220,10 +229,10 @@ export default {
         food: null,
         courier: null,
         payment_type: null,
-        order_date_from: null,
-        order_date_to: null,
-        order_price_from: null,
-        order_price_to: null
+        // order_date_from: null,
+        // order_date_to: null,
+        // order_price_from: null,
+        // order_price_to: null
       },
       orderStatus: [
         'order.pending',
@@ -240,6 +249,39 @@ export default {
     priceRangerChange (e) {
       this.routePusher()
       this.getData()
+    },
+    excelReport () {
+      const {
+        search,
+        vendor,
+        food,
+        courier,
+        payment_type,
+        type,
+        delivery_status,
+        transaction_status
+      } = this.filters
+      const link = document.createElement('a')
+
+        // page: this.page,
+        // status: this.$route.query.type,
+        // delivery_status: this.$route.query.delivery_status,
+        // transaction_status: this.$route.query.transaction_status,
+        // food_id: this.filters.food?.value,
+        // vendor_id: this.filters.vendor?.value,
+        // courier_id: this.filters.courier?.value,
+        // q: this.filters.search,
+        // payment_type: this.filters.payment_type?.value,
+        // order_date_to: this.filters.order_date_to || undefined,
+        // order_date_from: this.filters.order_date_from || undefined,
+        // order_price_to: this.filters.order_price_to ? parseInt(this.filters.order_price_to) : undefined,
+        // order_price_from: this.filters.order_price_from ? parseInt(this.filters.order_price_from) : undefined
+      link.href = process.env.VUE_APP_BASE_URL + `/orders/download/?q=${search ? '&q=' + search : ''}&status=${type || ''}${delivery_status ? '&delivery_status=' + delivery_status : ''}${transaction_status ? '&transaction_status=' + transaction_status : ''}${vendor?.value ? '&vendor_id=' + vendor.value : ''}${food?.value ? '&food_id=' + food.value : ''}${payment_type?.value ? '&payment_type=' + payment_type.value : ''}${courier?.value ? '&courier_id=' + courier.value : ''}`
+      // link.href = process.env.VUE_APP_BASE_URL + `/orders/download/?q=${search || ''}&status=${type || ''}&delivery_status=${delivery_status || ''}&transaction_status=${transaction_status || 0}&vendor_id=${vendor?.value || 0}&food_id=${food?.value || 0}&payment_type=${payment_type?.value || 0}${courier?.value ? '&courier_id=' + courier.value : ''}`
+      console.log(link.href)
+      link.setAttribute('download', 'Report')
+      document.body.appendChild(link)
+      link.click()
     },
     // priceToRangerChange (e) {
     //   if (e && e.length) {
@@ -406,7 +448,7 @@ export default {
       this.page = 1;
     },
     getData () {
-      this.$store.dispatch(get, {
+      const _ = {
         page: this.page,
         status: this.$route.query.type,
         delivery_status: this.$route.query.delivery_status,
@@ -420,7 +462,14 @@ export default {
         order_date_from: this.filters.order_date_from || undefined,
         order_price_to: this.filters.order_price_to ? parseInt(this.filters.order_price_to) : undefined,
         order_price_from: this.filters.order_price_from ? parseInt(this.filters.order_price_from) : undefined
-      }).then(res => {
+      }
+      const __ = { ..._ }
+      delete __.page
+      delete __.status
+      delete __.transaction_status
+      delete __.delivery_status
+      this.$store.dispatch('getOrderStats', __)
+      this.$store.dispatch(get, _).then(res => {
         // console.log(res)
         // console.log(this.pagination)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15

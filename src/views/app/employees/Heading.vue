@@ -126,6 +126,7 @@ export default {
     if (this.$route.name === 'vendors_list') {
       const _query = this.$route.query
       if (_query.name) this.filters.search = _query.name
+      if (_query.id) this.filters.id = _query.id
       if(_query.registration_from && _query.registration_to) {
         this.filters.startDate = _query.registration_from
         this.filters.endDate = _query.registration_to

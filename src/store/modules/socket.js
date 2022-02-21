@@ -13,15 +13,20 @@ export default {
     history: [
       { name: 'order.finished', count: 0 },
       { name: 'order.cancelled', count: 0 },
-    ]
+    ],
+    allStats: null
   },
   getters: {
     orderStats: state => state.stats,
+    allStats: state => state.allStats,
     orderStatsHistory: state => state.history
   },
   mutations: {
     SET_ORDER_STATS (state, payload) {
       state.stats = payload
+    },
+    SET_ALL_STATS (state, payload) {
+      state.allStats = payload
     },
     SET_ORDER_HISTORY_STATS (state, payload) {
       state.history = payload
@@ -31,18 +36,11 @@ export default {
     async changeStatusOrder ({ commit }, payload) {
       const res = await axios_init.patch(`/orders/${payload.id}/`, payload.data)
       return res
-      console.log(res)
     },
-    async getOrderStats ({ commit }, payload) {
-      const res = await axios_init.get(`/orders/stats/`)
+    async getOrderStats ({ commit }, params) {
+      const res = await axios_init.get(`/orders/stats/`, params)
+      commit('SET_ALL_STATS', res)
       commit('SET_ORDER_STATS', [
-      // accepted: 0
-      // finish: 1
-      // finished: 2017
-      // hold: 0
-      // in_process: 1
-      // pending: 0
-      // shipping: 0
         { name: 'order.pending', count: res.pending },
         { name: 'order.hold', count: res.hold },
         { name: 'order.accepted', count: res.accepted },
