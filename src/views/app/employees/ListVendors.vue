@@ -20,6 +20,15 @@
             :class="{ 'top-right-button': true }"
           >{{ $t('pages.add-new') }}
           </b-button>
+          <b-button
+            slot="action"
+            variant="primary"
+            size="lg"
+            :class="{ 'top-right-button': true }"
+            class="ml-2"
+            @click="excelReport"
+          ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
+          </b-button>
         </list-page-heading>
         <b-card :title="$t(`menu.vendors`)">
           <!--          <div class="all_table w-100">-->
@@ -232,6 +241,16 @@ export default {
           this.getData()
         })
       }
+    },
+    excelReport () {
+      // const { user_id, search, phone } = this.filters
+      const link = document.createElement('a')
+      // link.href = process.env.VUE_APP_BASE_URL + `/vendors/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
+      link.href = process.env.VUE_APP_BASE_URL + `/vendors/download/`
+      console.log(link.href)
+      link.setAttribute('download', 'Report')
+      document.body.appendChild(link)
+      link.click()
     },
     viewItem (id) {
       console.log(id)
