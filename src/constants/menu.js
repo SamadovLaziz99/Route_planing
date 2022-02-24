@@ -210,6 +210,12 @@ const data = [
         to: `${adminRoot}/settings/vendor_inventory`,
         roles: [roles.super_admin, roles.operator, roles.courier_operator],
       },
+      {
+        icon: "simple-icon-settings",
+        label: "menu.main_settings",
+        to: `${adminRoot}/settings/main_settings`,
+        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+      },
       // {
       //   icon: "iconsminds-digital-drawing",
       //   label: "menu.pages",

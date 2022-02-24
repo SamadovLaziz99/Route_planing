@@ -43,16 +43,16 @@
           </b-colxx>
         </b-row>
       </b-colxx>
-      <b-colxx lg="12" xl="3" class="mb-4">
+      <b-colxx lg="12" xl="6" class="mb-4">
         <transition name="fade">
           <recent-orders v-if="statsFoods && statsFoods.length" :items="statsFoods" name="top_foods"></recent-orders>
         </transition>
       </b-colxx>
-      <b-colxx lg="12" xl="3" class="mb-4">
-        <transition name="fade">
-          <recent-orders v-if="statsNotSoldFoods && statsNotSoldFoods.length" :items="statsNotSoldFoods" name="not_sold_foods"></recent-orders>
-        </transition>
-      </b-colxx>
+<!--      <b-colxx lg="12" xl="3" class="mb-4">-->
+<!--        <transition name="fade">-->
+<!--          <recent-orders v-if="statsNotSoldFoods && statsNotSoldFoods.length" :items="statsNotSoldFoods" name="not_sold_foods"></recent-orders>-->
+<!--        </transition>-->
+<!--      </b-colxx>-->
     </b-row>
     <b-row>
       <b-colxx lg="4" md="12" class="mb-4">
@@ -220,10 +220,32 @@ export default {
   },
   watch: {
     'filter.startDate': function (val) {
-      console.log(val)
+      if (val) {
+        if (val && this.filter.endDate) {
+          const _param = {
+            start_date: moment(this.filter.startDate).format('YYYY-MM-DD'),
+            end_date: moment(this.filter.endDate).format('YYYY-MM-DD')
+          }
+          this.getData(_param)
+        }
+      } else {
+        this.filter.endDate = null
+        this.getData()
+      }
     },
     'filter.endDate': function (val) {
-      console.log(val)
+      if (val) {
+        if (val && this.filter.startDate) {
+          const _param = {
+            start_date: moment(this.filter.startDate).format('YYYY-MM-DD'),
+            end_date: moment(this.filter.endDate).format('YYYY-MM-DD')
+          }
+          this.getData(_param)
+        }
+      } else {
+        this.filter.startDate = null
+        this.getData()
+      }
     }
   },
   methods: {
@@ -235,18 +257,21 @@ export default {
       setTimeout(() => {
         this.chartOff = true
       })
+    },
+    async getData (params) {
+      await this.$store.dispatch('statsTop', params)
+      await this.$store.dispatch('statsFoods', params)
+      // await this.$store.dispatch('statsNotSoldFoods')
+      await this.$store.dispatch('statsWeek', params)
+      await this.$store.dispatch('statsMonth', params)
+      await this.$store.dispatch('statsCategories', params)
+      await this.$store.dispatch('statsUsers', params)
+      await this.$store.dispatch('statsVendors', params)
+      await this.$store.dispatch('statsCouriers', params)
     }
   },
-  async mounted() {
-    await this.$store.dispatch('statsTop')
-    await this.$store.dispatch('statsFoods')
-    await this.$store.dispatch('statsNotSoldFoods')
-    await this.$store.dispatch('statsWeek')
-    await this.$store.dispatch('statsMonth')
-    await this.$store.dispatch('statsCategories')
-    await this.$store.dispatch('statsUsers')
-    await this.$store.dispatch('statsVendors')
-    await this.$store.dispatch('statsCouriers')
+  mounted() {
+    this.getData()
 
   }
 };

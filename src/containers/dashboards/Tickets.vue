@@ -7,10 +7,7 @@
       <list-with-user-item
         v-for="(ticket, index) in items"
         :data="ticket"
-        :detail-path="ticket.vendor ? {
-          name: 'vendor-detail',
-          params: { id: ticket.vendor }
-        } : '#'"
+        detail-path="#"
         :key="index"
       />
     </vue-perfect-scrollbar>

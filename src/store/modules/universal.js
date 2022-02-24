@@ -64,5 +64,9 @@ export default {
     async uploadingAction ({ commit }, payload) {
       commit('SET_UPLOADING', payload)
     },
+    async chefWeek ({ commit }, params) {
+      let res = await axios_init.post('/settings/chef-of-week/', null, params)
+      return res
+    }
   }
 }

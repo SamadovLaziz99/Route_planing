@@ -262,7 +262,9 @@ const routes = [
           },
           {
             path: "main_settings",
-            component: () => import("./views/app/pages/product/ThumbList"),
+            name: "main_settings",
+            meta: { roles: [roles.super_admin, roles.operator, roles.marketolog, roles.courier_operator] },
+            component: () => import("./views/app/settings/settings"),
             children: []
           },
           {
