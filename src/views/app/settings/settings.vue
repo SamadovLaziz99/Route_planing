@@ -80,7 +80,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('getVendors').then(res => {
+    this.$store.dispatch('getVendors', { no_page: true }).then(res => {
       this.vendors = res.map(e => {
         const { first_name, last_name } = e.user
         return {
