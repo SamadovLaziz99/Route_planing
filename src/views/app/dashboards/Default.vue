@@ -183,6 +183,7 @@ import WebsiteVisitsChartCard from "../../../containers/dashboards/WebsiteVisits
 import BestCouriers from "../../../containers/dashboards/BestCouriers";
 import { mapGetters } from "vuex";
 import moment from "moment";
+import axios from "axios";
 export default {
   components: {
     "advanced-search": AdvancedSearch,
@@ -260,10 +261,9 @@ export default {
     },
     async getData (params) {
       await this.$store.dispatch('statsTop', params)
-      await this.$store.dispatch('statsFoods', params)
-      // await this.$store.dispatch('statsNotSoldFoods')
       await this.$store.dispatch('statsWeek', params)
       await this.$store.dispatch('statsMonth', params)
+      await this.$store.dispatch('statsFoods', params)
       await this.$store.dispatch('statsCategories', params)
       await this.$store.dispatch('statsUsers', params)
       await this.$store.dispatch('statsVendors', params)
@@ -272,7 +272,6 @@ export default {
   },
   mounted() {
     this.getData()
-
   }
 };
 </script>

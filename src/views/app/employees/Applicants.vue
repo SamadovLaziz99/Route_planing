@@ -77,6 +77,15 @@
 <!--          </b-button>-->
 <!--        </list-page-heading>-->
         <b-card :title="$t(`menu.applicants`)" class="mb-4">
+          <b-tabs card v-model="activeTab">
+            <b-tab style="padding: 0.6rem" v-for="tab in statuses" :key="tab">
+              <template #title>
+                <div style="display: flex">
+                  <div style="margin-right: 10px">{{ $t(`statuses.${tab}`) }}</div>
+                </div>
+              </template>
+            </b-tab>
+          </b-tabs>
           <b-table
             hover
             :items="data"
@@ -84,6 +93,9 @@
             :busy="load"
             responsive
           >
+            <template #empty>
+              <EmptyBox style="margin-top: 50px"/>
+            </template>
             <template #table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle"></b-spinner>
@@ -130,12 +142,14 @@ import Pagination from "../../../components/TableComponents/Pagination";
 import {mapGetters} from "vuex";
 import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
+import EmptyBox from "../../../components/EmptyBox";
 import { actions, getters } from "../../../utils/store_schema";
 import moment from 'moment'
 const _page = 'applications'
 const { get, getById, put, post, remove } = actions(_page)
 export default {
   components: {
+    EmptyBox,
     "list-page-heading": ListPageHeading,
     Pagination
     // TableSimple
@@ -169,6 +183,7 @@ export default {
         'in_process',
         'vendor'
       ],
+      activeTab: 0,
       colors: [
         { label: this.$t('white'), value: 'white' },
         { label: this.$t('black'), value: 'Black' },
@@ -252,6 +267,51 @@ export default {
   },
   methods: {
     moment,
+    changeTabs (e) {
+      console.log(e)
+    },
+    tabChange (i) {
+      setTimeout(() => {
+        this.activeTab = i
+      }, 1)
+    },
+    statusNumber (index) {
+      switch (index) {
+        case 'pending': this.tabChange(0)
+          break
+        case 'interview': this.tabChange(1)
+          break
+        case 'training': this.tabChange(2)
+          break
+        case 'teste': this.tabChange(3)
+          break
+        case 'in_process': this.tabChange(4)
+          break
+        case 'vendor': this.tabChange(5)
+          break
+        default: break
+
+      }
+    },
+    tabStatus (index) {
+      const _ = this.statuses
+      switch (index) {
+          case 0: return _[0]
+            break
+          case 1: return _[1]
+            break
+          case 2: return _[2]
+            break
+          case 3: return _[3]
+            break
+          case 4: return _[4]
+            break
+          case 5: return _[5]
+            break
+          default: return _[0]
+            break
+        }
+    },
     changeStatus (val, item) {
       console.log(val, item)
       const _id = item.item.id
@@ -325,7 +385,8 @@ export default {
     },
     getData() {
       this.$store.dispatch(get, {
-        page: this.page
+        page: this.page,
+        status: this.$route.query.status
       }).then(res => {
         console.log(res)
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
@@ -362,8 +423,19 @@ export default {
     search() {
       this.page = 1;
     },
+    activeTab (e) {
+      console.log(e)
+      this.$router.replace({
+        name: this.$route.name,
+        query: {
+          status: this.tabStatus(e)
+        }
+      })
+      this.getData()
+    }
   },
   mounted() {
+    console.log('MOUNTTTTT')
     const _hash = this.$route.hash
     let _page;
     if (_hash) {
@@ -371,8 +443,14 @@ export default {
       _page = this.$route.hash.split('-')[1]
       this.page = parseInt(_page)
     }
+
+
+    if (this.$route.query.status) {
+      this.statusNumber(this.$route.query.status)
+    }
+    // this.statusNumber(this.tabStatus(0))
     this.getData()
-    // this.$store.dispatch('getUsers', { no_page: true }).then(res => {
+    // this.$stores.dispatch('getUsers', { no_page: true }).then(res => {
     //   console.log(res)
     //   this.users = res.map(e => {
     //     return {

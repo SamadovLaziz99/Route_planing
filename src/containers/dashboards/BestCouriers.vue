@@ -23,8 +23,7 @@ import Vuetable from "vuetable-2/src/components/Vuetable";
 export default {
   props: ["title", "items"],
   components: {
-    vuetable: Vuetable,
-    // "vuetable-pagination-bootstrap": VuetablePaginationBootstrap
+    vuetable: Vuetable
   },
   data() {
     return {
@@ -32,31 +31,31 @@ export default {
         // apiUrl: apiUrl + "/cakes/fordatatable",
         fields: [
           {
-            name: "courier__user__first_name",
+            name: "name",
             title: this.$t('first.name'),
             titleClass: "",
             dataClass: "list-item-heading"
           },
+          // {
+          //   name: "courier__user__last_name",
+          //   title: this.$t('last.name'),
+          //   titleClass: "",
+          //   dataClass: "text-muted"
+          // },
           {
-            name: "courier__user__last_name",
-            title: this.$t('last.name'),
-            titleClass: "",
-            dataClass: "text-muted"
-          },
-          {
-            name: "sales_count",
+            name: "count",
             // sortField: "stock",
             title: this.$t('sales'),
             titleClass: "",
             dataClass: "text-muted"
-          }
-          // {
-          //   name: "total_sum",
-          //   // sortField: "category",
-          //   title: this.$t('dashboards.total'),
-          //   titleClass: "",
-          //   dataClass: "text-muted"
-          // },
+          },
+          {
+            name: "sum",
+            // sortField: "category",
+            title: this.$t('dashboards.total'),
+            titleClass: "",
+            dataClass: "text-muted"
+          },
         ]
       }
     };

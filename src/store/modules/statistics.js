@@ -70,8 +70,8 @@ export default {
     },
     async statsCouriers ({ commit }, params) {
       commit('COURIERS_STATS', [])
-      let _res = await axios_init.get('/analytics/couriers/top', params)
-      commit('COURIERS_STATS', _res)
+      let _res = await axios_init.get('/statistics/analysis/', params)
+      commit('COURIERS_STATS', _res.couriers)
     },
     async statsWeek ({ commit }, params) {
       commit('ORDER_WEEK_STATS', null)
