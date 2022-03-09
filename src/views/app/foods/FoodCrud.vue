@@ -109,7 +109,7 @@
                     </b-form-group>
                   </b-colxx>
 
-                  <b-colxx xxs="12" md="4" class="has-float-label mb-2">
+                  <b-colxx xxs="12" md="8" class="has-float-label mb-2">
                     <b-form-group :label="$t('video_url')">
                       <b-form-input v-model="form.video_url" type="text"/>
                     </b-form-group>
@@ -122,7 +122,7 @@
                       </b-form-invalid-feedback>
                     </b-form-group>
                   </b-colxx>
-                  <b-colxx xxs="12" md="4" class="mb-2">
+                  <b-colxx xxs="12" md="6" class="mb-2">
                     <div class="d-flex justify-content-between">
                       <div class="d-flex mt-2">
                         <span>{{ $t('status') }}</span>
@@ -138,8 +138,16 @@
                                     class="vue-switcher-small"></switches>
                         </b-form-group>
                       </div>
+                      <div class="d-flex mt-2">
+                        <span>{{ $t('confirm') }}</span>
+                        <b-form-group class="ml-2">
+                          <switches v-model="form.confirm" theme="custom" color="primary-inverse"
+                                    class="vue-switcher-small"></switches>
+                        </b-form-group>
+                      </div>
                     </div>
                   </b-colxx>
+
 
                   <b-colxx xxs="12" md="12">
                     <b-form-group :label="$t('description')" class="has-float-label mb-4">
@@ -262,6 +270,7 @@ export default {
         vendor: null,
         active: true,
         cola_combo: true,
+        confirm: true,
         price: null,
         ingredients: [],
         video_url: '',
@@ -358,6 +367,7 @@ export default {
         _form.name = res.name
         _form.active = res.active
         _form.cola_combo = res.cola_combo
+        _form.confirm = res.confirm
         _form.price = res.price
         _form.sale_price = res.sale_price
         _form.min_amount = res.min_amount
