@@ -14,6 +14,7 @@ import Dropzone from "./containers/forms/DropzoneExample";
 import CloseButton from './components/Common/CloseButton'
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from "vuejs-datepicker";
+import ConfirmModal from './components/CofirmModal'
 // CSS
 import 'vue2-timepicker/dist/VueTimepicker.css'
 Vue.component('v-select', vSelect)
@@ -22,6 +23,7 @@ Vue.component('timepicker', VueTimepicker)
 Vue.component('dropzone', Dropzone)
 Vue.component('error-page', ErrorPage)
 Vue.component('remove-modal', DeleteConfirmModal)
+Vue.component('confirm-modal', ConfirmModal)
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);
 Vue.component('b-close-button', CloseButton)
