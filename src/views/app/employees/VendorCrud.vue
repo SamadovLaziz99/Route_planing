@@ -142,7 +142,7 @@
                   <img :src="card_png" alt="card" />
                   <h3>Iltimos karta qo'shing!</h3>
                 </div>
-                <div class="small" v-else v-for="item in cards" style="margin-top: 10px">
+                <div class="small" v-else v-for="item in cards" style="margin-top: 10px" :key="item">
                   <div class="card_top">
                     <div class="card_top_1">
                           <span>
@@ -299,6 +299,10 @@ export default {
   watch: {
     times (val) {
       console.log(val)
+    },
+    "form.user": function(val) {
+      console.log("user: ", val)
+      console.log(val.value)
     }
   },
   data() {
@@ -369,12 +373,31 @@ export default {
         if (refname === 'modalnestedinline') {
           this.$refs['modalnested'].show()
         }
+        const cardNumber = this.card.number.split(' ').join('');
+        const cardTime = this.card.time.split('/').join('');
+        const cardUserId = this.form.user.value;
+
+        const sendData = {
+          card_number: cardNumber,
+          expiry: cardTime,
+          color: "blue",
+          user: cardUserId
+        }
+
         this.cards.push({
           name: this.card.name,
           number: this.card.number,
           time: this.card.time
         });
-        console.log(this.cards);
+
+        if (this.cardUserId) {
+          this.$store.dispatch('postCards', sendData)
+            .then(res => {
+              console.log(res)
+            });
+        }
+        console.log(sendData)
+
         this.clear();
       } else {
         if(this.card.time.length < 5) {
