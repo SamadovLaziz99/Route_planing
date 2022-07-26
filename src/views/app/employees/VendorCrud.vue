@@ -227,6 +227,7 @@
 <!--                </div>-->
 <!--              </b-card>-->
 
+
 <!--              end Card-->
 
 
@@ -246,7 +247,7 @@
                 >{{ $t('clear') }}
 
                 </b-button>
-                <                <b-button type="submit" variant="primary" class="ml-1">{{ id ? $t('update') : $t('save') }}</b-button>
+               <b-button type="submit" variant="primary" class="ml-1">{{ id ? $t('update') : $t('save') }}</b-button>
 <!--                <b-button type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }"-->
 <!--                          variant="primary">-->
 <!--                  <span class="spinner d-inline-block">-->
@@ -301,6 +302,10 @@ export default {
   watch: {
     times (val) {
       console.log(val)
+    },
+    "form.user": function(val) {
+      console.log("user: ", val)
+      console.log(val.value)
     }
   },
   data() {
@@ -361,37 +366,57 @@ export default {
     clear() {
       this.card.number = this.card.name = this.card.time = "";
     },
-    // submitCard(refname) {
-    //   if(this.isValid) {
-    //     this.$v.card.$touch();
-    //     if (!this.$v.card.$invalid) {
-    //       console.log('Validate');
-    //     }
-    //     this.$refs[refname].hide()
-    //     if (refname === 'modalnestedinline') {
-    //       this.$refs['modalnested'].show()
-    //     }
-    //     this.cards.push({
-    //       name: this.card.name,
-    //       number: this.card.number,
-    //       time: this.card.time
-    //     });
-    //     console.log(this.cards);
-    //     this.clear();
-    //   } else {
-    //     if(this.card.time.length < 5) {
-    //       this.$refs.cardTime.focus();
-    //     }
-    //     if(this.card.name.trim() === "") {
-    //       this.$refs.cardName.focus();
-    //     }
-    //     if(this.card.number.length < 19) {
-    //       this.$refs.cardNumber.focus();
-    //     }
-    //   }
-    // },
+    submitCard(refname) {
+      if(this.isValid) {
+        this.$v.card.$touch();
+        if (!this.$v.card.$invalid) {
+          console.log('Validate');
+        }
+        this.$refs[refname].hide()
+        if (refname === 'modalnestedinline') {
+          this.$refs['modalnested'].show()
+        }
+        const cardNumber = this.card.number.split(' ').join('');
+        const cardTime = this.card.time.split('/').join('');
+        const cardUserId = this.form.user.value;
+
+        const sendData = {
+          card_number: cardNumber,
+          expiry: cardTime,
+          color: "blue",
+          user: cardUserId
+        }
+
+        this.cards.push({
+          name: this.card.name,
+          number: this.card.number,
+          time: this.card.time
+        });
+
+        if (this.cardUserId) {
+          this.$store.dispatch('postCards', sendData)
+            .then(res => {
+              console.log(res)
+            });
+        }
+        console.log(sendData)
+
+        this.clear();
+      } else {
+        if(this.card.time.length < 5) {
+          this.$refs.cardTime.focus();
+        }
+        if(this.card.name.trim() === "") {
+          this.$refs.cardName.focus();
+        }
+        if(this.card.number.length < 19) {
+          this.$refs.cardNumber.focus();
+        }
+      }
+    },
     getDataId() {
       this.$store.dispatch(getById, this.id).then(res => {
+        console.log(res);
         const _form = this.form;
         if (res.latitude && res.longitude) this.coords = [parseFloat(res.latitude), parseFloat(res.longitude)];
         _form.address = res.address;
