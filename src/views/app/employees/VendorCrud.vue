@@ -137,98 +137,95 @@
 
 <!--              Card-->
 
-<!--              <b-card title="Card" class="mb-4">-->
-<!--                <div v-if="cards.length === 0" class="noDataSvg">-->
-<!--                  <img :src="card_png" alt="card" />-->
-<!--                  <h3>Iltimos karta qo'shing!</h3>-->
-<!--                </div>-->
-<!--                <div class="small" v-else v-for="item in cards" style="margin-top: 10px">-->
-<!--                  <div class="card_top">-->
-<!--                    <div class="card_top_1">-->
-<!--                          <span>-->
-<!--                            {{ item.name }}-->
-<!--                          </span>-->
-<!--                    </div>-->
-<!--                    <div class="card_img">-->
-<!--                      <img class="small-icon" src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                  <div class="card_bottom">-->
-<!--                    <div>-->
-<!--                          <span>-->
-<!--                            {{ item.number }}-->
-<!--                          </span>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                          <span>-->
-<!--                            {{ item.time }}-->
-<!--                          </span>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
+             <b-card title="Card" class="mb-4">
+               <div v-if="cards.length === 0" class="noDataSvg">
+                 <img :src="card_png" alt="card" />
+                 <h3>Iltimos karta qo'shing!</h3>
+               </div>
+               <div class="small" v-else v-for="item in cards" style="margin-top: 10px">
+                 <div class="card_top">
+                   <div class="card_top_1">
+                         <span>
+                           {{ item.name }}
+                         </span>
+                   </div>
+                   <div class="card_img">
+                     <img class="small-icon" src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">
+                   </div>
+                 </div>
+                 <div class="card_bottom">
+                   <div>
+                         <span>
+                           {{ item.number }}
+                         </span>
+                   </div>
+                   <div>
+                         <span>
+                           {{ item.time }}
+                         </span>
+                   </div>
+                 </div>
+               </div>
 
-<!--                <div class="vendors" v-if="images.avatar">-->
-<!--                  <img>-->
-<!--                  <div class="image_action">-->
-<!--                    <div style="display: flex">-->
-<!--&lt;!&ndash;                      <span @click="$refs.imageEditor.open(images.avatar.url)" class="simple-icon-pencil m-2 icon"></span>&ndash;&gt;-->
-<!--&lt;!&ndash;                      <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.avatar})" class="simple-icon-trash m-2 icon"></span>&ndash;&gt;-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <b-button v-b-modal.modalright variant="secondary default mt-3" style="width: 100%; border-radius: 5px" >Karta qo'shish</b-button>-->
-<!--                  <b-modal id="modalright" ref="modalright" title="Plastik Karta qo'shish" modal-class="modal-right">-->
-<!--                    <div>-->
-<!--                      <label for="card-number">Karta raqami:</label>-->
-<!--                      <b-form-input type="text" v-mask="'#### #### #### ####'" v-model="$v.card.number.$model" :state="!$v.card.number.$error" ref="cardNumber" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "19" placeholder="0000 0000 0000 0000" id="card-number" />-->
-<!--                      <b-form-invalid-feedback v-if="!$v.card.number.required">{{ $t('please.enter') + $t('card_number') }}</b-form-invalid-feedback>-->
-<!--                    </div>-->
-<!--                    <div style="margin-top: 15px">-->
-<!--                      <label for="card-name">Nomi:</label>-->
-<!--                      <b-form-input type="text" v-model.trim="$v.card.name.$model" :state="!$v.card.name.$error" ref="cardName" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "15" placeholder="UzCard" id="card-name" required="required" />-->
-<!--                      <b-form-invalid-feedback v-if="!$v.card.name.required">{{ $t('please.enter') + $t('card_name') }}</b-form-invalid-feedback>-->
-<!--                    </div>-->
-<!--                    <div style="margin-top: 15px">-->
-<!--                      <label for="card-number">Tugash vaqti:</label>-->
-<!--                      <b-form-input type="text" v-mask="'##/##'" v-model="$v.card.time.$model" :state="!$v.card.time.$error" ref="cardTime" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "5" id="card-number" placeholder="03/24" />-->
-<!--                      <b-form-invalid-feedback v-if="!$v.card.time.required">{{ $t('please.enter') + $t('card_time') }}</b-form-invalid-feedback>-->
-<!--                    </div>-->
-<!--                    <template slot="modal-footer">-->
-<!--                      <b-button variant="secondary" @click="hideModal('modalright')">Cancel</b-button>-->
-<!--                      <b-button variant="success" @click="submitCard('modalright')" class="mr-1">Karta qo'shish</b-button>-->
-<!--                    </template>-->
-<!--                    <hr />-->
-<!--                    <div class="plastic" v-if="card.name && card.time.length === 5 && card.number.length === 19">-->
-<!--                      <div class="card_top">-->
-<!--                        <div class="card_top_1">-->
-<!--                          <span>-->
-<!--                            {{ card.name }}-->
-<!--                          </span>-->
-<!--                        </div>-->
-<!--                        <div class="card_img">-->
-<!--                          <img src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                      <div class="card_bottom">-->
-<!--                        <div>-->
-<!--                          <span>-->
-<!--                            {{ card.number }}-->
-<!--                          </span>-->
-<!--                        </div>-->
-<!--                        <div>-->
-<!--                          <span>-->
-<!--                            {{ card.time }}-->
-<!--                          </span>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </b-modal>-->
-<!--                </div>-->
-<!--              </b-card>-->
+               <div class="vendors" v-if="images.avatar">
+                 <img>
+                 <div class="image_action">
+                   <div style="display: flex">
+                      <span @click="$refs.imageEditor.open(images.avatar.url)" class="simple-icon-pencil m-2 icon"></span>&ndash;&gt;
+                      <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.avatar})" class="simple-icon-trash m-2 icon"></span>&ndash;&gt;
+                   </div>
+                 </div>
+               </div>
+               <div>
+                 <b-button v-b-modal.modalright variant="secondary default mt-3" style="width: 100%; border-radius: 5px" >Karta qo'shish</b-button>
+                 <b-modal id="modalright" ref="modalright" title="Plastik Karta qo'shish" modal-class="modal-right">
+                   <div>
+                     <label for="card-number">Karta raqami:</label>
+                     <b-form-input type="text" v-mask="'#### #### #### ####'" v-model="card.number" ref="cardNumber" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "19" placeholder="0000 0000 0000 0000" id="card-number" />
+                   </div>
+                   <div style="margin-top: 15px">
+                     <label for="card-name">Nomi:</label>
+                     <b-form-input type="text" v-model.trim="card.name" ref="cardName" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "15" placeholder="UzCard" id="card-name" required="required" />
+                   </div>
+                   <div style="margin-top: 15px">
+                     <label for="card-number">Tugash vaqti:</label>
+                     <b-form-input type="text" v-mask="'##/##'" v-model="card.time" ref="cardTime" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "5" id="card-number" placeholder="03/24" />
+                   </div>
+                   <template slot="modal-footer">
+                     <b-button variant="secondary" @click="hideModal('modalright')">Cancel</b-button>
+                     <b-button variant="success" @click="submitCard('modalright')" class="mr-1">Karta qo'shish</b-button>
+                   </template>
+                   <hr />
+                   <div class="plastic" v-if="card.name && card.time.length === 5 && card.number.length === 19">
+                     <div class="card_top">
+                       <div class="card_top_1">
+                         <span>
+                           {{ card.name }}
+                         </span>
+                       </div>
+                       <div class="card_img">
+                         <img src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">
+                       </div>
+                     </div>
+                     <div class="card_bottom">
+                       <div>
+                         <span>
+                           {{ card.number }}
+                         </span>
+                       </div>
+                       <div>
+                         <span>
+                           {{ card.time }}
+                         </span>
+                       </div>
+                     </div>
+                   </div>
+                 </b-modal>
+               </div>
+             </b-card>
 
 
-<!--              end Card-->
+             <!-- end Card -->
 
 
             </b-colxx>
@@ -248,15 +245,6 @@
 
                 </b-button>
                <b-button type="submit" variant="primary" class="ml-1">{{ id ? $t('update') : $t('save') }}</b-button>
-<!--                <b-button type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }"-->
-<!--                          variant="primary">-->
-<!--                  <span class="spinner d-inline-block">-->
-<!--                      <span class="bounce1"></span>-->
-<!--                      <span class="bounce2"></span>-->
-<!--                      <span class="bounce3"></span>-->
-<!--                  </span>-->
-<!--                  <span class="label">{{ id ? $t('update') : $t('save') }}</span>-->
-<!--                </b-button>-->
               </b-card>
             </b-colxx>
             <!--      ACTION CONTENT-->
@@ -368,10 +356,6 @@ export default {
     },
     submitCard(refname) {
       if(this.isValid) {
-        this.$v.card.$touch();
-        if (!this.$v.card.$invalid) {
-          console.log('Validate');
-        }
         this.$refs[refname].hide()
         if (refname === 'modalnestedinline') {
           this.$refs['modalnested'].show()
@@ -399,8 +383,6 @@ export default {
               console.log(res)
             });
         }
-        console.log(sendData)
-
         this.clear();
       } else {
         if(this.card.time.length < 5) {
