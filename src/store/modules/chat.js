@@ -17,7 +17,6 @@ const getters = {
   contacts: state => state.contacts,
   conversations: state => state.conversations,
   contactsSearchResult: state => state.contactsSearchResult
-
 }
 
 const mutations = {

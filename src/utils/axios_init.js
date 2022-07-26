@@ -1,7 +1,7 @@
-import axios from 'axios'
-import store from '../store'
-import i18n from '../locales/i18n'
+import axios from 'axios';
+import store from '../store';
 import router from "../router";
+import i18n from '../locales/i18n';
 
 function unauthorized(msg) {
   errorNotification(i18n.t('unauthorized.title'), '')
@@ -102,4 +102,4 @@ const init = {
   },
 }
 
-export default init
+export default init;

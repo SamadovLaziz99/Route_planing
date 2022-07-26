@@ -15,6 +15,10 @@ import CloseButton from './components/Common/CloseButton'
 import VueTimepicker from 'vue2-timepicker'
 import Datepicker from "vuejs-datepicker";
 import ConfirmModal from './components/CofirmModal'
+
+import { VueMaskDirective } from "v-mask";
+Vue.directive('mask', VueMaskDirective);
+
 // CSS
 import 'vue2-timepicker/dist/VueTimepicker.css'
 Vue.component('v-select', vSelect)

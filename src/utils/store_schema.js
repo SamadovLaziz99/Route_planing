@@ -1,4 +1,4 @@
-import {camelize} from "./index";
+import { camelize } from "./index";
 
 export const actions = (param) => {
   return {

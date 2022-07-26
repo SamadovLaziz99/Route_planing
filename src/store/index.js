@@ -71,4 +71,4 @@ export default new Vuex.Store({
     inventory: crud('inventory'),
     vendorinv: crud('inventory/vendorinv')
   }
-})
+});

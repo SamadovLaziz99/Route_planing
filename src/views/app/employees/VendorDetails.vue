@@ -54,8 +54,36 @@
                     <ymap-marker marker-id="123" :coords="[parseFloat(vendor.latitude), parseFloat(vendor.longitude)]" :hint-content="vendor.user.first_name + ' ' + vendor.user.last_name" ></ymap-marker>
                   </yandex-map>
                 </b-card>
-              </b-colxx>
 
+<!--                Cards-->
+
+                <b-card v-if="cards.length !== 0" title="Kartalar" class="mb-4">
+                    <div class="small" v-for="item in cards" style="margin-top: 10px">
+                      <div class="card_top">
+                        <div class="card_top_1">
+                          <span>
+                            {{ item.name }}
+                          </span>
+                        </div>
+                        <div class="card_img">
+                          <img class="small-icon" src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">
+                        </div>
+                      </div>
+                      <div class="card_bottom">
+                        <div>
+                          <span>
+                            {{ item.number }}
+                          </span>
+                        </div>
+                        <div>
+                          <span>
+                            {{ item.time }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </b-card>
+              </b-colxx>
               <b-colxx xxs="12" lg="8" class="mb-4 col-right">
                 <b-row>
                   <b-colxx v-for="(product, productIndex) in foods" xxs="12" lg="6" xl="4" class="mb-4" :key="`product_${productIndex}`">
@@ -161,8 +189,9 @@ import produtcs from '../../../data/products'
 import recentPosts from "../../../data/recentPosts";
 import followers from "../../../data/follow";
 import EmptyBox from "../../../components/EmptyBox";
-import defImage from '@/assets/img/details/chef_placeholder.png'
+import defImage from '@/assets/img/details/chef_placeholder.png';
 import moment from "moment";
+
 export default {
   components: {
     stars: Stars,
@@ -236,7 +265,12 @@ export default {
       defImage: defImage,
       vendorImage: null,
       orderCount: null,
-      foods: []
+      foods: [],
+      cards: [{
+        name: "UzCard",
+        number: "8600 0000 0000 0000",
+        time: "03/24"
+      }]
     }
   },
   computed: {
@@ -266,20 +300,163 @@ export default {
   mounted() {
     this.$store.dispatch('statsOrderByVendor', { vendor_id: this.$route.params.id }).then(res => {
       this.orderCount = res
-    })
+    });
     this.$store.dispatch('getByIdVendors', this.$route.params.id).then(res => {
       // console.log(res)
       this.vendor = res
       this.vendorImage = (res.media && res.media.length > 0) ? this.$imgProxy(res.media[0].url, '500x350') : this.defImage
-    })
+    });
     this.$store.dispatch('getOrders', { vendor_id: this.$route.params.id, no_page: true }).then(res => {
       this.orders = res
-    })
+    });
     this.$store.dispatch('getFood', {
       vendor_id: this.$route.params.id
     }).then(res => {
       this.foods = res
-    })
+    });
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.small {
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(90deg, rgba(0,212,255,1) 6%, rgba(44,198,230,1) 99%);
+  border-radius: 10px;
+  width: 100%;
+  height: 220px;
+  margin: 10px auto;
+}
+
+.small div div {
+  font-size: 1.3rem;
+}
+
+.small-icon {
+  width: 45px;
+}
+
+.card_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card_bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  font-weight: 600;
+}
+
+.card_top div {
+  margin: 8px;
+}
+
+.card_top_1 {
+  font-weight: 600;
+  margin: 8px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+//responsive
+@media only screen and(max-width: 1360px){
+  .small {
+    width: 100%;
+    height: 130px;
+  }
+
+  .card_top_1 {
+    font-size: 1.1rem !important;
+  }
+
+  .card_bottom div span {
+    font-size: .7rem;
+  }
+
+  .small-icon {
+    width: 30px;
+  }
+}
+
+@media only screen and(max-width: 1360px){
+  .small {
+    width: 100%;
+    height: 160px;
+  }
+
+  .card_top_1 {
+    font-size: 1.1rem !important;
+  }
+
+  .card_bottom div span {
+    font-size: 1rem;
+  }
+
+  .small-icon {
+    width: 30px;
+  }
+}
+
+@media only screen and(max-width: 1140px){
+  .small {
+    width: 100%;
+    height: 160px;
+  }
+
+  .card_top_1 {
+    font-size: 1.1rem !important;
+  }
+
+  .card_bottom div span {
+    font-size: .8rem;
+  }
+
+  .small-icon {
+    width: 30px;
+  }
+}
+
+@media only screen and(max-width: 992px){
+  .small {
+    width: 100%;
+    height: 300px;
+  }
+
+  .card_top_1 {
+    font-size: 2rem !important;
+  }
+
+  .card_bottom div span {
+    font-size: 1.6rem;
+  }
+
+  .small-icon {
+    width: 70px;
+  }
+}
+
+@media only screen and(max-width: 480px){
+  .small {
+    width: 100%;
+    height: 220px;
+  }
+
+  .card_top_1 {
+    font-size: 1.9rem !important;
+  }
+
+  .card_bottom div span {
+    font-size: 1.2rem;
+  }
+
+  .small-icon {
+    width: 50px;
+  }
+}
+</style>

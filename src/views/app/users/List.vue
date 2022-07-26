@@ -113,7 +113,12 @@
               </template>
             </template>
           </b-table>
-          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+          <Pagination
+            :page="pagination.page"
+            :per-page="pagination.limit"
+            :total="pagination.total"
+            @changePagination="changePagination"
+          />
         </b-card>
       </b-colxx>
     </b-row>

@@ -7,6 +7,7 @@
             <b-tabs v-if="!loadOne" fill content-class="tab-content" v-model="activeTab" nav-class="separator-tabs">
               <b-tab :title="$t('collection.main')">
                 <div class="mt-4"></div>
+<!--1-->
                 <b-form class="av-tooltip tooltip-right-bottom">
                   <b-form-group :label="$t('name') + $t('uz')" class="has-float-label mb-4">
                     <b-form-input type="text" v-model.trim="$v.form.name.uz.$model" :state="!$v.form.name.uz.$error"/>
@@ -32,6 +33,7 @@
                   </b-form-group>
                 </b-form>
               </b-tab>
+<!--2-->
               <b-tab :title="$t('collection.food')" style="height: 100% !important;">
                 <div class="mt-2"></div>
                 <b-button @click="isOpenFilter = !isOpenFilter" variant="primary" class="mb-3 w-100">
@@ -64,7 +66,7 @@
                       v-model="form.foods"
                       name="flavour-2"
                     >
-                      <b-form-checkbox v-for="(food, index) in dataFood" :value="food.id" :key="food.id" :class="{
+                      <b-form-checkbox v-for="(food, index) in unCheckedFoods" :value="food.id" :key="food.id" :class="{
                       'foods': !form.foods.length && form.foods.includes(food.id),
                       'activeFoods': form.foods.length && form.foods.includes(food.id)
                     }">
@@ -81,6 +83,59 @@
                   <strong>{{ $t('loading') }}...</strong>
                 </div>
               </b-tab>
+<!--3-->
+              <b-tab title="Новая Блюда" style="height: 100% !important;">
+                <div class="mt-2"></div>
+                <b-button @click="isOpenFilter = !isOpenFilter" variant="primary" class="mb-3 w-100">
+                  <span :class="`iconsminds-arrow-${isOpenFilter ? 'up' : 'down'}-2 mr-2`"></span>
+                  {{ $t('filter') }}
+                  <span :class="`iconsminds-arrow-${isOpenFilter ? 'up' : 'down'}-2 mr-2`"></span>
+                </b-button>
+                <transition name="slide">
+                  <div v-if="isOpenFilter">
+                    <b-form-group :label="$t('search')" class="has-float-label mb-2">
+                      <b-form-input type="text" @input="searchFood" v-model="foodFilters.search" :placeholder="$t('search')"/>
+                    </b-form-group>
+                    <b-form-group :label="$t('categories')" class="has-float-label mb-2">
+                      <v-select :options="categories" @input="seachCategory"/>
+                    </b-form-group>
+                    <b-form-group :label="$t('vendors')" class="has-float-label mb-4">
+                      <v-select :options="vendors" @input="seachVendors"/>
+                    </b-form-group>
+                  </div>
+                </transition>
+                <div
+                  v-if="!loadFood"
+                  class="dashboard-list-with-thumbs"
+                  style="height: 600px !important; overflow-y: auto"
+                >
+                  <EmptyBox v-if="!loadFood && !dataFood.length"/>
+                  <span>
+                    <b-form-group>
+                    <b-form-checkbox-group
+                      id="checkbox-group-3"
+                      v-model="form.foods"
+                      name="flavour-3"
+                    >
+                      <b-form-checkbox v-for="(food, index) in checkedFoods" :value="food.id" :key="food.id" :class="{
+                      'foods': !form.foods.length && form.foods.includes(food.id),
+                      'activeFoods': form.foods.length && form.foods.includes(food.id)
+                    }">
+                        <foods-card
+                          :order="food"
+                          detail-path="#"
+                        />
+                      </b-form-checkbox>
+                    </b-form-checkbox-group>
+                  </b-form-group>
+                  </span>
+                </div>
+                <div v-else class="text-center text-primary my-2 mt-5">
+                  <b-spinner class="align-middle"></b-spinner>
+                  <strong>{{ $t('loading') }}...</strong>
+                </div>
+              </b-tab>
+<!--4-->
               <b-tab :title="$t('collection.banner')" v-if="form.id">
                 <ImageEditor ref="imageEditor" @loaded="loadedImage"/>
                 <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
@@ -247,8 +302,9 @@ export default {
   },
   mixins: [validationMixin],
   data() {
-    this.searchFood = debounce(this.searchFood, 800)
+    this.searchFood = debounce(this.searchFood, 800);
     return {
+      itemrender: false,
       activeTab: 0,
       images: {
         banner: null,
@@ -317,6 +373,11 @@ export default {
     };
   },
   watch: {
+    // activeTab (e) {
+    //   if(e === 2) {
+    //    this.list=this.filterFood(this.dataFood)
+    //   }
+    // },
     foods (e) {
       console.log(e)
     },
@@ -325,6 +386,16 @@ export default {
     }
   },
   computed: {
+    checkedFoods() {
+      return this.dataFood.filter(e => this.form.foods.includes(e.id));
+    },
+    unCheckedFoods() {
+      return this.dataFood.filter(e => !this.form.foods.includes(e.id));
+    },
+    isRender (e) {
+      console.log(e)
+      return this.itemrender
+    },
     ...mapGetters(getters(_page)),
     ...mapGetters(['dataFood', 'loadFood', 'dataVendors']),
     items() {
@@ -346,8 +417,8 @@ export default {
     },
   },
   mounted() {
-    this.getData()
-    this.getFood()
+    this.getData();
+    this.getFood();
     // this.$store.dispatch('getFood', { no_page: true })
     this.$store.dispatch('getCategories', { no_page: true }).then(res => {
       this.categories = res.map(e => {
@@ -440,7 +511,7 @@ export default {
           this.$store.commit('DELETE_MODAL', {
             isShow: false,
             data: {}
-          })
+          });
           this.images.banner = null
           this.getMediaById()
         })

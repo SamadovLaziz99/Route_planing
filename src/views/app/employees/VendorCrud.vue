@@ -134,6 +134,102 @@
                 </div>
                 <b-button v-else variant="secondary default mt-3" style="width: 100%; border-radius: 5px" @click="$refs.imageEditor.open('vendors', 'patent', $route.params.id)">{{ $t('upload') }}</b-button>
               </b-card>
+
+<!--              Card-->
+
+<!--              <b-card title="Card" class="mb-4">-->
+<!--                <div v-if="cards.length === 0" class="noDataSvg">-->
+<!--                  <img :src="card_png" alt="card" />-->
+<!--                  <h3>Iltimos karta qo'shing!</h3>-->
+<!--                </div>-->
+<!--                <div class="small" v-else v-for="item in cards" style="margin-top: 10px">-->
+<!--                  <div class="card_top">-->
+<!--                    <div class="card_top_1">-->
+<!--                          <span>-->
+<!--                            {{ item.name }}-->
+<!--                          </span>-->
+<!--                    </div>-->
+<!--                    <div class="card_img">-->
+<!--                      <img class="small-icon" src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="card_bottom">-->
+<!--                    <div>-->
+<!--                          <span>-->
+<!--                            {{ item.number }}-->
+<!--                          </span>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--                          <span>-->
+<!--                            {{ item.time }}-->
+<!--                          </span>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="vendors" v-if="images.avatar">-->
+<!--                  <img>-->
+<!--                  <div class="image_action">-->
+<!--                    <div style="display: flex">-->
+<!--&lt;!&ndash;                      <span @click="$refs.imageEditor.open(images.avatar.url)" class="simple-icon-pencil m-2 icon"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <span @click="$store.commit('DELETE_MODAL', { isShow: true, data: images.avatar})" class="simple-icon-trash m-2 icon"></span>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                  <b-button v-b-modal.modalright variant="secondary default mt-3" style="width: 100%; border-radius: 5px" >Karta qo'shish</b-button>-->
+<!--                  <b-modal id="modalright" ref="modalright" title="Plastik Karta qo'shish" modal-class="modal-right">-->
+<!--                    <div>-->
+<!--                      <label for="card-number">Karta raqami:</label>-->
+<!--                      <b-form-input type="text" v-mask="'#### #### #### ####'" v-model="$v.card.number.$model" :state="!$v.card.number.$error" ref="cardNumber" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "19" placeholder="0000 0000 0000 0000" id="card-number" />-->
+<!--                      <b-form-invalid-feedback v-if="!$v.card.number.required">{{ $t('please.enter') + $t('card_number') }}</b-form-invalid-feedback>-->
+<!--                    </div>-->
+<!--                    <div style="margin-top: 15px">-->
+<!--                      <label for="card-name">Nomi:</label>-->
+<!--                      <b-form-input type="text" v-model.trim="$v.card.name.$model" :state="!$v.card.name.$error" ref="cardName" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "15" placeholder="UzCard" id="card-name" required="required" />-->
+<!--                      <b-form-invalid-feedback v-if="!$v.card.name.required">{{ $t('please.enter') + $t('card_name') }}</b-form-invalid-feedback>-->
+<!--                    </div>-->
+<!--                    <div style="margin-top: 15px">-->
+<!--                      <label for="card-number">Tugash vaqti:</label>-->
+<!--                      <b-form-input type="text" v-mask="'##/##'" v-model="$v.card.time.$model" :state="!$v.card.time.$error" ref="cardTime" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "5" id="card-number" placeholder="03/24" />-->
+<!--                      <b-form-invalid-feedback v-if="!$v.card.time.required">{{ $t('please.enter') + $t('card_time') }}</b-form-invalid-feedback>-->
+<!--                    </div>-->
+<!--                    <template slot="modal-footer">-->
+<!--                      <b-button variant="secondary" @click="hideModal('modalright')">Cancel</b-button>-->
+<!--                      <b-button variant="success" @click="submitCard('modalright')" class="mr-1">Karta qo'shish</b-button>-->
+<!--                    </template>-->
+<!--                    <hr />-->
+<!--                    <div class="plastic" v-if="card.name && card.time.length === 5 && card.number.length === 19">-->
+<!--                      <div class="card_top">-->
+<!--                        <div class="card_top_1">-->
+<!--                          <span>-->
+<!--                            {{ card.name }}-->
+<!--                          </span>-->
+<!--                        </div>-->
+<!--                        <div class="card_img">-->
+<!--                          <img src="../../../assets/icons/Uzcard_Logo.png" alt="Card logo">-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="card_bottom">-->
+<!--                        <div>-->
+<!--                          <span>-->
+<!--                            {{ card.number }}-->
+<!--                          </span>-->
+<!--                        </div>-->
+<!--                        <div>-->
+<!--                          <span>-->
+<!--                            {{ card.time }}-->
+<!--                          </span>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </b-modal>-->
+<!--                </div>-->
+<!--              </b-card>-->
+
+<!--              end Card-->
+
+
             </b-colxx>
             <!--      ACTION CONTENT-->
             <b-colxx xxs="12" md="12">
@@ -146,18 +242,20 @@
                 <b-button
                   class="ml-1"
                   variant="outline-secondary"
+                  @click="clearForm"
                 >{{ $t('clear') }}
+
                 </b-button>
-                <!--                <b-button type="submit" variant="primary" class="ml-1">{{ id ? $t('update') : $t('save') }}</b-button>-->
-                <b-button type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }"
-                          variant="primary">
-                  <span class="spinner d-inline-block">
-                      <span class="bounce1"></span>
-                      <span class="bounce2"></span>
-                      <span class="bounce3"></span>
-                  </span>
-                  <span class="label">{{ id ? $t('update') : $t('save') }}</span>
-                </b-button>
+                <                <b-button type="submit" variant="primary" class="ml-1">{{ id ? $t('update') : $t('save') }}</b-button>
+<!--                <b-button type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }"-->
+<!--                          variant="primary">-->
+<!--                  <span class="spinner d-inline-block">-->
+<!--                      <span class="bounce1"></span>-->
+<!--                      <span class="bounce2"></span>-->
+<!--                      <span class="bounce3"></span>-->
+<!--                  </span>-->
+<!--                  <span class="label">{{ id ? $t('update') : $t('save') }}</span>-->
+<!--                </b-button>-->
               </b-card>
             </b-colxx>
             <!--      ACTION CONTENT-->
@@ -178,10 +276,11 @@ import ImageEditor from "../../../components/ImageEditor";
 import {required} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
 import {mapGetters, mapActions} from "vuex";
-const _page = 'vendors'
+const _page = 'vendors';
 import {actions, getters} from "@/utils/store_schema";
+import card_png from "../../../assets/svg/card-1.png"
 
-const {getById, put, post} = actions(_page)
+const {getById, put, post} = actions(_page);
 export default {
   components: {
     'switches': Switches,
@@ -191,8 +290,13 @@ export default {
   validations: {
     form: {
       user: {required},
-      address: {required},
-    }
+      address: {required}
+    },
+    // card: {
+    //   number: {required},
+    //   name: {required},
+    //   time: {required}
+    // }
   },
   watch: {
     times (val) {
@@ -201,6 +305,13 @@ export default {
   },
   data() {
     return {
+      drawer: false,
+      card: {
+        number: "",
+        name: "",
+        time: "",
+      },
+      cards: [],
       id: this.$route.params.id,
       isValidCustom: false,
       times: null,
@@ -221,15 +332,11 @@ export default {
         to: '',
         cola_sponsor: false,
         cola_food: 0
-      }
+      },
+      card_png: card_png
     }
   },
-  mounted() {
-    if (this.id) {
-      this.getDataId()
-    }
-    this.getUsers({ no_page: true })
-  },
+
   computed: {
     ...mapGetters(['dataUsers']),
     ...mapGetters(getters(_page)),
@@ -241,21 +348,58 @@ export default {
           value: e.id
         }
       })
+    },
+    isValid() {
+      return this.card.number.length === 19 && this.card.name.trim() !== "" && this.card.time.length === 5;
     }
   },
   methods: {
     ...mapActions(['getUsers']),
+    hideModal(refname) {
+      this.$refs[refname].hide()
+    },
+    clear() {
+      this.card.number = this.card.name = this.card.time = "";
+    },
+    // submitCard(refname) {
+    //   if(this.isValid) {
+    //     this.$v.card.$touch();
+    //     if (!this.$v.card.$invalid) {
+    //       console.log('Validate');
+    //     }
+    //     this.$refs[refname].hide()
+    //     if (refname === 'modalnestedinline') {
+    //       this.$refs['modalnested'].show()
+    //     }
+    //     this.cards.push({
+    //       name: this.card.name,
+    //       number: this.card.number,
+    //       time: this.card.time
+    //     });
+    //     console.log(this.cards);
+    //     this.clear();
+    //   } else {
+    //     if(this.card.time.length < 5) {
+    //       this.$refs.cardTime.focus();
+    //     }
+    //     if(this.card.name.trim() === "") {
+    //       this.$refs.cardName.focus();
+    //     }
+    //     if(this.card.number.length < 19) {
+    //       this.$refs.cardNumber.focus();
+    //     }
+    //   }
+    // },
     getDataId() {
       this.$store.dispatch(getById, this.id).then(res => {
-        console.log(res)
-        const _form = this.form
-        if (res.latitude && res.longitude) this.coords = [parseFloat(res.latitude), parseFloat(res.longitude)]
-        _form.address = res.address
-        _form.about_me = res.about_me
-        _form.active = res.active
-        _form.verified = res.verified
-        const _from = res.from_field.split(':')
-        const _to = res.to.split(':')
+        const _form = this.form;
+        if (res.latitude && res.longitude) this.coords = [parseFloat(res.latitude), parseFloat(res.longitude)];
+        _form.address = res.address;
+        _form.about_me = res.about_me;
+        _form.active = res.active;
+        _form.verified = res.verified;
+        const _from = res.from_field.split(':');
+        const _to = res.to.split(':');
         if (_from && _to && _from.length && _to.length) {
           _form.from_field = _from.length ? {
             HH: _from[0].length < 2 ? '0' + _from[0] : _from[0],
@@ -292,10 +436,10 @@ export default {
       this.getDataId()
     },
     clickMap(e) {
-      this.coords = e.get('coords')
+      this.coords = e.get('coords');
       this.$store.dispatch('getPointData', this.coords.toString()).then(res => {
-        console.log(res)
-        this.form.address = res[0].name
+        console.log(res);
+        this.form.address = res[0].name;
       })
     },
     removeItem (e) {
@@ -313,34 +457,147 @@ export default {
       })
     },
     submit() {
-      console.log(this.$v)
-      this.isValidCustom = true
-      this.$v.$touch();
+      // console.log(this.$v);
+      this.isValidCustom = true;
+      // this.$v.$touch();
       if (!this.$v.$invalid) {
-        const _form = {...this.form}
-        delete _form.id
-        delete _form.user
-        _form.latitude = this.coords[0]
-        _form.longitude = this.coords[1]
-        _form.user_id = this.form.user?.value
-        _form.from_field = this.form.from_field ? (this.form.from_field['HH'] + ':' + this.form.from_field['mm']) : ''
-        _form.to = this.form.to ? (this.form.to['HH'] + ':' + this.form.to['mm']) : ''
+        const _form = {...this.form};
+        delete _form.id;
+        delete _form.user;
+        _form.latitude = this.coords[0];
+        _form.longitude = this.coords[1];
+        _form.user_id = this.form.user?.value;
+        _form.from_field = this.form.from_field ? (this.form.from_field['HH'] + ':' + this.form.from_field['mm']) : '';
+        _form.to = this.form.to ? (this.form.to['HH'] + ':' + this.form.to['mm']) : '';
         this.$store.dispatch(this.id ? put : post, {
           id: this.id,
           data: _form
         }).then(res => {
-          this.$router.go(-1)
-        })
+          this.$router.go(-1);
+        });
+      }
+    },
+    clearForm () {
+      this.form = {
+        address: '',
+        about_me: '',
+        user: null,
+        active: true,
+        verified: true,
+        from_field: '',
+        apelsin_account: '',
+        to: '',
+        cola_sponsor: false,
+        cola_food: 0
+      };
+
+      this.images = {
+        avatar: null,
+        patent: null,
+        passport: null
       }
     }
-  }
+  },
+  mounted() {
+    if (this.id) {
+      this.getDataId()
+    }
+    this.getUsers({ no_page: true });
+  },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .customTab {
   .nav-tabs {
     border: none;
   }
+}
+
+.plastic {
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1rem;
+  background: linear-gradient(90deg, rgba(0,212,255,1) 6%, rgba(44,198,230,1) 99%);
+  border-radius: 10px;
+  width: 100%;
+  height: 180px;
+}
+.small {
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  background: linear-gradient(90deg, rgba(0,212,255,1) 6%, rgba(44,198,230,1) 99%);
+  border-radius: 10px;
+  width: 70%;
+  height: 100px;
+  margin: 0 auto;
+  //margin-left: 35px;
+}
+
+.small div div {
+  font-size: 0.6rem;
+}
+
+.small-icon {
+  width: 20px !important;
+}
+
+.card_img img {
+  width: 35px;
+}
+
+.card_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card_bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  font-weight: 600;
+}
+
+.card_top div {
+  margin: 8px;
+}
+
+.card_top_1 {
+  font-weight: 600;
+  margin: 8px;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.cardNumberAlert, .cardNameAlert, .cardTimeAlert {
+  padding: 5px;
+  margin-top: 5px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media only screen and(min-width: 1280px){
+  .small {
+    width: 180px;
+  }
+}
+
+.noDataSvg {
+ text-align: center;
+}
+
+.noDataSvg img {
+  width: 200px;
 }
 </style>

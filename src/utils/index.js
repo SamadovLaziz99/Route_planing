@@ -1,4 +1,4 @@
-import { defaultDirection, defaultColor, themeSelectedColorStorageKey, themeRadiusStorageKey, localeOptions, defaultLocale } from '../constants/config'
+import { defaultDirection, defaultColor, themeSelectedColorStorageKey, themeRadiusStorageKey, localeOptions, defaultLocale } from '../constants/config';
 // import { t } from "../locales/i18n";
 export const mapOrder = (array, order, key) => {
   array.sort(function (a, b) {

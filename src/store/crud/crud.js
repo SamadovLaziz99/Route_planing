@@ -1,8 +1,8 @@
 import axios_init from "@/utils/axios_init";
-import { camelize } from '@/utils'
+import { camelize } from '@/utils';
 export default function (param) {
-  const toUpper = param.toUpperCase()
-  const _param = param.split('/').length > 1 ? param.split('/').slice(-1)[0] : param
+  const toUpper = param.toUpperCase();
+  const _param = param.split('/').length > 1 ? param.split('/').slice(-1)[0] : param;
   const _mutations = {
     error: `ERROR_${toUpper}`,
     load: `LOAD_${toUpper}`,
@@ -48,95 +48,97 @@ export default function (param) {
     actions: {
       // get    getSomething
       [camelize(`get ${_param}`)]: function ({ commit }, params) {
-        commit(_mutations.load, true)
+        commit(_mutations.load, true);
         return new Promise((resolve, reject) => {
-          axios_init.get(`${param}/`, params).then(res => {
-            const _res = res.results || res
-            const _total = res.count
-            commit(_mutations.error, null)
-            commit(_mutations.data, _res)
+          axios_init
+            .get(`${param}/`, params)
+            .then(res => {
+            const _res = res.results || res;
+            const _total = res.count;
+            commit(_mutations.error, null);
+            commit(_mutations.data, _res);
             commit(_mutations.pagination, {
               page: params?.page,
               total: _total
-            })
-            resolve(_res)
+            });
+            resolve(_res);
           }).catch(error => {
-            commit(_mutations.error, error)
-            reject(error)
+            commit(_mutations.error, error);
+            reject(error);
           }).finally(() => {
-            commit(_mutations.load, false)
-          })
-        })
+            commit(_mutations.load, false);
+          });
+        });
       },
 
       // get id   getByIdSomething
       [camelize(`get by id ${_param}`)]: function ({ commit }, payload) {
-        commit(_mutations.oneLoad, true)
+        commit(_mutations.oneLoad, true);
         return new Promise((resolve, reject) => {
           axios_init.get(`${param}/${payload}/`, ).then(res => {
-            commit(_mutations.error, null)
-            resolve(res)
+            commit(_mutations.error, null);
+            resolve(res);
           }).catch(error => {
-            commit(_mutations.error, error)
-            reject(error)
+            commit(_mutations.error, error);
+            reject(error);
           }).finally(() => {
-            commit(_mutations.oneLoad, false)
-          })
-        })
+            commit(_mutations.oneLoad, false);
+          });
+        });
       },
 
       //post   postSomething
       [camelize(`post ${_param}`)]: function ({ commit, dispatch }, payload) {
-        commit(_mutations.pending, true)
+        commit(_mutations.pending, true);
         return new Promise((resolve, reject) => {
           axios_init.post(`${param}/`, payload.data).then(res => {
             dispatch('success_alert', {
               title: `${_param.slice(0, 1).toUpperCase() + _param.slice(1)} created successfully`
-            })
-            resolve(res)
+            });
+            resolve(res);
           }).catch(error => {
-            // commit(_mutations.error, error)
-            reject(error)
+            // commit(_mutations.error, error);
+            reject(error);
           }).finally(() => {
-            commit(_mutations.pending, false)
+            commit(_mutations.pending, false);
           })
         })
       },
 
       //update  putSomething
       [camelize(`put ${_param}`)]: function ({ commit, dispatch }, payload) {
-        commit(_mutations.pending, true)
+        commit(_mutations.pending, true);
         return new Promise((resolve, reject) => {
           axios_init.put(`${param}/${ payload.id }/`, payload.data).then(res => {
             dispatch('success_alert', {
               title: `${param.slice(0, 1).toUpperCase() + param.slice(1)} updated successfully`
-            })
-            resolve(res)
+            });
+            resolve(res);
           }).catch(error => {
-            // commit(_mutations.error, error)
-            reject(error)
+            // commit(_mutations.error, error);
+            reject(error);
           }).finally(() => {
-            commit(_mutations.pending, false)
-          })
-        })
+            commit(_mutations.pending, false);
+          });
+        });
       },
 
       //delete   deleteSomething
       [camelize(`delete ${_param}`)]: function ({ commit, dispatch }, payload) {
-        commit(_mutations.deleting, true)
+        commit(_mutations.deleting, true);
         return new Promise((resolve, reject) => {
           axios_init.remove(`${param}/${ payload }`).then(res => {
             dispatch('success_alert', {
               title: `${_param.slice(0, 1).toUpperCase() + _param.slice(1)} deleted successfully`
-            })
-            resolve(res)
+            });
+            resolve(res);
           }).catch(error => {
-            // commit(_mutations.error, error)
-            reject(error)
+            // commit(_mutations.error, error);
+            reject(error);
           }).finally(() => {
-            commit(_mutations.deleting, false)
-          })
-        })
+            commit(_mutations.deleting, false);
+          });
+        });
       },
     }
   }
