@@ -137,10 +137,10 @@
 
 <!--              Card-->
 
-             <b-card title="Card" class="mb-4">
+             <b-card :title="$t('card')" class="mb-4">
                <div v-if="cards.length === 0" class="noDataSvg">
                  <img :src="card_png" alt="card" />
-                 <h3>Iltimos karta qo'shing!</h3>
+                 <h3>{{ $t('please-add-a-card!') }}</h3>
                </div>
                <div class="small" v-else v-for="item in cards" style="margin-top: 10px">
                  <div class="card_top">
@@ -177,23 +177,23 @@
                  </div>
                </div>
                <div>
-                 <b-button v-b-modal.modalright variant="secondary default mt-3" style="width: 100%; border-radius: 5px" >Karta qo'shish</b-button>
+                 <b-button v-b-modal.modalright variant="secondary default mt-3" style="width: 100%; border-radius: 5px" >{{ $t('addCard') }}</b-button>
                  <b-modal id="modalright" ref="modalright" title="Plastik Karta qo'shish" modal-class="modal-right">
                    <div>
-                     <label for="card-number">Karta raqami:</label>
+                     <label for="card-number">{{ $t('cardNumber') }}</label>
                      <b-form-input type="text" v-mask="'#### #### #### ####'" v-model="card.number" ref="cardNumber" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "19" placeholder="0000 0000 0000 0000" id="card-number" />
                    </div>
                    <div style="margin-top: 15px">
-                     <label for="card-name">Nomi:</label>
+                     <label for="card-name">{{ $t('name') }}:</label>
                      <b-form-input type="text" v-model.trim="card.name" ref="cardName" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "15" placeholder="UzCard" id="card-name" required="required" />
                    </div>
                    <div style="margin-top: 15px">
-                     <label for="card-number">Tugash vaqti:</label>
+                     <label for="card-number">{{ $t('endTime') }}</label>
                      <b-form-input type="text" v-mask="'##/##'" v-model="card.time" ref="cardTime" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength = "5" id="card-number" placeholder="03/24" />
                    </div>
                    <template slot="modal-footer">
-                     <b-button variant="secondary" @click="hideModal('modalright')">Cancel</b-button>
-                     <b-button variant="success" @click="submitCard('modalright')" class="mr-1">Karta qo'shish</b-button>
+                     <b-button variant="secondary" @click="hideModal('modalright')">{{ $t('cancel') }}</b-button>
+                     <b-button variant="success" @click="submitCard('modalright')" class="mr-1">{{ $t('addCard') }}</b-button>
                    </template>
                    <hr />
                    <div class="plastic" v-if="card.name && card.time.length === 5 && card.number.length === 19">
@@ -370,6 +370,7 @@ export default {
           color: "blue",
           user: cardUserId
         }
+        console.log(sendData)
 
         this.cards.push({
           name: this.card.name,
@@ -464,7 +465,6 @@ export default {
       })
     },
     submit() {
-      // console.log(this.$v);
       this.isValidCustom = true;
       // this.$v.$touch();
       if (!this.$v.$invalid) {
