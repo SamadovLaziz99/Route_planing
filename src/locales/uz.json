@@ -1,5 +1,9 @@
 {
   "category.create": "Turkum yaratish",
+  "addCard": "Karta qo'shish",
+  "cardNumber": "Karta raqami:",
+  "endTime": "Tugash vaqti:",
+  "please-add-a-card!": "Iltimos karta qo'shing!",
   "category.update": "Kategoriyani yangilash",
   "position": "Pozitsiya",
   "uz": "o'zbek",

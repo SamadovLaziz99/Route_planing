@@ -1,5 +1,9 @@
 {
   "category.create": "Create category",
+  "addCard": "Add card",
+  "cardNumber": "Card number:",
+  "endTime": "End time",
+  "please-add-a-card!": "Please add a card!",
   "category.update": "Update category",
   "position": "Position",
   "uz": "uzbek",
