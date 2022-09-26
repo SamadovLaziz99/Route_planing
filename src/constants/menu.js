@@ -8,14 +8,14 @@ const roles = {
 // // import { UserRole } from "../utils/auth.roles";
 // const { admin, super_admin, operator, courier_operator, marketolog } = roles
 const data = [
-  {
-    id: "dashboards",
-    icon: "simple-icon-chart",
-    label: "menu.dashboards",
-    to: `${adminRoot}/dashboards`,
-    roles: [roles.super_admin, roles.operator, roles.marketolog],
-    subs: []
-  },
+  // {
+  //   id: "dashboards",
+  //   icon: "simple-icon-chart",
+  //   label: "menu.dashboards",
+  //   to: `${adminRoot}/dashboards`,
+  //   roles: [roles.super_admin, roles.operator, roles.marketolog],
+  //   subs: []
+  // },
   {
     id: "orders",
     icon: "iconsminds-shopping-cart",

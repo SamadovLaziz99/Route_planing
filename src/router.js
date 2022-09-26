@@ -29,20 +29,20 @@ const routes = [
     meta: { loginRequired: true, roles: [UserRole.Admin, UserRole.Editor] },
     */
     children: [
-      {
-        path: "dashboards",
-        component: () => import("./views/app/dashboards"),
-        redirect: (JSON.parse(localStorage.getItem('detail')) && (JSON.parse(localStorage.getItem('detail')).role.role === roles.courier_operator)) ?`${adminRoot}/orders` : `${adminRoot}/dashboards/analytics`,
-        meta: { roles: [roles.super_admin, roles.operator, roles.marketolog] },
-        children: [
-          {
-            path: "analytics",
-            component: () => import("./views/app/dashboards/Default"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.marketolog] },
-            // meta: { roles: [UserRole.Admin] },
-          }
-        ]
-      },
+      // {
+      //   path: "dashboards",
+      //   component: () => import("./views/app/dashboards"),
+      //   redirect: (JSON.parse(localStorage.getItem('detail')) && (JSON.parse(localStorage.getItem('detail')).role.role === roles.courier_operator)) ?`${adminRoot}/orders` : `${adminRoot}/dashboards/analytics`,
+      //   meta: { roles: [roles.super_admin, roles.operator, roles.marketolog] },
+      //   children: [
+      //     {
+      //       path: "analytics",
+      //       component: () => import("./views/app/dashboards/Default"),
+      //       meta: { roles: [roles.super_admin, roles.operator, roles.marketolog] },
+      //       // meta: { roles: [UserRole.Admin] },
+      //     }
+      //   ]
+      // },
       {
         path: "orders",
         component: () => import("./views/app/pages"),
