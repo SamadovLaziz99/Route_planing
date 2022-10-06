@@ -1,4 +1,4 @@
-import { isAuthGuardActive } from '../constants/config'
+import { isAuthGuardActive } from '../constants/config';
 import { setCurrentUser, getCurrentUser } from '.'
 export default (to, from, next) => {
   if (to.matched.some(record => record.meta.loginRequired)) {

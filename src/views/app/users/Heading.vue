@@ -5,7 +5,7 @@
       <div class="top-right-button-container">
         <slot name="action"></slot>
       </div>
-      <piaf-breadcrumb />
+      <piaf-breadcrumb/>
       <div class="mb-3 mt-3">
         <div class="d-flex justify-content-between">
           <div></div>
@@ -15,7 +15,7 @@
             v-b-toggle.displayOptions
           >
             {{ $t('filters') }}
-            <i class="simple-icon-arrow-down align-middle" />
+            <i class="simple-icon-arrow-down align-middle"/>
           </b-button>
         </div>
         <b-collapse id="displayOptions" class="d-md-block mt-3">
@@ -23,17 +23,17 @@
             <b-row>
               <b-colxx xxs="12" md="2">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('id')" @input="filter" v-model="filters.user_id"  />
+                  <b-input class="search_input" :placeholder="$t('id')" @input="filter" v-model="filters.user_id"/>
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('search')" @input="filter" v-model="filters.search"  />
+                  <b-input class="search_input" :placeholder="$t('search')" @input="filter" v-model="filters.search"/>
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('phone')" @input="filter" v-model="filters.phone"  />
+                  <b-input class="search_input" :placeholder="$t('phone')" @input="filter" v-model="filters.phone"/>
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="1">
@@ -41,7 +41,7 @@
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="float-md-right pt-1">
-                  <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} {{ $t('of') }} {{ total }}</span>
+                  <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ total }}</span>
                 </div>
               </b-colxx>
             </b-row>
@@ -60,7 +60,7 @@ import {
 } from "../../../components/Svg";
 import AddNewModal from "../../../containers/pages/AddNewModal";
 import debounce from 'debounce'
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -98,7 +98,7 @@ export default {
     };
   },
   methods: {
-    filter (e) {
+    filter(e) {
       this.$emit('filters', this.filters)
     }
   },
