@@ -8,11 +8,11 @@
         <b-row>
           <b-colxx xxs="12" lg="4" class="mb-4">
             <b-card class="mb-4" no-body>
-<!--              <div class="position-absolute card-top-buttons">-->
-<!--                <b-button variant="outline-white" class="icon-button">-->
-<!--                  <i class="simple-icon-pencil"/>-->
-<!--                </b-button>-->
-<!--              </div>-->
+              <!--              <div class="position-absolute card-top-buttons">-->
+              <!--                <b-button variant="outline-white" class="icon-button">-->
+              <!--                  <i class="simple-icon-pencil"/>-->
+              <!--                </b-button>-->
+              <!--              </div>-->
               <img :src="defImage" alt="Detail" class="card-img-top"/>
               <b-card-body>
                 <p class="text-muted text-small mb-2">{{ $t('first.name') }}</p>
@@ -49,7 +49,9 @@
                 </template>
                 <template #cell(action)="{ item }">
                   <div style="display: flex">
-                    <div @click="$router.push({ name: 'order_details', params: { id: item.id } })" class="glyph-icon simple-icon-eye mr-2 w-100 text-center action_button" id="view_button" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                    <div @click="$router.push({ name: 'order_details', params: { id: item.id } })"
+                         class="glyph-icon simple-icon-eye mr-2 w-100 text-center action_button" id="view_button"
+                         style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
                   </div>
                 </template>
                 <template #cell(status)="{ item }">
@@ -62,9 +64,12 @@
                   <div>#{{ item.id }}</div>
                 </template>
                 <template #cell(payment_type)="{ item }">
-                  <div v-if="item.payment_type === 'cash'" style="font-size: 28px" class="iconsminds-dollar text-primary"></div>
-                  <div v-if="item.payment_type === 'balance'" style="font-size: 28px" class="iconsminds-wallet text-primary"></div>
-                  <div v-if="item.payment_type === 'card'" style="font-size: 28px" class="simple-icon-credit-card text-primary"></div>
+                  <div v-if="item.payment_type === 'cash'" style="font-size: 28px"
+                       class="iconsminds-dollar text-primary"></div>
+                  <div v-if="item.payment_type === 'balance'" style="font-size: 28px"
+                       class="iconsminds-wallet text-primary"></div>
+                  <div v-if="item.payment_type === 'card'" style="font-size: 28px"
+                       class="simple-icon-credit-card text-primary"></div>
                 </template>
                 <template #cell(delivery_time)="{ item }">
                   {{ moment(item.delivery_time).format('YYYY-MM-DD HH:mm') }}
@@ -89,7 +94,7 @@
 import {comments} from "../../../data/comments";
 import EmptyBox from "../../../components/EmptyBox";
 import moment from "moment";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -164,19 +169,26 @@ export default {
     moment,
     badgeType(type) {
       switch (type) {
-        case 'pending': return 'info'
+        case 'pending':
+          return 'info'
           break;
-        case 'accepted': return 'secondary'
+        case 'accepted':
+          return 'secondary'
           break;
-        case 'in_process': return 'light'
+        case 'in_process':
+          return 'light'
           break;
-        case 'shipping': return 'dark'
+        case 'shipping':
+          return 'dark'
           break;
-        case 'finished': return 'success'
+        case 'finished':
+          return 'success'
           break;
-        case 'cancelled': return 'danger'
+        case 'cancelled':
+          return 'danger'
           break;
-        default: return 'primary'
+        default:
+          return 'primary'
           break;
       }
     },
@@ -189,8 +201,8 @@ export default {
       user_id: this.$route.params.id,
       no_page: true
     }).then(res => {
-      this.orders = res
-      console.log(res)
+      this.orders = res;
+      console.log(res);
     })
     this.$store.dispatch('getByIdUsers', this.$route.params.id).then(res => {
       this.user = res

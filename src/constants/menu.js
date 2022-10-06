@@ -1,6 +1,8 @@
-import { adminRoot } from "./config";
+import {adminRoot} from "./config";
+
 const roles = {
   super_admin: 'superadmin',
+  public: 'Public',
   operator: 'operator',
   courier_operator: 'courier_bro',
   marketolog: 'marketolog'
@@ -86,7 +88,7 @@ const data = [
     icon: "simple-icon-user",
     label: "menu.users",
     to: `${adminRoot}/users`,
-    roles: [roles.super_admin, roles.operator],
+    // roles: [roles.super_admin, roles.operator, roles.public],
     subs: []
     // subs: [
     //   {
@@ -102,21 +104,21 @@ const data = [
     icon: "iconsminds-business-man",
     label: "menu.employees",
     to: `${adminRoot}/employees`,
-    roles: [roles.super_admin, roles.operator],
+    // roles: [roles.super_admin, roles.operator, roles.public],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: [
       // {
       //   icon: "iconsminds-chef-hat",
       //   label: "menu.vendors",
       //   to: `${adminRoot}/employees/vendors`,
-      //   roles: [roles.super_admin, roles.operator],
+      //   roles: [roles.super_admin, roles.operator, roles.public],
       //   // roles: [UserRole.Admin],
       // },
       // {
       //   icon: "simple-icon-user-follow",
       //   label: "menu.applicants",
       //   to: `${adminRoot}/employees/applicants`,
-      //   roles: [roles.super_admin, roles.operator],
+      //   roles: [roles.super_admin, roles.operator, roles.public],
       //   // roles: [UserRole.Admin],
       // },
       {
@@ -146,7 +148,7 @@ const data = [
     icon: "simple-icon-map",
     label: "menu.maps",
     to: `${adminRoot}/maps`,
-    roles: [roles.super_admin, roles.courier_operator],
+    // roles: [roles.super_admin, roles.courier_operator],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: []
   },
@@ -155,7 +157,7 @@ const data = [
     icon: "simple-icon-tag",
     label: "menu.vouchers",
     to: `${adminRoot}/vouchers`,
-    roles: [roles.super_admin, roles.courier_operator],
+    // roles: [roles.super_admin, roles.courier_operator],
     // roles: [UserRole.Admin, UserRole.Editor],
     subs: []
   },
@@ -172,7 +174,7 @@ const data = [
     icon: "simple-icon-settings",
     label: "menu.settings",
     to: `${adminRoot}/settings`,
-    roles: [roles.super_admin, roles.operator, roles.courier_operator],
+    // roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator],
     subs: [
       // {
       //   icon: "iconsminds-key",
@@ -196,25 +198,25 @@ const data = [
       //   icon: "iconsminds-video",
       //   label: "menu.video_tutorial",
       //   to: `${adminRoot}/settings/video_tutorial`,
-      //   roles: [roles.super_admin, roles.operator, roles.courier_operator],
+      //   roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator],
       // },
       {
         icon: "iconsminds-cupcake",
         label: "menu.inventory",
         to: `${adminRoot}/settings/inventory`,
-        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+        // roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator],
       },
       {
         icon: "iconsminds-cupcake",
         label: "menu.vendor_inventory",
         to: `${adminRoot}/settings/vendor_inventory`,
-        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+        // roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator],
       },
       {
         icon: "simple-icon-settings",
         label: "menu.main_settings",
         to: `${adminRoot}/settings/main_settings`,
-        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+        // roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator],
       },
       // {
       //   icon: "iconsminds-digital-drawing",

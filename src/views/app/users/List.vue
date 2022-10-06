@@ -7,30 +7,53 @@
             <b-form class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('first.name')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.first_name.$model" :state="!$v.form.first_name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.first_name.required">{{ $t('please.enter') + $t('first.name') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.first_name.required">{{
+                    $t('please.enter') + $t('first.name')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('last.name')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{ $t('please.enter') + $t('last.name') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{
+                    $t('please.enter') + $t('last.name')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('phone')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.phone.$model" :state="!$v.form.phone.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{ $t('please.enter') + $t('phone') }}</b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX XX XX</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{
+                    $t('please.enter') + $t('phone')
+                  }}
+                </b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX
+                  XX XX
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('email')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.email.$model" :state="!$v.form.email.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.email.required">{{ $t('please.enter') + $t('email') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.email.required">{{
+                    $t('please.enter') + $t('email')
+                  }}
+                </b-form-invalid-feedback>
                 <b-form-invalid-feedback v-if="!$v.form.email.email">{{ $t('error.email') }}</b-form-invalid-feedback>
               </b-form-group>
               <b-form-group v-if="!form.id" :label="$t('password')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.password.$model" :state="!$v.form.password.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.password.required">{{ $t('please.enter') + $t('password') }}</b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6 characters</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.password.required">{{
+                    $t('please.enter') + $t('password')
+                  }}
+                </b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6
+                  characters
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.re_password.$model" :state="!$v.form.re_password.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{ $t('re.password.error') }}</b-form-invalid-feedback>
+                <b-form-input type="text" v-model.trim="$v.form.re_password.$model"
+                              :state="!$v.form.re_password.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{
+                    $t('re.password.error')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <!--            <b-form-group :label="$t('pages.status')">-->
               <!--              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />-->
@@ -38,7 +61,8 @@
             </b-form>
           </div>
           <div slot="action">
-            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <b-button @click="submit" type="submit"
+                      :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
@@ -93,9 +117,14 @@
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer" @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div class="glyph-icon simple-icon-eye mr-2"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"
+                     @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"
+                     class="glyph-icon simple-icon-trash mr-2"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>
             <template #cell(status)="row">
@@ -132,10 +161,11 @@ import Pagination from "../../../components/TableComponents/Pagination";
 import {mapGetters} from "vuex";
 import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
-import { actions, getters } from "../../../utils/store_schema";
+import {actions, getters} from "../../../utils/store_schema";
 import moment from 'moment'
+
 const _page = 'users'
-const { get, getById, put, post, remove } = actions(_page)
+const {get, getById, put, post, remove} = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -195,24 +225,18 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
-          key: 'first_name',
-          label: this.$t('first.name'),
+          key: 'username',
+          label: this.$t('username'),
           // tdClass: 'firstColumn'
         },
         {
-          key: 'last_name',
-          label: this.$t('last.name'),
+          key: 'phone',
+          label: this.$t('phone'),
           // tdClass: 'firstColumn'
         },
         {
-          key: 'balance',
-          label: this.$t('coozin.balance'),
-          class: 'text-center'
-          // tdClass: 'firstColumn'
-        },
-        {
-          key: 'count',
-          label: this.$t('order.count'),
+          key: 'email',
+          label: this.$t('email'),
           class: 'text-center'
           // tdClass: 'firstColumn'
         },
@@ -239,11 +263,11 @@ export default {
   },
   methods: {
     moment,
-    validPh (value) {
+    validPh(value) {
       console.log(value)
       return /^[+][9][9][8]\d{9}$/.test(value)
     },
-    closed (e) {
+    closed(e) {
       console.log(e)
       this.clear()
     },
@@ -260,8 +284,8 @@ export default {
         balance: 0
       }
     },
-    edit (item) {
-      const _data = { ...item.item }
+    edit(item) {
+      const _data = {...item.item}
       delete _data.date_joined
       delete _data.is_staff
       delete _data.is_superuser
@@ -275,7 +299,7 @@ export default {
       this.$v.$touch();
       console.log(this.$v)
       if (!this.$v.$invalid) {
-        const _form = { ...this.form }
+        const _form = {...this.form}
         delete _form.id
         delete _form.re_password
         // if (this.form.id) delete _form.password
@@ -297,7 +321,7 @@ export default {
         this.from = (this.pagination.page - 1) * 15
       })
     },
-    changePagination (e) {
+    changePagination(e) {
       this.page = e
       this.getData()
       console.log(this.$route)
@@ -315,8 +339,8 @@ export default {
       this.page = 1
       this.getData()
     },
-    excelReport () {
-      const { user_id, search, phone } = this.filters
+    excelReport() {
+      const {user_id, search, phone} = this.filters
       const link = document.createElement('a')
       link.href = process.env.VUE_APP_BASE_URL + `/users/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
       console.log(link.href)
@@ -324,10 +348,10 @@ export default {
       document.body.appendChild(link)
       link.click()
     },
-    filtered (val) {
+    filtered(val) {
       this.filters = val
       this.page = 1
-      this.$router.push({ name: this.$route.name, query: this.filters })
+      this.$router.push({name: this.$route.name, query: this.filters})
       this.getData(val)
     },
     removeItem(e) {
