@@ -15,14 +15,10 @@
               <!--              </div>-->
               <img :src="defImage" alt="Detail" class="card-img-top"/>
               <b-card-body>
-                <p class="text-muted text-small mb-2">{{ $t('first.name') }}</p>
-                <p class="mb-3">{{ user.first_name }}</p>
-                <p class="text-muted text-small mb-2">{{ $t('last.name') }}</p>
-                <p class="mb-3">{{ user.last_name }}</p>
+                <p class="text-muted text-small mb-2">{{ $t('username') }}</p>
+                <p class="mb-3">{{ user.username }}</p>
                 <p class="text-muted text-small mb-2">{{ $t('phone') }}</p>
-                <p class="mb-3">{{ user.phone }}</p>
-                <p class="text-muted text-small mb-2">{{ $t('balance') }}</p>
-                <p class="mb-3">{{ new Intl.NumberFormat().format(user.balance) }} {{ $t('sum') }}</p>
+                <p class="mb-3">{{ user.phone ? user.phone : "-" }}</p>
                 <p class="text-muted text-small mb-2">{{ $t('created_at') }}</p>
                 <p>{{ moment(user.created_at).format('YYYY-MM-DD HH:mm') }}</p>
               </b-card-body>
@@ -201,11 +197,11 @@ export default {
       user_id: this.$route.params.id,
       no_page: true
     }).then(res => {
-      this.orders = res;
-      console.log(res);
+      this.orders = res.data;
     })
     this.$store.dispatch('getByIdUsers', this.$route.params.id).then(res => {
-      this.user = res
+      console.log("User: ", res);
+      this.user = res;
     })
   }
 };

@@ -1,5 +1,5 @@
 import { isAuthGuardActive } from '../constants/config';
-import { setCurrentUser, getCurrentUser } from '.'
+import { setCurrentUser, getCurrentUser } from '.';
 export default (to, from, next) => {
   if (to.matched.some(record => record.meta.loginRequired)) {
     if (isAuthGuardActive) {
@@ -9,16 +9,16 @@ export default (to, from, next) => {
         if (roleArrayHierarchic.every(x => x.includes(user.role))) {
           next();
         } else {
-          next('/unauthorized')
+          next('/unauthorized');
         }
       } else {
         setCurrentUser(null);
-        next('/user/login')
+        next('/user/login');
       }
     } else {
       next();
     }
   } else {
-    next()
+    next();
   }
 }

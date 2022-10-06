@@ -25,7 +25,7 @@
                     $t('please.enter') + $t('phone')
                   }}
                 </b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: +998 XX XXX
+                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: 998 XX XXX
                   XX XX
                 </b-form-invalid-feedback>
               </b-form-group>
@@ -104,7 +104,7 @@
         <b-card :title="$t(`menu.users`)" class="mb-4">
           <b-table
             hover
-            :items="data"
+            :items="dataList"
             :fields="fields"
             :busy="load"
             responsive
@@ -164,8 +164,8 @@ import {validationMixin} from "vuelidate";
 import {actions, getters} from "../../../utils/store_schema";
 import moment from 'moment'
 
-const _page = 'users'
-const {get, getById, put, post, remove} = actions(_page)
+const _page = 'users';
+const {get, getById, put, post, remove} = actions(_page);
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -202,6 +202,7 @@ export default {
   },
   data() {
     return {
+      dataList: [],
       form: {
         id: null,
         first_name: '',
@@ -265,7 +266,7 @@ export default {
     moment,
     validPh(value) {
       console.log(value)
-      return /^[+][9][9][8]\d{9}$/.test(value)
+      return /^[9][9][8]\d{9}$/.test(value)
     },
     closed(e) {
       console.log(e)
@@ -315,16 +316,23 @@ export default {
     getData(params) {
       this.$store.dispatch(get, {
         page: this.page,
+        populate: "*",
         ...params
       }).then(res => {
+        console.log(res);
+        this.dataList = res;
+        this.dataList.map(el => {
+          if(!el.phone) {
+            el.phone = "-"
+          }
+        });
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       })
     },
     changePagination(e) {
-      this.page = e
-      this.getData()
-      console.log(this.$route)
+      this.page = e;
+      this.getData();
       // let _query = { ...this.$route.query }
       // _query.page = e
       // _query.limit = this.pagination.limit

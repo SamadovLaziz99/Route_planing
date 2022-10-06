@@ -23,25 +23,25 @@ const data = [
     icon: "iconsminds-shopping-cart",
     label: "menu.orders",
     to: `${adminRoot}/orders`,
-    roles: [roles.super_admin, roles.operator, roles.courier_operator],
+    // roles: [roles.super_admin, roles.operator, roles.courier_operator],
     subs: [
       {
         icon: "iconsminds-shop-4",
         label: "menu.orders_list",
         to: `${adminRoot}/orders/list?type=pending`,
-        roles: [roles.super_admin, roles.operator, roles.courier_operator],
+        // roles: [roles.super_admin, roles.operator, roles.courier_operator],
       },
       {
         icon: "iconsminds-cash-register-2",
         label: "menu.orders_history",
         to: `${adminRoot}/orders/history?type=finished`,
-        roles: [roles.super_admin, roles.operator],
+        // roles: [roles.super_admin, roles.operator],
       },
       {
         icon: "iconsminds-receipt-4",
         label: "menu.transactions",
         to: `${adminRoot}/orders/transactions`,
-        roles: [roles.super_admin],
+        // roles: [roles.super_admin],
         // roles: [UserRole.Admin],
       },
     ]
@@ -125,7 +125,7 @@ const data = [
         icon: "iconsminds-scooter",
         label: "menu.couriers",
         to: `${adminRoot}/employees/couriers`,
-        roles: [roles.super_admin],
+        // roles: [roles.super_admin],
         // roles: [UserRole.Admin],
       },
       // {
@@ -138,7 +138,7 @@ const data = [
         icon: "iconsminds-conference",
         label: "menu.system_users",
         to: `${adminRoot}/employees/system_users`,
-        roles: [roles.super_admin],
+        // roles: [roles.super_admin],
         // roles: [UserRole.Admin],
       }
     ]
