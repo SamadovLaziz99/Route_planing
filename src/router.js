@@ -22,7 +22,7 @@ const routes = [
   {
     path: adminRoot,
     component: () => import(/* webpackChunkName: "app" */ "./views/app"),
-    redirect: `${adminRoot}/dashboards`,
+    redirect: `${adminRoot}/users`,
     meta: { loginRequired: true },
     /*
     define with Authorization :
@@ -78,61 +78,61 @@ const routes = [
           },
         ]
       },
-      {
-        path: "foods",
-        component: () => import("./views/app/pages"),
-        redirect: `${adminRoot}/foods/list`,
-        meta: { roles: [roles.super_admin, roles.operator] },
-        children: [
-          {
-            path: "list",
-            name: 'food_list',
-            component: () => import("./views/app/foods/List"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "create",
-            name: 'food_create',
-            component: () => import("./views/app/foods/FoodCrud"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "update/:id",
-            name: 'food_update',
-            component: () => import("./views/app/foods/FoodCrud"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "details/:id",
-            name: 'food_detail',
-            component: () => import("./views/app/foods/Details"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "categories",
-            name: "categories",
-            component: () => import("./views/app/foods/Category"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "unit",
-            component: () => import("./views/app/foods/Unit"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "collection",
-            component: () => import("./views/app/foods/Collection"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-        ]
-      },
+      // {
+      //   path: "foods",
+      //   component: () => import("./views/app/pages"),
+      //   redirect: `${adminRoot}/foods/list`,
+      //   meta: { roles: [roles.super_admin, roles.operator] },
+      //   children: [
+      //     {
+      //       path: "list",
+      //       name: 'food_list',
+      //       component: () => import("./views/app/foods/List"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //     {
+      //       path: "create",
+      //       name: 'food_create',
+      //       component: () => import("./views/app/foods/FoodCrud"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //     {
+      //       path: "update/:id",
+      //       name: 'food_update',
+      //       component: () => import("./views/app/foods/FoodCrud"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //     {
+      //       path: "details/:id",
+      //       name: 'food_detail',
+      //       component: () => import("./views/app/foods/Details"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //     {
+      //       path: "categories",
+      //       name: "categories",
+      //       component: () => import("./views/app/foods/Category"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //     {
+      //       path: "unit",
+      //       component: () => import("./views/app/foods/Unit"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //     {
+      //       path: "collection",
+      //       component: () => import("./views/app/foods/Collection"),
+      //       meta: { roles: [roles.super_admin, roles.operator] },
+      //       children: []
+      //     },
+      //   ]
+      // },
       {
         path: "users",
         name: 'users',
@@ -155,20 +155,20 @@ const routes = [
         redirect: `${adminRoot}/employees/vendors`,
         meta: { roles: [roles.super_admin, roles.operator] },
         children: [
-          {
-            path: "vendors",
-            name: "vendors_list",
-            component: () => import("./views/app/employees/ListVendors"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
-          {
-            path: "vendors/create",
-            name: 'vendor_create',
-            component: () => import("./views/app/employees/VendorCrud"),
-            meta: { roles: [roles.super_admin, roles.operator] },
-            children: []
-          },
+          // {
+          //   path: "vendors",
+          //   name: "vendors_list",
+          //   component: () => import("./views/app/employees/ListVendors"),
+          //   meta: { roles: [roles.super_admin, roles.operator] },
+          //   children: []
+          // },
+          // {
+          //   path: "vendors/create",
+          //   name: 'vendor_create',
+          //   component: () => import("./views/app/employees/VendorCrud"),
+          //   meta: { roles: [roles.super_admin, roles.operator] },
+          //   children: []
+          // },
           {
             path: "vendors/update/:id",
             name: 'vendor_update',

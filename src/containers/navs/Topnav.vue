@@ -6,14 +6,14 @@
         class="menu-button d-none d-md-block"
         @click.prevent.stop="changeSideMenuStatus({step :menuClickCount+1,classNames:menuType,selectedMenuHasSubItems})"
       >
-        <menu-icon />
+        <menu-icon/>
       </a>
       <a
         href="#"
         class="menu-button-mobile d-xs-block d-sm-block d-md-none"
         @click.prevent.stop="changeSideMenuForMobile(menuType)"
       >
-        <mobile-menu-icon />
+        <mobile-menu-icon/>
       </a>
       <div
         :class="{'search':true, 'mobile-view':isMobileSearch}"
@@ -39,22 +39,24 @@
           toggle-class="language-button"
         >
           <template slot="button-content">
-            <span class="name">{{$i18n.locale.toUpperCase()}}</span>
+            <span class="name">{{ $i18n.locale.toUpperCase() }}</span>
           </template>
           <b-dropdown-item
             v-for="(l, index) in localeOptions"
             :key="index"
             @click="changeLocale(l.id)"
-          >{{ l.name }}</b-dropdown-item>
+          >{{ l.name }}
+          </b-dropdown-item>
         </b-dropdown>
       </div>
     </div>
-    <router-link class="navbar-logo" :to="adminRoot">
+    <router-link :to="adminRoot">
       <span class="logo d-none d-xl-flex">
-        <logo/>
+        <h1>Route-Planing</h1>
+        <!--        <logo/>-->
       </span>
       <span class="d-block d-xl-none">
-        <div style="width: 44px; height: 44px" >
+        <div style="width: 44px; height: 44px">
           <img style="width: 100%; height: 100%" src="../../assets/logos/mobile.svg" alt="">
         </div>
       </span>
@@ -72,83 +74,83 @@
         <b-tooltip target="tool-mode-switch" placement="left" :title="$t('dark_mode')"></b-tooltip>
       </div>
       <div class="header-icons d-inline-block align-middle">
-<!--        <div class="position-relative d-none d-sm-inline-block">-->
-<!--          <b-dropdown-->
-<!--            variant="empty"-->
-<!--            size="sm"-->
-<!--            right-->
-<!--            toggle-class="header-icon"-->
-<!--            menu-class="position-absolute mt-3 iconMenuDropdown"-->
-<!--            no-caret-->
-<!--          >-->
-<!--            <template slot="button-content">-->
-<!--              <i class="simple-icon-grid" />-->
-<!--            </template>-->
-<!--            <div>-->
-<!--              <router-link :to="`${adminRoot}/dashboards/default`" class="icon-menu-item">-->
-<!--                <i class="iconsminds-shop-4 d-block" />-->
-<!--                {{$t('menu.dashboards')}}-->
-<!--              </router-link>-->
-<!--              <router-link :to="`${adminRoot}/ui`" class="icon-menu-item">-->
-<!--                <i class="iconsminds-pantone d-block" />-->
-<!--                {{$t('menu.ui')}}-->
-<!--              </router-link>-->
-<!--              <router-link :to="`${adminRoot}/ui/components/charts`" class="icon-menu-item">-->
-<!--                <i class="iconsminds-bar-chart-4 d-block" />-->
-<!--                {{$t('menu.charts')}}-->
-<!--              </router-link>-->
-<!--              <router-link :to="`${adminRoot}/applications/chat`" class="icon-menu-item">-->
-<!--                <i class="iconsminds-speach-bubble d-block" />-->
-<!--                {{$t('menu.chat')}}-->
-<!--              </router-link>-->
-<!--              <router-link :to="`${adminRoot}/applications/survey`" class="icon-menu-item">-->
-<!--                <i class="iconsminds-formula d-block" />-->
-<!--                {{$t('menu.survey')}}-->
-<!--              </router-link>-->
-<!--              <router-link :to="`${adminRoot}/applications/todo`" class="icon-menu-item">-->
-<!--                <i class="iconsminds-check d-block" />-->
-<!--                {{$t('menu.todo')}}-->
-<!--              </router-link>-->
-<!--            </div>-->
-<!--          </b-dropdown>-->
-<!--        </div>-->
+        <!--        <div class="position-relative d-none d-sm-inline-block">-->
+        <!--          <b-dropdown-->
+        <!--            variant="empty"-->
+        <!--            size="sm"-->
+        <!--            right-->
+        <!--            toggle-class="header-icon"-->
+        <!--            menu-class="position-absolute mt-3 iconMenuDropdown"-->
+        <!--            no-caret-->
+        <!--          >-->
+        <!--            <template slot="button-content">-->
+        <!--              <i class="simple-icon-grid" />-->
+        <!--            </template>-->
+        <!--            <div>-->
+        <!--              <router-link :to="`${adminRoot}/dashboards/default`" class="icon-menu-item">-->
+        <!--                <i class="iconsminds-shop-4 d-block" />-->
+        <!--                {{$t('menu.dashboards')}}-->
+        <!--              </router-link>-->
+        <!--              <router-link :to="`${adminRoot}/ui`" class="icon-menu-item">-->
+        <!--                <i class="iconsminds-pantone d-block" />-->
+        <!--                {{$t('menu.ui')}}-->
+        <!--              </router-link>-->
+        <!--              <router-link :to="`${adminRoot}/ui/components/charts`" class="icon-menu-item">-->
+        <!--                <i class="iconsminds-bar-chart-4 d-block" />-->
+        <!--                {{$t('menu.charts')}}-->
+        <!--              </router-link>-->
+        <!--              <router-link :to="`${adminRoot}/applications/chat`" class="icon-menu-item">-->
+        <!--                <i class="iconsminds-speach-bubble d-block" />-->
+        <!--                {{$t('menu.chat')}}-->
+        <!--              </router-link>-->
+        <!--              <router-link :to="`${adminRoot}/applications/survey`" class="icon-menu-item">-->
+        <!--                <i class="iconsminds-formula d-block" />-->
+        <!--                {{$t('menu.survey')}}-->
+        <!--              </router-link>-->
+        <!--              <router-link :to="`${adminRoot}/applications/todo`" class="icon-menu-item">-->
+        <!--                <i class="iconsminds-check d-block" />-->
+        <!--                {{$t('menu.todo')}}-->
+        <!--              </router-link>-->
+        <!--            </div>-->
+        <!--          </b-dropdown>-->
+        <!--        </div>-->
 
-<!--        <div class="position-relative d-inline-block">-->
-<!--          <b-dropdown-->
-<!--            variant="empty"-->
-<!--            size="sm"-->
-<!--            right-->
-<!--            toggle-class="header-icon notificationButton"-->
-<!--            menu-class="position-absolute mt-3 notificationDropdown"-->
-<!--            no-caret-->
-<!--          >-->
-<!--            <template slot="button-content">-->
-<!--              <i class="simple-icon-bell" />-->
-<!--              <span class="count">3</span>-->
-<!--            </template>-->
-<!--            <vue-perfect-scrollbar :settings="{ suppressScrollX: true, wheelPropagation: false }">-->
-<!--              <div-->
-<!--                class="d-flex flex-row mb-3 pb-3 border-bottom"-->
-<!--                v-for="(n,index) in notifications"-->
-<!--                :key="index"-->
-<!--              >-->
-<!--                <router-link :to="`${adminRoot}/pages/product/details`">-->
-<!--                  <img-->
-<!--                    :src="n.img"-->
-<!--                    :alt="n.title"-->
-<!--                    class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"-->
-<!--                  />-->
-<!--                </router-link>-->
-<!--                <div class="pl-3 pr-2">-->
-<!--                  <router-link :to="`${adminRoot}/pages/product/details`">-->
-<!--                    <p class="font-weight-medium mb-1">{{n.title}}</p>-->
-<!--                    <p class="text-muted mb-0 text-small">{{n.date}}</p>-->
-<!--                  </router-link>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </vue-perfect-scrollbar>-->
-<!--          </b-dropdown>-->
-<!--        </div>-->
+        <!--        <div class="position-relative d-inline-block">-->
+        <!--          <b-dropdown-->
+        <!--            variant="empty"-->
+        <!--            size="sm"-->
+        <!--            right-->
+        <!--            toggle-class="header-icon notificationButton"-->
+        <!--            menu-class="position-absolute mt-3 notificationDropdown"-->
+        <!--            no-caret-->
+        <!--          >-->
+        <!--            <template slot="button-content">-->
+        <!--              <i class="simple-icon-bell" />-->
+        <!--              <span class="count">3</span>-->
+        <!--            </template>-->
+        <!--            <vue-perfect-scrollbar :settings="{ suppressScrollX: true, wheelPropagation: false }">-->
+        <!--              <div-->
+        <!--                class="d-flex flex-row mb-3 pb-3 border-bottom"-->
+        <!--                v-for="(n,index) in notifications"-->
+        <!--                :key="index"-->
+        <!--              >-->
+        <!--                <router-link :to="`${adminRoot}/pages/product/details`">-->
+        <!--                  <img-->
+        <!--                    :src="n.img"-->
+        <!--                    :alt="n.title"-->
+        <!--                    class="img-thumbnail list-thumbnail xsmall border-0 rounded-circle"-->
+        <!--                  />-->
+        <!--                </router-link>-->
+        <!--                <div class="pl-3 pr-2">-->
+        <!--                  <router-link :to="`${adminRoot}/pages/product/details`">-->
+        <!--                    <p class="font-weight-medium mb-1">{{n.title}}</p>-->
+        <!--                    <p class="text-muted mb-0 text-small">{{n.date}}</p>-->
+        <!--                  </router-link>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--            </vue-perfect-scrollbar>-->
+        <!--          </b-dropdown>-->
+        <!--        </div>-->
         <div class="position-relative d-none d-sm-inline-block">
           <div class="btn-group">
             <b-button variant="empty" class="header-icon btn-sm" @click="toggleFullScreen">
@@ -169,16 +171,16 @@
           no-caret
         >
           <template v-if="user" slot="button-content">
-            <span class="name mr-1"> {{user.first_name}} {{ user.last_name }} </span>
+            <span class="name mr-1"> {{ user.first_name }} {{ user.last_name }} </span>
             <span style="width: 40px; height: 40px">
-              <img :alt=" user.first_name + ' ' + user.last_name " :src="currentUser.img" />
+              <img :alt=" user.first_name + ' ' + user.last_name " :src="currentUser.img"/>
             </span>
           </template>
           <b-dropdown-item @click="$router.push({ name: 'account' })">{{ $t('menu.settings') }}</b-dropdown-item>
-<!--          <b-dropdown-item>Features</b-dropdown-item>-->
-<!--          <b-dropdown-item>History</b-dropdown-item>-->
-<!--          <b-dropdown-item>Support</b-dropdown-item>-->
-          <b-dropdown-divider />
+          <!--          <b-dropdown-item>Features</b-dropdown-item>-->
+          <!--          <b-dropdown-item>History</b-dropdown-item>-->
+          <!--          <b-dropdown-item>Support</b-dropdown-item>-->
+          <b-dropdown-divider/>
           <b-dropdown-item @click="logout">{{ $t('sign.out') }}</b-dropdown-item>
         </b-dropdown>
       </div>
@@ -190,8 +192,8 @@
 import Switches from "vue-switches";
 import notifications from "../../data/notifications";
 
-import { mapGetters, mapMutations, mapActions } from "vuex";
-import { MenuIcon, MobileMenuIcon } from "../../components/Svg";
+import {mapGetters, mapMutations, mapActions} from "vuex";
+import {MenuIcon, MobileMenuIcon} from "../../components/Svg";
 import {
   searchPath,
   menuHiddenBreakpoint,
@@ -199,8 +201,9 @@ import {
   buyUrl,
   adminRoot
 } from "../../constants/config";
-import { getDirection, setDirection, getThemeColor, setThemeColor } from "../../utils";
+import {getDirection, setDirection, getThemeColor, setThemeColor} from "../../utils";
 import logo from '../../components/logo'
+
 export default {
   components: {
     logo,

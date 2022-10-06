@@ -68,37 +68,37 @@ const init = {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       }
     }
-    if (data) config.data = data
+    if (data) config.data = data;
 
-    if (params) config.params = params
+    if (params) config.params = params;
 
-    const result = axios(config)
+    const result = axios(config);
 
     return new Promise((resolve, reject) => {
       result
         .then((res) => {
-          resolve(res.data)
+          resolve(res.data);
         })
         .catch((error) => {
-          ErrorHandler(error)
-          reject(error)
+          ErrorHandler(error);
+          reject(error);
         })
     })
   },
   get(url, params) {
-    return this.request('GET', url, params, undefined)
+    return this.request('GET', url, params, undefined);
   },
   post(url, data, params) {
-    return this.request('POST', url, params, data)
+    return this.request('POST', url, params, data);
   },
   patch(url, data, params) {
-    return this.request('PATCH', url, params, data)
+    return this.request('PATCH', url, params, data);
   },
   put(url, data, params) {
-    return this.request('PUT', url, params, data)
+    return this.request('PUT', url, params, data);
   },
   remove(url, params) {
-    return this.request('DELETE', url, params, undefined)
+    return this.request('DELETE', url, params, undefined);
   },
 }
 

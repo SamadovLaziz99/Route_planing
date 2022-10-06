@@ -59,4 +59,3 @@ ws.onerror = function (e) {
     duration: 60 * 60 * 1000
   })
 }
-
