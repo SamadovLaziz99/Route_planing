@@ -7,6 +7,7 @@
     <span v-if="$store.getters.deleteModal.data.user">{{ $store.getters.deleteModal.data.user.first_name + ' ' +  $store.getters.deleteModal.data.user.last_name}}</span>
     <span v-if="$store.getters.deleteModal.data.first_name">{{ $store.getters.deleteModal.data.first_name + ' ' +  $store.getters.deleteModal.data.last_name}}</span>
     <span v-if="$store.getters.deleteModal.data.code">{{ $store.getters.deleteModal.data.code}}</span>
+    <span v-if="$store.getters.deleteModal.data.username">{{ $store.getters.deleteModal.data.username}}</span>
     <span v-if="$store.getters.deleteModal.data.type">{{ $store.getters.deleteModal.data.type.name}}</span>
     <template slot="modal-footer">
       <b-button variant="outline-secondary" @click="hide">{{ $t('cancel') }}</b-button>
@@ -27,7 +28,7 @@ export default {
   name: "DeleteConfirmModal",
   methods: {
     remove () {
-      this.$emit('removing', this.$store.getters.deleteModal.data.id, this.$store.getters.deleteModal.data)
+      this.$emit('removing', this.$store.getters.deleteModal.data.id, this.$store.getters.deleteModal.data);
     },
     hide (e) {
       this.$store.commit('DELETE_MODAL', {

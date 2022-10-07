@@ -5,17 +5,10 @@
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'user.update' : 'user.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
-              <b-form-group :label="$t('first.name')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.first_name.$model" :state="!$v.form.first_name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.first_name.required">{{
-                    $t('please.enter') + $t('first.name')
-                  }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-              <b-form-group :label="$t('last.name')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.last_name.$model" :state="!$v.form.last_name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.last_name.required">{{
-                    $t('please.enter') + $t('last.name')
+              <b-form-group :label="$t('username')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.username.$model" :state="!$v.form.username.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.username.required">{{
+                    $t('please.enter') + $t('username')
                   }}
                 </b-form-invalid-feedback>
               </b-form-group>
@@ -30,34 +23,26 @@
                 </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('email')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.email.$model" :state="!$v.form.email.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.email.required">{{
-                    $t('please.enter') + $t('email')
-                  }}
-                </b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.email.email">{{ $t('error.email') }}</b-form-invalid-feedback>
+                <b-form-input type="text" v-model.trim="form.email"/>
               </b-form-group>
-              <b-form-group v-if="!form.id" :label="$t('password')" class="has-float-label mb-4">
+              <b-form-group :label="$t('password')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.password.$model" :state="!$v.form.password.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.password.required">{{
-                    $t('please.enter') + $t('password')
-                  }}
-                </b-form-invalid-feedback>
+                <!--                <b-form-invalid-feedback v-if="!$v.form.password.required">{{-->
+                <!--                    $t('please.enter') + $t('password')-->
+                <!--                  }}-->
+                <!--                </b-form-invalid-feedback>-->
                 <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6
                   characters
                 </b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.re_password.$model"
-                              :state="!$v.form.re_password.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{
-                    $t('re.password.error')
-                  }}
-                </b-form-invalid-feedback>
-              </b-form-group>
-              <!--            <b-form-group :label="$t('pages.status')">-->
-              <!--              <b-form-radio-group stacked class="pt-2" :options="statuses" v-model="form.is_active" />-->
-              <!--            </b-form-group>-->
+              <!--              <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">-->
+              <!--                <b-form-input type="text" v-model.trim="$v.form.re_password.$model"-->
+              <!--                              :state="!$v.form.re_password.$error"/>-->
+              <!--                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{-->
+              <!--                    $t('re.password.error')-->
+              <!--                  }}-->
+              <!--                </b-form-invalid-feedback>-->
+              <!--              </b-form-group>-->
             </b-form>
           </div>
           <div slot="action">
@@ -104,7 +89,7 @@
         <b-card :title="$t(`menu.users`)" class="mb-4">
           <b-table
             hover
-            :items="dataList"
+            :items="data"
             :fields="fields"
             :busy="load"
             responsive
@@ -172,46 +157,15 @@ export default {
     Pagination
     // TableSimple
   },
-  validations: {
-    form: {
-      first_name: {
-        required
-      },
-      last_name: {
-        required
-      },
-      email: {
-        required, email
-      },
-      phone: {
-        required,
-        valid: (e) => /^[+][9][9][8]\d{9}$/.test(e)
-      },
-      password: {
-        required,
-        minLength: minLength(6)
-      },
-      re_password: {
-        sameAsPassword: sameAs('password')
-      }
-    }
-  },
-  mixins: [validationMixin],
-  computed: {
-    ...mapGetters(getters(_page)),
-  },
   data() {
     return {
-      dataList: [],
       form: {
         id: null,
-        first_name: '',
-        last_name: '',
-        phone: '',
-        email: '',
+        username: "",
+        phone: "",
+        email: "",
         password: null,
-        re_password: null,
-        balance: 0
+        // re_password: null,
       },
       sort: {
         column: "title",
@@ -262,55 +216,67 @@ export default {
       to: 0
     };
   },
+  mixins: [validationMixin],
+  computed: {
+    ...mapGetters(getters(_page)),
+  },
   methods: {
     moment,
     validPh(value) {
-      console.log(value)
-      return /^[9][9][8]\d{9}$/.test(value)
+      console.log(value);
+      return /^[9][9][8]\d{9}$/.test(value);
     },
     closed(e) {
-      console.log(e)
-      this.clear()
+      this.clear();
     },
     clear() {
-      this.$v.$reset()
+      this.$v.$reset();
       this.form = {
         id: null,
-        first_name: '',
-        last_name: '',
-        phone: '',
-        email: '',
+        username: "",
+        phone: "",
+        email: "",
+        role: 1,
         password: null,
-        re_password: null,
-        balance: 0
+        // re_password: null,
       }
     },
     edit(item) {
-      const _data = {...item.item}
-      delete _data.date_joined
-      delete _data.is_staff
-      delete _data.is_superuser
-      delete _data.last_login
-      _data.re_password = _data.password
+      const _data = {...item.item};
       console.log(_data)
-      this.form = _data
-      this.$bvModal.show('crudModal')
+      delete _data.car;
+      delete _data.company;
+      delete _data.blocked;
+      delete _data.confirmed;
+      delete _data.createdAt;
+      delete _data.provider;
+      delete _data.updatedAt;
+      // delete _data.re_password;
+      // _data.re_password = _data.password;
+      this.form = _data;
+      this.form.role = _data.role.id;
+      console.log("_data: ", _data);
+      this.$bvModal.show('crudModal');
     },
     submit() {
       this.$v.$touch();
-      console.log(this.$v)
+      // console.log(this.$v);
       if (!this.$v.$invalid) {
-        const _form = {...this.form}
-        delete _form.id
-        delete _form.re_password
-        // if (this.form.id) delete _form.password
+        console.log('blabla');
+        const _form = {...this.form};
+        delete _form.id;
+        delete _form.re_password;
+        if (this.form.id) delete _form.password;
+        if (_form.email === "") _form.email = `${_form.phone}@gmail.com`;
+        // console.log(this.form);
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
           data: _form
         }).then(res => {
-          this.$refs.crudModal.hideModal()
-          this.getData()
-        })
+          console.log(res)
+          this.$refs.crudModal.hideModal();
+          this.getData();
+        });
       }
     },
     getData(params) {
@@ -319,16 +285,10 @@ export default {
         populate: "*",
         ...params
       }).then(res => {
-        console.log(res);
-        this.dataList = res;
-        this.dataList.map(el => {
-          if(!el.phone) {
-            el.phone = "-"
-          }
-        });
+        // console.log(res);
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
-      })
+      });
     },
     changePagination(e) {
       this.page = e;
@@ -342,25 +302,25 @@ export default {
       this.sort = sort;
     },
     searchName(val) {
-      console.log(val)
-      this.search = val
-      this.page = 1
-      this.getData()
+      console.log(val);
+      this.search = val;
+      this.page = 1;
+      this.getData();
     },
     excelReport() {
       const {user_id, search, phone} = this.filters
       const link = document.createElement('a')
       link.href = process.env.VUE_APP_BASE_URL + `/users/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
-      console.log(link.href)
-      link.setAttribute('download', 'Report')
-      document.body.appendChild(link)
-      link.click()
+      console.log(link.href);
+      link.setAttribute('download', 'Report');
+      document.body.appendChild(link);
+      link.click();
     },
     filtered(val) {
-      this.filters = val
-      this.page = 1
-      this.$router.push({name: this.$route.name, query: this.filters})
-      this.getData(val)
+      this.filters = val;
+      this.page = 1;
+      this.$router.push({name: this.$route.name, query: this.filters});
+      this.getData(val);
     },
     removeItem(e) {
       this.$store.dispatch(remove, e).then(res => {
@@ -368,21 +328,39 @@ export default {
           isShow: false,
           data: {}
         })
-        this.getData()
+        this.getData();
       })
     }
   },
   mounted() {
-    const _hash = this.$route.hash
-    const _query = this.$route.query
-    this.filters = _query
+    const _hash = this.$route.hash;
+    const _query = this.$route.query;
+    this.filters = _query;
     let _page;
     if (_hash) {
-      _page = this.$route.hash.split('-')[1]
-      this.page = parseInt(_page)
+      _page = this.$route.hash.split('-')[1];
+      this.page = parseInt(_page);
     }
-    this.getData(_query)
-  }
+    this.getData(_query);
+  },
+  validations: {
+    form: {
+      username: {
+        required
+      },
+      phone: {
+        required,
+        valid: (e) => /^[9][9][8]\d{9}$/.test(e)
+      },
+      password: {
+        required,
+        minLength: minLength(6)
+      },
+      // re_password: {
+      //   sameAsPassword: sameAs('password')
+      // }
+    }
+  },
 };
 </script>
 <style>
