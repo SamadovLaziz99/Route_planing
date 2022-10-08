@@ -2,7 +2,7 @@
   <div>
     <b-colxx xxs="12">
       <h1>{{ $t('menu.main_settings') }}</h1>
-      <piaf-breadcrumb />
+      <piaf-breadcrumb/>
     </b-colxx>
     <b-card class="mb-4 d-flex">
       <b-row>
@@ -44,13 +44,14 @@
 
 <script>
 import Draggable from "vuedraggable";
+
 export default {
   components: {
     'draggable': Draggable
   },
   data() {
     return {
-      array: [1,2,3,4,5,6,7,8,9],
+      array: [1, 2, 3, 4, 5, 6, 7, 8, 9],
       vendors: null,
       vendor: null,
       loader: false,
@@ -58,10 +59,10 @@ export default {
     }
   },
   methods: {
-    sort (e) {
+    sort(e) {
       console.log(e)
     },
-    chefWeek () {
+    chefWeek() {
       if (this.vendor) {
         this.loader = true
         this.$store.dispatch('chefWeek', {
@@ -70,19 +71,21 @@ export default {
           this.$store.dispatch('success_alert', {
             title: 'Chef Of Week Selected', message: ''
           })
-        }).finally(() => { this.loader = false })
+        }).finally(() => {
+          this.loader = false
+        })
       }
     }
   },
   watch: {
-    array (val) {
+    array(val) {
       console.log(val)
     }
   },
   mounted() {
-    this.$store.dispatch('getVendors', { no_page: true }).then(res => {
+    this.$store.dispatch('getVendors', {no_page: true}).then(res => {
       this.vendors = res.map(e => {
-        const { first_name, last_name } = e.user
+        const {first_name, last_name} = e.user
         return {
           label: first_name + ' ' + last_name,
           value: e.id

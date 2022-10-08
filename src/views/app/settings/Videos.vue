@@ -7,38 +7,46 @@
             <b-form class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('name')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('language')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.language.$model" :state="!$v.form.language.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.language.required">{{ $t('please.enter') + $t('language')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.language.required">{{ $t('please.enter') + $t('language') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('url')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.url.$model" :state="!$v.form.url.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.url.required">{{ $t('please.enter') + $t('url')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.url.required">{{ $t('please.enter') + $t('url') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('type')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.type.$model" :state="!$v.form.type.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('type')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('type') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('category')" class="has-float-label mb-4">
-                <v-select :options="categories" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error" />
+                <v-select :options="categories" v-model.trim="$v.form.category.$model"
+                          :state="!$v.form.category.$error"/>
                 <!--              <b-form-input type="text" v-model.trim="$v.form.category.$model" :state="!$v.form.category.$error"/>-->
-                <b-form-invalid-feedback v-if="!$v.form.category.required">{{ $t('please.enter') + $t('category')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.category.required">{{ $t('please.enter') + $t('category') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
-                <v-select :options="vendors" v-model.trim="$v.form.vendor.$model" :state="!$v.form.vendor.$error" />
+                <v-select :options="vendors" v-model.trim="$v.form.vendor.$model" :state="!$v.form.vendor.$error"/>
                 <!--              <b-form-input type="text" />-->
-                <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor')}}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('description')" class="has-float-label mb-4">
-                <b-textarea v-model="form.description" :rows="3" :max-rows="5" />
+                <b-textarea v-model="form.description" :rows="3" :max-rows="5"/>
                 <!--              <b-form-input type="text" v-model="form.description"/>-->
               </b-form-group>
             </b-form>
           </div>
           <div slot="action">
-            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <b-button @click="submit" type="submit"
+                      :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
@@ -98,12 +106,13 @@
 <script>
 import ListPageHeading from "./ListHeading";
 import ListPageListing from "./ListListing";
-import { mapGetters } from "vuex";
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
-import { actions, getters } from "../../../utils/store_schema";
+import {mapGetters} from "vuex";
+import {validationMixin} from "vuelidate";
+import {required} from "vuelidate/lib/validators";
+import {actions, getters} from "../../../utils/store_schema";
+
 const _page = 'videos'
-const { get, getById, put, post, remove } = actions(_page)
+const {get, getById, put, post, remove} = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -199,7 +208,7 @@ export default {
     submit() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        const _form = { ...this.form }
+        const _form = {...this.form}
         delete _form.id
         _form.category = this.form.category.value ? this.form.category.value : this.form.category
         _form.vendor = this.form.vendor.value ? this.form.vendor.value : this.form.vendor
@@ -213,12 +222,12 @@ export default {
         })
       }
     },
-    viewItem (id) {
+    viewItem(id) {
       console.log(id)
     },
-    editItem (id) {
+    editItem(id) {
       this.$store.dispatch(getById, id).then(res => {
-        const _data = { ...res }
+        const _data = {...res}
         delete _data.created_at
         delete _data.updated_at
         delete _data.slug
@@ -226,7 +235,7 @@ export default {
         this.$bvModal.show('crudModal')
       })
     },
-    removeItem (id) {
+    removeItem(id) {
       this.$store.dispatch(remove, id).then(res => {
         this.$store.commit('DELETE_MODAL', {
           isShow: false,

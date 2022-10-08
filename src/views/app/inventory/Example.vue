@@ -7,12 +7,16 @@
             <b-form class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('name')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.name.required">{{ $t('please.enter') + $t('name') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.name.required">{{
+                    $t('please.enter') + $t('name')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
             </b-form>
           </div>
           <div slot="action">
-            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <b-button @click="submit" type="submit"
+                      :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
@@ -58,13 +62,17 @@
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-<!--                <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer" @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>-->
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <!--                <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer" @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>-->
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"
+                     class="glyph-icon simple-icon-trash mr-2"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>
           </b-table>
-          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total"
+                      @changePagination="changePagination"/>
         </b-card>
       </b-colxx>
     </b-row>
@@ -78,10 +86,11 @@ import Pagination from "../../../components/TableComponents/Pagination";
 import {mapGetters} from "vuex";
 import {required} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
-import { actions, getters } from "../../../utils/store_schema";
+import {actions, getters} from "../../../utils/store_schema";
 import moment from 'moment'
+
 const _page = 'inventory'
-const { get, getById, put, post, remove } = actions(_page)
+const {get, getById, put, post, remove} = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -133,7 +142,7 @@ export default {
   },
   methods: {
     moment,
-    closed (e) {
+    closed(e) {
       console.log(e)
       this.clear()
     },
@@ -144,8 +153,8 @@ export default {
         name: ''
       }
     },
-    edit (item) {
-      const _data = { ...item.item }
+    edit(item) {
+      const _data = {...item.item}
       this.form = _data
       this.$bvModal.show('crudModal')
     },
@@ -153,7 +162,7 @@ export default {
       this.$v.$touch();
       console.log(this.$v)
       if (!this.$v.$invalid) {
-        const _form = { ...this.form }
+        const _form = {...this.form}
         delete _form.id
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
@@ -174,7 +183,7 @@ export default {
         this.from = (this.pagination.page - 1) * 15
       })
     },
-    changePagination (e) {
+    changePagination(e) {
       this.page = e
       this.getData()
     },

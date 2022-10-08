@@ -59,7 +59,7 @@
         </crud-modal>
         <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
         <list-page-heading
-          :title="$t('menu.users')"
+          :title="$t('users')"
           :changeOrderBy="changeOrderBy"
           :sort="sort"
           @filters="filtered"

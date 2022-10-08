@@ -2,7 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 // import AuthGuard from "./utils/auth.guard";
 import NewGuard from "./utils/new.guard"
-import { adminRoot } from "./constants/config";
+import {adminRoot} from "./constants/config";
+
 const roles = {
   super_admin: 'superadmin',
   public: 'Public',
@@ -24,7 +25,7 @@ const routes = [
     path: adminRoot,
     component: () => import(/* webpackChunkName: "app" */ "./views/app"),
     redirect: `${adminRoot}/users`,
-    meta: { loginRequired: true },
+    meta: {loginRequired: true},
     /*
     define with Authorization :
     meta: { loginRequired: true, roles: [UserRole.Admin, UserRole.Editor] },
@@ -48,33 +49,33 @@ const routes = [
         path: "orders",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/orders/list`,
-        meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator] },
+        meta: {roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator]},
         children: [
           {
             path: "list",
             name: 'order_list',
             component: () => import("./views/app/orders/List"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator] },
+            meta: {roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator]},
             children: []
           },
           {
             path: "details/:id",
             name: "order_details",
             component: () => import("./views/app/orders/Details"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator] },
+            meta: {roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator]},
             children: []
           },
           {
             path: "history",
             name: "order_history",
             component: () => import("./views/app/orders/History"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public] },
+            meta: {roles: [roles.super_admin, roles.operator, roles.public]},
             children: []
           },
           {
             path: "transactions",
             component: () => import("./views/app/orders/Transactions"),
-            meta: { roles: [roles.super_admin] },
+            meta: {roles: [roles.super_admin]},
             children: []
           },
         ]
@@ -138,7 +139,7 @@ const routes = [
         path: "users",
         name: "users",
         component: () => import("./views/app/users/List"),
-        meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.public] },
+        meta: {roles: [roles.super_admin, roles.operator, roles.public, roles.public]},
         // redirect: `${adminRoot}/users/list`,
         children: []
       },
@@ -146,7 +147,7 @@ const routes = [
         path: "users/:id",
         name: 'user_details',
         component: () => import("./views/app/users/Details"),
-        meta: { roles: [roles.super_admin, roles.operator, roles.public] },
+        meta: {roles: [roles.super_admin, roles.operator, roles.public]},
         // redirect: `${adminRoot}/users/list`,
         children: []
       },
@@ -154,7 +155,7 @@ const routes = [
         path: "employees",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/employees/vendors`,
-        meta: { roles: [roles.super_admin, roles.operator, roles.public] },
+        meta: {roles: [roles.super_admin, roles.operator, roles.public]},
         children: [
           // {
           //   path: "vendors",
@@ -174,34 +175,34 @@ const routes = [
             path: "vendors/update/:id",
             name: 'vendor_update',
             component: () => import("./views/app/employees/VendorCrud"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public] },
+            meta: {roles: [roles.super_admin, roles.operator, roles.public]},
             children: []
           },
           {
             path: "vendor-detail/:id",
             name: "vendor-detail",
             component: () => import("./views/app/employees/VendorDetails"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public] },
+            meta: {roles: [roles.super_admin, roles.operator, roles.public]},
             children: []
           },
           {
             path: "couriers",
             component: () => import("./views/app/employees/Couriers"),
-            meta: { roles: [roles.super_admin] },
+            meta: {roles: [roles.super_admin]},
             children: []
           },
           {
             path: "system_users",
             name: 'user',
             component: () => import("./views/app/employees/SystemUsers"),
-            meta: { roles: [roles.super_admin] },
+            meta: {roles: [roles.super_admin]},
             children: []
           },
           {
             path: "applicants",
             name: 'applicants',
             component: () => import("./views/app/employees/Applicants"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public] },
+            meta: {roles: [roles.super_admin, roles.operator, roles.public]},
             children: []
           }
         ]
@@ -209,15 +210,15 @@ const routes = [
       {
         path: "maps",
         component: () => import("./views/app/map"),
-        redirect: `${ adminRoot }/maps/map`,
-        meta: { roles: [roles.super_admin, roles.courier_operator] },
+        redirect: `${adminRoot}/maps/map`,
+        meta: {roles: [roles.super_admin, roles.courier_operator]},
         // meta: { roles: [UserRole.Admin, UserRole.Editor] },
         children: [
           {
             path: "map",
             name: "maps",
             component: () => import("./views/app/map/Map"),
-            meta: { roles: [roles.super_admin, roles.courier_operator] },
+            meta: {roles: [roles.super_admin, roles.courier_operator]},
             // meta: { roles: [UserRole.Admin] },
           }
         ]
@@ -225,21 +226,21 @@ const routes = [
       {
         path: "vouchers",
         component: () => import("./views/app/map"),
-        redirect: `${ adminRoot }/vouchers/v`,
-        meta: { roles: [roles.super_admin, roles.courier_operator] },
+        redirect: `${adminRoot}/vouchers/v`,
+        meta: {roles: [roles.super_admin, roles.courier_operator]},
         children: [
           {
             path: "v",
             name: "vouchers",
             component: () => import("./views/app/settings/Vouchers"),
-            meta: { roles: [roles.super_admin, roles.courier_operator] },
+            meta: {roles: [roles.super_admin, roles.courier_operator]},
           }
         ]
       },
       {
         path: "maps2",
         component: () => import("./views/app/map"),
-        redirect: `${ adminRoot }/maps2/map2`,
+        redirect: `${adminRoot}/maps2/map2`,
         // meta: { roles: [UserRole.Admin, UserRole.Editor] },
         children: [
           {
@@ -254,51 +255,58 @@ const routes = [
         path: "settings",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/settings/list`,
-        meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
+        // meta: {roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator]},
         children: [
+          // {
+          //   path: "roles",
+          //   component: () => import("./views/app/pages/product/DataList"),
+          //   children: []
+          // },
+          // {
+          //   path: "main_settings",
+          //   name: "main_settings",
+          //   meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
+          //   component: () => import("./views/app/settings/settings"),
+          //   children: []
+          // },
+          // {
+          //   path: "banner",
+          //   component: () => import("./views/app/pages/product/Details"),
+          //   children: []
+          // },
+          // {
+          //   path: "video_tutorial",
+          //   name: 'videos',
+          //   component: () => import("./views/app/settings/Videos"),
+          //   meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
+          //   children: []
+          // },
           {
-            path: "roles",
-            component: () => import("./views/app/pages/product/DataList"),
+            path: "cars",
+            name: 'cars',
+            component: () => import("./views/app/inventory/Cars"),
+            // meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
             children: []
           },
           {
-            path: "main_settings",
-            name: "main_settings",
-            meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
-            component: () => import("./views/app/settings/settings"),
+            path: "colors",
+            name: 'colors',
+            component: () => import("./views/app/inventory/Colors"),
+            // meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
             children: []
           },
-          {
-            path: "banner",
-            component: () => import("./views/app/pages/product/Details"),
-            children: []
-          },
-          {
-            path: "video_tutorial",
-            name: 'videos',
-            component: () => import("./views/app/settings/Videos"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
-            children: []
-          },
-          {
-            path: "inventory",
-            name: 'inventory',
-            component: () => import("./views/app/inventory/Inventory"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
-            children: []
-          },
-          {
-            path: "vendor_inventory",
-            name: 'vendor_inventory',
-            component: () => import("./views/app/inventory/VendorInventors"),
-            meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
-            children: []
-          },
-          {
-            path: "pages",
-            component: () => import("./views/Defaults"),
-            children: []
-          },
+          // {
+          //   path: "vendor_inventory",
+          //   name: 'vendor_inventory',
+          //   component: () => import("./views/app/inventory/VendorInventors"),
+          //   meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.marketolog, roles.courier_operator] },
+          //   children: []
+          // },
+          // {
+          //   path: "pages",
+          //   component: () => import("./views/Defaults"),
+          //   children: []
+          // },
         ]
       },
       {
@@ -338,7 +346,7 @@ const routes = [
         path: "account",
         name: 'account',
         component: () => import("./views/app/account/Account"),
-        meta: { roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator, roles.marketolog] },
+        meta: {roles: [roles.super_admin, roles.operator, roles.public, roles.courier_operator, roles.marketolog]},
         children: []
       },
     ]

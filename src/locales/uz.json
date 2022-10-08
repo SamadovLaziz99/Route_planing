@@ -1,5 +1,10 @@
 {
   "category.create": "Turkum yaratish",
+  "car": "Mashina",
+  "cars": "Mashinalar",
+  "color": "Rangi",
+  "colors": "Ranglar",
+  "gov_number": "Mashina raqami",
   "addCard": "Karta qo'shish",
   "cardNumber": "Karta raqami:",
   "endTime": "Tugash vaqti:",

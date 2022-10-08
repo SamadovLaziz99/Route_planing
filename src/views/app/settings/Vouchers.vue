@@ -7,42 +7,56 @@
             <b-form class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('count')" class="has-float-label mb-4">
                 <b-form-input type="number" v-model.trim="$v.form.count.$model" :state="!$v.form.count.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.count.required">{{ $t('please.enter') + $t('count') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.count.required">{{
+                    $t('please.enter') + $t('count')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('amount')" class="has-float-label mb-4">
                 <b-form-input type="number" v-model.trim="$v.form.amount.$model" :state="!$v.form.amount.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.amount.required">{{ $t('please.enter') + $t('amount') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.amount.required">{{
+                    $t('please.enter') + $t('amount')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('active_date_from')" class="has-float-label mb-4">
                 <datepicker
-                    :bootstrap-styling="true"
-                    :format="(val) => moment(val).format('YYYY-MM-DD')"
-                    :language="ru"
-                    :placeholder="$t('form-components.date')"
-                    v-model="$v.form.active_date_from.$model"
-                    :state="!$v.form.active_date_from.$error"
+                  :bootstrap-styling="true"
+                  :format="(val) => moment(val).format('YYYY-MM-DD')"
+                  :language="ru"
+                  :placeholder="$t('form-components.date')"
+                  v-model="$v.form.active_date_from.$model"
+                  :state="!$v.form.active_date_from.$error"
                 ></datepicker>
-                <b-form-invalid-feedback v-if="!$v.form.active_date_from.required">{{ $t('please.enter') + $t('active_date_from') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.active_date_from.required">
+                  {{ $t('please.enter') + $t('active_date_from') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('active_date_to')" class="has-float-label mb-4">
                 <datepicker
-                    :bootstrap-styling="true"
-                    :format="(val) => moment(val).format('YYYY-MM-DD')"
-                    :language="ru"
-                    :placeholder="$t('form-components.date')"
-                    v-model="$v.form.active_date_to.$model"
-                    :state="!$v.form.active_date_to.$error"
+                  :bootstrap-styling="true"
+                  :format="(val) => moment(val).format('YYYY-MM-DD')"
+                  :language="ru"
+                  :placeholder="$t('form-components.date')"
+                  v-model="$v.form.active_date_to.$model"
+                  :state="!$v.form.active_date_to.$error"
                 ></datepicker>
-                <b-form-invalid-feedback v-if="!$v.form.active_date_to.required">{{ $t('please.enter') + $t('active_date_to') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.active_date_to.required">
+                  {{ $t('please.enter') + $t('active_date_to') }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('tag')" class="has-float-label mb-4">
                 <b-form-input type="text" v-model.trim="$v.form.tag.$model" :state="!$v.form.tag.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.tag.required">{{ $t('please.enter') + $t('tag') }}</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.form.tag.required">{{
+                    $t('please.enter') + $t('tag')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
             </b-form>
           </div>
           <div slot="action">
-            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <b-button @click="submit" type="submit"
+                      :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
@@ -89,17 +103,22 @@
             <template #cell(action)="row">
               <div style="display: flex; justify-content: center">
                 <!--              <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280"></div>-->
-<!--                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>-->
-                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <!--                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>-->
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"
+                     class="glyph-icon simple-icon-trash mr-2"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>
             <template #cell(code)="{ item }">
               <div class="code" v-clipboard:copy="item.code" v-clipboard:success="onCopy">
-                {{item.code}}
+                {{ item.code }}
               </div>
             </template>
             <template #cell(used)="{ item }">
-              <b-badge pill :variant="item.used ? 'primary' : 'dark'">{{ item.used ? $t('used') : $t('unused') }}</b-badge>
+              <b-badge pill :variant="item.used ? 'primary' : 'dark'">{{
+                  item.used ? $t('used') : $t('unused')
+                }}
+              </b-badge>
             </template>
             <template #cell(created_at)="row">
               {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
@@ -113,7 +132,8 @@
               </template>
             </template>
           </b-table>
-          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total"
+                      @changePagination="changePagination"/>
         </b-card>
       </b-colxx>
     </b-row>
@@ -127,13 +147,14 @@ import Pagination from "../../../components/TableComponents/Pagination";
 import {mapGetters} from "vuex";
 import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
-import { actions, getters } from "../../../utils/store_schema";
+import {actions, getters} from "../../../utils/store_schema";
 import Datepicker from "vuejs-datepicker";
 import {ru} from 'vuejs-datepicker/dist/locale'
 import moment from 'moment'
 import debounce from "debounce";
+
 const _page = 'vouchers'
-const { get, getById, put, post, remove } = actions(_page)
+const {get, getById, put, post, remove} = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -143,11 +164,11 @@ export default {
   },
   validations: {
     form: {
-      count: { required },
-      active_date_from: { required },
-      active_date_to: { required },
-      amount: { required },
-      tag: { required }
+      count: {required},
+      active_date_from: {required},
+      active_date_to: {required},
+      amount: {required},
+      tag: {required}
     }
   },
   mixins: [validationMixin],
@@ -217,14 +238,14 @@ export default {
   },
   methods: {
     moment,
-    onCopy (e) {
+    onCopy(e) {
       this.$store.dispatch('success_alert', {
         title: 'Copied',
         message: e.text
       })
       console.log('Copied:', e.text)
     },
-    closed (e) {
+    closed(e) {
       console.log(e)
       this.clear()
     },
@@ -239,8 +260,8 @@ export default {
         tag: null
       }
     },
-    edit (item) {
-      const _data = { ...item.item }
+    edit(item) {
+      const _data = {...item.item}
       delete _data.date_joined
       delete _data.is_staff
       delete _data.is_superuser
@@ -257,7 +278,7 @@ export default {
       console.log(this.$v)
       console.log(this.form)
       if (!this.$v.$invalid) {
-        const _form = { ...this.form }
+        const _form = {...this.form}
         delete _form.id
         _form.amount = parseInt(this.form.amount)
         _form.count = parseInt(this.form.count)
@@ -281,7 +302,7 @@ export default {
         this.from = (this.pagination.page - 1) * 15
       })
     },
-    changePagination (e) {
+    changePagination(e) {
       this.page = e
       this.getData()
       console.log(this.$route)
@@ -344,6 +365,7 @@ export default {
   border-radius: 5px;
   transition: all, .3s;
 }
+
 .code:hover {
   background: #cbcbcb;
 }

@@ -6,21 +6,27 @@
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
               <b-form-group :label="$t('menu.inventory')" class="has-float-label mb-4">
-                <v-select :options="inventorys" v-model.trim="$v.form.type.$model"  :state="!$v.form.type.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.type.required">{{ $t('please.enter') + $t('inventory') }}</b-form-invalid-feedback>
+                <v-select :options="inventorys" v-model.trim="$v.form.type.$model" :state="!$v.form.type.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.type.required">{{
+                    $t('please.enter') + $t('inventory')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('vendor')" class="has-float-label mb-4">
-                <v-select :options="vendors" v-model.trim="$v.form.vendor.$model"  :state="!$v.form.vendor.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{ $t('please.enter') + $t('vendor') }}</b-form-invalid-feedback>
+                <v-select :options="vendors" v-model.trim="$v.form.vendor.$model" :state="!$v.form.vendor.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.vendor.required">{{
+                    $t('please.enter') + $t('vendor')
+                  }}
+                </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('count')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model.trim="$v.form.count.$model"  :state="!$v.form.count.$error"/>
+                <b-form-input type="number" v-model.trim="$v.form.count.$model" :state="!$v.form.count.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.count.required">
                   {{ $t('please.enter') + $t('count') }}
                 </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('used')" class="has-float-label mb-4">
-                <b-form-input type="number" v-model.trim="$v.form.used.$model"  :state="!$v.form.used.$error"/>
+                <b-form-input type="number" v-model.trim="$v.form.used.$model" :state="!$v.form.used.$error"/>
                 <b-form-invalid-feedback v-if="!$v.form.used.required">
                   {{ $t('please.enter') + $t('used') }}
                 </b-form-invalid-feedback>
@@ -28,7 +34,8 @@
             </b-form>
           </div>
           <div slot="action">
-            <b-button @click="submit" type="submit" :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
+            <b-button @click="submit" type="submit"
+                      :class="{'btn-multiple-state btn-shadow': true, 'show-spinner': pending }" variant="primary">
             <span class="spinner d-inline-block">
                 <span class="bounce1"></span>
                 <span class="bounce2"></span>
@@ -78,12 +85,16 @@
             <template #cell(action)="row">
               <div style="display: flex">
                 <!--                <div class="glyph-icon simple-icon-eye mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer" @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>-->
-                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
-                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})" class="glyph-icon simple-icon-trash mr-2" style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
+                <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"
+                     class="glyph-icon simple-icon-trash mr-2"
+                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
             </template>
           </b-table>
-          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total" @changePagination="changePagination"/>
+          <Pagination :page="pagination.page" :per-page="pagination.limit" :total="pagination.total"
+                      @changePagination="changePagination"/>
         </b-card>
       </b-colxx>
     </b-row>
@@ -97,10 +108,11 @@ import Pagination from "../../../components/TableComponents/Pagination";
 import {mapGetters} from "vuex";
 import {required} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
-import { actions, getters } from "../../../utils/store_schema";
+import {actions, getters} from "../../../utils/store_schema";
 import moment from 'moment'
+
 const _page = 'vendorinv'
-const { get, getById, put, post, remove } = actions(_page)
+const {get, getById, put, post, remove} = actions(_page)
 export default {
   components: {
     "list-page-heading": ListPageHeading,
@@ -109,10 +121,10 @@ export default {
   },
   validations: {
     form: {
-      vendor: { required },
-      type: { required },
-      used: { required },
-      count: { required },
+      vendor: {required},
+      type: {required},
+      used: {required},
+      count: {required},
     }
   },
   mixins: [validationMixin],
@@ -169,7 +181,7 @@ export default {
   computed: {
     ...mapGetters(getters(_page)),
     ...mapGetters(['dataInventory', 'dataVendors']),
-    inventorys () {
+    inventorys() {
       return this.dataInventory.map(e => {
         return {
           label: e.name,
@@ -177,9 +189,9 @@ export default {
         }
       })
     },
-    vendors () {
+    vendors() {
       return this.dataVendors.map(e => {
-        const { first_name, last_name } = e.user
+        const {first_name, last_name} = e.user
         return {
           label: first_name + ' ' + last_name,
           value: e.id
@@ -189,7 +201,7 @@ export default {
   },
   methods: {
     moment,
-    closed (e) {
+    closed(e) {
       console.log(e)
       this.clear()
     },
@@ -203,9 +215,9 @@ export default {
         type: null
       }
     },
-    edit (item) {
+    edit(item) {
       console.log(item)
-      const _data = { ...item.item }
+      const _data = {...item.item}
       this.form = _data
       this.form.vendor = this.vendors.filter(e => e.value === _data.vendor)[0]
       this.form.type = this.inventorys.filter(e => e.value === _data.type.id)[0]
@@ -215,7 +227,7 @@ export default {
       this.$v.$touch();
       console.log(this.$v)
       if (!this.$v.$invalid) {
-        const _form = { ...this.form }
+        const _form = {...this.form}
         delete _form.id
         _form.type_id = this.form.type.value
         _form.vendor = this.form.vendor.value
@@ -238,7 +250,7 @@ export default {
         this.from = (this.pagination.page - 1) * 15
       })
     },
-    changePagination (e) {
+    changePagination(e) {
       this.page = e
       this.getData()
     },

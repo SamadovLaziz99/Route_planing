@@ -5,7 +5,7 @@
       <div class="top-right-button-container">
         <slot name="action"></slot>
       </div>
-      <piaf-breadcrumb />
+      <piaf-breadcrumb/>
       <div class="mb-3 mt-3">
         <div class="d-flex justify-content-between">
           <div></div>
@@ -15,32 +15,32 @@
             v-b-toggle.displayOptions
           >
             {{ $t('filters') }}
-            <i class="simple-icon-arrow-down align-middle" />
+            <i class="simple-icon-arrow-down align-middle"/>
           </b-button>
         </div>
         <b-collapse id="displayOptions" class="d-md-block mt-3">
           <div class="d-md-inline-block pt-1 w-100">
             <b-row>
-<!--              <b-colxx xxs="12" md="3">-->
-<!--                <v-select v-if="$route.name === 'food_list'" v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>-->
-<!--              </b-colxx>-->
-<!--              <b-colxx xxs="12" md="3">-->
-<!--                <v-select v-if="$route.name === 'food_list'" v-model="filters.category" @input="changeCategory" style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('categories')"/>-->
-<!--              </b-colxx>-->
+              <!--              <b-colxx xxs="12" md="3">-->
+              <!--                <v-select v-if="$route.name === 'food_list'" v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>-->
+              <!--              </b-colxx>-->
+              <!--              <b-colxx xxs="12" md="3">-->
+              <!--                <v-select v-if="$route.name === 'food_list'" v-model="filters.category" @input="changeCategory" style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('categories')"/>-->
+              <!--              </b-colxx>-->
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />
+                  <b-input class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"/>
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="6">
                 <div></div>
-<!--                <div class="d-inline-block mb-2 float-md-left align-top w-100">-->
-<!--                  <b-input class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />-->
-<!--                </div>-->
+                <!--                <div class="d-inline-block mb-2 float-md-left align-top w-100">-->
+                <!--                  <b-input class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />-->
+                <!--                </div>-->
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="float-md-right pt-1">
-                  <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} {{ $t('of') }} {{ total }}</span>
+                  <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ total }}</span>
                 </div>
               </b-colxx>
             </b-row>
@@ -59,7 +59,7 @@ import {
 } from "../../../components/Svg";
 import AddNewModal from "../../../containers/pages/AddNewModal";
 import debounce from 'debounce'
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   components: {
@@ -144,7 +144,7 @@ export default {
   },
   computed: {
     ...mapGetters(['dataCategories', 'dataVendors']),
-    categorys () {
+    categorys() {
       return this.dataCategories.map(e => {
         return {
           label: e.name[this.$lang],
@@ -152,9 +152,9 @@ export default {
         }
       })
     },
-    vendors () {
+    vendors() {
       return this.dataVendors.map(e => {
-        const { first_name, last_name } = e.user
+        const {first_name, last_name} = e.user
         return {
           label: first_name + ' ' + last_name,
           value: e.id
@@ -170,15 +170,15 @@ export default {
         q: this.filters.search
       }
     },
-    changeVendor (e) {
+    changeVendor(e) {
       this.$emit('filters', this.filterState())
     },
     changeCategory(e) {
       this.$emit('filters', this.filterState())
     },
-    search (e) {
+    search(e) {
       this.$emit('search', e)
     }
   }
-};
+}
 </script>
