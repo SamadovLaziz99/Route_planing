@@ -5,20 +5,16 @@
         <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'car.update' : 'car.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
-              <b-form-group :label="$t('gov_number')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.gov_number.$model" :state="!$v.form.gov_number.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.gov_number.required">{{
-                    $t('please.enter') + " " + $t('gov_number')
+              <b-form-group :label="$t('name')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.name.required">{{
+                    $t('please.enter') + " " + $t('name')
                   }}
                 </b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('color')" class="has-float-label mb-4">
-                <v-select v-model="$v.form.color.$model" label="name" value="id" :reduce="color => color.id"
-                          :options="colors"/>
-                <div
-                  :class="{'invalid-feedback':true ,'d-block':$v.form.color.$error && !$v.form.color.required}"
-                >Color is required!
-                </div>
+              <b-form-group :label="$t('cars')" class="has-float-label mb-4">
+                <v-select v-model="form.cars" :multiple="true" label="name" value="id" :reduce="cars => cars.id"
+                          :options="cars"/>
               </b-form-group>
             </b-form>
           </div>
@@ -36,7 +32,7 @@
         </crud-modal>
         <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
         <list-page-heading
-          :title="$t('cars')"
+          :title="$t('color')"
           @filters="filtered"
           :from="from"
           :to="to"
@@ -66,12 +62,12 @@
                 <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
-            <template #cell(gov_number)="row">
-              {{ row.item.attributes.gov_number}}
+            <template #cell(name)="row">
+              {{ row.item.attributes.name }}
             </template>
-            <template #cell(color)="row">
-              {{ row.item.attributes.color.data ? row.item.attributes.color.data.attributes.name : "-" }}
-            </template>
+<!--            <template #cell(cars)="row">-->
+<!--              {{ row.item.attributes.cars.data ? row.item.attributes.cars.data.map(el => el.attributes.gov_number) : "-" }}-->
+<!--            </template>-->
             <template #cell(createdAt)="row">
               {{ moment(row.item.attributes.createdAt).format('YYYY-MM-DD HH:mm') }}
             </template>
@@ -110,7 +106,7 @@ import {validationMixin} from "vuelidate";
 import {actions, getters} from "../../../utils/store_schema";
 import moment from 'moment';
 
-const _page = 'cars';
+const _page = 'colors';
 const {get, getById, put, post, remove} = actions(_page);
 export default {
   components: {
@@ -119,12 +115,12 @@ export default {
   },
   data() {
     return {
-      colors: [],
+      cars: [],
       tableData: [],
       form: {
         id: null,
-        gov_number: "",
-        color: [],
+        name: "",
+        cars: [],
       },
       // sort: {
       //   column: "title",
@@ -139,15 +135,15 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
-          key: 'gov_number',
-          label: this.$t('gov_number'),
+          key: 'name',
+          label: this.$t('name'),
           // tdClass: 'firstColumn'
         },
-        {
-          key: 'color',
-          label: this.$t('color'),
-          // tdClass: 'firstColumn'
-        },
+        // {
+        //   key: 'cars',
+        //   label: this.$t('cars'),
+        //   // tdClass: 'firstColumn'
+        // },
         {
           key: 'createdAt',
           label: this.$t('reg.date'),
@@ -164,7 +160,7 @@ export default {
       to: 0
     };
   },
-  name: "cars",
+  name: "colors",
   mixins: [validationMixin],
   computed: {
     ...mapGetters(getters(_page)),
@@ -178,15 +174,15 @@ export default {
       this.$v.$reset();
       this.form = {
         id: null,
-        gov_number: "",
-        color: [],
+        name: "",
+        cars: [],
       }
     },
     edit(item) {
       const _data = {...item.item};
       this.form.id = _data.id;
-      this.form.gov_number = _data.attributes.gov_number;
-      this.form.color = _data.attributes.color.data ? _data.attributes.color.data.id : null;
+      this.form.name = _data.attributes.name;
+      this.form.cars = _data.attributes.cars.data ? _data.attributes.cars.data.map(el => el.id) : null;
       this.$bvModal.show('crudModal');
     },
     submit() {
@@ -220,10 +216,10 @@ export default {
       });
     },
     getDirectories() {
-      this.$store.dispatch('getColors').then(res => {
-        this.colors = res.data.map(el => {
+      this.$store.dispatch('getCars').then(res => {
+        this.cars = res.data.map(el => {
           return {
-            name: el.attributes.name,
+            name: el.attributes.gov_number,
             id: el.id
           }
         });
@@ -276,12 +272,9 @@ export default {
   },
   validations: {
     form: {
-      gov_number: {
+      name: {
         required,
       },
-      color: {
-        required
-      }
     }
   },
 };
