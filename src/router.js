@@ -152,6 +152,14 @@ const routes = [
         children: []
       },
       {
+        path: "company",
+        name: 'company',
+        component: () => import("./views/app/company/List"),
+        meta: {roles: [roles.super_admin, roles.operator, roles.public]},
+        // redirect: `${adminRoot}/users/list`,
+        children: []
+      },
+      {
         path: "employees",
         component: () => import("./views/app/pages"),
         redirect: `${adminRoot}/employees/vendors`,

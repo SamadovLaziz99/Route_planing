@@ -35,6 +35,14 @@
                   characters
                 </b-form-invalid-feedback>
               </b-form-group>
+              <b-form-group :label="$t('role')" class="has-float-label mb-4">
+                <v-select v-model="$v.form.role.$model" label="name" value="id" :reduce="role => role.id"
+                          :options="role"/>
+                <div
+                  :class="{'invalid-feedback':true ,'d-block':$v.form.role.$error && !$v.form.role.required}"
+                >Role is required!
+                </div>
+              </b-form-group>
               <!--              <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">-->
               <!--                <b-form-input type="text" v-model.trim="$v.form.re_password.$model"-->
               <!--                              :state="!$v.form.re_password.$error"/>-->
@@ -75,15 +83,6 @@
             size="lg"
             :class="{ 'top-right-button': true }"
           >{{ $t('pages.add-new') }}
-          </b-button>
-          <b-button
-            slot="action"
-            variant="primary"
-            size="lg"
-            :class="{ 'top-right-button': true }"
-            class="ml-2"
-            @click="excelReport"
-          ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
           </b-button>
         </list-page-heading>
         <b-card :title="$t(`menu.users`)" class="mb-4">
@@ -159,12 +158,23 @@ export default {
   },
   data() {
     return {
+      role: [
+        {
+          name: "Authenticated",
+          id: 1
+        },
+        {
+          name: "Public",
+          id: 2
+        },
+      ],
       form: {
         id: null,
         username: "",
         phone: "",
         email: "",
         password: null,
+        role: null,
         // re_password: null,
       },
       sort: {
@@ -236,14 +246,13 @@ export default {
         username: "",
         phone: "",
         email: "",
-        role: 1,
+        role: null,
         password: null,
         // re_password: null,
       }
     },
     edit(item) {
       const _data = {...item.item};
-      console.log(_data)
       delete _data.car;
       delete _data.company;
       delete _data.blocked;
@@ -262,7 +271,6 @@ export default {
       this.$v.$touch();
       // console.log(this.$v);
       if (!this.$v.$invalid) {
-        console.log('blabla');
         const _form = {...this.form};
         delete _form.id;
         delete _form.re_password;
@@ -273,7 +281,7 @@ export default {
           id: this.form.id,
           data: _form
         }).then(res => {
-          console.log(res)
+          console.log("onSubmit: ", res);
           this.$refs.crudModal.hideModal();
           this.getData();
         });
@@ -285,7 +293,6 @@ export default {
         populate: "*",
         ...params
       }).then(res => {
-        // console.log(res);
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
       });
@@ -306,15 +313,6 @@ export default {
       this.search = val;
       this.page = 1;
       this.getData();
-    },
-    excelReport() {
-      const {user_id, search, phone} = this.filters
-      const link = document.createElement('a')
-      link.href = process.env.VUE_APP_BASE_URL + `/users/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
-      console.log(link.href);
-      link.setAttribute('download', 'Report');
-      document.body.appendChild(link);
-      link.click();
     },
     filtered(val) {
       this.filters = val;
@@ -346,6 +344,9 @@ export default {
   validations: {
     form: {
       username: {
+        required
+      },
+      role: {
         required
       },
       phone: {

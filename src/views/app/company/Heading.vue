@@ -21,14 +21,9 @@
         <b-collapse id="displayOptions" class="d-md-block mt-3">
           <div class="d-md-inline-block pt-1 w-100">
             <b-row>
-              <b-colxx xxs="12" md="2">
-                <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('id')" @input="filter" v-model="filters.user_id"/>
-                </div>
-              </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
-                  <b-input class="search_input" :placeholder="$t('search')" @input="filter" v-model="filters.search"/>
+                  <b-input class="search_input" :placeholder="$t('name')" @input="filter" v-model="filters.name"/>
                 </div>
               </b-colxx>
               <b-colxx xxs="12" md="3">
@@ -41,7 +36,7 @@
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="float-md-right pt-1">
-                  <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ total }}</span>
+<!--                  <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ total }}</span>-->
                 </div>
               </b-colxx>
             </b-row>
@@ -91,8 +86,7 @@ export default {
     this.filter = debounce(this.filter, 1000)
     return {
       filters: {
-        user_id: null,
-        search: null,
+        name: null,
         phone: null
       }
     };

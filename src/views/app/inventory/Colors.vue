@@ -32,7 +32,7 @@
         </crud-modal>
         <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
         <list-page-heading
-          :title="$t('color')"
+          :title="$t('colors')"
           @filters="filtered"
           :from="from"
           :to="to"
@@ -48,7 +48,7 @@
           >{{ $t('pages.add-new') }}
           </b-button>
         </list-page-heading>
-        <b-card :title="$t('cars')" class="mb-4">
+        <b-card :title="$t('colors')" class="mb-4">
           <b-table
             hover
             :items="tableData"
@@ -73,9 +73,6 @@
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <div class="glyph-icon simple-icon-eye mr-2"
-                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"
-                     @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>
                 <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)"
                      style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"

@@ -61,6 +61,7 @@ export default new Vuex.Store({
     collections: crud('collections'),
     cars: crud('cars'),
     colors: crud('colors'),
+    companies: crud('companies'),
     vendors: crud('vendors'),
     users: crud('users'),
     system_users: crud('user'),

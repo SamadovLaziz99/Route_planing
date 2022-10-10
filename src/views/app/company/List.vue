@@ -2,47 +2,69 @@
   <div>
     <b-row v-if="!error">
       <b-colxx class="disable-text-selection">
-        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'user.update' : 'user.create'">
+        <crud-modal ref="crudModal" @closeable="closed" :name="form.id ? 'company.update' : 'company.create'">
           <div slot="content">
             <b-form class="av-tooltip tooltip-right-bottom">
-              <b-form-group :label="$t('username')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.username.$model" :state="!$v.form.username.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.username.required">{{
-                    $t('please.enter') + $t('username')
+              <b-form-group :label="$t('name')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="$v.form.name.$model" :state="!$v.form.name.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.name.required">{{
+                    $t('please.enter') + " " + $t('name')
                   }}
                 </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('phone')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.phone.$model" :state="!$v.form.phone.$error"/>
-                <b-form-invalid-feedback v-if="!$v.form.phone.required">{{
+                <b-form-input type="text" v-model.trim="$v.form.phone_number.$model"
+                              :state="!$v.form.phone_number.$error"/>
+                <b-form-invalid-feedback v-if="!$v.form.phone_number.required">{{
                     $t('please.enter') + $t('phone')
                   }}
                 </b-form-invalid-feedback>
-                <b-form-invalid-feedback v-if="!$v.form.phone.valid">{{ $t('phone') }} is error value. Ex: 998 XX XXX
+                <b-form-invalid-feedback v-if="!$v.form.phone_number.valid">{{ $t('phone') }} is error value. Ex: 998 XX
+                  XXX
                   XX XX
                 </b-form-invalid-feedback>
               </b-form-group>
-              <b-form-group :label="$t('email')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="form.email"/>
+              <b-form-group :label="$t('address')" class="has-float-label mb-4">
+                <b-form-input type="text" v-model.trim="form.address"/>
               </b-form-group>
-              <b-form-group :label="$t('password')" class="has-float-label mb-4">
-                <b-form-input type="text" v-model.trim="$v.form.password.$model" :state="!$v.form.password.$error"/>
-                <!--                <b-form-invalid-feedback v-if="!$v.form.password.required">{{-->
-                <!--                    $t('please.enter') + $t('password')-->
-                <!--                  }}-->
-                <!--                </b-form-invalid-feedback>-->
-                <b-form-invalid-feedback v-if="!$v.form.password.minLength">{{ $t('password') }} is minimumm 6
-                  characters
-                </b-form-invalid-feedback>
+              <b-card class="mb-4">
+                <b-card-title>{{ $t("logo") }}</b-card-title>
+                <div class="card-group">
+                  <image-editor ref="imageEditor" @loaded="loadedMainPhoto"/>
+                  <div class="vendors" v-if="mainPhoto">
+                    <img class="imgClass" :src="$img + mainPhoto"/>
+                    <div class="image_action">
+                      <div style="display: flex">
+                  <span
+                    @click="$refs.imageEditor.open('4:3', mainPhoto)"
+                    class="simple-icon-pencil m-2 icon cursor-pointer"
+                  ></span>
+                        <span
+                          @click="
+                      $store.commit('DELETE_MODAL', {
+                        isShow: true,
+                        data: { name: '4:3', logo: mainPhoto },
+                      })
+                    "
+                          class="simple-icon-trash m-2 icon cursor-pointer"
+                        ></span>
+                      </div>
+                    </div>
+                  </div>
+                  <b-button
+                    v-if="!mainPhoto"
+                    class="mt-1 w-100"
+                    @click="$refs.imageEditor.open('4:3')"
+                    variant="success default"
+                  >{{ $t("uploadImage") }}
+                  </b-button
+                  >
+                </div>
+              </b-card>
+              <b-form-group :label="$t('orders')" class="has-float-label mb-4">
+                <v-select v-model="form.orders" label="name" value="id" :reduce="orders => orders.id"
+                          :options="orders"/>
               </b-form-group>
-              <!--              <b-form-group v-if="!form.id" :label="$t('re.password')" class="has-float-label mb-4">-->
-              <!--                <b-form-input type="text" v-model.trim="$v.form.re_password.$model"-->
-              <!--                              :state="!$v.form.re_password.$error"/>-->
-              <!--                <b-form-invalid-feedback v-if="!$v.form.re_password.sameAsPassword">{{-->
-              <!--                    $t('re.password.error')-->
-              <!--                  }}-->
-              <!--                </b-form-invalid-feedback>-->
-              <!--              </b-form-group>-->
             </b-form>
           </div>
           <div slot="action">
@@ -59,9 +81,7 @@
         </crud-modal>
         <remove-modal v-if="$store.getters.deleteModal.isShow" @removing="removeItem"/>
         <list-page-heading
-          :title="$t('users')"
-          :changeOrderBy="changeOrderBy"
-          :sort="sort"
+          :title="$t('company')"
           @filters="filtered"
           :from="from"
           :to="to"
@@ -76,20 +96,11 @@
             :class="{ 'top-right-button': true }"
           >{{ $t('pages.add-new') }}
           </b-button>
-          <b-button
-            slot="action"
-            variant="primary"
-            size="lg"
-            :class="{ 'top-right-button': true }"
-            class="ml-2"
-            @click="excelReport"
-          ><span class="iconsminds-data-download mr-2"></span>Экспорт Excel
-          </b-button>
         </list-page-heading>
-        <b-card :title="$t(`menu.users`)" class="mb-4">
+        <b-card :title="$t('companies')" class="mb-4">
           <b-table
             hover
-            :items="data"
+            :items="tableData"
             :fields="fields"
             :busy="load"
             responsive
@@ -100,31 +111,23 @@
                 <strong>{{ $t('loading') }}...</strong>
               </div>
             </template>
+            <template #cell(name)="row">
+              {{ row.item.attributes.name }}
+            </template>
+            <template #cell(phone_number)="row">
+              {{ row.item.attributes.phone_number ? row.item.attributes.phone_number : "-" }}
+            </template>
+            <template #cell(createdAt)="row">
+              {{ moment(row.item.attributes.createdAt).format('YYYY-MM-DD HH:mm') }}
+            </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <div class="glyph-icon simple-icon-eye mr-2"
-                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"
-                     @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>
                 <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)"
                      style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"
                      class="glyph-icon simple-icon-trash mr-2"
                      style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
               </div>
-            </template>
-            <template #cell(status)="row">
-              <b-badge pill variant="primary">Pending</b-badge>
-            </template>
-            <template #cell(created_at)="row">
-              {{ moment(row.item.created_at).format('YYYY-MM-DD HH:mm') }}
-            </template>
-            <template #cell(selection)="{ rowSelected }">
-              <template v-if="rowSelected">
-                <div class="glyph-icon simple-icon-check"></div>
-              </template>
-              <template v-else>
-                <!--          <div class="glyph-icon simple-icon-user"></div>-->
-              </template>
             </template>
           </b-table>
           <Pagination
@@ -144,34 +147,35 @@
 import ListPageHeading from "./Heading";
 import Pagination from "../../../components/TableComponents/Pagination";
 import {mapGetters} from "vuex";
-import {required, email, sameAs, minLength} from "vuelidate/lib/validators";
+import {required} from "vuelidate/lib/validators";
 import {validationMixin} from "vuelidate";
 import {actions, getters} from "../../../utils/store_schema";
-import moment from 'moment'
+import moment from 'moment';
 
 const _page = 'companies';
 const {get, getById, put, post, remove} = actions(_page);
 export default {
-  name: "company",
   components: {
     "list-page-heading": ListPageHeading,
     Pagination
-    // TableSimple
   },
   data() {
     return {
+      orders: [],
+      tableData: [],
+      mainPhoto: null,
       form: {
         id: null,
-        username: "",
-        phone: "",
-        email: "",
-        password: null,
-        // re_password: null,
+        name: "",
+        phone_number: "",
+        address: "",
+        logo: null,
+        orders: [],
       },
-      sort: {
-        column: "title",
-        label: "Product Name"
-      },
+      // sort: {
+      //   column: "title",
+      //   label: "Product Name"
+      // },
       search: "",
       filters: null,
       fields: [
@@ -181,28 +185,17 @@ export default {
           // tdClass: 'firstColumn'
         },
         {
-          key: 'username',
-          label: this.$t('username'),
+          key: 'name',
+          label: this.$t('name'),
           // tdClass: 'firstColumn'
         },
         {
-          key: 'phone',
-          label: this.$t('phone'),
+          key: 'phone_number',
+          label: this.$t('phone_number'),
           // tdClass: 'firstColumn'
         },
         {
-          key: 'email',
-          label: this.$t('email'),
-          class: 'text-center'
-          // tdClass: 'firstColumn'
-        },
-        {
-          key: 'phone',
-          label: this.$t('phone'),
-          // tdClass: 'firstColumn'
-        },
-        {
-          key: 'created_at',
+          key: 'createdAt',
           label: this.$t('reg.date'),
           tdClass: 'text-muted'
         },
@@ -217,12 +210,17 @@ export default {
       to: 0
     };
   },
+  name: "companies",
   mixins: [validationMixin],
   computed: {
     ...mapGetters(getters(_page)),
   },
   methods: {
     moment,
+    loadedMainPhoto(e) {
+      this.form.logo = this.$imgFormat(e);
+      this.mainPhoto = this.$imgFormat(e);
+    },
     validPh(value) {
       console.log(value);
       return /^[9][9][8]\d{9}$/.test(value);
@@ -234,47 +232,39 @@ export default {
       this.$v.$reset();
       this.form = {
         id: null,
-        username: "",
-        phone: "",
-        email: "",
-        role: 1,
-        password: null,
-        // re_password: null,
+        name: "",
+        phone_number: "",
+        address: "",
+        logo: null,
+        orders: [],
       }
     },
     edit(item) {
       const _data = {...item.item};
       console.log(_data)
-      delete _data.car;
-      delete _data.company;
-      delete _data.blocked;
-      delete _data.confirmed;
-      delete _data.createdAt;
-      delete _data.provider;
-      delete _data.updatedAt;
-      // delete _data.re_password;
-      // _data.re_password = _data.password;
-      this.form = _data;
-      this.form.role = _data.role.id;
-      console.log("_data: ", _data);
+      this.form.id = _data.id;
+      this.form.name = _data.attributes.name;
+      this.form.phone_number = _data.attributes.phone_number;
+      this.form.address = _data.attributes.address;
+      this.form.logo = _data.attributes.logo.data ? _data.attributes.logo.data.name : null;
+      this.mainPhoto = _data.attributes.logo.data ? _data.attributes.logo.data.name : null;
+      // this.form.color = _data.attributes.color.data ? _data.attributes.color.data.id : null;
       this.$bvModal.show('crudModal');
     },
     submit() {
       this.$v.$touch();
       // console.log(this.$v);
       if (!this.$v.$invalid) {
-        console.log('blabla');
         const _form = {...this.form};
         delete _form.id;
-        delete _form.re_password;
-        if (this.form.id) delete _form.password;
-        if (_form.email === "") _form.email = `${_form.phone}@gmail.com`;
-        // console.log(this.form);
         this.$store.dispatch(this.form.id ? put : post, {
           id: this.form.id,
-          data: _form
+          data: {
+            data: {
+              ..._form
+            }
+          }
         }).then(res => {
-          console.log(res)
           this.$refs.crudModal.hideModal();
           this.getData();
         });
@@ -282,40 +272,41 @@ export default {
     },
     getData(params) {
       this.$store.dispatch(get, {
-        page: this.page,
+        // page: this.page,
         populate: "*",
         ...params
       }).then(res => {
-        // console.log(res);
+        this.tableData = res.data;
         this.to = this.pagination.page * 15 > this.pagination.total ? this.pagination.total : this.pagination.page * 15
         this.from = (this.pagination.page - 1) * 15
+      });
+    },
+    getDirectories() {
+      this.$store.dispatch('getOrders').then(res => {
+        this.orders = res.data.map(el => {
+          return {
+            name: el.attributes.name,
+            id: el.id
+          }
+        });
       });
     },
     changePagination(e) {
       this.page = e;
       this.getData();
-      // let _query = { ...this.$route.query }
-      // _query.page = e
-      // _query.limit = this.pagination.limit
-      // this.routePusher(_query)
+      // let _query = { ...this.$route.query };
+      // _query.page = e;
+      // _query.limit = this.pagination.limit;
+      // this.routePusher(_query);
     },
-    changeOrderBy(sort) {
-      this.sort = sort;
-    },
+    // changeOrderBy(sort) {
+    //   this.sort = sort;
+    // },
     searchName(val) {
       console.log(val);
       this.search = val;
       this.page = 1;
       this.getData();
-    },
-    excelReport() {
-      const {user_id, search, phone} = this.filters
-      const link = document.createElement('a')
-      link.href = process.env.VUE_APP_BASE_URL + `/users/download/?user_id=${user_id || ''}&search=${search || ''}&phone=${phone || ''}`
-      console.log(link.href);
-      link.setAttribute('download', 'Report');
-      document.body.appendChild(link);
-      link.click();
     },
     filtered(val) {
       this.filters = val;
@@ -334,6 +325,7 @@ export default {
     }
   },
   mounted() {
+    this.getDirectories();
     const _hash = this.$route.hash;
     const _query = this.$route.query;
     this.filters = _query;
@@ -346,20 +338,13 @@ export default {
   },
   validations: {
     form: {
-      username: {
-        required
+      name: {
+        required,
       },
-      phone: {
+      phone_number: {
         required,
         valid: (e) => /^[9][9][8]\d{9}$/.test(e)
-      },
-      password: {
-        required,
-        minLength: minLength(6)
-      },
-      // re_password: {
-      //   sameAsPassword: sameAs('password')
-      // }
+      }
     }
   },
 };

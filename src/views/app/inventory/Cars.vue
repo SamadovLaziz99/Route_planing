@@ -13,12 +13,8 @@
                 </b-form-invalid-feedback>
               </b-form-group>
               <b-form-group :label="$t('color')" class="has-float-label mb-4">
-                <v-select v-model="$v.form.color.$model" label="name" value="id" :reduce="color => color.id"
+                <v-select v-model="form.color" label="name" value="id" :reduce="color => color.id"
                           :options="colors"/>
-                <div
-                  :class="{'invalid-feedback':true ,'d-block':$v.form.color.$error && !$v.form.color.required}"
-                >Color is required!
-                </div>
               </b-form-group>
             </b-form>
           </div>
@@ -67,7 +63,7 @@
               </div>
             </template>
             <template #cell(gov_number)="row">
-              {{ row.item.attributes.gov_number}}
+              {{ row.item.attributes.gov_number }}
             </template>
             <template #cell(color)="row">
               {{ row.item.attributes.color.data ? row.item.attributes.color.data.attributes.name : "-" }}
@@ -77,9 +73,6 @@
             </template>
             <template #cell(action)="row">
               <div style="display: flex">
-                <div class="glyph-icon simple-icon-eye mr-2"
-                     style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"
-                     @click="$router.push({ name: 'user_details', params: { id: row.item.id } })"></div>
                 <div class="glyph-icon simple-icon-pencil mr-2" @click="edit(row)"
                      style="font-size: 16px; font-weight: 700; color: #6B7280; cursor: pointer"></div>
                 <div @click="$store.commit('DELETE_MODAL', { isShow: true, data: row.item})"
@@ -279,9 +272,6 @@ export default {
       gov_number: {
         required,
       },
-      color: {
-        required
-      }
     }
   },
 };

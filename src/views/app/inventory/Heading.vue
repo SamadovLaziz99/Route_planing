@@ -21,12 +21,6 @@
         <b-collapse id="displayOptions" class="d-md-block mt-3">
           <div class="d-md-inline-block pt-1 w-100">
             <b-row>
-              <!--              <b-colxx xxs="12" md="3">-->
-              <!--                <v-select v-if="$route.name === 'food_list'" v-model="filters.vendor" @input="changeVendor" style="width: 100%" class="mb-2" :options="vendors" :placeholder="$t('vendors')"/>-->
-              <!--              </b-colxx>-->
-              <!--              <b-colxx xxs="12" md="3">-->
-              <!--                <v-select v-if="$route.name === 'food_list'" v-model="filters.category" @input="changeCategory" style="width: 100%" class="mb-2" :options="categorys" :placeholder="$t('categories')"/>-->
-              <!--              </b-colxx>-->
               <b-colxx xxs="12" md="3">
                 <div class="d-inline-block mb-2 float-md-left align-top w-100">
                   <b-input class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"/>
@@ -34,13 +28,10 @@
               </b-colxx>
               <b-colxx xxs="12" md="6">
                 <div></div>
-                <!--                <div class="d-inline-block mb-2 float-md-left align-top w-100">-->
-                <!--                  <b-input class="search_input" :placeholder="$t('search')" @input="search" v-model="filters.search"  />-->
-                <!--                </div>-->
               </b-colxx>
               <b-colxx xxs="12" md="3">
                 <div class="float-md-right pt-1">
-                  <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ total }}</span>
+<!--                  <span class="text-muted text-small mr-1 mb-2">{{ from }}-{{ to }} {{ $t('of') }} {{ total }}</span>-->
                 </div>
               </b-colxx>
             </b-row>
